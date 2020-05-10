@@ -1,5 +1,5 @@
 <template>
-  <footer class="s-footer fixed-bottom">
+  <footer id="s-footer" class="fixed-bottom">
     <div class="row">
       <div class="col-sm-2">Srđan Tubin</div>
       <div class="col-sm-1">
@@ -17,3 +17,9 @@ export default {
   name: 'Footer'
 }
 </script>
+
+<style scoped>
+#s-footer {
+    margin-bottom: 5px;
+}
+</style>

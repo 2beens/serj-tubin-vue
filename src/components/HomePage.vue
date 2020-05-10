@@ -1,6 +1,12 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h2>{{ msg }}</h2>
+
+    <h6 id="quote-info">{{ smartassMsg }}</h6>
+    <div id="quote-section">
+      <h3 id="quote-text"></h3>
+      <h5 id="quote-author"></h5>
+    </div>
 
     <h3>Installed CLI Plugins</h3>
     <ul>
@@ -11,16 +17,72 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'HomePage',
   props: {
     msg: String
+  },
+  data: function () {
+    return {
+      smartassMsg: 'I\'m being a smartass by showing some cool stolen quotes here:'
+    }
+  },
+  created: function () {
+    console.log('create home page')
+  },
+  mounted: function () {
+    console.log('mounted home page')
+    document.getElementById('quote-info').style.display = 'none'
+
+    axios
+      .get('https://www.serj-tubin.com/api/quote/random')
+      .then(response => {
+        if (response === null || response.data === null) {
+          console.error('received null response / data')
+          return
+        }
+        const quote = response.data
+        document.getElementById('quote-text').innerHTML = quote.text
+        document.getElementById('quote-author').innerHTML = quote.author
+        document.getElementById('quote-info').style.display = 'block'
+
+        this.quoteLoaded = true
+        console.log(this)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => console.log('axios done'))
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#quote-info {
+  margin-top: 75px;
+  margin-left: 45px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+#quote-section {
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 85px;
+  padding: 20px;
+  border: 2px solid rgb(48, 83, 83);
+  border-radius: 5px;
+}
+#quote-text {
+  margin-top: 5px;
+  color: rgb(48, 83, 83);
+}
+#quote-author {
+  color: #42b983;
+}
+
 h3 {
   margin: 40px 0 0;
 }
