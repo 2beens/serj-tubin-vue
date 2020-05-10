@@ -8,19 +8,20 @@
 
     <router-view />
 
-    <footer class="s-footer fixed-bottom">
-      <div class="row">
-        <div class="col-sm-2">Srđan Tubin</div>
-        <div class="col-sm-1">
-          <a href="https://github.com/2beens" class="fa fa-github"></a>
-        </div>
-        <div class="col-sm-1">
-          <a href="https://www.facebook.com/srdjantubin" class="fa fa-facebook"></a>
-        </div>
-      </div>
-    </footer>
+    <Footer/>
   </div>
 </template>
+
+<script>
+import Footer from '@/components/Footer.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Footer
+  }
+}
+</script>
 
 <style>
 #app {
