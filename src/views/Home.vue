@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <h3>Work in progress</h3>
     <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
     <HomePage msg="Welcome to my personal nothingness!"/>
   </div>
