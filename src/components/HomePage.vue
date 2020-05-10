@@ -47,9 +47,6 @@ export default {
         document.getElementById('quote-text').innerHTML = quote.text
         document.getElementById('quote-author').innerHTML = quote.author
         document.getElementById('quote-info').style.display = 'block'
-
-        this.quoteLoaded = true
-        console.log(this)
       })
       .catch(error => {
         console.log(error)
