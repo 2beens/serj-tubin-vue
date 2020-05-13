@@ -19,6 +19,11 @@ export default {
   name: 'App',
   components: {
     Footer
+  },
+  watch: {
+    $route (to, from) {
+      console.log('app: route change')
+    }
   }
 }
 </script>

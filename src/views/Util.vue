@@ -1,6 +1,17 @@
 <template>
   <div class="util">
-    <h1>This is a util page.</h1>
-    <h4>Will contain various things like weather, user agent analyzer, etc.</h4>
+    <UtilPage />
   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import UtilPage from '@/components/UtilPage.vue'
+
+export default {
+  name: 'Util',
+  components: {
+    UtilPage
+  }
+}
+</script>

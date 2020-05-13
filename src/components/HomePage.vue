@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="home-page">
     <h2>{{ msg }}</h2>
 
     <h6 id="quote-info">{{ smartassMsg }}</h6>
