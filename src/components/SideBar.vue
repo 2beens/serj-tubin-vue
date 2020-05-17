@@ -72,7 +72,7 @@ export default {
         icons.forEach(function (item, i, wArray) {
           const weatherIcon = document.createElement('img')
           weatherIcon.classList.add('weather-icon-img')
-          weatherIcon.src = 'http://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
+          weatherIcon.src = 'https://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
           weatherIcon.width = 30
           document.getElementById('weather-tomorrow').appendChild(weatherIcon)
         })
