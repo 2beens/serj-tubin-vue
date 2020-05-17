@@ -7,6 +7,9 @@
     <div id="weather-info">
         Weather there:
         <p id="weather-now"></p>
+        Tomorrow:
+        <div id="weather-tomorrow">
+        </div>
     </div>
   </div>
 </template>
@@ -49,17 +52,58 @@ export default {
       .catch(error => {
         console.log(error)
       })
+
+    axios
+      .get('https://www.serj-tubin.com/api/weather/tomorrow')
+      .then(response => {
+        if (response === null || response.data === null) {
+          console.error('received null response / data')
+          return
+        }
+
+        const icons = getIconsFromWeatherData(response.data)
+        icons.forEach(function (item, i, wArray) {
+          const weatherIcon = document.createElement('img')
+          weatherIcon.classList.add('weather-icon-img')
+          weatherIcon.src = 'http://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
+          weatherIcon.width = 30
+          document.getElementById('weather-tomorrow').appendChild(weatherIcon)
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
+}
+
+function getIconsFromWeatherData (weatherData) {
+  const icons = []
+  weatherData.forEach(function (item, i, wArray) {
+    const descriptions = weatherData[i].descriptions
+    descriptions.forEach(function (item, i, dArray) {
+      icons.push(descriptions[i].icon)
+    })
+  })
+  return icons
 }
 </script>
 
 <style scoped>
+.weather-icon-img {
+  display: none;
+  width: 15px;
+  height: auto;
+}
+#weather-tomorrow {
+  margin-top: 5px;
+}
 #geo-city {
     color: #42b983;
 }
 #weather-now {
     color: #42b983;
 }
+
 #sidebar {
     position: absolute;
     top: 3%;
