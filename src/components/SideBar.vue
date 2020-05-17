@@ -45,9 +45,16 @@ export default {
           console.error('received null response / data')
           return
         }
-        const weatherData = response.data
-        document.getElementById('weather-now').innerHTML = weatherData.weather
-        document.getElementById('weather-info').style.display = 'block'
+
+        const weatherDescriptions = []
+        response.data.forEach(function (item, i, array) {
+          weatherDescriptions.push(item.description)
+        })
+
+        if (weatherDescriptions.length > 0) {
+          document.getElementById('weather-now').innerHTML = weatherDescriptions.join(', ')
+          document.getElementById('weather-info').style.display = 'block'
+        }
       })
       .catch(error => {
         console.log(error)
