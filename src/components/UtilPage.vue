@@ -7,6 +7,12 @@
       <h5>Your User Agent</h5>
       <h4 id="user-agent-value"></h4>
     </div>
+
+    <div>
+      <p>TODO: add a board, where everyone can leave soem message</p>
+      <p>Use some persistent storage for that (redis, postgres, or maybe something else...)</p>
+      <p>Explain it: some nice hackers can screw up my site, and maybe I learn something from that</p>
+    </div>
   </div>
 </template>
 
