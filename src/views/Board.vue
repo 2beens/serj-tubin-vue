@@ -1,19 +1,10 @@
 <template>
   <div id="board">
     <div id="board-messages">
-      somebody1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum, dui vel tristique convallis, leo lorem faucibus lorem, a molestie mauris est sed magna. Sed ac ipsum sed elit bibendum blandit. Nam convallis egestas sem, nec scelerisque risus hendrerit tempor. Vivamus magna urna, auctor ut turpis quis, ornare lacinia nunc. Mauris eget pellentesque lacus, ultricies venenatis erat. Vestibulum dictum sapien non tortor efficitur, vel auctor erat finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-      <hr />ass2: Phasellus eros risus, bibendum sit amet egestas id, venenatis in turpis. Pellentesque gravida, nibh quis rutrum lobortis, sem diam pulvinar lorem, vitae lobortis diam sapien eget ante. Proin aliquam lobortis dui. Nullam posuere felis enim, et molestie lectus facilisis sit amet. Duis finibus nisl quis sapien faucibus tincidunt. Nulla finibus erat ut euismod pretium. Sed imperdiet, magna ut euismod finibus, turpis urna aliquet libero, quis tempus neque odio sit amet lorem. Nam mauris diam, vehicula quis nunc non, ultrices efficitur justo. Vestibulum ut odio elementum, dictum elit vitae, porttitor augue. Praesent aliquet facilisis mauris, ac pulvinar magna rutrum non. Aenean et neque non eros commodo efficitur.
-      <hr />dickhead3: Aliquam dictum imperdiet quam, eu bibendum ex dapibus in. Pellentesque vel orci arcu. Quisque convallis, lectus sed sollicitudin cursus, urna eros tincidunt lorem, pharetra lacinia dolor sapien eu purus. Vestibulum quam est, condimentum sit amet leo sit amet, semper dapibus massa. Fusce quis nisi rutrum, commodo lacus nec, tristique felis. Etiam accumsan tellus id libero cursus, vel suscipit risus fermentum. Aenean placerat congue massa, vehicula feugiat leo suscipit ut. Nam a arcu neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-      <hr />somebody1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum, dui vel tristique convallis, leo lorem faucibus lorem, a molestie mauris est sed magna. Sed ac ipsum sed elit bibendum blandit. Nam convallis egestas sem, nec scelerisque risus hendrerit tempor. Vivamus magna urna, auctor ut turpis quis, ornare lacinia nunc. Mauris eget pellentesque lacus, ultricies venenatis erat. Vestibulum dictum sapien non tortor efficitur, vel auctor erat finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-      <hr />ass2: Phasellus eros risus, bibendum sit amet egestas id, venenatis in turpis. Pellentesque gravida, nibh quis rutrum lobortis, sem diam pulvinar lorem, vitae lobortis diam sapien eget ante. Proin aliquam lobortis dui. Nullam posuere felis enim, et molestie lectus facilisis sit amet. Duis finibus nisl quis sapien faucibus tincidunt. Nulla finibus erat ut euismod pretium. Sed imperdiet, magna ut euismod finibus, turpis urna aliquet libero, quis tempus neque odio sit amet lorem. Nam mauris diam, vehicula quis nunc non, ultrices efficitur justo. Vestibulum ut odio elementum, dictum elit vitae, porttitor augue. Praesent aliquet facilisis mauris, ac pulvinar magna rutrum non. Aenean et neque non eros commodo efficitur.
-      <hr />dickhead3: Aliquam dictum imperdiet quam, eu bibendum ex dapibus in. Pellentesque vel orci arcu. Quisque convallis, lectus sed sollicitudin cursus, urna eros tincidunt lorem, pharetra lacinia dolor sapien eu purus. Vestibulum quam est, condimentum sit amet leo sit amet, semper dapibus massa. Fusce quis nisi rutrum, commodo lacus nec, tristique felis. Etiam accumsan tellus id libero cursus, vel suscipit risus fermentum. Aenean placerat congue massa, vehicula feugiat leo suscipit ut. Nam a arcu neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-      <hr />somebody1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum, dui vel tristique convallis, leo lorem faucibus lorem, a molestie mauris est sed magna. Sed ac ipsum sed elit bibendum blandit. Nam convallis egestas sem, nec scelerisque risus hendrerit tempor. Vivamus magna urna, auctor ut turpis quis, ornare lacinia nunc. Mauris eget pellentesque lacus, ultricies venenatis erat. Vestibulum dictum sapien non tortor efficitur, vel auctor erat finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-      <hr />ass2: Phasellus eros risus, bibendum sit amet egestas id, venenatis in turpis. Pellentesque gravida, nibh quis rutrum lobortis, sem diam pulvinar lorem, vitae lobortis diam sapien eget ante. Proin aliquam lobortis dui. Nullam posuere felis enim, et molestie lectus facilisis sit amet. Duis finibus nisl quis sapien faucibus tincidunt. Nulla finibus erat ut euismod pretium. Sed imperdiet, magna ut euismod finibus, turpis urna aliquet libero, quis tempus neque odio sit amet lorem. Nam mauris diam, vehicula quis nunc non, ultrices efficitur justo. Vestibulum ut odio elementum, dictum elit vitae, porttitor augue. Praesent aliquet facilisis mauris, ac pulvinar magna rutrum non. Aenean et neque non eros commodo efficitur.
-      <hr />dickhead3: Aliquam dictum imperdiet quam, eu bibendum ex dapibus in. Pellentesque vel orci arcu. Quisque convallis, lectus sed sollicitudin cursus, urna eros tincidunt lorem, pharetra lacinia dolor sapien eu purus. Vestibulum quam est, condimentum sit amet leo sit amet, semper dapibus massa. Fusce quis nisi rutrum, commodo lacus nec, tristique felis. Etiam accumsan tellus id libero cursus, vel suscipit risus fermentum. Aenean placerat congue massa, vehicula feugiat leo suscipit ut. Nam a arcu neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
     </div>
     <div id="board-controls">
-      <input type="text" placeholder="author: anonymous" class="board-input" id="author"/>
-      <input type="text" placeholder="message ..." v-on:keyup="sendMessage" class="board-input" id="message"/>
+      <input type="text" placeholder="author: anonymous" class="board-input" id="author-input"/>
+      <input type="text" placeholder="message ..." v-on:keyup="sendMessage" class="board-input" id="message-input"/>
     </div>
   </div>
 </template>
@@ -21,6 +12,18 @@
 <script>
 import axios from 'axios'
 const qs = require('querystring')
+
+function addNewMessage (m) {
+  const board = document.getElementById('board-messages')
+  const msgTs = getTimestampString(new Date(m.timestamp * 1000))
+  const msgSection = document.createElement('div')
+  msgSection.setAttribute('class', 'board-message')
+  msgSection.style.borderBottom = '2px solid white'
+  msgSection.style.borderRadius = '2px'
+  const msgNode = document.createTextNode(msgTs + ': [' + m.author + '] ' + m.message)
+  msgSection.appendChild(msgNode)
+  board.appendChild(msgSection)
+}
 
 export default {
   data: () => ({
@@ -38,16 +41,9 @@ export default {
           return
         }
 
-        const board = document.getElementById('board-messages')
-        board.innerHTML = ''
-
-        console.log(response.data)
         const messages = response.data
         messages.forEach(m => {
-          console.log(m)
-          const msgNode = document.createTextNode(m.author + ': ' + m.message)
-          board.appendChild(msgNode)
-          board.appendChild(document.createElement('hr'))
+          addNewMessage(m)
         })
       })
       .catch(error => {
@@ -58,13 +54,13 @@ export default {
   methods: {
     sendMessage () {
       if (event.keyCode === 13) {
-        const msgInput = document.getElementById('message')
+        const msgInput = document.getElementById('message-input')
         const msgContent = msgInput.value
         if (msgContent === '') {
           return
         }
 
-        const msgAuthor = document.getElementById('author').value
+        const msgAuthor = document.getElementById('author-input').value
 
         const config = {
           headers: {
@@ -82,8 +78,12 @@ export default {
           qs.stringify(requestBody),
           config
         ).then(function (response) {
-          console.log(response)
           msgInput.value = ''
+          addNewMessage({
+            timestamp: Math.floor(Date.now() / 1000),
+            message: msgContent,
+            author: msgAuthor
+          })
         }).catch(function (error) {
           console.log(error)
         })
@@ -99,6 +99,17 @@ export default {
     }
   }
 }
+
+function getTimestampString (date) {
+  const hourInfo = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)
+
+  const y = date.getFullYear()
+  const m = date.getMonth()
+  const d = date.getDate()
+  const dateInfo = ('0' + d).slice(-2) + '/' + ('0' + (m + 1)).slice(-2) + '/' + y
+
+  return dateInfo + ' ' + hourInfo
+}
 </script>
 
 <style scoped>
@@ -106,11 +117,11 @@ export default {
   margin-top: 10px;
   margin-bottom: 50px;
 }
-#author {
+#author-input {
   margin-left: 10px;
   margin-right: 20px;
 }
-#message {
+#message-input {
   min-width: 200px;
   width: 700px;
 }
