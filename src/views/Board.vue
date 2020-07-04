@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+const qs = require('querystring')
+
 export default {
   data: () => ({
     message: 'Hey!',
@@ -27,7 +30,30 @@ export default {
   mounted: function () {
     console.log('mounted ...')
 
-    // TODO: load messages from server
+    axios
+      .get('http://localhost:9000/board/messages/last/40')
+      .then(response => {
+        if (response === null || response.data === null) {
+          console.error('received null response / data messages')
+          return
+        }
+
+        const board = document.getElementById('board-messages')
+        board.innerHTML = ''
+
+        console.log(response.data)
+        const messages = response.data
+        messages.forEach(m => {
+          console.log(m)
+          const msgNode = document.createTextNode(m.author + ': ' + m.message)
+          board.appendChild(msgNode)
+          board.appendChild(document.createElement('hr'))
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => console.log('axios board messages done'))
   },
   methods: {
     sendMessage () {
@@ -38,10 +64,29 @@ export default {
           return
         }
 
-        console.log('will send message: ' + msgContent)
-        msgInput.value = ''
+        const msgAuthor = document.getElementById('author').value
 
-        // TODO send message to server
+        const config = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+
+        const requestBody = {
+          author: msgAuthor,
+          message: msgContent
+        }
+
+        axios.post(
+          'http://localhost:9000/board/messages/new',
+          qs.stringify(requestBody),
+          config
+        ).then(function (response) {
+          console.log(response)
+          msgInput.value = ''
+        }).catch(function (error) {
+          console.log(error)
+        })
       }
     },
     clickMe () {
