@@ -1,5 +1,6 @@
 <template>
   <div id="board">
+    <h5>Let's see if this board can be hacked and screwed 🤔👀🤷‍♂️</h5>
     <div id="board-messages">
     </div>
     <div id="board-controls">
@@ -13,28 +14,14 @@
 import axios from 'axios'
 const qs = require('querystring')
 
-function addNewMessage (m) {
-  const board = document.getElementById('board-messages')
-  const msgTs = getTimestampString(new Date(m.timestamp * 1000))
-  const msgSection = document.createElement('div')
-  msgSection.setAttribute('class', 'board-message')
-  msgSection.style.borderBottom = '2px solid white'
-  msgSection.style.borderRadius = '2px'
-  const msgNode = document.createTextNode(msgTs + ': [' + m.author + '] ' + m.message)
-  msgSection.appendChild(msgNode)
-  board.appendChild(msgSection)
-}
-
 export default {
   data: () => ({
     message: 'Hey!',
     loading: false
   }),
   mounted: function () {
-    console.log('mounted ...')
-
     axios
-      .get('http://localhost:9000/board/messages/last/40')
+      .get('http://localhost:9000/board/messages/last/140')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
@@ -49,7 +36,7 @@ export default {
       .catch(error => {
         console.log(error)
       })
-      .finally(() => console.log('axios board messages done'))
+      .finally(() => updateMessagesScroll())
   },
   methods: {
     sendMessage () {
@@ -62,31 +49,27 @@ export default {
 
         const msgAuthor = document.getElementById('author-input').value
 
-        const config = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
-
         const requestBody = {
           author: msgAuthor,
           message: msgContent
         }
 
-        axios.post(
-          'http://localhost:9000/board/messages/new',
-          qs.stringify(requestBody),
-          config
-        ).then(function (response) {
-          msgInput.value = ''
-          addNewMessage({
-            timestamp: Math.floor(Date.now() / 1000),
-            message: msgContent,
-            author: msgAuthor
+        axios
+          .post(
+            'http://localhost:9000/board/messages/new',
+            qs.stringify(requestBody))
+          .then(function (response) {
+            msgInput.value = ''
+            addNewMessage({
+              timestamp: Math.floor(Date.now() / 1000),
+              message: msgContent,
+              author: msgAuthor
+            })
           })
-        }).catch(function (error) {
-          console.log(error)
-        })
+          .catch(function (error) {
+            console.log(error)
+          })
+          .finally(() => updateMessagesScroll())
       }
     },
     clickMe () {
@@ -98,6 +81,25 @@ export default {
       }, 2000)
     }
   }
+}
+
+function updateMessagesScroll () {
+  const messagesBoard = document.getElementById('board-messages')
+  messagesBoard.scrollTop = messagesBoard.scrollHeight
+}
+
+function addNewMessage (m) {
+  const msgTs = getTimestampString(new Date(m.timestamp * 1000))
+
+  const msgSection = document.createElement('div')
+  msgSection.setAttribute('class', 'board-message')
+  msgSection.style.borderBottom = '2px solid white'
+  msgSection.style.borderRadius = '2px'
+
+  const msgNode = document.createTextNode(msgTs + ': [' + m.author + '] ' + m.message)
+  msgSection.appendChild(msgNode)
+
+  document.getElementById('board-messages').appendChild(msgSection)
 }
 
 function getTimestampString (date) {
