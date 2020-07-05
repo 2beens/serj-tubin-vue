@@ -15,8 +15,8 @@ import axios from 'axios'
 const qs = require('querystring')
 
 // TODO: make configurable
-// const host = 'https://www.serj-tubin.com'
-const host = 'http://localhost:9000'
+const host = 'https://www.serj-tubin.com/api'
+// const host = 'http://localhost:9000'
 
 export default {
   data: () => ({
@@ -63,11 +63,21 @@ export default {
             host + '/board/messages/new',
             qs.stringify(requestBody))
           .then(function (response) {
+            if (response.data === null || response.data !== 'added') {
+              console.warn(response)
+              return
+            }
+
             msgInput.value = ''
+
+            let msgCreator = 'anon'
+            if (msgAuthor !== '') {
+              msgCreator = msgAuthor
+            }
             addNewMessage({
               timestamp: Math.floor(Date.now() / 1000),
               message: msgContent,
-              author: msgAuthor
+              author: msgCreator
             })
           })
           .catch(function (error) {

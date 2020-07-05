@@ -15,8 +15,8 @@
 import axios from 'axios'
 
 // TODO: make configurable
-// const host = 'https://www.serj-tubin.com'
-const host = 'http://localhost:9000'
+const host = 'https://www.serj-tubin.com/api'
+// const host = 'http://localhost:9000'
 
 export default {
   name: 'Util',
@@ -27,7 +27,6 @@ export default {
     axios
       .get(host + '/myip')
       .then(response => {
-        console.log(response)
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
           return
