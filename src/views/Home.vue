@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Work in progress</h1>
+    <h1>Work in progress 👨🏼‍💻</h1>
     <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
 
     <SideBar />
