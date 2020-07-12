@@ -24,7 +24,7 @@ export default {
     document.getElementById('weather-info').style.display = 'none'
 
     axios
-      .get('https://www.serj-tubin.com/api/whereami')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/whereami')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
@@ -39,7 +39,7 @@ export default {
       })
 
     axios
-      .get('https://www.serj-tubin.com/api/weather/current')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/weather/current')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
@@ -61,7 +61,7 @@ export default {
       })
 
     axios
-      .get('https://www.serj-tubin.com/api/weather/tomorrow')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/weather/tomorrow')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data')

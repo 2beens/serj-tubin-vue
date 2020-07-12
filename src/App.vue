@@ -21,9 +21,12 @@ export default {
   components: {
     Footer
   },
+  mounted: function () {
+    console.log('loaded env: ' + process.env.VUE_APP_ENV)
+  },
   watch: {
     $route (to, from) {
-      console.log('app: route change')
+      console.log('app: route change to ' + to.path)
     }
   }
 }

@@ -1,5 +1,8 @@
 # serj-tubin
 
+Frontend part of my personal playground site
+Hosted at https://www.serj-tubin.com/
+
 ## Project setup
 ```
 yarn install

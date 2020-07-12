@@ -14,10 +14,6 @@
 <script>
 import axios from 'axios'
 
-// TODO: make configurable
-const host = 'https://www.serj-tubin.com/api'
-// const host = 'http://localhost:9000'
-
 export default {
   name: 'Util',
   mounted: function () {
@@ -25,7 +21,7 @@ export default {
     document.getElementById('user-agent-value').innerHTML = navigator.userAgent
 
     axios
-      .get(host + '/myip')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/myip')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')

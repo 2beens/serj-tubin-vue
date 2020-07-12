@@ -14,10 +14,6 @@
 import axios from 'axios'
 const qs = require('querystring')
 
-// TODO: make configurable
-const host = 'https://www.serj-tubin.com/api'
-// const host = 'http://localhost:9000'
-
 export default {
   data: () => ({
     message: 'Hey!',
@@ -25,7 +21,7 @@ export default {
   }),
   mounted: function () {
     axios
-      .get(host + '/board/messages/last/140')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/board/messages/last/140')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
@@ -60,7 +56,7 @@ export default {
 
         axios
           .post(
-            host + '/board/messages/new',
+            process.env.VUE_APP_API_ENDPOINT + '/board/messages/new',
             qs.stringify(requestBody))
           .then(function (response) {
             if (response.data === null || response.data !== 'added') {

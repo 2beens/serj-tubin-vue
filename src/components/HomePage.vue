@@ -30,14 +30,13 @@ export default {
     }
   },
   created: function () {
-    console.log('create home page')
+    console.log('home page created')
   },
   mounted: function () {
-    console.log('mounted home page')
     document.getElementById('quote-info').style.display = 'none'
 
     axios
-      .get('https://www.serj-tubin.com/api/quote/random')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/quote/random')
       .then(response => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
