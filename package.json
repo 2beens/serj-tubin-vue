@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8080",
-    "serve-dev": "vue-cli-service serve --port 8080 --mode development",
-    "serve-prod": "vue-cli-service serve --port 1987 --mode production",
+    "serve": "vue-cli-service serve --port 8080 --watch",
+    "serve-dev": "vue-cli-service serve --port 8080 --mode development --watch",
+    "serve-prod": "vue-cli-service serve --port 1987 --mode production --watch",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
