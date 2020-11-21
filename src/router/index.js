@@ -36,6 +36,11 @@ const routes = [
     component: function () {
       return import('../views/Util.vue')
     }
+  },
+  {
+    path: '*',
+    component: () =>
+      import(/* webpackChunkName: '404' */ '../components/404.vue')
   }
 ]
 
