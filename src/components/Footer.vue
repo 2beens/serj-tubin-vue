@@ -8,7 +8,7 @@
       <div class="col-sm-2">
         <a href="https://www.facebook.com/srdjantubin" class="fa fa-facebook"></a>
       </div>
-      <div id="version-info" class="col-sm-1" style="margin-left: 77%; margin-right: 15;">[]</div>
+      <div class="col-sm-1" id="version-info">[]</div>
     </div>
   </footer>
 </template>

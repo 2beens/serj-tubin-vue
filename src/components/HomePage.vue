@@ -8,21 +8,21 @@
       <h5 id="quote-author"></h5>
     </div>
 
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
+    <Blog title="Recent Posts"/>
   </div>
 </template>
 
 <script>
+import Blog from '@/components/Blog.vue'
 import axios from 'axios'
 
 export default {
   name: 'HomePage',
   props: {
     msg: String
+  },
+  components: {
+    Blog
   },
   data: function () {
     return {

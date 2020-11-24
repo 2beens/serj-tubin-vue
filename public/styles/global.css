@@ -2,6 +2,10 @@ body {
     background-color: black;
 }
 
+#blog {
+    margin-bottom: 50px;
+}
+
 /* #app {
     margin-left: 15%;
     margin-right: 15%;
