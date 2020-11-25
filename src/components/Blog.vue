@@ -2,6 +2,12 @@
   <div id="blog">
     <h3>{{ title }}</h3>
     <div id="blogs-list">
+      <div v-for="post in posts" :key="post.id">
+        <div class="blog-post" v-bind:id="'blog-' + post.id">
+          <h4>{{ post.title }}</h4>
+          <p>{{ post.content }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -11,7 +17,16 @@ import axios from 'axios'
 
 export default {
   name: 'Blog',
+  props: {
+    title: String
+  },
+  data: function () {
+    return {
+      posts: []
+    }
+  },
   mounted: function () {
+    const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/blog/all')
       .then((response) => {
@@ -19,23 +34,24 @@ export default {
           console.error('all blogs - received null response / data')
           return
         }
-        const blogsList = document.getElementById('blogs-list')
-        const blogs = response.data
-        blogs.forEach((b) => {
-          blogsList.insertAdjacentHTML('beforeend', `
-            <div id="blog-${b.id}">
-              <h4>${b.title}</h4>
-              <p>${b.content}</p>
-            </div>
-          `)
-        })
+        vm.posts = response.data
       })
       .catch((error) => {
         console.log(error)
       })
-  },
-  props: {
-    title: String
   }
 }
 </script>
+
+<style scoped>
+#blog {
+  margin-bottom: 100px;
+}
+.blog-post {
+  margin: 15px 15% 15px 15%;
+
+  background-color: cadetblue;
+  border-left: 20px solid #42b983;;
+  border-radius: 5px;
+}
+</style>

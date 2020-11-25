@@ -66,7 +66,7 @@ export default {
 #quote-section {
   margin-left: 40px;
   margin-right: 40px;
-  margin-bottom: 85px;
+  margin-bottom: 35px;
   padding: 20px;
   border: 2px solid rgb(48, 83, 83);
   border-radius: 5px;
