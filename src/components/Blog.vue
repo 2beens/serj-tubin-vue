@@ -1,6 +1,17 @@
 <template>
   <div id="blog">
     <h3>{{ title }}</h3>
+    <v-btn
+      class="mx-2"
+      fab
+      dark
+      small
+      color="primary"
+    >
+      <v-icon dark>
+        mdi-minus
+      </v-icon>
+    </v-btn>
     <div id="blogs-list">
       <div v-for="post in posts" :key="post.id">
         <div class="blog-post" v-bind:id="'blog-' + post.id">

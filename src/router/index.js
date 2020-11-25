@@ -38,6 +38,13 @@ const routes = [
     }
   },
   {
+    path: '/newblog',
+    name: 'New Blog Post',
+    component: function () {
+      return import('../views/NewBlogPost.vue')
+    }
+  },
+  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue')

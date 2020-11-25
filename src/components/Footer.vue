@@ -37,6 +37,8 @@ export default {
 
 <style scoped>
 #s-footer {
-    margin-bottom: 5px;
+  background-color: cadetblue;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 </style>
