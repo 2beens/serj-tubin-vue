@@ -72,9 +72,9 @@
         <div class="blog-post" v-bind:id="'blog-' + post.id">
           <h4>{{ post.title }}</h4>
           <p>{{ post.content }}</p>
-          <!-- <v-btn class="mx-2" fab dark x-small color="primary">
+          <v-btn class="mx-2" fab dark x-small color="primary" @click="deletePost(post.id, post.title)">
             <v-icon dark>mdi-minus</v-icon>
-          </v-btn> -->
+          </v-btn>
         </div>
       </div>
     </div>
@@ -98,6 +98,41 @@ export default {
     }
   },
   methods: {
+    deletePost: function (id, title) {
+      if (!confirm('Are you sure you want to remove blog post [' + title + ']?')) {
+        return
+      }
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id)
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('delete blog - received null response / data')
+            return
+          }
+          if (!response.data.startsWith('deleted:')) {
+            console.error('delete blog - invalid response received: ' + response.data)
+            return
+          }
+
+          var removedPostIndex = -1
+          var i
+          for (i = 0; i < vm.posts.length; i++) {
+            if (vm.posts[i].id === id) {
+              removedPostIndex = i
+              break
+            }
+          }
+          if (removedPostIndex >= 0) {
+            vm.posts.splice(removedPostIndex, 1)
+          } else {
+            console.error('failed to find deleted post')
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     addBlogPost: function (event) {
       if (this.newPost.title === undefined || this.newPost.title === '') {
         console.error('emtpy title')
