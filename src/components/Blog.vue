@@ -1,17 +1,72 @@
 <template>
-  <div id="blog">
+  <div id="blog" data-app="true">
     <h3>{{ title }}</h3>
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      small
-      color="primary"
+
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="600px"
     >
-      <v-icon dark>
-        mdi-minus
-      </v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon dark>
+            mdi-plus
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Add Blog Post</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="Title"
+                  required
+                  v-model="newPost.title"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  required
+                  name="input-7-1"
+                  filled
+                  label="Content"
+                  auto-grow
+                  value=""
+                  v-model="newPost.content"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialog = false"
+          >
+            Abort
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="addBlogPost"
+          >
+            Post!
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <div id="blogs-list">
       <div v-for="post in posts" :key="post.id">
         <div class="blog-post" v-bind:id="'blog-' + post.id">
@@ -25,6 +80,7 @@
 
 <script>
 import axios from 'axios'
+const qs = require('querystring')
 
 export default {
   name: 'Blog',
@@ -33,7 +89,45 @@ export default {
   },
   data: function () {
     return {
-      posts: []
+      posts: [],
+      dialog: false,
+      newPost: {}
+    }
+  },
+  methods: {
+    addBlogPost: function (event) {
+      if (this.newPost.title === undefined || this.newPost.title === '') {
+        console.error('emtpy title')
+        return
+      }
+      if (this.newPost.content === undefined || this.newPost.content === '') {
+        console.error('emtpy content')
+        return
+      }
+
+      const requestBody = {
+        title: this.newPost.title,
+        content: this.newPost.content
+      }
+
+      axios
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + '/blog/new',
+          qs.stringify(requestBody))
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('added:')) {
+            console.warn(response)
+            // return
+          }
+
+          // TODO: refresh blog posts
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+        .finally(() => {
+          this.dialog = false
+        })
     }
   },
   mounted: function () {
@@ -60,9 +154,8 @@ export default {
 }
 .blog-post {
   margin: 15px 15% 15px 15%;
-
   background-color: cadetblue;
-  border-left: 20px solid #42b983;;
+  border-left: 20px solid #42b983;
   border-radius: 5px;
 }
 </style>
