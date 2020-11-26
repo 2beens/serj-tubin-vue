@@ -72,6 +72,9 @@
         <div class="blog-post" v-bind:id="'blog-' + post.id">
           <h4>{{ post.title }}</h4>
           <p>{{ post.content }}</p>
+          <!-- <v-btn class="mx-2" fab dark x-small color="primary">
+            <v-icon dark>mdi-minus</v-icon>
+          </v-btn> -->
         </div>
       </div>
     </div>
@@ -110,6 +113,7 @@ export default {
         content: this.newPost.content
       }
 
+      const vm = this
       axios
         .post(
           process.env.VUE_APP_API_ENDPOINT + '/blog/new',
@@ -117,16 +121,21 @@ export default {
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
             console.warn(response)
-            // return
+            return
           }
 
-          // TODO: refresh blog posts
+          const postId = response.data.split(':')[1]
+          vm.posts.push({
+            id: postId,
+            title: requestBody.title,
+            content: requestBody.content
+          })
         })
         .catch(function (error) {
           console.log(error)
         })
         .finally(() => {
-          this.dialog = false
+          vm.dialog = false
         })
     }
   },
@@ -157,5 +166,6 @@ export default {
   background-color: cadetblue;
   border-left: 20px solid #42b983;
   border-radius: 5px;
+  padding: 10px;
 }
 </style>
