@@ -72,11 +72,32 @@
         <div class="blog-post" v-bind:id="'blog-' + post.id">
           <h4>{{ post.title }}</h4>
           <p>{{ post.content }}</p>
-          <v-btn class="mx-2" fab dark x-small color="primary" @click="deletePost(post.id, post.title)">
-            <v-icon dark>mdi-minus</v-icon>
-          </v-btn>
+          <div class="delete-post-button">
+            <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
+              <v-icon dark>mdi-minus</v-icon>
+            </v-btn>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div id="snackbar-div">
+      <v-snackbar
+        v-model="showSnackbar"
+      >
+        {{ snackbarText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </div>
 </template>
@@ -94,7 +115,9 @@ export default {
     return {
       posts: [],
       dialog: false,
-      newPost: {}
+      newPost: {},
+      snackbarText: '',
+      showSnackbar: false
     }
   },
   methods: {
@@ -123,11 +146,16 @@ export default {
               break
             }
           }
+
           if (removedPostIndex >= 0) {
             vm.posts.splice(removedPostIndex, 1)
+            vm.snackbarText = `Post ${title} removed!`
           } else {
             console.error('failed to find deleted post')
+            vm.snackbarText = `Post ${title} not removed :(`
           }
+
+          vm.showSnackbar = true
         })
         .catch((error) => {
           console.log(error)
@@ -165,6 +193,9 @@ export default {
             title: requestBody.title,
             content: requestBody.content
           })
+
+          vm.snackbarText = `Post ${requestBody.title} added!`
+          vm.showSnackbar = true
         })
         .catch(function (error) {
           console.log(error)
@@ -202,5 +233,16 @@ export default {
   border-left: 20px solid #42b983;
   border-radius: 5px;
   padding: 10px;
+  position: relative;
+}
+.delete-post-button {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  margin-top: 10px;
+}
+#snackbar-div {
+  margin-bottom: 200px;
 }
 </style>

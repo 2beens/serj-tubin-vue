@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <v-app>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
@@ -10,7 +10,7 @@
     <router-view />
 
     <Footer/>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #264e77;
+  background-color: black;
 }
 
 #nav {
