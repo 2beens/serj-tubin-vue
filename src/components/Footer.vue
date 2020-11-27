@@ -29,7 +29,7 @@
           class="mx-4"
           dark
           icon
-          @click="goTo('github')"
+          @click="goTo('gh')"
         >
           <v-icon size="24px">
             mdi-github-circle
@@ -38,7 +38,7 @@
       </v-card-title>
 
       <v-card-text class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+        {{ new Date().getFullYear() }} — {{ versionInfo }}
       </v-card-text>
     </v-card>
   </v-footer>
@@ -49,12 +49,22 @@ import axios from 'axios'
 
 export default {
   name: 'Footer',
+  data: function () {
+    return {
+      versionInfo: '...'
+    }
+  },
   methods: {
     goTo: function (target) {
-      alert(target)
+      if (target === 'gh') {
+        window.open('https://github.com/2beens', '_blank').focus()
+      } else if (target === 'fb') {
+        window.open('https://www.facebook.com/srdjantubin', '_blank').focus()
+      }
     }
   },
   mounted: function () {
+    const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/version')
       .then(response => {
@@ -62,7 +72,7 @@ export default {
           console.error('get version info: received null response / data')
           return
         }
-        document.getElementById('version-info').innerHTML = '[' + response.data.trim() + ']'
+        vm.versionInfo = response.data.trim()
       })
       .catch(error => {
         console.log(error)
