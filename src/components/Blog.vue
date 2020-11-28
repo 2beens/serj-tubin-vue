@@ -230,7 +230,7 @@ export default {
 .blog-post {
   margin: 15px 15% 15px 15%;
   background-color: cadetblue;
-  border-left: 20px solid #42b983;
+  border-left: 20px solid #26A69A;
   border-radius: 5px;
   padding: 10px;
   position: relative;
