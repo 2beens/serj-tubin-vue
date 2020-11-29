@@ -17,7 +17,6 @@ import axios from 'axios'
 export default {
   name: 'Util',
   mounted: function () {
-    console.log('util mounted')
     document.getElementById('user-agent-value').innerHTML = navigator.userAgent
 
     axios
@@ -38,7 +37,7 @@ export default {
 
 <style scoped>
 .util-info-box {
-    background-color: rgb(32, 185, 134);
+    background-color: #26A69A;
     margin-left: 10%;
     margin-right: 10%;
     border-radius: 5px;

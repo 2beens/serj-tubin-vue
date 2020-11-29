@@ -14,6 +14,10 @@
 
         <v-spacer></v-spacer>
 
+        {{ new Date().getFullYear() }} — {{ versionInfo }}
+
+        <v-spacer></v-spacer>
+
         <v-btn
           class="mx-4"
           dark
@@ -36,10 +40,6 @@
           </v-icon>
         </v-btn>
       </v-card-title>
-
-      <v-card-text class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — {{ versionInfo }}
-      </v-card-text>
     </v-card>
   </v-footer>
 </template>

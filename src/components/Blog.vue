@@ -10,7 +10,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
+          color="teal lighten-1"
           dark
           v-bind="attrs"
           v-on="on"

@@ -67,7 +67,7 @@ export default {
   margin-right: 40px;
   margin-bottom: 35px;
   padding: 20px;
-  border: 2px solid rgb(48, 83, 83);
+  border: 2px solid #26A69A;
   border-radius: 5px;
 }
 #quote-text {
@@ -75,7 +75,7 @@ export default {
   color: rgb(48, 83, 83);
 }
 #quote-author {
-  color: #42b983;
+  color: #26A69A;
 }
 
 h3 {
@@ -90,6 +90,6 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #26A69A;
 }
 </style>
