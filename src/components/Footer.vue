@@ -10,7 +10,7 @@
       tile
     >
       <v-card-title class="teal lighten-1">
-        <strong class="subheading">Srđan Tubin, Berlin 2019/2020, https://vuetifyjs.com/en/styles/colors</strong>
+        <strong class="subheading">Srđan Tubin, Berlin 2019/2020</strong>
 
         <v-spacer></v-spacer>
 

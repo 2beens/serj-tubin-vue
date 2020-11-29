@@ -4,6 +4,7 @@
 
     <v-dialog
       v-model="dialog"
+      v-if="theRoot.loggedIn"
       persistent
       max-width="600px"
     >
@@ -72,7 +73,7 @@
         <div class="blog-post" v-bind:id="'blog-' + post.id">
           <h4>{{ post.title }}</h4>
           <p>{{ post.content }}</p>
-          <div class="delete-post-button">
+          <div v-if="theRoot.loggedIn" class="delete-post-button">
             <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
               <v-icon dark>mdi-minus</v-icon>
             </v-btn>
@@ -117,7 +118,8 @@ export default {
       dialog: false,
       newPost: {},
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
+      theRoot: this.$root
     }
   },
   methods: {
@@ -125,9 +127,16 @@ export default {
       if (!confirm('Are you sure you want to remove blog post [' + title + ']?')) {
         return
       }
+
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id)
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete blog - received null response / data')
@@ -180,7 +189,13 @@ export default {
       axios
         .post(
           process.env.VUE_APP_API_ENDPOINT + '/blog/new',
-          qs.stringify(requestBody))
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
             console.warn(response)

@@ -11,7 +11,7 @@
         x-small
         text
         icon
-        v-if="loggedIn"
+        v-if="this.$root.loggedIn"
         @click="logout"
         color="teal lighten-1"
       >
@@ -94,12 +94,13 @@
 
 <script>
 import Footer from '@/components/Footer.vue'
+import axios from 'axios'
+const qs = require('querystring')
 
 export default {
   name: 'App',
   data: function () {
     return {
-      loggedIn: false,
       user: {},
       showLoginDialog: false
     }
@@ -109,6 +110,15 @@ export default {
   },
   mounted: function () {
     console.log('loaded env: ' + process.env.VUE_APP_ENV)
+
+    const token = this.getCookie('sessionkolacic')
+    if (token === undefined || token === null || token === '') {
+      // console.warn('no token in cookies, not logged in')
+      return
+    }
+
+    console.log(token)
+    this.$root.loggedIn = true
   },
   watch: {
     $route (to, from) {
@@ -117,14 +127,73 @@ export default {
   },
   methods: {
     login: function () {
-      // TODO:
-      this.loggedIn = true
-      this.showLoginDialog = false
+      if (this.user.name === undefined || this.user.name === '') {
+        console.error('emtpy username')
+        return
+      }
+      if (this.user.password === undefined || this.user.password === '') {
+        console.error('emtpy password')
+        return
+      }
+
+      const requestBody = {
+        username: this.user.name,
+        password: this.user.password
+      }
+
+      const vm = this
+      axios
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + '/login',
+          qs.stringify(requestBody))
+        .then(function (response) {
+          if (response.data === null) {
+            console.warn(response)
+            return
+          }
+
+          const token = response.data.token
+          vm.$root.loggedIn = true
+          vm.setCookie('sessionkolacic', token, 1)
+          console.log('logged in with: ' + token)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+        .finally(() => {
+          vm.showLoginDialog = false
+        })
     },
     logout: function () {
-      // TODO:
-      this.loggedIn = false
-      this.showLoginDialog = false
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + '/logout', {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          })
+        .then(response => {
+          if (response === null || response.data === null) {
+            console.error('received null response / data')
+            return
+          }
+          if (response.data !== 'logged-out') {
+            console.error('received unexpected response / data')
+            return
+          }
+
+          this.eraseCookie('sessionkolacic')
+          this.$root.loggedIn = false
+          this.showLoginDialog = false
+        })
+        .catch(error => {
+          if (error.response && error.response.status === 401) {
+            this.eraseCookie('sessionkolacic')
+            this.$root.loggedIn = false
+            this.showLoginDialog = false
+          }
+        })
     }
   }
 }
