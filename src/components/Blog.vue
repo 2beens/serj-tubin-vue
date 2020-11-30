@@ -80,6 +80,15 @@
           </div>
         </div>
       </div>
+      <div class="text-center">
+        <v-pagination
+          @input="onBlogPageChange"
+          v-if="posts.length > 0"
+          v-model="blogPage"
+          :length="blogPageLength"
+          :total-visible="7"
+        ></v-pagination>
+      </div>
     </div>
 
     <div id="snackbar-div">
@@ -114,6 +123,9 @@ export default {
   },
   data: function () {
     return {
+      blogPage: 1,
+      maxPostsPerPage: 5,
+      blogPageLength: 0,
       posts: [],
       dialog: false,
       newPost: {},
@@ -123,6 +135,9 @@ export default {
     }
   },
   methods: {
+    onBlogPageChange (page) {
+      console.warn(page)
+    },
     deletePost: function (id, title) {
       if (!confirm('Are you sure you want to remove blog post [' + title + ']?')) {
         return
@@ -230,6 +245,7 @@ export default {
           return
         }
         vm.posts = response.data
+        vm.blogPageLength = Math.ceil((vm.posts.length / vm.maxPostsPerPage) + 1)
       })
       .catch((error) => {
         console.log(error)
