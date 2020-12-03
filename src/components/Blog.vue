@@ -136,7 +136,20 @@ export default {
   },
   methods: {
     onBlogPageChange (page) {
-      console.warn(page)
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + `/blog/page/${page}/size/${vm.maxPostsPerPage}`)
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('all blogs - received null response / data')
+            return
+          }
+          vm.posts = response.data.posts
+          vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     deletePost: function (id, title) {
       if (!confirm('Are you sure you want to remove blog post [' + title + ']?')) {
@@ -218,11 +231,15 @@ export default {
           }
 
           const postId = response.data.split(':')[1]
-          vm.posts.push({
+          vm.posts.unshift({
             id: postId,
             title: requestBody.title,
             content: requestBody.content
           })
+
+          if (vm.posts.length > vm.maxPostsPerPage) {
+            vm.posts.pop()
+          }
 
           vm.snackbarText = `Post ${requestBody.title} added!`
           vm.showSnackbar = true
@@ -238,14 +255,14 @@ export default {
   mounted: function () {
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/blog/all')
+      .get(process.env.VUE_APP_API_ENDPOINT + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`)
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('all blogs - received null response / data')
           return
         }
-        vm.posts = response.data
-        vm.blogPageLength = Math.ceil((vm.posts.length / vm.maxPostsPerPage) + 1)
+        vm.posts = response.data.posts
+        vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
       })
       .catch((error) => {
         console.log(error)
