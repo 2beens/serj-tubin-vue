@@ -86,6 +86,25 @@
       </v-dialog>
     </div>
 
+    <div id="snackbar-div">
+      <v-snackbar
+        v-model="showSnackbar"
+      >
+        {{ snackbarText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+
     <router-view />
 
     <Footer/>
@@ -102,7 +121,9 @@ export default {
   data: function () {
     return {
       user: {},
-      showLoginDialog: false
+      showLoginDialog: false,
+      snackbarText: '',
+      showSnackbar: false
     }
   },
   components: {
@@ -156,15 +177,21 @@ export default {
           vm.$root.loggedIn = true
           vm.setCookie('sessionkolacic', token, 1)
           console.log('logged in with: ' + token)
+          vm.showSnackbar = true
+          vm.snackbarText = 'logged in'
         })
         .catch(function (error) {
           console.log(error)
+          vm.showSnackbar = true
+          vm.snackbarText = error
+          vm.user = {}
         })
         .finally(() => {
           vm.showLoginDialog = false
         })
     },
     logout: function () {
+      const vm = this
       axios
         .get(
           process.env.VUE_APP_API_ENDPOINT + '/logout', {
@@ -183,15 +210,23 @@ export default {
             return
           }
 
-          this.eraseCookie('sessionkolacic')
-          this.$root.loggedIn = false
-          this.showLoginDialog = false
+          vm.eraseCookie('sessionkolacic')
+          vm.$root.loggedIn = false
+          vm.showLoginDialog = false
+
+          vm.showSnackbar = true
+          vm.snackbarText = 'logged out'
+          vm.user = {}
         })
         .catch(error => {
           if (error.response && error.response.status === 401) {
-            this.eraseCookie('sessionkolacic')
-            this.$root.loggedIn = false
-            this.showLoginDialog = false
+            vm.eraseCookie('sessionkolacic')
+            vm.$root.loggedIn = false
+            vm.showLoginDialog = false
+
+            vm.showSnackbar = true
+            vm.snackbarText = error
+            vm.user = {}
           }
         })
     }
