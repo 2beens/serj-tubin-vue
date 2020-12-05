@@ -1,5 +1,6 @@
 <template>
   <v-footer
+    max-height="52"
     dark
     padless
     fixed

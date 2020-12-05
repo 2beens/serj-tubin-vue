@@ -22,7 +22,8 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Add Blog Post</span>
+          <span v-if="editBlogMode" class="headline">Edit Blog Post</span>
+          <span v-else class="headline">Add Blog Post</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -31,7 +32,7 @@
                 <v-text-field
                   label="Title"
                   required
-                  v-model="newPost.title"
+                  v-model="selectedPost.title"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -42,7 +43,7 @@
                   label="Content"
                   auto-grow
                   value=""
-                  v-model="newPost.content"
+                  v-model="selectedPost.content"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -53,11 +54,20 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="abortEditPost"
           >
             Abort
           </v-btn>
           <v-btn
+            v-if="editBlogMode"
+            color="blue darken-1"
+            text
+            @click="updateBlogPost"
+          >
+            Update!
+          </v-btn>
+          <v-btn
+            v-else
             color="blue darken-1"
             text
             @click="addBlogPost"
@@ -72,8 +82,11 @@
       <div v-for="post in posts" :key="post.id">
         <div class="blog-post" v-bind:id="'blog-' + post.id">
           <h4>{{ post.title }}</h4>
-          <p>{{ post.content }}</p>
+          <span v-html="post.content"></span>
           <div v-if="theRoot.loggedIn" class="delete-post-button">
+            <v-btn class="mx-2" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
+              <v-icon dark>mdi-pencil</v-icon>
+            </v-btn>
             <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
               <v-icon dark>mdi-minus</v-icon>
             </v-btn>
@@ -123,12 +136,14 @@ export default {
   },
   data: function () {
     return {
+      editBlogMode: false,
       blogPage: 1,
       maxPostsPerPage: 5,
       blogPageLength: 0,
       posts: [],
       dialog: false,
-      newPost: {},
+      selectedPost: {},
+      editedPost: {},
       snackbarText: '',
       showSnackbar: false,
       theRoot: this.$root
@@ -199,18 +214,20 @@ export default {
         })
     },
     addBlogPost: function (event) {
-      if (this.newPost.title === undefined || this.newPost.title === '') {
+      this.editBlogMode = false
+
+      if (this.selectedPost.title === undefined || this.selectedPost.title === '') {
         console.error('emtpy title')
         return
       }
-      if (this.newPost.content === undefined || this.newPost.content === '') {
+      if (this.selectedPost.content === undefined || this.selectedPost.content === '') {
         console.error('emtpy content')
         return
       }
 
       const requestBody = {
-        title: this.newPost.title,
-        content: this.newPost.content
+        title: this.selectedPost.title,
+        content: this.selectedPost.content
       }
 
       const vm = this
@@ -226,6 +243,8 @@ export default {
         )
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
+            vm.snackbarText = 'Received unexpected response from server'
+            vm.showSnackbar = true
             console.warn(response)
             return
           }
@@ -243,12 +262,77 @@ export default {
 
           vm.snackbarText = `Post ${requestBody.title} added!`
           vm.showSnackbar = true
+          vm.selectedPost = {}
         })
         .catch(function (error) {
+          vm.snackbarText = error
+          vm.showSnackbar = true
           console.log(error)
         })
         .finally(() => {
           vm.dialog = false
+        })
+    },
+    abortEditPost: function () {
+      this.selectedPost.title = this.editedPost.title
+      this.selectedPost.content = this.editedPost.content
+      this.editedPost = {}
+      this.dialog = false
+    },
+    openEditPostDialog: function (post) {
+      this.editBlogMode = true
+      this.dialog = true
+      this.editedPost = Object.assign({}, post)
+      this.selectedPost = post
+    },
+    updateBlogPost: function () {
+      if (this.selectedPost.title === undefined || this.selectedPost.title === '') {
+        console.error('emtpy title')
+        return
+      }
+      if (this.selectedPost.content === undefined || this.selectedPost.content === '') {
+        console.error('emtpy content')
+        return
+      }
+
+      const requestBody = {
+        id: this.selectedPost.id,
+        title: this.selectedPost.title,
+        content: this.selectedPost.content
+      }
+
+      const vm = this
+      axios
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + '/blog/update',
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('updated:')) {
+            vm.snackbarText = 'Received unexpected response from server'
+            vm.showSnackbar = true
+            console.warn(response)
+            return
+          }
+
+          const postId = response.data.split(':')[1]
+          vm.snackbarText = `Post ${postId} ${requestBody.title} updated!`
+          vm.showSnackbar = true
+          vm.selectedPost = {}
+        })
+        .catch(function (error) {
+          vm.snackbarText = error
+          vm.showSnackbar = true
+          console.log(error)
+        })
+        .finally(() => {
+          this.editBlogMode = false
+          this.dialog = false
         })
     }
   },

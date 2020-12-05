@@ -138,7 +138,6 @@ export default {
       return
     }
 
-    console.log(token)
     this.$root.loggedIn = true
   },
   watch: {
@@ -176,7 +175,6 @@ export default {
           const token = response.data.token
           vm.$root.loggedIn = true
           vm.setCookie('sessionkolacic', token, 1)
-          console.log('logged in with: ' + token)
           vm.showSnackbar = true
           vm.snackbarText = 'logged in'
         })
