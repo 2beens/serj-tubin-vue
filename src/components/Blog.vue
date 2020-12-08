@@ -81,16 +81,33 @@
     <div id="blogs-list">
       <div v-for="post in posts" :key="post.id">
         <div class="blog-post" v-bind:id="'blog-' + post.id">
-          <h4>{{ post.title }}</h4>
-          <span v-html="post.content"></span>
-          <div v-if="theRoot.loggedIn" class="delete-post-button">
-            <v-btn class="mx-2" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
-              <v-icon dark>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
-              <v-icon dark>mdi-minus</v-icon>
-            </v-btn>
-          </div>
+          <v-row>
+            <v-col cols="2"></v-col>
+            <v-col cols="8">
+              <h4 class="blog-post-title">{{ post.title }}</h4>
+            </v-col>
+            <v-col cols="2">
+              <p class="blog-post-date">{{ post.created_at.split('T')[0] }}</p>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="1"></v-col>
+            <v-col cols="10">
+              <span v-html="post.content"></span>
+            </v-col>
+            <v-col v-if="theRoot.loggedIn" cols="1">
+              <div class="delete-post-button">
+                <v-btn class="mx-2" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
+                  <v-icon dark>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+              </div>
+            </v-col>
+            <v-col v-else cols="1"></v-col>
+          </v-row>
         </div>
       </div>
       <div class="text-center">
@@ -366,6 +383,14 @@ export default {
   border-radius: 5px;
   padding: 10px;
   position: relative;
+}
+.blog-post-title {
+  border-bottom: 10px solid #26A69A;
+  border-radius: 5px;
+}
+.blog-post-date {
+  background-color: #26A69A;
+  border-radius: 5px;
 }
 .delete-post-button {
   top: 0;
