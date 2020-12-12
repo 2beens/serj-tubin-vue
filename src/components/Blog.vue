@@ -87,7 +87,7 @@
               <h4 class="blog-post-title">{{ post.title }}</h4>
             </v-col>
             <v-col cols="2">
-              <p class="blog-post-date">{{ post.created_at.split('T')[0] }}</p>
+              <p class="blog-post-date">{{ date2string(Date.parse(post.created_at)) }}</p>
             </v-col>
           </v-row>
 
@@ -190,7 +190,7 @@ export default {
 
       const vm = this
       axios
-        .get(
+        .delete(
           process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
             headers: {
               'Access-Control-Allow-Origin': '*',
@@ -270,7 +270,8 @@ export default {
           vm.posts.unshift({
             id: postId,
             title: requestBody.title,
-            content: requestBody.content
+            content: requestBody.content,
+            created_at: vm.date2string(Date.now())
           })
 
           if (vm.posts.length > vm.maxPostsPerPage) {

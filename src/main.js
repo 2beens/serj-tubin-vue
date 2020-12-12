@@ -9,6 +9,12 @@ Vue.config.productionTip = false
 
 Vue.mixin({
   methods: {
+    date2string (aDate) {
+      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(aDate)
+      const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(aDate)
+      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(aDate)
+      return `${da}-${mo}-${ye}`
+    },
     setCookie (name, value, days) {
       var expires = ''
       if (days) {
