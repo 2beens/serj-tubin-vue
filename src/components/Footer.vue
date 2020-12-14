@@ -1,16 +1,48 @@
 <template>
-  <footer id="s-footer" class="fixed-bottom">
-    <div class="row">
-      <div class="col-sm-1">Srđan Tubin</div>
-      <div class="col-sm-1">
-        <a href="https://github.com/2beens" class="fa fa-github"></a>
-      </div>
-      <div class="col-sm-2">
-        <a href="https://www.facebook.com/srdjantubin" class="fa fa-facebook"></a>
-      </div>
-      <div id="version-info" class="col-sm-1" style="margin-left: 77%; margin-right: 15;">[]</div>
-    </div>
-  </footer>
+  <v-footer
+    max-height="52"
+    dark
+    padless
+    fixed
+  >
+    <v-card
+      class="flex"
+      flat
+      tile
+    >
+      <v-card-title class="teal lighten-1">
+        <strong class="subheading">Serj, Berlin 2019/2020</strong>
+
+        <v-spacer></v-spacer>
+
+        {{ new Date().getFullYear() }} — {{ versionInfo }}
+
+        <v-spacer></v-spacer>
+
+        <v-btn
+          class="mx-4"
+          dark
+          icon
+          @click="goTo('fb')"
+        >
+          <v-icon size="24px">
+            mdi-facebook
+          </v-icon>
+        </v-btn>
+
+        <v-btn
+          class="mx-4"
+          dark
+          icon
+          @click="goTo('gh')"
+        >
+          <v-icon size="24px">
+            mdi-github-circle
+          </v-icon>
+        </v-btn>
+      </v-card-title>
+    </v-card>
+  </v-footer>
 </template>
 
 <script>
@@ -18,7 +50,22 @@ import axios from 'axios'
 
 export default {
   name: 'Footer',
+  data: function () {
+    return {
+      versionInfo: '...'
+    }
+  },
+  methods: {
+    goTo: function (target) {
+      if (target === 'gh') {
+        window.open('https://github.com/2beens', '_blank').focus()
+      } else if (target === 'fb') {
+        window.open('https://www.facebook.com/srdjantubin', '_blank').focus()
+      }
+    }
+  },
   mounted: function () {
+    const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/version')
       .then(response => {
@@ -26,7 +73,7 @@ export default {
           console.error('get version info: received null response / data')
           return
         }
-        document.getElementById('version-info').innerHTML = '[' + response.data.trim() + ']'
+        vm.versionInfo = response.data.trim()
       })
       .catch(error => {
         console.log(error)
@@ -36,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-#s-footer {
-    margin-bottom: 5px;
+div {
+  /* color: cadetblue; */
 }
 </style>

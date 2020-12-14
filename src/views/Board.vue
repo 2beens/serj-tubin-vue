@@ -142,7 +142,7 @@ function getTimestampString (date) {
   font-size: 18px;
   border-width: 1px;
   border-color: #f5f2f2;
-  background-color: rgb(32, 185, 134);
+  background-color: #26A69A;
   color: #000000;
   border-style: groove;
   border-radius: 4px;
@@ -153,7 +153,7 @@ function getTimestampString (date) {
      outline:none;
 }
 #board-messages {
-  background-color: rgb(32, 185, 134);
+  background-color: #26A69A;
   text-align: left;
 
   margin-left: 10%;

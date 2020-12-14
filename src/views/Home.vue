@@ -6,6 +6,10 @@
     <SideBar />
 
     <HomePage msg="Welcome to my personal nothingness!"/>
+
+    <!-- <div id="app">
+      <link-prevue url="https://www.accountingcoach.com/"></link-prevue>
+    </div> -->
   </div>
 </template>
 
@@ -13,12 +17,15 @@
 // @ is an alias to /src
 import HomePage from '@/components/HomePage.vue'
 import SideBar from '@/components/SideBar.vue'
+// import LinkPrevue from 'link-prevue'
 
 export default {
   name: 'Home',
   components: {
     HomePage,
     SideBar
+    // https://morioh.com/p/faa3a48bf0d6
+    // LinkPrevue
   }
 }
 </script>
