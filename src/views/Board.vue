@@ -2,6 +2,11 @@
   <div id="board">
     <h5>Let's see if this board can be hacked and screwed 🤔👀🤷‍♂️</h5>
     <div id="board-messages">
+      <div class="board-message" v-for="message in messages" :key="message.id">
+        <div v-bind:id="'message-' + message.id">
+          <p class="message-content"><span class="message-date">{{ getTimestampString(new Date(message.timestamp * 1000)) }}</span>: [{{ message.author }}] <strong>{{ message.message }}</strong></p>
+        </div>
+      </div>
     </div>
     <div id="board-controls">
       <input type="text" placeholder="author: anonymous" class="board-input" id="author-input"/>
@@ -17,9 +22,11 @@ const qs = require('querystring')
 export default {
   data: () => ({
     message: 'Hey!',
+    messages: [],
     loading: false
   }),
   mounted: function () {
+    const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/board/messages/last/140')
       .then(response => {
@@ -27,11 +34,7 @@ export default {
           console.error('received null response / data messages')
           return
         }
-
-        const messages = response.data
-        messages.forEach(m => {
-          addNewMessage(m)
-        })
+        vm.messages = response.data
       })
       .catch(error => {
         console.log(error)
@@ -54,23 +57,27 @@ export default {
           message: msgContent
         }
 
+        const vm = this
         axios
           .post(
             process.env.VUE_APP_API_ENDPOINT + '/board/messages/new',
             qs.stringify(requestBody))
           .then(function (response) {
-            if (response.data === null || response.data !== 'added') {
+            if (response.data === null || !response.data.startsWith('added:')) {
               console.warn(response)
+              // TODO: show error
               return
             }
 
             msgInput.value = ''
-
             let msgCreator = 'anon'
             if (msgAuthor !== '') {
               msgCreator = msgAuthor
             }
-            addNewMessage({
+
+            const newMessageId = response.data.split(':')[1]
+            vm.messages.push({
+              id: newMessageId,
               timestamp: Math.floor(Date.now() / 1000),
               message: msgContent,
               author: msgCreator
@@ -96,31 +103,6 @@ export default {
 function updateMessagesScroll () {
   const messagesBoard = document.getElementById('board-messages')
   messagesBoard.scrollTop = messagesBoard.scrollHeight
-}
-
-function addNewMessage (m) {
-  const msgTs = getTimestampString(new Date(m.timestamp * 1000))
-
-  const msgSection = document.createElement('div')
-  msgSection.setAttribute('class', 'board-message')
-  msgSection.style.borderBottom = '2px solid white'
-  msgSection.style.borderRadius = '2px'
-
-  const msgNode = document.createTextNode(msgTs + ': [' + m.author + '] ' + m.message)
-  msgSection.appendChild(msgNode)
-
-  document.getElementById('board-messages').appendChild(msgSection)
-}
-
-function getTimestampString (date) {
-  const hourInfo = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)
-
-  const y = date.getFullYear()
-  const m = date.getMonth()
-  const d = date.getDate()
-  const dateInfo = ('0' + d).slice(-2) + '/' + ('0' + (m + 1)).slice(-2) + '/' + y
-
-  return dateInfo + ' ' + hourInfo
 }
 </script>
 
@@ -161,7 +143,7 @@ function getTimestampString (date) {
   /* margin-bottom: 20%; */
 
   padding-top: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   padding-right: 5px;
   padding-left: 5px;
 
@@ -169,5 +151,18 @@ function getTimestampString (date) {
 
   border-radius: 5px;
   overflow: auto;
+}
+.board-message {
+  margin-left: 15px;
+  margin-bottom: 5px;
+}
+.message-content {
+  padding: 0px;
+  margin: 0px;
+}
+.message-date{
+  background-color: #000000;
+  padding: 3px;
+  border-radius: 10px;
 }
 </style>
