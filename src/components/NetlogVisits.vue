@@ -1,15 +1,54 @@
 <template>
   <div id="visits-main">
-    <div v-for="visit in visits" :key="visit.id">
-      <div class="visit" v-bind:id="'visit-' + visit.id">
-        <v-row>
-          <v-col cols="10" class="text-left pa-md-0">
-            <p class="visit-url">{{ visit.url }}</p>
-          </v-col>
-          <v-col cols="2" class="pa-md-0">
-            <p class="visit-timestamp">{{ visit.timestamp }}</p>
-          </v-col>
-        </v-row>
+    <div id="filter-row">
+      <v-card
+        id="filter-row-card"
+        elevation="2"
+        rounded-xl
+        class="ma-xs-10"
+      >
+        <v-form
+          class="pa-md-0"
+          @submit.prevent
+        >
+          <v-container>
+            <v-row>
+              <v-col cols="12" class="pa-md-0">
+                <v-text-field
+                  v-model="filterInput"
+                  :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
+                  :append-outer-icon="filterInput ? 'mdi-send' : 'mdi-microphone'"
+                  :prepend-icon="icon"
+                  filled
+                  clear-icon="mdi-close-circle"
+                  clearable
+                  label="Filter Input"
+                  type="text"
+                  @keyup.enter="filterVisits"
+                  @click:append="toggleMarker"
+                  @click:append-outer="filterVisits"
+                  @click:prepend="changeIcon"
+                  @click:clear="clearFilterInput"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+      </v-card>
+    </div>
+
+    <div id="visits-list">
+      <div v-for="visit in visits" :key="visit.id">
+        <div class="visit" v-bind:id="'visit-' + visit.id">
+          <v-row>
+            <v-col cols="10" class="text-left pa-md-0">
+              <p class="visit-url">{{ visit.url }}</p>
+            </v-col>
+            <v-col cols="2" class="pa-md-0">
+              <p class="visit-timestamp">{{ visit.timestamp }}</p>
+            </v-col>
+          </v-row>
+        </div>
       </div>
     </div>
   </div>
@@ -22,12 +61,60 @@ export default {
   name: 'NetlogVisits',
   data: function () {
     return {
-      visits: []
+      visits: [],
+      filterInput: '',
+      marker: true,
+      iconIndex: 0,
+      icons: [
+        'mdi-emoticon',
+        'mdi-emoticon-cool',
+        'mdi-emoticon-dead',
+        'mdi-emoticon-excited',
+        'mdi-emoticon-happy',
+        'mdi-emoticon-neutral',
+        'mdi-emoticon-sad',
+        'mdi-emoticon-tongue'
+      ]
+    }
+  },
+  computed: {
+    icon () {
+      return this.icons[this.iconIndex]
     }
   },
   methods: {
-    removeMe (page) {
-      console.log(this.visits.length)
+    filterVisits () {
+      if (this.filterInput.length === 0) {
+        return
+      }
+
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}`)
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('all blogs - received null response / data')
+            return
+          }
+          vm.visits = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    toggleMarker () {
+      this.marker = !this.marker
+    },
+    clearFilterInput () {
+      this.filterInput = ''
+    },
+    resetIcon () {
+      this.iconIndex = 0
+    },
+    changeIcon () {
+      this.iconIndex === this.icons.length - 1
+        ? this.iconIndex = 0
+        : this.iconIndex++
     }
   },
   mounted: function () {
@@ -49,10 +136,16 @@ export default {
 </script>
 
 <style scoped>
-#visits-main {
-  margin-left: 30px;
+#filter-row {
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-bottom: 15px;
+  padding-bottom: 0px;
 }
-.visit {
-  /* border-bottom: 1px solid white; */
+#filter-row-card {
+  background-color: #26A69A;
+}
+#visits-list {
+  margin-left: 30px;
 }
 </style>
