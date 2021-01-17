@@ -5,6 +5,7 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/board">Visitor Board</router-link> |
       <router-link to="/util">Util</router-link> |
+      <router-link to="/netlog">Netlog</router-link>
 
       <v-btn
         class="ma-2"

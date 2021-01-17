@@ -38,6 +38,13 @@ const routes = [
     }
   },
   {
+    path: '/netlog',
+    name: 'Netlog',
+    component: function () {
+      return import('../views/Netlog.vue')
+    }
+  },
+  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue')

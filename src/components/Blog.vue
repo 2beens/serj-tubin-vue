@@ -110,6 +110,8 @@
           </v-row>
         </div>
       </div>
+
+      <!-- PAGNIATION HERE -->
       <div class="text-center">
         <v-pagination
           @input="onBlogPageChange"
