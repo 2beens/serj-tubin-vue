@@ -1,5 +1,5 @@
 <template>
-  <div id="visits-main">
+  <div data-app="true" v-if="theRoot.loggedIn" id="visits-main">
     <div id="filter-row">
       <v-card
         id="filter-row-card"
@@ -52,6 +52,7 @@
       </div>
     </div>
   </div>
+  <h4 v-else>Can't show you this one, sorry 🤷‍♂️</h4>
 </template>
 
 <script>
@@ -61,6 +62,7 @@ export default {
   name: 'NetlogVisits',
   data: function () {
     return {
+      theRoot: this.$root,
       visits: [],
       filterInput: '',
       marker: true,
@@ -90,7 +92,12 @@ export default {
 
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}`)
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}`, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('all blogs - received null response / data')
@@ -103,6 +110,9 @@ export default {
         })
     },
     toggleMarker () {
+      // TODO:
+      // list of material design emoticons/icons:
+      // https://materialdesignicons.com/icon/emoticon
       this.marker = !this.marker
     },
     clearFilterInput () {
@@ -120,7 +130,12 @@ export default {
   mounted: function () {
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/netlog/')
+      .get(process.env.VUE_APP_API_ENDPOINT + '/netlog/', {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        }
+      })
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('all blogs - received null response / data')
