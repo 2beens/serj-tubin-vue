@@ -1,5 +1,5 @@
 <template>
-  <div data-app="true" v-if="theRoot.loggedIn" id="visits-main">
+  <div id="visits-main" data-app="true" v-if="theRoot.loggedIn">
     <div id="filter-row">
       <v-card
         id="filter-row-card"
@@ -8,7 +8,7 @@
         class="ma-xs-10"
       >
         <v-form
-          class="pa-md-0"
+          class="pa-md-2"
           @submit.prevent
         >
           <v-container>
@@ -87,6 +87,7 @@ export default {
   methods: {
     filterVisits () {
       if (this.filterInput.length === 0) {
+        this.getRecentVisits()
         return
       }
 
@@ -117,6 +118,7 @@ export default {
     },
     clearFilterInput () {
       this.filterInput = ''
+      this.getRecentVisits()
     },
     resetIcon () {
       this.iconIndex = 0
@@ -125,27 +127,30 @@ export default {
       this.iconIndex === this.icons.length - 1
         ? this.iconIndex = 0
         : this.iconIndex++
+    },
+    getRecentVisits () {
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + '/netlog/', {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('all blogs - received null response / data')
+            return
+          }
+          vm.visits = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   },
   mounted: function () {
-    const vm = this
-    axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/netlog/', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-        }
-      })
-      .then((response) => {
-        if (response === null || response.data === null) {
-          console.error('all blogs - received null response / data')
-          return
-        }
-        vm.visits = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.getRecentVisits()
   }
 }
 </script>
@@ -161,6 +166,10 @@ export default {
   background-color: #26A69A;
 }
 #visits-list {
+  margin-top: 45px;
   margin-left: 30px;
+}
+#visits-main {
+  margin-bottom: 95px;
 }
 </style>
