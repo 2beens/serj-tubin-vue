@@ -50,6 +50,17 @@
           </v-row>
         </div>
       </div>
+
+      <!-- PAGNIATION HERE -->
+      <div class="text-center">
+        <v-pagination
+          @input="onVisitsPageChange"
+          v-if="visits.length > 0"
+          v-model="visitsPage"
+          :length="visitsPageLength"
+          :total-visible="10"
+        ></v-pagination>
+      </div>
     </div>
   </div>
   <h4 v-else>Can't show you this one, sorry 🤷‍♂️</h4>
@@ -64,6 +75,9 @@ export default {
     return {
       theRoot: this.$root,
       visits: [],
+      visitsPage: 1,
+      maxVisitsPerPage: 200,
+      visitsPageLength: 0,
       filterInput: '',
       marker: true,
       iconIndex: 0,
@@ -101,7 +115,7 @@ export default {
         })
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all blogs - received null response / data')
+            console.error('filter visits - received null response / data')
             return
           }
           vm.visits = response.data
@@ -131,7 +145,7 @@ export default {
     getRecentVisits () {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/netlog/', {
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -139,14 +153,18 @@ export default {
         })
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all blogs - received null response / data')
+            console.error('visits page - received null response / data')
             return
           }
-          vm.visits = response.data
+          vm.visits = response.data.visits
+          vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    onVisitsPageChange (page) {
+      this.getRecentVisits()
     }
   },
   mounted: function () {
