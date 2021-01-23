@@ -81,6 +81,7 @@ export default {
       filterInput: '',
       marker: true,
       iconIndex: 0,
+      searchMode: false,
       icons: [
         'mdi-emoticon',
         'mdi-emoticon-cool',
@@ -101,13 +102,19 @@ export default {
   methods: {
     filterVisits () {
       if (this.filterInput.length === 0) {
-        this.getRecentVisits()
+        this.getVisits()
         return
+      }
+
+      if (!this.searchMode) {
+        console.warn('search on')
+        this.visitsPage = 1
+        this.searchMode = true
       }
 
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}`, {
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -118,7 +125,8 @@ export default {
             console.error('filter visits - received null response / data')
             return
           }
-          vm.visits = response.data
+          vm.visits = response.data.visits
+          vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
         })
         .catch((error) => {
           console.log(error)
@@ -131,8 +139,10 @@ export default {
       this.marker = !this.marker
     },
     clearFilterInput () {
+      this.searchMode = false
+      console.warn('search off')
       this.filterInput = ''
-      this.getRecentVisits()
+      this.getVisits()
     },
     resetIcon () {
       this.iconIndex = 0
@@ -142,7 +152,7 @@ export default {
         ? this.iconIndex = 0
         : this.iconIndex++
     },
-    getRecentVisits () {
+    getVisits () {
       const vm = this
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
@@ -164,11 +174,15 @@ export default {
         })
     },
     onVisitsPageChange (page) {
-      this.getRecentVisits()
+      if (this.searchMode) {
+        this.filterVisits()
+      } else {
+        this.getVisits()
+      }
     }
   },
   mounted: function () {
-    this.getRecentVisits()
+    this.getVisits()
   }
 }
 </script>
