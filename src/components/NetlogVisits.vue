@@ -39,13 +39,16 @@
 
     <div id="visits-list">
       <div v-for="visit in visits" :key="visit.id">
-        <div class="visit" v-bind:id="'visit-' + visit.id">
-          <v-row>
+        <div v-bind:id="'visit-' + visit.id">
+          <v-row class="url-title-row">
+            <p class="url-title-p">{{ visit.title }}</p>
+          </v-row>
+          <v-row class="url-endpoint-row">
             <v-col cols="10" class="text-left pa-md-0">
-              <p class="visit-url">{{ visit.url }}</p>
+              <p>{{ visit.url }}</p>
             </v-col>
             <v-col cols="2" class="pa-md-0">
-              <p class="visit-timestamp">{{ visit.timestamp }}</p>
+              <p class="visit-timestamp">{{ getTimestampString(new Date(visit.timestamp)) }}</p>
             </v-col>
           </v-row>
         </div>
@@ -76,7 +79,7 @@ export default {
       theRoot: this.$root,
       visits: [],
       visitsPage: 1,
-      maxVisitsPerPage: 200,
+      maxVisitsPerPage: 250,
       visitsPageLength: 0,
       filterInput: '',
       marker: true,
@@ -197,11 +200,22 @@ export default {
 #filter-row-card {
   background-color: #26A69A;
 }
-#visits-list {
-  margin-top: 45px;
-  margin-left: 30px;
-}
 #visits-main {
+  margin-top: 45px;
+  margin-left: 12px;
+}
+#visits-list {
   margin-bottom: 95px;
+}
+.url-title-row {
+  margin: 0px;
+}
+.url-title-p{
+  margin: 0px;
+  color: #26A69A;
+}
+.url-endpoint-row{
+  margin: 0px;
+  border-bottom: 2px solid #26A69A;
 }
 </style>
