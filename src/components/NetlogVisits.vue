@@ -37,6 +37,23 @@
       </v-card>
     </div>
 
+    <v-row class="url-title-row">
+      <v-col cols="10" class="text-left pa-md-0">
+      </v-col>
+      <v-col cols="2" class="pa-md-0">
+        <v-chip
+          class="ma-2"
+          color="blue"
+          text-color="white"
+        >
+          {{ this.totalVisits }}
+          <v-icon right>
+            mdi-star
+          </v-icon>
+        </v-chip>
+      </v-col>
+    </v-row>
+
     <div id="visits-list">
       <div v-for="visit in visits" :key="visit.id">
         <div v-bind:id="'visit-' + visit.id">
@@ -78,6 +95,7 @@ export default {
     return {
       theRoot: this.$root,
       visits: [],
+      totalVisits: 0,
       visitsPage: 1,
       maxVisitsPerPage: 250,
       visitsPageLength: 0,
@@ -129,6 +147,7 @@ export default {
             return
           }
           vm.visits = response.data.visits
+          vm.totalVisits = response.data.total
           vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
         })
         .catch((error) => {
@@ -170,6 +189,7 @@ export default {
             return
           }
           vm.visits = response.data.visits
+          vm.totalVisits = response.data.total
           vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
         })
         .catch((error) => {
