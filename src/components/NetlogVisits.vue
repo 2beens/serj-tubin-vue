@@ -58,6 +58,34 @@
       <div v-for="visit in visits" :key="visit.id">
         <div v-bind:id="'visit-' + visit.id">
           <v-row class="url-title-row">
+            <v-icon
+              v-if="visit.source === 'chrome'"
+              dense
+              color="light-green darken-2"
+            >
+              mdi-google-chrome
+            </v-icon>
+            <v-icon
+              v-else-if="visit.source === 'safari'"
+              dense
+              color="light-blue darken-2"
+            >
+              mdi-apple-safari
+            </v-icon>
+            <v-icon
+              v-else-if="visit.source === 'pc'"
+              dense
+              color="yellow darken-2"
+            >
+              mdi-desktop-tower-monitor
+            </v-icon>
+            <v-icon
+              v-else
+              dense
+              color="light-green darken-2"
+            >
+              mdi-crosshairs-question
+            </v-icon>
             <p class="url-title-p">{{ visit.title }}</p>
           </v-row>
           <v-row class="url-endpoint-row">
