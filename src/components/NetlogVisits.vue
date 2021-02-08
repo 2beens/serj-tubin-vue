@@ -38,7 +38,42 @@
     </div>
 
     <v-row class="url-title-row">
-      <v-col cols="10" class="text-left pa-md-0">
+      <v-col cols="6" class="text-left pa-md-0">
+      </v-col>
+      <v-col cols="2" class="text-left pa-md-0">
+        <v-btn-toggle
+          v-model="searchSource"
+          rounded
+          @change="filterVisits"
+        >
+          <v-btn>
+            <v-icon>mdi-google-chrome</v-icon>
+          </v-btn>
+          <v-btn>
+            <v-icon>mdi-apple-safari</v-icon>
+          </v-btn>
+          <v-btn>
+            <v-icon>mdi-desktop-tower-monitor</v-icon>
+          </v-btn>
+          <v-btn>
+            <v-icon>mdi-all-inclusive</v-icon>
+          </v-btn>
+        </v-btn-toggle>
+      </v-col>
+      <v-col cols="2" class="text-left pa-md-0">
+        <!-- SEARCH MODES HERE - FIELD -->
+        <v-btn-toggle
+          v-model="searchField"
+          rounded
+          color="primary"
+        >
+          <v-btn>
+            URL
+          </v-btn>
+          <v-btn>
+            Title
+          </v-btn>
+        </v-btn-toggle>
       </v-col>
       <v-col cols="2" class="pa-md-0">
         <v-chip
@@ -128,6 +163,8 @@ export default {
       maxVisitsPerPage: 250,
       visitsPageLength: 0,
       filterInput: '',
+      searchField: 0,
+      searchSource: 3,
       marker: true,
       iconIndex: 0,
       searchMode: false,
@@ -149,6 +186,22 @@ export default {
     }
   },
   methods: {
+    getSeachSourceType () {
+      if (this.searchSource === 0) {
+        return 'chrome'
+      } else if (this.searchSource === 1) {
+        return 'safari'
+      } else if (this.searchSource === 2) {
+        return 'pc'
+      }
+      return 'all'
+    },
+    getSearchFieldType () {
+      if (this.searchField === 0) {
+        return 'url'
+      }
+      return 'title'
+    },
     filterVisits () {
       if (this.filterInput.length === 0) {
         this.getVisits()
