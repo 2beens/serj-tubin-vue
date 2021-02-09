@@ -203,7 +203,7 @@ export default {
       return 'title'
     },
     filterVisits () {
-      if (this.filterInput.length === 0) {
+      if (!this.filterInput || this.filterInput.length === 0) {
         this.getVisits()
         return
       }
@@ -214,9 +214,12 @@ export default {
         this.searchMode = true
       }
 
+      const source = this.getSeachSourceType()
+      const field = this.getSearchFieldType()
+
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -256,9 +259,12 @@ export default {
         : this.iconIndex++
     },
     getVisits () {
+      const source = this.getSeachSourceType()
+      const field = this.getSearchFieldType()
+
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
+        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
