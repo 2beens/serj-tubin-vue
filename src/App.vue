@@ -49,6 +49,7 @@
                   <v-text-field
                     label="Username"
                     required
+                    autofocus
                     v-model="user.name"
                   ></v-text-field>
                 </v-col>
@@ -61,6 +62,7 @@
                     type="password"
                     name="input-10-1"
                     counter
+                    @keyup="loginOnEnter"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -147,6 +149,11 @@ export default {
     }
   },
   methods: {
+    loginOnEnter: function (e) {
+      if (e.keyCode === 13) {
+        this.login()
+      }
+    },
     login: function () {
       if (this.user.name === undefined || this.user.name === '') {
         console.error('emtpy username')
