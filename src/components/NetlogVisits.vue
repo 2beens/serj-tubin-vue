@@ -35,71 +35,39 @@
     </div>
 
     <v-row class="url-title-row mb-3">
-        <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
 
-        <SourceFilterGroup
-          v-on:source-changed="onSourceFilterChanged"
-        />
+      <!-- SEARCH MODES HERE - SOURCE -->
+      <SourceFilterGroup
+        v-on:source-changed="onSourceFilterChanged"
+      />
 
-        <!-- SEARCH MODES HERE - FIELD -->
-        <v-btn-toggle
-          v-model="searchField"
-          rounded
-          color="primary"
-          class="ml-2"
-        >
-          <v-btn>
-            URL
-          </v-btn>
-          <v-btn>
-            Title
-          </v-btn>
-        </v-btn-toggle>
+      <!-- SEARCH MODES HERE - FIELD -->
+      <v-btn-toggle
+        v-model="searchField"
+        rounded
+        color="primary"
+        class="ml-2"
+      >
+        <v-btn>URL</v-btn>
+        <v-btn>Title</v-btn>
+      </v-btn-toggle>
 
-        <v-chip
-          class="ma-2 mr-15"
-          color="blue"
-          text-color="white"
-        >
-          {{ this.totalVisits }}
-          <v-icon right>
-            mdi-star
-          </v-icon>
-        </v-chip>
+      <v-chip
+        class="ma-2 mr-15"
+        color="blue"
+        text-color="white"
+      >
+        {{ this.totalVisits }}
+        <v-icon right>mdi-star</v-icon>
+      </v-chip>
     </v-row>
 
     <div id="visits-list">
       <div v-for="visit in visits" :key="visit.id">
         <div v-bind:id="'visit-' + visit.id">
           <v-row class="url-title-row">
-            <v-icon
-              v-if="visit.source === 'chrome'"
-              dense
-              color="light-green darken-2"
-            >
-              mdi-google-chrome
-            </v-icon>
-            <v-icon
-              v-else-if="visit.source === 'safari'"
-              dense
-              color="light-blue darken-2"
-            >
-              mdi-apple-safari
-            </v-icon>
-            <v-icon
-              v-else-if="visit.source === 'pc'"
-              dense
-              color="yellow darken-2"
-            >
-              mdi-desktop-tower-monitor
-            </v-icon>
-            <v-icon
-              v-else
-              dense
-              color="light-green darken-2"
-            >
-              mdi-crosshairs-question
-            </v-icon>
+            <SourceIcon :source="visit.source" />
             <p class="url-title-p">{{ visit.title }}</p>
           </v-row>
           <v-row class="url-endpoint-row">
@@ -130,12 +98,14 @@
 
 <script>
 import SourceFilterGroup from '@/components/netlog/SourceFilterGroup.vue'
+import SourceIcon from '@/components/netlog/SourceIcon.vue'
 import axios from 'axios'
 
 export default {
   name: 'NetlogVisits',
   components: {
-    SourceFilterGroup
+    SourceFilterGroup,
+    SourceIcon
   },
   data: function () {
     return {
