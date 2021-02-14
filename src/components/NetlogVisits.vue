@@ -6,66 +6,47 @@
         elevation="2"
         rounded-xl
         class="ma-xs-10"
+        dark
       >
         <v-form
           class="pa-md-2"
           @submit.prevent
         >
           <v-container>
-            <v-row>
-              <v-col cols="12" class="pa-md-0">
-                <v-text-field
-                  v-model="filterInput"
-                  :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
-                  :append-outer-icon="filterInput ? 'mdi-send' : 'mdi-microphone'"
-                  :prepend-icon="icon"
-                  filled
-                  clear-icon="mdi-close-circle"
-                  clearable
-                  label="Filter Input"
-                  type="text"
-                  @keyup.enter="filterVisits"
-                  @click:append="toggleMarker"
-                  @click:append-outer="filterVisits"
-                  @click:prepend="changeIcon"
-                  @click:clear="clearFilterInput"
-                ></v-text-field>
-              </v-col>
-            </v-row>
+            <v-text-field
+              v-model="filterInput"
+              :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
+              :append-outer-icon="filterInput ? 'mdi-send' : 'mdi-microphone'"
+              :prepend-icon="icon"
+              filled
+              clear-icon="mdi-close-circle"
+              clearable
+              label="Filter Input"
+              type="text"
+              @keyup.enter="filterVisits"
+              @click:append="toggleMarker"
+              @click:append-outer="filterVisits"
+              @click:prepend="changeIcon"
+              @click:clear="clearFilterInput"
+            ></v-text-field>
           </v-container>
         </v-form>
       </v-card>
     </div>
 
-    <v-row class="url-title-row">
-      <v-col cols="6" class="text-left pa-md-0">
-      </v-col>
-      <v-col cols="2" class="text-left pa-md-0">
-        <v-btn-toggle
-          v-model="searchSource"
-          rounded
-          @change="filterVisits"
-        >
-          <v-btn>
-            <v-icon>mdi-google-chrome</v-icon>
-          </v-btn>
-          <v-btn>
-            <v-icon>mdi-apple-safari</v-icon>
-          </v-btn>
-          <v-btn>
-            <v-icon>mdi-desktop-tower-monitor</v-icon>
-          </v-btn>
-          <v-btn>
-            <v-icon>mdi-all-inclusive</v-icon>
-          </v-btn>
-        </v-btn-toggle>
-      </v-col>
-      <v-col cols="2" class="text-left pa-md-0">
+    <v-row class="url-title-row mb-3">
+        <v-spacer></v-spacer>
+
+        <SourceFilterGroup
+          v-on:source-changed="onSourceFilterChanged"
+        />
+
         <!-- SEARCH MODES HERE - FIELD -->
         <v-btn-toggle
           v-model="searchField"
           rounded
           color="primary"
+          class="ml-2"
         >
           <v-btn>
             URL
@@ -74,10 +55,9 @@
             Title
           </v-btn>
         </v-btn-toggle>
-      </v-col>
-      <v-col cols="2" class="pa-md-0">
+
         <v-chip
-          class="ma-2"
+          class="ma-2 mr-15"
           color="blue"
           text-color="white"
         >
@@ -86,7 +66,6 @@
             mdi-star
           </v-icon>
         </v-chip>
-      </v-col>
     </v-row>
 
     <div id="visits-list">
@@ -150,10 +129,14 @@
 </template>
 
 <script>
+import SourceFilterGroup from '@/components/netlog/SourceFilterGroup.vue'
 import axios from 'axios'
 
 export default {
   name: 'NetlogVisits',
+  components: {
+    SourceFilterGroup
+  },
   data: function () {
     return {
       theRoot: this.$root,
@@ -186,6 +169,10 @@ export default {
     }
   },
   methods: {
+    onSourceFilterChanged (source) {
+      this.searchSource = source
+      this.filterVisits()
+    },
     getSeachSourceType () {
       if (this.searchSource === 0) {
         return 'chrome'
