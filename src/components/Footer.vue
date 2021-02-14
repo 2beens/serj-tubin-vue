@@ -81,9 +81,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-div {
-  /* color: cadetblue; */
-}
-</style>

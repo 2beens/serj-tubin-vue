@@ -1,65 +1,60 @@
 <template>
-  <div data-app="true" v-if="theRoot.loggedIn" class="ma-5">
+  <v-container>
+  <div v-if="theRoot.loggedIn" class="ma-5">
     <div class="mr-10 ml-10 mb-3">
       <v-card
+        class="ma-xs-10"
         color="#26A69A"
         elevation="2"
-        rounded-xl
-        class="ma-xs-10"
+        rounded
         dark
       >
         <v-card-text>
-          <v-form
-            class="pa-mb-2"
-            @submit.prevent
-          >
-            <v-container>
-              <v-text-field
-                v-model="filterInput"
-                prepend-icon="mdi-cloud-search-outline"
-                filled
-                clear-icon="mdi-close-circle"
-                clearable
-                label="Filter Input"
-                type="text"
-                @keyup.enter="filterVisits"
-                @click:append-outer="filterVisits"
-                @click:clear="clearFilterInput"
-              ></v-text-field>
-            </v-container>
+          <v-form @submit.prevent>
+            <v-text-field
+              v-model="filterInput"
+              label="Filter Input"
+              prepend-icon="mdi-cloud-search-outline"
+              clear-icon="mdi-close-circle"
+              filled
+              clearable
+              @keyup.enter="filterVisits"
+              @click:append-outer="filterVisits"
+              @click:clear="clearFilterInput"
+              hint="Separate keywords with comma, without spaces. Use minus in front of the keyword to exclude it."
+            ></v-text-field>
           </v-form>
 
           <v-row>
-            <v-spacer></v-spacer>
+            <v-col cols="12" justify="end" align="end">
+              <!-- <div class="float-lg-right"> -->
+                <!-- SEARCH MODES HERE - SOURCE -->
+                <SourceFilterGroup
+                  v-on:source-changed="onSourceFilterChanged"
+                />
 
-            <!-- SEARCH MODES HERE - SOURCE -->
-            <SourceFilterGroup
-              v-on:source-changed="onSourceFilterChanged"
-            />
+                <!-- SEARCH MODES HERE - FIELD -->
+                <v-btn-toggle
+                  class="ml-3"
+                  v-model="searchField"
+                  rounded
+                >
+                  <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
+                  <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
+                </v-btn-toggle>
 
-            <!-- SEARCH MODES HERE - FIELD -->
-            <v-btn-toggle
-              v-model="searchField"
-              rounded
-              color="primary"
-              class="ml-2"
-            >
-              <v-btn>URL</v-btn>
-              <v-btn>Title</v-btn>
-            </v-btn-toggle>
-
-            <v-chip
-              class="ma-2 mr-15"
-            >
-              {{ this.totalVisits }}
-              <v-icon right>mdi-star</v-icon>
-            </v-chip>
+                <v-chip class="ml-5">
+                  {{ this.totalVisits }}
+                  <v-icon right>mdi-star</v-icon>
+                </v-chip>
+              <!-- </div> -->
+            </v-col>
           </v-row>
         </v-card-text>
       </v-card>
     </div>
 
-    <div id="visits-list">
+    <div style="margin-bottom: 95px;">
       <div v-for="visit in visits" :key="visit.id">
         <div v-bind:id="'visit-' + visit.id">
           <v-row class="url-title-row">
@@ -90,6 +85,7 @@
     </div>
   </div>
   <h4 v-else>Can't show you this one, sorry 🤷‍♂️</h4>
+  </v-container>
 </template>
 
 <script>
@@ -224,15 +220,6 @@ export default {
 </script>
 
 <style scoped>
-#filter-row {
-  margin-left: 100px;
-  margin-right: 100px;
-  margin-bottom: 15px;
-  padding-bottom: 0px;
-}
-#visits-list {
-  margin-bottom: 95px;
-}
 .url-title-row {
   margin: 0px;
 }
