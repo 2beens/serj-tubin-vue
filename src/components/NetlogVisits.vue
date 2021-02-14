@@ -1,67 +1,63 @@
 <template>
-  <div id="visits-main" data-app="true" v-if="theRoot.loggedIn">
-    <div id="filter-row">
+  <div data-app="true" v-if="theRoot.loggedIn" class="ma-5">
+    <div class="mr-10 ml-10 mb-3">
       <v-card
-        id="filter-row-card"
+        color="#26A69A"
         elevation="2"
         rounded-xl
         class="ma-xs-10"
         dark
       >
-        <v-form
-          class="pa-md-2"
-          @submit.prevent
-        >
-          <v-container>
-            <v-text-field
-              v-model="filterInput"
-              :append-icon="marker ? 'mdi-map-marker' : 'mdi-map-marker-off'"
-              :append-outer-icon="filterInput ? 'mdi-send' : 'mdi-microphone'"
-              :prepend-icon="icon"
-              filled
-              clear-icon="mdi-close-circle"
-              clearable
-              label="Filter Input"
-              type="text"
-              @keyup.enter="filterVisits"
-              @click:append="toggleMarker"
-              @click:append-outer="filterVisits"
-              @click:prepend="changeIcon"
-              @click:clear="clearFilterInput"
-            ></v-text-field>
-          </v-container>
-        </v-form>
+        <v-card-text>
+          <v-form
+            class="pa-mb-2"
+            @submit.prevent
+          >
+            <v-container>
+              <v-text-field
+                v-model="filterInput"
+                prepend-icon="mdi-cloud-search-outline"
+                filled
+                clear-icon="mdi-close-circle"
+                clearable
+                label="Filter Input"
+                type="text"
+                @keyup.enter="filterVisits"
+                @click:append-outer="filterVisits"
+                @click:clear="clearFilterInput"
+              ></v-text-field>
+            </v-container>
+          </v-form>
+
+          <v-row>
+            <v-spacer></v-spacer>
+
+            <!-- SEARCH MODES HERE - SOURCE -->
+            <SourceFilterGroup
+              v-on:source-changed="onSourceFilterChanged"
+            />
+
+            <!-- SEARCH MODES HERE - FIELD -->
+            <v-btn-toggle
+              v-model="searchField"
+              rounded
+              color="primary"
+              class="ml-2"
+            >
+              <v-btn>URL</v-btn>
+              <v-btn>Title</v-btn>
+            </v-btn-toggle>
+
+            <v-chip
+              class="ma-2 mr-15"
+            >
+              {{ this.totalVisits }}
+              <v-icon right>mdi-star</v-icon>
+            </v-chip>
+          </v-row>
+        </v-card-text>
       </v-card>
     </div>
-
-    <v-row class="url-title-row mb-3">
-      <v-spacer></v-spacer>
-
-      <!-- SEARCH MODES HERE - SOURCE -->
-      <SourceFilterGroup
-        v-on:source-changed="onSourceFilterChanged"
-      />
-
-      <!-- SEARCH MODES HERE - FIELD -->
-      <v-btn-toggle
-        v-model="searchField"
-        rounded
-        color="primary"
-        class="ml-2"
-      >
-        <v-btn>URL</v-btn>
-        <v-btn>Title</v-btn>
-      </v-btn-toggle>
-
-      <v-chip
-        class="ma-2 mr-15"
-        color="blue"
-        text-color="white"
-      >
-        {{ this.totalVisits }}
-        <v-icon right>mdi-star</v-icon>
-      </v-chip>
-    </v-row>
 
     <div id="visits-list">
       <div v-for="visit in visits" :key="visit.id">
@@ -118,24 +114,8 @@ export default {
       filterInput: '',
       searchField: 0,
       searchSource: 3,
-      marker: true,
       iconIndex: 0,
-      searchMode: false,
-      icons: [
-        'mdi-emoticon',
-        'mdi-emoticon-cool',
-        'mdi-emoticon-dead',
-        'mdi-emoticon-excited',
-        'mdi-emoticon-happy',
-        'mdi-emoticon-neutral',
-        'mdi-emoticon-sad',
-        'mdi-emoticon-tongue'
-      ]
-    }
-  },
-  computed: {
-    icon () {
-      return this.icons[this.iconIndex]
+      searchMode: false
     }
   },
   methods: {
@@ -195,12 +175,6 @@ export default {
           console.log(error)
         })
     },
-    toggleMarker () {
-      // TODO:
-      // list of material design emoticons/icons:
-      // https://materialdesignicons.com/icon/emoticon
-      this.marker = !this.marker
-    },
     clearFilterInput () {
       this.searchMode = false
       console.warn('search off')
@@ -209,11 +183,6 @@ export default {
     },
     resetIcon () {
       this.iconIndex = 0
-    },
-    changeIcon () {
-      this.iconIndex === this.icons.length - 1
-        ? this.iconIndex = 0
-        : this.iconIndex++
     },
     getVisits () {
       const source = this.getSeachSourceType()
@@ -260,13 +229,6 @@ export default {
   margin-right: 100px;
   margin-bottom: 15px;
   padding-bottom: 0px;
-}
-#filter-row-card {
-  background-color: #26A69A;
-}
-#visits-main {
-  margin-top: 45px;
-  margin-left: 12px;
 }
 #visits-list {
   margin-bottom: 95px;
