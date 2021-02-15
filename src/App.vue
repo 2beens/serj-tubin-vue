@@ -1,23 +1,20 @@
 <template>
 <v-app>
-  <v-row>
-    <v-col cols="4">
-    </v-col>
-    <v-col cols="4">
-      <div id="nav" class="mt-2">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/board">Visitor Board</router-link> |
-        <router-link to="/util">Util</router-link> |
-        <router-link to="/netlog">Netlog</router-link>
-      </div>
-    </v-col>
+  <v-app-bar app color="black" dark>
+    <!-- <v-toolbar-title>Tech Sandbox</v-toolbar-title> -->
+    <v-spacer></v-spacer>
+    <v-btn color="#305d8a" text rounded to="/">Home</v-btn>
+    <v-btn color="#305d8a" text rounded to="/about">About</v-btn>
+    <v-btn color="#305d8a" text rounded to="/board">Visitor Board</v-btn>
+    <v-btn color="#305d8a" text rounded to="/util">Util</v-btn>
+    <v-btn color="#305d8a" text rounded to="/netlog">Netlog</v-btn>
+    <v-spacer></v-spacer>
+    <LoginLogoutButton />
+  </v-app-bar>
 
-    <v-col cols="4">
-      <LoginLogoutButton />
-    </v-col>
-  </v-row>
-  <router-view />
+  <v-main>
+    <router-view></router-view>
+  </v-main>
 
   <Footer/>
 </v-app>
