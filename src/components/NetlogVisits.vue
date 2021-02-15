@@ -27,27 +27,25 @@
 
           <v-row>
             <v-col cols="12" justify="end" align="end">
-              <!-- <div class="float-lg-right"> -->
-                <!-- SEARCH MODES HERE - SOURCE -->
-                <SourceFilterGroup
-                  v-on:source-changed="onSourceFilterChanged"
-                />
+              <!-- SEARCH MODES HERE - SOURCE -->
+              <SourceFilterGroup
+                v-on:source-changed="onSourceFilterChanged"
+              />
 
-                <!-- SEARCH MODES HERE - FIELD -->
-                <v-btn-toggle
-                  class="ml-3"
-                  v-model="searchField"
-                  rounded
-                >
-                  <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
-                  <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
-                </v-btn-toggle>
+              <!-- SEARCH MODES HERE - FIELD -->
+              <v-btn-toggle
+                class="ml-3"
+                v-model="searchField"
+                rounded
+              >
+                <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
+                <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
+              </v-btn-toggle>
 
-                <v-chip class="ml-5">
-                  {{ this.totalVisits }}
-                  <v-icon right>mdi-star</v-icon>
-                </v-chip>
-              <!-- </div> -->
+              <v-chip class="ml-5">
+                {{ this.totalVisits }}
+                <v-icon right>mdi-star</v-icon>
+              </v-chip>
             </v-col>
           </v-row>
         </v-card-text>
