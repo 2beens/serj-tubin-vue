@@ -1,8 +1,8 @@
 <template>
   <div class="home-page">
-    <h2>{{ msg }}</h2>
+    <h3 style="margin: 40px 0 0;">{{ title }}</h3>
 
-    <h6 id="quote-info">{{ smartassMsg }}</h6>
+    <h6 id="quote-info">I'm being a smartass by showing some cool stolen quotes here:</h6>
     <div id="quote-section">
       <h3 id="quote-text"></h3>
       <h5 id="quote-author"></h5>
@@ -19,15 +19,10 @@ import axios from 'axios'
 export default {
   name: 'HomePage',
   props: {
-    msg: String
+    title: String
   },
   components: {
     Blog
-  },
-  data: function () {
-    return {
-      smartassMsg: 'I\'m being a smartass by showing some cool stolen quotes here:'
-    }
   },
   created: function () {
     console.log('home page created')
@@ -78,9 +73,6 @@ export default {
   color: #26A69A;
 }
 
-h3 {
-  margin: 40px 0 0;
-}
 ul {
   list-style-type: none;
   padding: 0;

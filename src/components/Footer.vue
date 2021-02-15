@@ -11,7 +11,7 @@
       tile
     >
       <v-card-title class="teal lighten-1">
-        <strong class="subheading">Serj, Berlin 2019/2020</strong>
+        <strong class="subheading">Serj, Berlin 2020/2021</strong>
 
         <v-spacer></v-spacer>
 

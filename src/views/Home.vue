@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <h1>Work in progress 👨🏼‍💻</h1>
+    <h2>Work in constant progress 👨🏼‍💻🛠</h2>
     <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
 
     <SideBar />
 
-    <HomePage msg="Welcome to my personal nothingness!"/>
+    <HomePage title="This is just a personal tech sandbox"/>
 
     <!-- <div id="app">
       <link-prevue url="https://www.accountingcoach.com/"></link-prevue>
@@ -35,7 +35,6 @@ export default {
     border-radius: 50%;
     max-width: 20%;
     height: auto;
-    /* float: right; */
 }
 
 #my-image:hover {
