@@ -107,7 +107,7 @@ export default {
       visitsPageLength: 0,
       filterInput: '',
       searchField: 0,
-      searchSource: 3,
+      searchSource: 4,
       iconIndex: 0,
       searchMode: false
     }
@@ -124,6 +124,8 @@ export default {
         return 'safari'
       } else if (this.searchSource === 2) {
         return 'pc'
+      } else if (this.searchSource === 3) {
+        return 'firefox'
       }
       return 'all'
     },

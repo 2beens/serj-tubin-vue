@@ -21,6 +21,13 @@
     mdi-desktop-tower-monitor
   </v-icon>
   <v-icon
+    v-else-if="source === 'firefox'"
+    dense
+    color="orange darken-2"
+  >
+    mdi-firefox
+  </v-icon>
+  <v-icon
     v-else
     dense
     color="light-green darken-2"
