@@ -14,6 +14,9 @@
       <v-icon>mdi-desktop-tower-monitor</v-icon>
     </v-btn>
     <v-btn>
+      <v-icon>mdi-firefox</v-icon>
+    </v-btn>
+    <v-btn>
       <v-icon>mdi-all-inclusive</v-icon>
     </v-btn>
   </v-btn-toggle>
@@ -24,7 +27,7 @@ export default {
   name: 'SearchFilterGroup',
   data: function () {
     return {
-      searchSource: 3
+      searchSource: 4
     }
   },
   methods: {
