@@ -146,7 +146,8 @@ export default {
 
           const token = response.data.token
           vm.$root.loggedIn = true
-          vm.setCookie('sessionkolacic', token, 1)
+          // session cookie expires in 60 days, i'm too lazy logging in every day
+          vm.setCookie('sessionkolacic', token, 60)
           vm.showSnackbar = true
           vm.snackbarText = 'logged in'
         })

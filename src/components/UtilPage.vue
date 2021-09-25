@@ -1,5 +1,5 @@
 <template>
-  <div class="util-page">
+  <div id="util-page">
     <div class="util-info-box">
       <h5>Your User Agent</h5>
       <h4 id="user-agent-value"></h4>
@@ -36,6 +36,10 @@ export default {
 </script>
 
 <style scoped>
+#util-page {
+  margin-top: 20px;
+}
+
 .util-info-box {
     background-color: #26A69A;
     margin-left: 10%;

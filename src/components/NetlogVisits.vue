@@ -61,7 +61,7 @@
           </v-row>
           <v-row class="url-endpoint-row">
             <v-col cols="10" class="text-left pa-md-0">
-              <p>{{ visit.url }}</p>
+              <a :href="visit.url" target="_blank">{{ visit.url }}</a>
             </v-col>
             <v-col cols="2" class="pa-md-0">
               <p class="visit-timestamp">{{ getTimestampString(new Date(visit.timestamp)) }}</p>
