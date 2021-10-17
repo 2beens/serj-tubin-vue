@@ -205,7 +205,7 @@ export default {
           console.log(error)
         })
     },
-    onVisitsPageChange (page) {
+    onVisitsPageChange () {
       if (this.searchMode) {
         this.filterVisits()
       } else {

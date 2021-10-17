@@ -45,6 +45,13 @@ const routes = [
     }
   },
   {
+    path: '/notes',
+    name: 'Notes',
+    component: function () {
+      return import('../views/Notes.vue')
+    }
+  },
+  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue')
