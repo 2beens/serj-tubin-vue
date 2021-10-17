@@ -10,11 +10,16 @@
           <span class="text-h6 font-weight-light">{{n.title}}</span>
         </v-card-title>
 
-        <v-card-text class="text-h5 font-weight-bold">
-          {{n.content}}
+        <v-card-text class="mb-0 pb-0">
+          <v-textarea
+            name="input-7-1"
+            filled
+            auto-grow
+            :value="n.content"
+          ></v-textarea>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="mt-0 pt-0">
           <v-list-item class="grow">
             <v-row
               align="center"

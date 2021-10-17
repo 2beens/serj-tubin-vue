@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <h2>📝 Notes 📝</h2>
+
     <v-dialog
       v-model="showDialog"
       persistent
@@ -19,56 +20,14 @@
           </v-icon>
         </v-btn>
       </template>
-      <v-card>
-        <v-card-title>
-          <span v-if="editMode" class="headline">Edit Note</span>
-          <span v-else class="headline">Add Note</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  label="Title"
-                  required
-                  v-model="selectedNote.title"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  required
-                  name="input-7-1"
-                  filled
-                  label="Content"
-                  auto-grow
-                  value=""
-                  v-model="selectedNote.content"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            @click="onAbortEditNote"
-          >
-            🚫
-          </v-btn>
-          <v-btn
-            v-if="editMode"
-            @click="onUpdateNote"
-          >
-            📝
-          </v-btn>
-          <v-btn
-            v-else
-            @click="onAddNote"
-          >
-            📩
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+      <notes-dialog
+        :editMode="editMode"
+        :selectedNote="selectedNote"
+        :editedNote="editedNote"
+        v-on:add-note="addNote"
+        v-on:update-note="onUpdateNote"
+        v-on:abort-edit="onAbortEditNote"
+      />
     </v-dialog>
 
     <notes-list
@@ -99,7 +58,8 @@
 </template>
 
 <script>
-import NotesList from '../components/NotesList.vue'
+import NotesDialog from '../components/notes/NotesDialog.vue'
+import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
 const qs = require('querystring')
 
@@ -107,6 +67,7 @@ export default {
   name: 'Notes',
 
   components: {
+    NotesDialog,
     NotesList
   },
 
@@ -232,7 +193,7 @@ export default {
           console.log(error)
         })
     },
-    onAddNote () {
+    addNote () {
       this.editMode = false
 
       if (this.selectedNote.content === undefined || this.selectedNote.content === '') {
