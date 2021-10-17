@@ -9,7 +9,8 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           color="teal lighten-1"
-          dark
+          large
+          icon
           v-bind="attrs"
           v-on="on"
         >
@@ -73,7 +74,27 @@
     <notes-list
       :notes="this.notes"
       v-on:delete-note="deleteNote($event.id, $event.title)"
+      v-on:edit-note="onOpenEditNoteDialog($event)"
     />
+
+    <div id="snackbar-div">
+      <v-snackbar
+        v-model="showSnackbar"
+      >
+        {{ snackbarText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
   </v-container>
 </template>
 
@@ -95,14 +116,20 @@ export default {
       selectedNote: {},
       editedNote: {},
       editMode: false,
-      showDialog: false
+      showDialog: false,
+      snackbarText: '',
+      showSnackbar: false
     }
   },
 
   methods: {
     onAbortEditNote () {
-      this.selectedNote.title = this.editedNote.title
-      this.selectedNote.content = this.editedNote.content
+      if (this.editMode) {
+        this.selectedNote.title = this.editedNote.title
+        this.selectedNote.content = this.editedNote.content
+        // this.selectedNote = {}
+      }
+      this.editMode = false
       this.editedNote = {}
       this.showDialog = false
     },
@@ -112,8 +139,51 @@ export default {
       this.editedNote = Object.assign({}, note)
       this.selectedNote = note
     },
-    updateNote () {
+    onUpdateNote () {
+      if (this.selectedNote.content === undefined || this.selectedNote.content === '') {
+        console.error('emtpy content')
+        return
+      }
 
+      const requestBody = {
+        id: this.selectedNote.id,
+        title: this.selectedNote.title,
+        content: this.selectedNote.content
+      }
+
+      const vm = this
+      axios
+        .put(
+          process.env.VUE_APP_API_ENDPOINT + '/notes',
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('updated:')) {
+            vm.snackbarText = 'Received unexpected response from server'
+            vm.showSnackbar = true
+            console.warn(response)
+            return
+          }
+
+          const noteId = response.data.split(':')[1]
+          vm.snackbarText = `Note ${noteId} ${requestBody.title} updated!`
+          vm.showSnackbar = true
+          vm.selectedNote = {}
+        })
+        .catch(function (error) {
+          vm.snackbarText = error
+          vm.showSnackbar = true
+          console.log(error)
+        })
+        .finally(() => {
+          this.editMode = false
+          this.showDialog = false
+        })
     },
     deleteNote (id, title) {
       if (!confirm(`Are you sure you want to remove note [${id}] [${title}]?`)) {

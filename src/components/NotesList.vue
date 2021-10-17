@@ -20,10 +20,10 @@
               align="center"
               justify="end"
             >
-              <v-icon class="mr-1">
+              <v-icon class="mr-1" @click="onEditNote(n)">
                 mdi-wrench
               </v-icon>
-              <v-icon class="mr-1" color="red" @click="onDeleteNote(n.id, n.title)">
+              <v-icon class="mr-1" color="red" @click="onDeleteNote(n)">
                 mdi-delete
               </v-icon>
             </v-row>
@@ -42,10 +42,20 @@ export default {
     notes: Array
   },
 
+  mounted: function () {
+    // console.warn(this.notes)
+    for (const n of this.notes) {
+      console.warn(n.content)
+    }
+  },
+
   methods: {
-    onDeleteNote: function (id, title) {
-      console.log(`will delete: ${id}`)
-      this.$emit('delete-note', { id: id, title: title })
+    onEditNote: function (note) {
+      this.$emit('edit-note', note)
+    },
+    onDeleteNote: function (note) {
+      console.log(`will delete: ${note.id}`)
+      this.$emit('delete-note', { id: note.id, title: note.title })
     }
   }
 }
