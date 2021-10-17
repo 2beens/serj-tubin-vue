@@ -3,6 +3,7 @@
     <h2>📝 Notes 📝</h2>
 
     <v-dialog
+      @keydown.esc="onAbortEditNote"
       v-model="showDialog"
       persistent
       max-width="800px"
