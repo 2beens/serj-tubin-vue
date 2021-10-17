@@ -38,7 +38,7 @@
         </v-btn>
         <v-btn
           v-if="editMode"
-          @click="$emit('update-note')"
+          @click="$emit('update-note', selectedNote)"
         >
           📝
         </v-btn>
@@ -61,14 +61,6 @@ export default {
     editMode: Boolean,
     selectedNote: Object,
     editedNote: Object
-  },
-
-  mounted: function () {
-    console.warn(this.note)
-  },
-
-  methods: {
-    // TODO
   }
 }
 </script>

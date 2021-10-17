@@ -5,7 +5,7 @@
     <v-dialog
       v-model="showDialog"
       persistent
-      max-width="600px"
+      max-width="800px"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -25,7 +25,7 @@
         :selectedNote="selectedNote"
         :editedNote="editedNote"
         v-on:add-note="addNote"
-        v-on:update-note="onUpdateNote"
+        v-on:update-note="onUpdateNote($event)"
         v-on:abort-edit="onAbortEditNote"
       />
     </v-dialog>
@@ -34,6 +34,7 @@
       :notes="this.notes"
       v-on:delete-note="deleteNote($event.id, $event.title)"
       v-on:edit-note="onOpenEditNoteDialog($event)"
+      v-on:update-note-in-place="onUpdateNote($event)"
     />
 
     <div id="snackbar-div">
@@ -100,16 +101,16 @@ export default {
       this.editedNote = Object.assign({}, note)
       this.selectedNote = note
     },
-    onUpdateNote () {
-      if (this.selectedNote.content === undefined || this.selectedNote.content === '') {
+    onUpdateNote (note) {
+      if (note.content === undefined || note.content === '') {
         console.error('emtpy content')
         return
       }
 
       const requestBody = {
-        id: this.selectedNote.id,
-        title: this.selectedNote.title,
-        content: this.selectedNote.content
+        id: note.id,
+        title: note.title,
+        content: note.content
       }
 
       const vm = this
@@ -134,7 +135,7 @@ export default {
           const noteId = response.data.split(':')[1]
           vm.snackbarText = `Note ${noteId} ${requestBody.title} updated!`
           vm.showSnackbar = true
-          vm.selectedNote = {}
+          note = {}
         })
         .catch(function (error) {
           vm.snackbarText = error

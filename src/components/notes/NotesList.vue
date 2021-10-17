@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="mb-10">
     <div v-for="(n, index) in notes" v-bind:key="index">
       <v-card
         class="mb-2"
@@ -7,15 +7,15 @@
       >
         <v-card-title>
           <v-icon large left>mdi-note</v-icon>
-          <span class="text-h6 font-weight-light">{{n.title}}</span>
+          <span class="text-h6 font-weight-light">{{n.id}}: {{n.title}}</span>
         </v-card-title>
 
         <v-card-text class="mb-0 pb-0">
           <v-textarea
+            v-model="n.content"
             name="input-7-1"
             filled
             auto-grow
-            :value="n.content"
           ></v-textarea>
         </v-card-text>
 
@@ -25,8 +25,11 @@
               align="center"
               justify="end"
             >
-              <v-icon class="mr-1" @click="onEditNote(n)">
+              <v-icon class="mr-1" color="#fadf73" @click="onUpdateNoteInPlace(n)">
                 mdi-wrench
+              </v-icon>
+              <v-icon class="mr-1" color="#2e73d1" @click="onEditNote(n)">
+                mdi-toolbox
               </v-icon>
               <v-icon class="mr-1" color="red" @click="onDeleteNote(n)">
                 mdi-delete
@@ -47,14 +50,11 @@ export default {
     notes: Array
   },
 
-  mounted: function () {
-    // console.warn(this.notes)
-    for (const n of this.notes) {
-      console.warn(n.content)
-    }
-  },
-
   methods: {
+    onUpdateNoteInPlace: function (note) {
+      console.warn(note.content)
+      this.$emit('update-note-in-place', note)
+    },
     onEditNote: function (note) {
       this.$emit('edit-note', note)
     },
