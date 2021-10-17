@@ -8,6 +8,7 @@
     <v-btn color="#305d8a" text rounded to="/board">Visitor Board</v-btn>
     <v-btn color="#305d8a" text rounded to="/util">Util</v-btn>
     <v-btn color="#305d8a" text rounded to="/netlog">Netlog</v-btn>
+    <v-btn color="#305d8a" text rounded to="/notes" v-if="this.$root.loggedIn">Notes</v-btn>
     <v-spacer></v-spacer>
     <LoginLogoutButton />
   </v-app-bar>
