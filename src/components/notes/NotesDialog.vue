@@ -29,29 +29,19 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-icon
-          class="mr-2"
+        <v-btn
+          elevation="2"
+          fab
+          icon
           large
-          @click="$emit('abort-edit')"
+          outlined
+          color="green"
+          @click="$emit('confirm-clicked', selectedNote)"
+          :disabled="confirmDisabled"
         >
-          🚫
-        </v-icon>
-        <v-icon
-          class="mb-2"
-          large
-          v-if="editMode"
-          @click="$emit('update-note', selectedNote)"
-        >
-          📝
-        </v-icon>
-        <v-icon
-          class="mb-2"
-          large
-          v-else
-          @click="$emit('add-note')"
-        >
-          📩
-        </v-icon>
+          <v-icon>mdi-check</v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -60,6 +50,12 @@
 <script>
 export default {
   name: 'NotesDialog',
+
+  computed: {
+    confirmDisabled () {
+      return !this.selectedNote.content || this.selectedNote.content === ''
+    }
+  },
 
   props: {
     editMode: Boolean,

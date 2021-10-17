@@ -25,9 +25,7 @@
         :editMode="editMode"
         :selectedNote="selectedNote"
         :editedNote="editedNote"
-        v-on:add-note="addNote"
-        v-on:update-note="onUpdateNote($event)"
-        v-on:abort-edit="onAbortEditNote"
+        v-on:confirm-clicked="onConfirmClicked($event)"
       />
     </v-dialog>
 
@@ -86,11 +84,18 @@ export default {
   },
 
   methods: {
+    onConfirmClicked (note) {
+      if (this.editMode) {
+        this.onUpdateNote(note)
+      } else {
+        this.addNote()
+      }
+    },
     onAbortEditNote () {
       if (this.editMode) {
         this.selectedNote.title = this.editedNote.title
         this.selectedNote.content = this.editedNote.content
-        // this.selectedNote = {}
+        this.selectedNote = {}
       }
       this.editMode = false
       this.editedNote = {}
@@ -136,7 +141,7 @@ export default {
           const noteId = response.data.split(':')[1]
           vm.snackbarText = `Note ${noteId} ${requestBody.title} updated!`
           vm.showSnackbar = true
-          note = {}
+          vm.selectedNote = {}
         })
         .catch(function (error) {
           vm.snackbarText = error
