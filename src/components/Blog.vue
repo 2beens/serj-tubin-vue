@@ -232,7 +232,7 @@ export default {
           console.log(error)
         })
     },
-    addBlogPost: function (event) {
+    addBlogPost: function () {
       this.editBlogMode = false
 
       if (this.selectedPost.title === undefined || this.selectedPost.title === '') {

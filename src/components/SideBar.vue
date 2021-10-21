@@ -47,7 +47,7 @@ export default {
         }
 
         const weatherDescriptions = []
-        response.data.forEach(function (item, i, array) {
+        response.data.forEach(function (item) {
           weatherDescriptions.push(item.description)
         })
 
@@ -69,7 +69,7 @@ export default {
         }
 
         const icons = getIconsFromWeatherData(response.data)
-        icons.forEach(function (item, i, wArray) {
+        icons.forEach(function (item, i) {
           const weatherIcon = document.createElement('img')
           weatherIcon.classList.add('weather-icon-img')
           weatherIcon.src = 'https://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
@@ -85,9 +85,9 @@ export default {
 
 function getIconsFromWeatherData (weatherData) {
   const icons = []
-  weatherData.forEach(function (item, i, wArray) {
+  weatherData.forEach(function (item, i) {
     const descriptions = weatherData[i].descriptions
-    descriptions.forEach(function (item, i, dArray) {
+    descriptions.forEach(function (item, i) {
       icons.push(descriptions[i].icon)
     })
   })
