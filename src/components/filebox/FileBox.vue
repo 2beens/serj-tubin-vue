@@ -51,66 +51,85 @@
 </template>
 
 <script>
-  export default {
-    name: 'FileBox',
-    data: () => ({
-      open: [],
-      search: null,
-      caseSensitive: false,
-      files: {
-        html: 'mdi-language-html5',
-        js: 'mdi-nodejs',
-        json: 'mdi-code-json',
-        md: 'mdi-language-markdown',
-        pdf: 'mdi-file-pdf',
-        png: 'mdi-file-image',
-        txt: 'mdi-file-document-outline',
-        xls: 'mdi-file-excel',
+import axios from 'axios'
+
+export default {
+  name: 'FileBox',
+  data: () => ({
+    open: [],
+    search: null,
+    caseSensitive: false,
+    files: {
+      html: 'mdi-language-html5',
+      js: 'mdi-nodejs',
+      json: 'mdi-code-json',
+      md: 'mdi-language-markdown',
+      pdf: 'mdi-file-pdf',
+      png: 'mdi-file-image',
+      txt: 'mdi-file-document-outline',
+      xls: 'mdi-file-excel',
+    },
+    tree: [],
+    items: [
+      {
+        name: 'public',
+        children: [
+          {
+            name: 'static',
+            children: [
+              {
+                name: 'logo.png',
+                file: 'png',
+              },
+              {
+                name: 'babel.config.js',
+                file: 'js',
+              },
+              {
+                name: 'package.json',
+                file: 'json',
+              },
+            ],
+          },
+          {
+            name: 'favicon.ico',
+            file: 'png',
+          },
+          {
+            name: 'index.html',
+            file: 'html',
+          },
+        ],
       },
-      tree: [],
-      items: [
-        {
-          name: 'public',
-          children: [
-            {
-              name: 'static',
-              children: [
-                {
-                  name: 'logo.png',
-                  file: 'png',
-                },
-                {
-                  name: 'babel.config.js',
-                  file: 'js',
-                },
-                {
-                  name: 'package.json',
-                  file: 'json',
-                },
-              ],
-            },
-            {
-              name: 'favicon.ico',
-              file: 'png',
-            },
-            {
-              name: 'index.html',
-              file: 'html',
-            },
-          ],
-        },
-        {
-          name: '.gitignore',
-          file: 'txt',
-        },
-      ],
-    }),
-    computed: {
-      filter () {
-        return this.caseSensitive
-          ? (item, search, textKey) => item[textKey].indexOf(search) > -1
-          : undefined
+      {
+        name: '.gitignore',
+        file: 'txt',
       },
-    }
-  }
+    ],
+  }),
+  computed: {
+    filter () {
+      return this.caseSensitive
+        ? (item, search, textKey) => item[textKey].indexOf(search) > -1
+        : undefined
+    },
+  },
+  mounted () {
+    const vm = this
+    axios
+      .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/folder/root')
+      .then((response) => {
+        if (response === null || response.data === null) {
+          console.error('get root - received null response / data')
+          return
+        }
+        vm.items = [response.data]
+        console.log(`items:`)
+        console.log(vm.items)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  },
+}
 </script>
