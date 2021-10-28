@@ -7,22 +7,57 @@
       max-width="500"
     >
       <v-sheet class="pa-4 primary lighten-2">
-        <v-text-field
-          v-model="search"
-          label="Search Company Directory"
-          dark
-          flat
-          solo-inverted
-          hide-details
-          clearable
-          clear-icon="mdi-close-circle-outline"
-        ></v-text-field>
-        <v-checkbox
-          v-model="caseSensitive"
-          dark
-          hide-details
-          label="Case sensitive search"
-        ></v-checkbox>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="search"
+              label="Search Company Directory"
+              dark
+              flat
+              solo-inverted
+              hide-details
+              clearable
+              clear-icon="mdi-close-circle-outline"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row class="mt-2 mb-1">
+          <v-col cols="12" class="pa-0 ma-0">
+            <v-file-input
+              show-size
+              label="File input"
+            ></v-file-input>
+          </v-col>
+        </v-row>
+        <v-row class="mt-2 mb-1">
+          <v-col cols="4" class="pa-0 ma-0">
+            <v-checkbox
+              class="pa-0 ma-0"
+              v-model="caseSensitive"
+              dark
+              hide-details
+              label="Case sensitive"
+            ></v-checkbox>
+          </v-col>
+          <v-col class="pa-0 ma-0" cols="4" />
+          <v-col class="pa-0 ma-0" cols="4">
+            <v-btn
+              fab
+              small
+              @click="onNewFolderClick"
+            >
+              <v-icon>mdi-folder</v-icon>
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              fab
+              small
+              @click="onUploadClick"
+            >
+              <v-icon>mdi-cloud-upload</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-sheet>
       <v-card-text>
         <v-treeview
@@ -70,6 +105,12 @@ export default {
         return
       }
       console.log('opened', nodes[0].name)
+    },
+    onNewFolderClick() {
+      console.log('new folder')
+    },
+    onUploadClick() {
+      console.log('upload')
     },
   },
   data: () => ({
