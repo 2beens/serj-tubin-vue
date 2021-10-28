@@ -32,6 +32,9 @@
           activatable
           item-key="name"
           open-on-click
+          return-object
+          @update:active="clickOnNode($event)"
+          @update:open="openNode"
           :search="search"
           :filter="filter"
         >
@@ -55,6 +58,20 @@ import axios from 'axios'
 
 export default {
   name: 'FileBox',
+  methods: {
+    clickOnNode(items) {
+      if (items.length === 0) {
+        return
+      }
+      console.log('item', items[0].name)
+    },
+    openNode(nodes) {
+      if (nodes.length === 0) {
+        return
+      }
+      console.log('opened', nodes[0].name)
+    },
+  },
   data: () => ({
     open: [],
     search: null,
