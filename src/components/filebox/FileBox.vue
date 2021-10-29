@@ -77,7 +77,8 @@
           :open.sync="open"
           :items="items"
           activatable
-          item-key="name"
+          active-class="primary--text"
+          item-key="id"
           return-object
           @update:active="clickOnNode($event)"
           @update:open="openNode"
@@ -116,6 +117,8 @@ export default {
     caseSensitive: false,
     inputFile: null,
     selectedItem: null,
+    tree: [],
+    items: [],
     files: {
       html: 'mdi-language-html5',
       js: 'mdi-nodejs',
@@ -128,8 +131,6 @@ export default {
       txt: 'mdi-file-document-outline',
       xls: 'mdi-file-excel',
     },
-    tree: [],
-    items: [],
   }),
 
   computed: {
@@ -153,7 +154,7 @@ export default {
         return
       }
       this.selectedItem = items[0]
-      console.log('item', items[0].name)
+      console.warn(this.selectedItem)
     },
     openNode(nodes) {
       if (nodes.length === 0) {
@@ -161,7 +162,7 @@ export default {
         return
       }
       this.selectedItem = nodes[0]
-      console.log('opened', nodes[0].name)
+      console.warn(this.selectedItem)
     },
     onNewFolderClick() {
       if (this.selectedItem.is_file) {
