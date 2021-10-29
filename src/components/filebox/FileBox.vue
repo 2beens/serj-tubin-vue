@@ -4,7 +4,7 @@
 
     <v-card
       class="mx-auto"
-      max-width="500"
+      max-width="700"
     >
       <v-sheet class="pa-4 primary lighten-2">
         <v-row>
@@ -54,10 +54,18 @@
               class="ml-2"
               fab
               small
-              :disabled="!itemSelected"
+              :disabled="!itemSelected || !fileSelected"
               @click="onUploadClick"
             >
               <v-icon>mdi-cloud-upload</v-icon>
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              fab
+              small
+              :disabled="!itemSelected"
+            >
+              <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-col>
         </v-row>
@@ -83,7 +91,7 @@
             <v-icon style="float: left"  v-else>
               {{ files[item.file] }}
             </v-icon>
-            <span style="float: left; font-weight: bold">{{ item.name }}</span>
+            <span style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
           </template>
         </v-treeview>
       </v-card-text>
@@ -107,8 +115,10 @@ export default {
     },
     openNode(nodes) {
       if (nodes.length === 0) {
+        this.selectedItem = null
         return
       }
+      this.selectedItem = nodes[0]
       console.log('opened', nodes[0].name)
     },
     onNewFolderClick() {
@@ -117,13 +127,9 @@ export default {
     onUploadClick() {
       const folderId = this.selectedItem.id
       console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${this.selectedItem.name}`)
-      // console.warn(this.inputFile)
 
       let formData = new FormData()
       formData.append("file", this.inputFile, this.inputFile.name)
-
-      // additional data
-      // formData.append("test", "foo bar");
 
       axios
         .post(
@@ -154,48 +160,15 @@ export default {
       js: 'mdi-nodejs',
       json: 'mdi-code-json',
       md: 'mdi-language-markdown',
-      pdf: 'mdi-file-pdf',
-      png: 'mdi-file-image',
+      'application/pdf': 'mdi-file-pdf',
+      'image/png': 'mdi-file-image',
+      'image/jpg': 'mdi-file-image',
+      'image/jpeg': 'mdi-file-image',
       txt: 'mdi-file-document-outline',
       xls: 'mdi-file-excel',
     },
     tree: [],
-    items: [
-      {
-        name: 'public',
-        children: [
-          {
-            name: 'static',
-            children: [
-              {
-                name: 'logo.png',
-                file: 'png',
-              },
-              {
-                name: 'babel.config.js',
-                file: 'js',
-              },
-              {
-                name: 'package.json',
-                file: 'json',
-              },
-            ],
-          },
-          {
-            name: 'favicon.ico',
-            file: 'png',
-          },
-          {
-            name: 'index.html',
-            file: 'html',
-          },
-        ],
-      },
-      {
-        name: '.gitignore',
-        file: 'txt',
-      },
-    ],
+    items: [],
   }),
   computed: {
     filter () {
@@ -205,6 +178,9 @@ export default {
     },
     itemSelected () {
       return this.selectedItem !== null
+    },
+    fileSelected () {
+      return this.inputFile !== null
     },
   },
   mounted () {
