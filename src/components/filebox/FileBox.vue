@@ -24,8 +24,9 @@
         <v-row class="mt-2 mb-1">
           <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
+              v-model="inputFile"
               show-size
-              label="File input"
+              label="File upload (select the dest folder first)"
             ></v-file-input>
           </v-col>
         </v-row>
@@ -44,6 +45,7 @@
             <v-btn
               fab
               small
+              :disabled="!itemSelected"
               @click="onNewFolderClick"
             >
               <v-icon>mdi-folder</v-icon>
@@ -52,6 +54,7 @@
               class="ml-2"
               fab
               small
+              :disabled="!itemSelected"
               @click="onUploadClick"
             >
               <v-icon>mdi-cloud-upload</v-icon>
@@ -96,8 +99,10 @@ export default {
   methods: {
     clickOnNode(items) {
       if (items.length === 0) {
+        this.selectedItem = null
         return
       }
+      this.selectedItem = items[0]
       console.log('item', items[0].name)
     },
     openNode(nodes) {
@@ -110,13 +115,40 @@ export default {
       console.log('new folder')
     },
     onUploadClick() {
-      console.log('upload')
+      const folderId = this.selectedItem.id
+      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${this.selectedItem.name}`)
+      // console.warn(this.inputFile)
+
+      let formData = new FormData()
+      formData.append("file", this.inputFile, this.inputFile.name)
+
+      // additional data
+      // formData.append("test", "foo bar");
+
+      axios
+        .post(
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}`,
+          formData
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('save file - received null response / data')
+            return
+          }
+          console.log('response:')
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
   },
   data: () => ({
     open: [],
     search: null,
     caseSensitive: false,
+    inputFile: null,
+    selectedItem: null,
     files: {
       html: 'mdi-language-html5',
       js: 'mdi-nodejs',
@@ -170,6 +202,9 @@ export default {
       return this.caseSensitive
         ? (item, search, textKey) => item[textKey].indexOf(search) > -1
         : undefined
+    },
+    itemSelected () {
+      return this.selectedItem !== null
     },
   },
   mounted () {
