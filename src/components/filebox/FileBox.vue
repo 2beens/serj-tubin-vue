@@ -21,7 +21,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row class="mt-2 mb-1">
+        <v-row class="ma-2">
           <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
               v-model="inputFile"
@@ -30,7 +30,7 @@
             ></v-file-input>
           </v-col>
         </v-row>
-        <v-row class="mt-2 mb-1">
+        <v-row class="ma-2">
           <v-col cols="4" class="pa-0 ma-0">
             <v-checkbox
               class="pa-0 ma-0"
@@ -45,7 +45,7 @@
             <v-btn
               fab
               small
-              :disabled="!itemSelected"
+              :disabled="!itemSelected || this.selectedItem.is_file"
               @click="onNewFolderClick"
             >
               <v-icon>mdi-folder</v-icon>
@@ -64,6 +64,7 @@
               fab
               small
               :disabled="!itemSelected"
+              @click="onDeleteClick"
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
@@ -77,7 +78,6 @@
           :items="items"
           activatable
           item-key="name"
-          open-on-click
           return-object
           @update:active="clickOnNode($event)"
           @update:open="openNode"
@@ -91,7 +91,8 @@
             <v-icon style="float: left"  v-else>
               {{ files[item.file] }}
             </v-icon>
-            <span style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
+            <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
+            <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
           </template>
         </v-treeview>
       </v-card-text>
@@ -101,54 +102,14 @@
 
 <script>
 import axios from 'axios'
+const qs = require('querystring')
 
 export default {
   name: 'FileBox',
-  methods: {
-    clickOnNode(items) {
-      if (items.length === 0) {
-        this.selectedItem = null
-        return
-      }
-      this.selectedItem = items[0]
-      console.log('item', items[0].name)
-    },
-    openNode(nodes) {
-      if (nodes.length === 0) {
-        this.selectedItem = null
-        return
-      }
-      this.selectedItem = nodes[0]
-      console.log('opened', nodes[0].name)
-    },
-    onNewFolderClick() {
-      console.log('new folder')
-    },
-    onUploadClick() {
-      const folderId = this.selectedItem.id
-      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${this.selectedItem.name}`)
-
-      let formData = new FormData()
-      formData.append("file", this.inputFile, this.inputFile.name)
-
-      axios
-        .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}`,
-          formData
-        )
-        .then((response) => {
-          if (response === null || response.data === null) {
-            console.error('save file - received null response / data')
-            return
-          }
-          console.log('response:')
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
+  mounted () {
+    this.refreshFilesTree()
   },
+
   data: () => ({
     open: [],
     search: null,
@@ -170,6 +131,7 @@ export default {
     tree: [],
     items: [],
   }),
+
   computed: {
     filter () {
       return this.caseSensitive
@@ -183,22 +145,121 @@ export default {
       return this.inputFile !== null
     },
   },
-  mounted () {
-    const vm = this
-    axios
-      .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/folder/root')
-      .then((response) => {
-        if (response === null || response.data === null) {
-          console.error('get root - received null response / data')
-          return
-        }
-        vm.items = [response.data]
-        console.log(`items:`)
-        console.log(vm.items)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+
+  methods: {
+    clickOnNode(items) {
+      if (items.length === 0) {
+        this.selectedItem = null
+        return
+      }
+      this.selectedItem = items[0]
+      console.log('item', items[0].name)
+    },
+    openNode(nodes) {
+      if (nodes.length === 0) {
+        this.selectedItem = null
+        return
+      }
+      this.selectedItem = nodes[0]
+      console.log('opened', nodes[0].name)
+    },
+    onNewFolderClick() {
+      if (this.selectedItem.is_file) {
+        return;
+      }
+
+      var folderName = prompt('New folder name', '')
+      if (folderName === null) {
+        console.error('folder name empty')
+        return
+      }
+
+      const folderId = this.selectedItem.id
+      const requestBody = {
+        name: folderName,
+      }
+
+      axios
+        .post(
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}/new`,
+          qs.stringify(requestBody),
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('create new folder - received null response / data')
+            return
+          }
+          this.refreshFilesTree()
+        })
+        .catch((error) => {
+          if (error && error.response && error.response.data) {
+            console.error(error.response.data)
+          } else {
+            console.error(error)
+          }
+        })
+    },
+    onUploadClick() {
+      const folderId = this.selectedItem.id
+      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${this.selectedItem.name}`)
+
+      let formData = new FormData()
+      formData.append("file", this.inputFile, this.inputFile.name)
+
+      axios
+        .post(
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}`,
+          formData
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('save file - received null response / data')
+            return
+          }
+          this.refreshFilesTree()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    onDeleteClick() {
+      const id = this.selectedItem.id
+      const isFile = this.selectedItem.is_file
+      if (!confirm(`Are you sure you want to remove ${isFile ? 'file' : 'folder'} [${id}]?`)) {
+        return
+      }
+
+      axios
+        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${this.selectedItem.parent_id}/file/${id}`)
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('save file - received null response / data')
+            return
+          }
+          console.log('response:')
+          console.log(response.data)
+          this.refreshFilesTree()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    refreshFilesTree() {
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/folder/root')
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('get root - received null response / data')
+            return
+          }
+          vm.items = [response.data]
+          vm.inputFile = null
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
   },
 }
 </script>
