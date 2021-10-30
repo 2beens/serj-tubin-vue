@@ -259,8 +259,15 @@ export default {
         return
       }
 
+      let path
+      if (isFile) {
+        path = `/f/${this.selectedItem.parent_id}/c/${id}`
+      } else {
+        path = `/f/${id}`
+      }
+
       axios
-        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${this.selectedItem.parent_id}/c/${id}`)
+        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + path)
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('save file - received null response / data')
@@ -271,7 +278,11 @@ export default {
           this.refreshFilesTree()
         })
         .catch((error) => {
-          console.log(error)
+          if (error && error.response && error.response.data) {
+            console.error(error.response.data)
+          } else {
+            console.error(error)
+          }
         })
     },
     refreshFilesTree() {
@@ -286,6 +297,7 @@ export default {
           // get root folder content - children
           vm.items = response.data.children
           vm.inputFile = null
+          vm.selectedItem = null
         })
         .catch((error) => {
           console.log(error)
