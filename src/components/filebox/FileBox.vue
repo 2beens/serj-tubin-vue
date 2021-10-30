@@ -6,22 +6,8 @@
       class="mx-auto"
       max-width="700"
     >
-      <v-sheet class="pa-4 primary lighten-2">
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-model="search"
-              label="Search Company Directory"
-              dark
-              flat
-              solo-inverted
-              hide-details
-              clearable
-              clear-icon="mdi-close-circle-outline"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row class="ma-2">
+      <v-sheet class="pa-4 teal darken-2">
+        <v-row class="ma-2 mt-0">
           <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
               v-model="inputFile"
@@ -33,7 +19,7 @@
         <v-row class="ma-2">
           <v-col cols="4" class="pa-0 ma-0">
             <v-checkbox
-              class="pa-0 ma-0"
+              class="ma-0"
               v-model="caseSensitive"
               dark
               hide-details
@@ -45,7 +31,7 @@
             <v-btn
               fab
               small
-              :disabled="!itemSelected || this.selectedItem.is_file"
+              :disabled="itemSelected && this.selectedItem.is_file"
               @click="onNewFolderClick"
             >
               <v-icon>mdi-folder</v-icon>
@@ -80,6 +66,20 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="search"
+              label="Search ..."
+              dark
+              flat
+              solo-inverted
+              hide-details
+              clearable
+              clear-icon="mdi-close-circle-outline"
+            ></v-text-field>
+          </v-col>
+        </v-row>
       </v-sheet>
       <v-card-text>
         <v-treeview
@@ -102,8 +102,13 @@
             <v-icon style="float: left"  v-else>
               {{ fileTypes[item.file] }}
             </v-icon>
-            <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
-            <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
+            <v-hover v-slot:default="{ hover }">
+              <div style="cursor: pointer;">
+                <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
+                <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
+                <v-icon v-if="hover" class="appendRight">mdi-file</v-icon>
+              </div>
+            </v-hover>
           </template>
         </v-treeview>
       </v-card-text>
@@ -186,7 +191,7 @@ export default {
       navigator.clipboard.writeText(fileUrl)
     },
     onNewFolderClick() {
-      if (this.selectedItem.is_file) {
+      if (this.selectedItem && this.selectedItem.is_file) {
         return;
       }
 
@@ -196,7 +201,10 @@ export default {
         return
       }
 
-      const folderId = this.selectedItem.id
+      let folderId = 0
+      if (this.selectedItem) {
+        folderId = this.selectedItem.id
+      }
       const requestBody = {
         name: folderName,
       }
