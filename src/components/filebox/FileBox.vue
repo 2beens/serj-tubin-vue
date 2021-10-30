@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mb-10">
+  <v-container class="mb-10" v-if="this.$root.loggedIn">
     <h2>Files Box</h2>
 
     <v-card
