@@ -68,6 +68,16 @@
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
+            <v-btn
+              class="ml-2"
+              color="primary"
+              fab
+              small
+              :disabled="!itemSelected || !this.selectedItem.is_file"
+              @click="onGetLinkClick"
+            >
+              <v-icon>mdi-link</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-sheet>
@@ -90,7 +100,7 @@
               {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
             </v-icon>
             <v-icon style="float: left"  v-else>
-              {{ files[item.file] }}
+              {{ fileTypes[item.file] }}
             </v-icon>
             <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }} [{{ item.file }}]</span>
             <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
@@ -105,6 +115,19 @@
 import axios from 'axios'
 const qs = require('querystring')
 
+const fileTypes = {
+  'application/pdf': 'mdi-file-pdf',
+  'image/png': 'mdi-file-image',
+  'image/jpg': 'mdi-file-image',
+  'image/jpeg': 'mdi-file-image',
+  html: 'mdi-language-html5',
+  js: 'mdi-nodejs',
+  json: 'mdi-code-json',
+  md: 'mdi-language-markdown',
+  txt: 'mdi-file-document-outline',
+  xls: 'mdi-file-excel',
+}
+
 export default {
   name: 'FileBox',
   mounted () {
@@ -113,24 +136,13 @@ export default {
 
   data: () => ({
     open: [],
-    search: null,
-    caseSensitive: false,
-    inputFile: null,
     selectedItem: null,
     tree: [],
     items: [],
-    files: {
-      html: 'mdi-language-html5',
-      js: 'mdi-nodejs',
-      json: 'mdi-code-json',
-      md: 'mdi-language-markdown',
-      'application/pdf': 'mdi-file-pdf',
-      'image/png': 'mdi-file-image',
-      'image/jpg': 'mdi-file-image',
-      'image/jpeg': 'mdi-file-image',
-      txt: 'mdi-file-document-outline',
-      xls: 'mdi-file-excel',
-    },
+    search: null,
+    caseSensitive: false,
+    inputFile: null,
+    fileTypes: fileTypes,
   }),
 
   computed: {
@@ -154,7 +166,6 @@ export default {
         return
       }
       this.selectedItem = items[0]
-      console.warn(this.selectedItem)
     },
     openNode(nodes) {
       if (nodes.length === 0) {
@@ -162,7 +173,17 @@ export default {
         return
       }
       this.selectedItem = nodes[0]
-      console.warn(this.selectedItem)
+    },
+    onGetLinkClick() {
+      const id = this.selectedItem.id
+      const isFile = this.selectedItem.is_file
+      if (!isFile) {
+        console.error(id, 'not a file')
+        return
+      }
+      const folderId = this.selectedItem.parent_id
+      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/c/${id}`
+      navigator.clipboard.writeText(fileUrl)
     },
     onNewFolderClick() {
       if (this.selectedItem.is_file) {
@@ -182,7 +203,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}/new`,
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
           qs.stringify(requestBody),
         )
         .then((response) => {
@@ -209,7 +230,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${folderId}`,
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}`,
           formData
         )
         .then((response) => {
@@ -231,7 +252,7 @@ export default {
       }
 
       axios
-        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + `/folder/${this.selectedItem.parent_id}/file/${id}`)
+        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${this.selectedItem.parent_id}/c/${id}`)
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('save file - received null response / data')
@@ -248,13 +269,14 @@ export default {
     refreshFilesTree() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/folder/root')
+        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root')
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('get root - received null response / data')
             return
           }
-          vm.items = [response.data]
+          // get root folder content - children
+          vm.items = response.data.children
           vm.inputFile = null
         })
         .catch((error) => {
