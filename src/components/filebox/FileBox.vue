@@ -212,7 +212,12 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
-          qs.stringify(requestBody),
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
         )
         .then((response) => {
           if (response === null || response.data === null) {
@@ -239,7 +244,12 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}`,
-          formData
+          formData, {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
         )
         .then((response) => {
           if (response === null || response.data === null) {
@@ -267,7 +277,12 @@ export default {
       }
 
       axios
-        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + path)
+        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('save file - received null response / data')
@@ -288,7 +303,12 @@ export default {
     refreshFilesTree() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root')
+        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('get root - received null response / data')
