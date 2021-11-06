@@ -40,7 +40,7 @@
               class="ml-2"
               fab
               small
-              :disabled="!itemSelected || !fileSelected"
+              :disabled="!fileSelected"
               @click="onUploadClick"
             >
               <v-icon>mdi-cloud-upload</v-icon>
@@ -235,8 +235,15 @@ export default {
         })
     },
     onUploadClick() {
-      const folderId = this.selectedItem.id
-      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${this.selectedItem.name}`)
+      let folderId, folderName
+      if (!this.selectedItem) {
+        folderId = 0
+        folderName = 'root'
+      } else {
+        folderId = this.selectedItem.id
+        folderName = this.inputFile.name
+      }
+      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${folderName}`)
 
       let formData = new FormData()
       formData.append("file", this.inputFile, this.inputFile.name)
