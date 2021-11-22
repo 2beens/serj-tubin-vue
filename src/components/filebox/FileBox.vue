@@ -315,7 +315,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}`,
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData, {
             headers: {
               'Access-Control-Allow-Origin': '*',
@@ -343,9 +343,9 @@ export default {
 
       let path
       if (isFile) {
-        path = `/f/${this.selectedItem.parent_id}/c/${id}`
+        path = `/f/del/${this.selectedItem.parent_id}/c/${id}`
       } else {
-        path = `/f/${id}`
+        path = `/f/del/${id}`
       }
 
       axios
