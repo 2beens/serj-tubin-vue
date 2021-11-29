@@ -157,7 +157,7 @@ export default {
     return {
       editBlogMode: false,
       blogPage: 1,
-      maxPostsPerPage: 5,
+      maxPostsPerPage: 10,
       blogPageLength: 0,
       posts: [],
       dialog: false,
