@@ -139,6 +139,20 @@
         </v-treeview>
       </v-card-text>
     </v-card>
+
+    <v-snackbar v-model="showSnackbar">
+      {{ snackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          :color="snackbarColor"
+          text
+          v-bind="attrs"
+          @click="showSnackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -180,6 +194,9 @@ export default {
     inputFile: null,
     fileTypes: fileTypes,
     showDialog: false,
+    snackbarText: '',
+    showSnackbar: false,
+    snackbarColor: 'green',
   }),
 
   computed: {
@@ -221,6 +238,7 @@ export default {
       const folderId = this.selectedItem.parent_id
       const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
       navigator.clipboard.writeText(fileUrl)
+      this.show(`File link [${fileUrl}] copied!`)
     },
     onUpdateFileConfirmClicked (fileInfo) {
       this.showDialog = false
@@ -245,6 +263,7 @@ export default {
             console.error('update file info - received null response / data')
             return
           }
+          this.show('Updated!')
           this.refreshFilesTree()
         })
         .catch((error) => {
@@ -253,6 +272,7 @@ export default {
           } else {
             console.error(error)
           }
+          this.showErr(`Update failed, check the console!`)
         })
     },
     onNewFolderClick() {
@@ -289,6 +309,7 @@ export default {
             console.error('create new folder - received null response / data')
             return
           }
+          this.show(`Folder ${folderName} created!`)
           this.refreshFilesTree()
         })
         .catch((error) => {
@@ -297,6 +318,7 @@ export default {
           } else {
             console.error(error)
           }
+          this.showErr(`Create new folder failed, check the console!`)
         })
     },
     onUploadClick() {
@@ -328,10 +350,12 @@ export default {
             console.error('save file - received null response / data')
             return
           }
+          this.show(`File ${this.inputFile.name} uploaded!`)
           this.refreshFilesTree()
         })
         .catch((error) => {
           console.log(error)
+          this.showErr(`Upload failed, check the console!`)
         })
     },
     onDeleteClick() {
@@ -362,6 +386,8 @@ export default {
           }
           console.log('response:')
           console.log(response.data)
+          const msg = isFile ? `File ${id} deleted!` : `Folder ${id} deleted!`
+          this.show(msg)
           this.refreshFilesTree()
         })
         .catch((error) => {
@@ -370,6 +396,7 @@ export default {
           } else {
             console.error(error)
           }
+          this.showErr(`Delete failed, check the console!`)
         })
     },
     refreshFilesTree() {
@@ -395,6 +422,16 @@ export default {
           console.log(error)
         })
     },
+    show(message) {
+      this.snackbarText = message
+      this.snackbarColor = 'green'
+      this.showSnackbar = true
+    },
+    showErr(message) {
+      this.snackbarText = message
+      this.snackbarColor = 'red'
+      this.showSnackbar = true
+    }
   },
 }
 </script>

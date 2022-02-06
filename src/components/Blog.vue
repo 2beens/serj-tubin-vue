@@ -128,7 +128,6 @@
         v-model="showSnackbar"
       >
         {{ snackbarText }}
-
         <template v-slot:action="{ attrs }">
           <v-btn
             color="pink"
