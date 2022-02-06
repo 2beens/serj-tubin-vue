@@ -26,8 +26,8 @@
               label="Case sensitive"
             ></v-checkbox>
           </v-col>
-          <v-col class="pa-0 ma-0" cols="3" />
-          <v-col class="pa-0 ma-0" cols="5">
+          <v-col class="pa-0 ma-0" cols="2" />
+          <v-col class="pa-0 ma-0" cols="6">
             <v-btn
               fab
               small
@@ -63,6 +63,16 @@
               @click="onGetLinkClick"
             >
               <v-icon>mdi-link</v-icon>
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              color="success"
+              fab
+              small
+              :disabled="!itemSelected || !this.selectedItem.is_file"
+              @click="onViewFile"
+            >
+              <v-icon>mdi-file-find</v-icon>
             </v-btn>
             <v-dialog
               @keydown.esc="showDialog = false"
@@ -239,6 +249,18 @@ export default {
       const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
       navigator.clipboard.writeText(fileUrl)
       this.show(`File link [${fileUrl}] copied!`)
+    },
+    onViewFile() {
+      const id = this.selectedItem.id
+      const isFile = this.selectedItem.is_file
+      if (!isFile) {
+        console.error(id, 'not a file')
+        return
+      }
+      const folderId = this.selectedItem.parent_id
+      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
+      window.open(fileUrl,'') // TODO: in order to open private links, i need to store cookie in local storage,
+      // and later get it from there, in a page for the selected file
     },
     onUpdateFileConfirmClicked (fileInfo) {
       this.showDialog = false
