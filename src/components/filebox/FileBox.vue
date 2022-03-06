@@ -16,6 +16,11 @@
               label="File upload (select the dest folder first)"
             ></v-file-input>
           </v-col>
+          <v-progress-linear
+            color="teal"
+            v-show="uploadingFile"
+            :value="uploadPercentage"
+          ></v-progress-linear>
         </v-row>
         <v-row class="ma-2">
           <v-col cols="4" class="pa-0 ma-0">
@@ -202,6 +207,8 @@ export default {
     items: [],
     search: null,
     caseSensitive: false,
+    uploadPercentage: 0,
+    uploadingFile: false,
     inputFiles: null,
     fileTypes: fileTypes,
     showDialog: false,
@@ -353,13 +360,14 @@ export default {
         folderId = this.selectedItem.id
         folderName = this.selectedItem.name
       }
-      console.log(`uploading ${this.inputFiles.name} to folder ${folderId} ${folderName}`)
+      console.log(`uploading ${this.inputFiles.length} files to folder ${folderId} ${folderName}`)
 
       let formData = new FormData()
       for (let i = 0; i < this.inputFiles.length; i++) {
         formData.append("files", this.inputFiles[i], this.inputFiles[i].name)
       }
 
+      this.uploadingFile = true
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
@@ -367,7 +375,11 @@ export default {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+            },
+            onUploadProgress: function( progressEvent ) {
+              const percentage = Math.round((progressEvent.loaded / progressEvent.total) * 100)
+              this.uploadPercentage = parseInt(percentage)
+            }.bind(this)
           }
         )
         .then((response) => {
@@ -376,9 +388,10 @@ export default {
             return
           }
           this.show(`Files uploaded!`)
+          this.uploadingFile = false
 
           try {
-            const filesIds = response.data.split(':')[0]
+            const filesIds = response.data.split(':')[1]
             console.log('files added', filesIds)
           } catch(e) { /*nop*/ }
 
@@ -387,6 +400,7 @@ export default {
         .catch((error) => {
           console.log(error)
           this.showErr(`Upload failed, check the console!`)
+          this.uploadingFile = false
         })
     },
     onDeleteClick() {
