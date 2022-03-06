@@ -10,7 +10,8 @@
         <v-row class="ma-2 mt-0">
           <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
-              v-model="inputFile"
+              v-model="inputFiles"
+              multiple
               show-size
               label="File upload (select the dest folder first)"
             ></v-file-input>
@@ -201,7 +202,7 @@ export default {
     items: [],
     search: null,
     caseSensitive: false,
-    inputFile: null,
+    inputFiles: null,
     fileTypes: fileTypes,
     showDialog: false,
     snackbarText: '',
@@ -219,7 +220,7 @@ export default {
       return this.selectedItem !== null
     },
     fileSelected () {
-      return this.inputFile !== null
+      return this.inputFiles !== null
     },
   },
 
@@ -350,12 +351,14 @@ export default {
         folderName = 'root'
       } else {
         folderId = this.selectedItem.id
-        folderName = this.inputFile.name
+        folderName = this.selectedItem.name
       }
-      console.log(`uploading ${this.inputFile.name} to folder ${folderId} ${folderName}`)
+      console.log(`uploading ${this.inputFiles.name} to folder ${folderId} ${folderName}`)
 
       let formData = new FormData()
-      formData.append("file", this.inputFile, this.inputFile.name)
+      for (let i = 0; i < this.inputFiles.length; i++) {
+        formData.append("files", this.inputFiles[i], this.inputFiles[i].name)
+      }
 
       axios
         .post(
@@ -369,10 +372,16 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('save file - received null response / data')
+            console.error('save files - received null response / data')
             return
           }
-          this.show(`File ${this.inputFile.name} uploaded!`)
+          this.show(`Files uploaded!`)
+
+          try {
+            const filesIds = response.data.split(':')[0]
+            console.log('files added', filesIds)
+          } catch(e) { /*nop*/ }
+
           this.refreshFilesTree()
         })
         .catch((error) => {
@@ -437,7 +446,7 @@ export default {
           }
           // get root folder content - children
           vm.items = response.data.children
-          vm.inputFile = null
+          vm.inputFiles = null
           vm.selectedItem = null
         })
         .catch((error) => {
