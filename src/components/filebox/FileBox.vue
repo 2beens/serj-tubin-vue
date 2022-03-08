@@ -74,6 +74,16 @@
               class="ml-2"
               fab
               small
+              color="#d51e00"
+              :disabled="!itemSelected"
+              @click="onDownloadClick"
+            >
+              <v-icon>mdi-cloud-download</v-icon>
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              fab
+              small
               :disabled="!itemSelected"
               @click="onDeleteClick"
             >
@@ -322,6 +332,39 @@ export default {
             console.error(error)
           }
           this.showErr(`Update failed, check the console!`)
+        })
+    },
+    onDownloadClick() {
+      if (!this.selectedItem) {
+        return;
+      }
+
+      let path;
+      if (this.selectedItem.is_file) {
+        path = `/f/download/file/${this.selectedItem.id}/parent/${this.selectedItem.parent_id}`
+      } else {
+        path = `/f/download/folder/${this.selectedItem.id}`
+      }
+
+      axios
+        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          },
+          responseType: 'blob'
+        })
+        .then((response) => {
+          const downloadUrl = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = downloadUrl
+          link.setAttribute('download', `${this.selectedItem.name}.zip`)
+          document.body.appendChild(link)
+          link.click()
+          link.remove()
+        })
+        .catch(function (error) {
+          console.log(error)
         })
     },
     onNewFolderClick() {
