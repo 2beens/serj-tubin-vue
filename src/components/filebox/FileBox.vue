@@ -22,6 +22,25 @@
             :value="uploadPercentage"
           ></v-progress-linear>
         </v-row>
+
+        <v-row v-if="this.selectedItem" class="ma-2">
+          <v-col cols="1" class="pa-0 ma-0">
+            >>
+          </v-col>
+          <v-col cols="11" class="pa-0 ma-0">
+            <span v-if="this.selectedItem.is_file" style="color: darkgray; float: left; font-weight: bold">{{ this.selectedItem.name }}</span>
+            <span v-else style="color: white; float: left; font-weight: bold">
+              <v-icon style="float: left; color: blue;">mdi-folder</v-icon>
+              {{ this.selectedItem.name }} [{{ this.selectedItem.children ? this.selectedItem.children.length : 0 }}]
+            </span>
+          </v-col>
+        </v-row>
+        <v-row v-else class="ma-2">
+          <v-col cols="1" class="pa-0 ma-0">
+            >>
+          </v-col>
+        </v-row>
+
         <v-row class="ma-2">
           <v-col cols="4" class="pa-0 ma-0">
             <v-checkbox
