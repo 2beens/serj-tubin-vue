@@ -65,6 +65,7 @@
               class="ml-2"
               fab
               small
+              color="#5665d0"
               :disabled="!fileSelected"
               @click="onUploadClick"
             >
@@ -222,7 +223,7 @@ const fileTypes = {
 export default {
   name: 'FileBox',
   mounted () {
-    this.refreshFilesTree()
+    this.refreshFilesTreeAndDeselectItems()
   },
 
   components: {
@@ -323,7 +324,7 @@ export default {
             return
           }
           this.show('Updated!')
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -402,7 +403,7 @@ export default {
             return
           }
           this.show(`Folder ${folderName} created!`)
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -457,7 +458,7 @@ export default {
             console.log('files added', filesIds)
           } catch(e) { /*nop*/ }
 
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           console.log(error)
@@ -495,7 +496,7 @@ export default {
           console.log(response.data)
           const msg = isFile ? `File ${id} deleted!` : `Folder ${id} deleted!`
           this.show(msg)
-          this.refreshFilesTree()
+          this.refreshFilesTreeAndDeselectItems()
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -506,7 +507,10 @@ export default {
           this.showErr(`Delete failed, check the console!`)
         })
     },
-    refreshFilesTree() {
+    refreshFilesTreeAndDeselectItems() {
+      this.refreshFilesTree(true)
+    },
+    refreshFilesTree(deselectItems) {
       const vm = this
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
@@ -523,7 +527,9 @@ export default {
           // get root folder content - children
           vm.items = response.data.children
           vm.inputFiles = null
-          vm.selectedItem = null
+          if (deselectItems) {
+            vm.selectedItem = null
+          }
         })
         .catch((error) => {
           console.log(error)
