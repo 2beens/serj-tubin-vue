@@ -24,17 +24,27 @@
         </v-row>
 
         <v-row class="ma-2">
-          <v-col v-if="noItemsSelected" cols="1" class="pa-0 ma-0">
+          <v-col cols="1">
+            <v-btn
+              class="ma-0"
+              small
+              :disabled="noItemsSelected"
+              @click="deselectAll"
+            >
+              <v-icon>mdi-close </v-icon>
+            </v-btn>
+          </v-col>
+          <v-col v-if="noItemsSelected" cols="1">
             <br/>
           </v-col>
-          <v-col v-else-if="oneItemSelected" cols="11" class="pa-0 ma-0">
+          <v-col v-else-if="oneItemSelected" cols="10" class="ma-0">
             <span v-if="oneFileSelected" style="color: white; float: left; font-weight: bold">{{ this.selectedItems[0].name }}</span>
             <span v-else style="color: white; float: left; font-weight: bold">
               <v-icon style="float: left; color: blue;">mdi-folder</v-icon>
               {{ this.selectedItems[0].name }} [{{ this.selectedItems[0].children ? this.selectedItems[0].children.length : 0 }}]
             </span>
           </v-col>
-          <v-col v-else cols="3" class="pa-0 ma-0" style="color: white; float: left; font-weight: bold">
+          <v-col v-else cols="3" class="ma-0" style="color: white; float: left; font-weight: bold">
             {{ this.selectedItems.length }} selected items
           </v-col>
         </v-row>
@@ -152,17 +162,13 @@
       </v-sheet>
       <v-card-text>
         <v-treeview
-          v-model="tree"
-          :open.sync="open"
-          multiple-active
+          :active.sync="selectedItems"
           :items="items"
-          hoverable
           activatable
-          active-class="primary--text"
+          multiple-active
+          hoverable
           item-key="id"
           return-object
-          @update:active="clickOnNode($event)"
-          @update:open="openNode"
           :search="search"
           :filter="filter"
         >
@@ -232,7 +238,6 @@ export default {
 
   data: () => ({
     open: [],
-    tree: [],
     items: [],
     selectedItems: [],
     search: null,
@@ -274,12 +279,8 @@ export default {
   },
 
   methods: {
-    clickOnNode(items) {
-      this.selectedItems = items
-    },
-    openNode(nodes) {
-      // NOP for now
-      // console.log('opened', JSON.stringify(nodes))
+    deselectAll() {
+      this.selectedItems = []
     },
     onGetLinkClick() {
       const item = this.selectedItems[0]
@@ -301,8 +302,7 @@ export default {
         console.error(id, 'not a file')
         return
       }
-      const folderId = item.parent_id
-      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
+      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
       window.open(fileUrl,'') // TODO: in order to open private links, i need to store cookie in local storage,
       // and later get it from there, in a page for the selected file
     },
