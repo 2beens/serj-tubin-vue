@@ -64,7 +64,7 @@
             <v-btn
               fab
               small
-              :disabled="!oneFolderSelected"
+              :disabled="!oneFolderSelected && !noItemsSelected"
               @click="onNewFolderClick"
             >
               <v-icon>mdi-folder</v-icon>
