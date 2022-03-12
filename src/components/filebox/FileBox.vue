@@ -230,6 +230,13 @@ export default {
   name: 'FileBox',
   mounted () {
     this.refreshFilesTreeAndDeselectItems()
+
+    // deselect all files/folders on ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === 'Escape') {
+        this.selectedItems = []
+      }
+    });
   },
 
   components: {
