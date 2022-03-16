@@ -22,6 +22,33 @@
             :value="uploadPercentage"
           ></v-progress-linear>
         </v-row>
+
+        <v-row class="ma-2">
+          <v-col cols="1">
+            <v-btn
+              class="ma-0"
+              small
+              :disabled="noItemsSelected"
+              @click="deselectAll"
+            >
+              <v-icon>mdi-close </v-icon>
+            </v-btn>
+          </v-col>
+          <v-col v-if="noItemsSelected" cols="1">
+            <br/>
+          </v-col>
+          <v-col v-else-if="oneItemSelected" cols="10" class="ma-0">
+            <span v-if="oneFileSelected" style="color: white; float: left; font-weight: bold">{{ this.selectedItems[0].name }}</span>
+            <span v-else style="color: white; float: left; font-weight: bold">
+              <v-icon style="float: left; color: blue;">mdi-folder</v-icon>
+              {{ this.selectedItems[0].name }} [{{ this.selectedItems[0].children ? this.selectedItems[0].children.length : 0 }}]
+            </span>
+          </v-col>
+          <v-col v-else cols="3" class="ma-0" style="color: white; float: left; font-weight: bold">
+            {{ this.selectedItems.length }} selected items
+          </v-col>
+        </v-row>
+
         <v-row class="ma-2">
           <v-col cols="4" class="pa-0 ma-0">
             <v-checkbox
@@ -37,7 +64,7 @@
             <v-btn
               fab
               small
-              :disabled="itemSelected && this.selectedItem.is_file"
+              :disabled="!oneFolderSelected && !noItemsSelected"
               @click="onNewFolderClick"
             >
               <v-icon>mdi-folder</v-icon>
@@ -46,7 +73,8 @@
               class="ml-2"
               fab
               small
-              :disabled="!fileSelected"
+              color="#5665d0"
+              :disabled="!filesForUploadSelected"
               @click="onUploadClick"
             >
               <v-icon>mdi-cloud-upload</v-icon>
@@ -55,7 +83,17 @@
               class="ml-2"
               fab
               small
-              :disabled="!itemSelected"
+              color="#d51e00"
+              :disabled="noItemsSelected"
+              @click="onDownloadClick"
+            >
+              <v-icon>mdi-cloud-download</v-icon>
+            </v-btn>
+            <v-btn
+              class="ml-2"
+              fab
+              small
+              :disabled="noItemsSelected"
               @click="onDeleteClick"
             >
               <v-icon>mdi-delete</v-icon>
@@ -65,7 +103,7 @@
               color="primary"
               fab
               small
-              :disabled="!itemSelected || !this.selectedItem.is_file"
+              :disabled="!oneFileSelected"
               @click="onGetLinkClick"
             >
               <v-icon>mdi-link</v-icon>
@@ -75,7 +113,7 @@
               color="success"
               fab
               small
-              :disabled="!itemSelected || !this.selectedItem.is_file"
+              :disabled="!oneFileSelected"
               @click="onViewFile"
             >
               <v-icon>mdi-file-find</v-icon>
@@ -93,7 +131,7 @@
                   icon
                   v-bind="attrs"
                   v-on="on"
-                  :disabled="!itemSelected || !selectedItem.is_file"
+                  :disabled="!oneFileSelected"
                 >
                   <v-icon dark>
                     mdi-wrench
@@ -101,7 +139,7 @@
                 </v-btn>
               </template>
               <update-file-info-dialog
-                :fileInfo="selectedItem"
+                :fileInfo="this.selectedItems[0]"
                 v-on:confirm-clicked="onUpdateFileConfirmClicked($event)"
               />
             </v-dialog>
@@ -124,15 +162,13 @@
       </v-sheet>
       <v-card-text>
         <v-treeview
-          v-model="tree"
-          :open.sync="open"
+          :active.sync="selectedItems"
           :items="items"
           activatable
-          active-class="primary--text"
+          multiple-active
+          hoverable
           item-key="id"
           return-object
-          @update:active="clickOnNode($event)"
-          @update:open="openNode"
           :search="search"
           :filter="filter"
         >
@@ -193,7 +229,14 @@ const fileTypes = {
 export default {
   name: 'FileBox',
   mounted () {
-    this.refreshFilesTree()
+    this.refreshFilesTreeAndDeselectItems()
+
+    // deselect all files/folders on ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === 'Escape') {
+        this.selectedItems = []
+      }
+    });
   },
 
   components: {
@@ -202,9 +245,8 @@ export default {
 
   data: () => ({
     open: [],
-    selectedItem: null,
-    tree: [],
     items: [],
+    selectedItems: [],
     search: null,
     caseSensitive: false,
     uploadPercentage: 0,
@@ -223,50 +265,51 @@ export default {
         ? (item, search, textKey) => item[textKey].indexOf(search) > -1
         : undefined
     },
-    itemSelected () {
-      return this.selectedItem !== null
+    someItemsSelected () {
+      return this.selectedItems && this.selectedItems.length > 0
     },
-    fileSelected () {
+    noItemsSelected () {
+      return !this.selectedItems || this.selectedItems.length === 0
+    },
+    oneItemSelected () {
+      return this.selectedItems && this.selectedItems.length === 1
+    },
+    oneFolderSelected () {
+      return this.selectedItems && this.selectedItems.length === 1 && !this.selectedItems[0].is_file
+    },
+    oneFileSelected () {
+      return this.selectedItems && this.selectedItems.length === 1 && this.selectedItems[0].is_file
+    },
+    filesForUploadSelected () {
       return this.inputFiles !== null
     },
   },
 
   methods: {
-    clickOnNode(items) {
-      if (items.length === 0) {
-        this.selectedItem = null
-        return
-      }
-      this.selectedItem = items[0]
-    },
-    openNode(nodes) {
-      if (nodes.length === 0) {
-        this.selectedItem = null
-        return
-      }
-      this.selectedItem = nodes[0]
+    deselectAll() {
+      this.selectedItems = []
     },
     onGetLinkClick() {
-      const id = this.selectedItem.id
-      const isFile = this.selectedItem.is_file
+      const item = this.selectedItems[0]
+      const id = item.id
+      const isFile = item.is_file
       if (!isFile) {
         console.error(id, 'not a file')
         return
       }
-      const folderId = this.selectedItem.parent_id
-      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
+      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
       navigator.clipboard.writeText(fileUrl)
       this.show(`File link [${fileUrl}] copied!`)
     },
     onViewFile() {
-      const id = this.selectedItem.id
-      const isFile = this.selectedItem.is_file
+      const item = this.selectedItems[0]
+      const id = item.id
+      const isFile = item.is_file
       if (!isFile) {
         console.error(id, 'not a file')
         return
       }
-      const folderId = this.selectedItem.parent_id
-      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${folderId}/c/${id}`
+      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
       window.open(fileUrl,'') // TODO: in order to open private links, i need to store cookie in local storage,
       // and later get it from there, in a page for the selected file
     },
@@ -280,7 +323,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${fileInfo.parent_id}/c/${fileInfo.id}`,
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
           qs.stringify(requestBody), {
             headers: {
               'Access-Control-Allow-Origin': '*',
@@ -294,7 +337,7 @@ export default {
             return
           }
           this.show('Updated!')
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -305,8 +348,43 @@ export default {
           this.showErr(`Update failed, check the console!`)
         })
     },
+    onDownloadClick() {
+      if (this.selectedItems.length === 0) {
+        return;
+      }
+
+      const item = this.selectedItems[0]
+
+      let path;
+      if (item.is_file) {
+        path = `/f/download/file/${item.id}`
+      } else {
+        path = `/f/download/folder/${item.id}`
+      }
+
+      axios
+        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          },
+          responseType: 'blob'
+        })
+        .then((response) => {
+          const downloadUrl = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = downloadUrl
+          link.setAttribute('download', `${this.selectedItem.name}.zip`)
+          document.body.appendChild(link)
+          link.click()
+          link.remove()
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     onNewFolderClick() {
-      if (this.selectedItem && this.selectedItem.is_file) {
+      if (this.selectedItems.length > 0 && this.selectedItems[0].is_file) {
         return;
       }
 
@@ -317,8 +395,8 @@ export default {
       }
 
       let folderId = 0
-      if (this.selectedItem) {
-        folderId = this.selectedItem.id
+      if (this.selectedItems.length > 0) {
+        folderId = this.selectedItems[0].id
       }
       const requestBody = {
         name: folderName,
@@ -340,7 +418,7 @@ export default {
             return
           }
           this.show(`Folder ${folderName} created!`)
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -353,12 +431,12 @@ export default {
     },
     onUploadClick() {
       let folderId, folderName
-      if (!this.selectedItem) {
+      if (this.selectedItems.length === 0) {
         folderId = 0
         folderName = 'root'
       } else {
-        folderId = this.selectedItem.id
-        folderName = this.selectedItem.name
+        folderId = this.selectedItems[0].id
+        folderName = this.selectedItems[0].name
       }
       console.log(`uploading ${this.inputFiles.length} files to folder ${folderId} ${folderName}`)
 
@@ -395,7 +473,7 @@ export default {
             console.log('files added', filesIds)
           } catch(e) { /*nop*/ }
 
-          this.refreshFilesTree()
+          this.refreshFilesTree(false)
         })
         .catch((error) => {
           console.log(error)
@@ -404,36 +482,45 @@ export default {
         })
     },
     onDeleteClick() {
-      const id = this.selectedItem.id
-      const isFile = this.selectedItem.is_file
-      if (!confirm(`Are you sure you want to remove ${isFile ? 'file' : 'folder'} [${id}]?`)) {
+      if (this.selectedItems.length === 0) {
         return
       }
 
-      let path
-      if (isFile) {
-        path = `/f/del/${this.selectedItem.parent_id}/c/${id}`
-      } else {
-        path = `/f/del/${id}`
+      if (!confirm(`Are you sure you want to remove ${this.selectedItems.length} items?`)) {
+        return
+      }
+
+      const selectedIds = []
+      for (let i = 0; i < this.selectedItems.length; i++) {
+        selectedIds.push(this.selectedItems[i].id)
       }
 
       axios
-        .delete(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+        .post(
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/del`, 
+          qs.stringify({ ids: selectedIds.join(',') }), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
         })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('save file - received null response / data')
             return
           }
-          console.log('response:')
-          console.log(response.data)
-          const msg = isFile ? `File ${id} deleted!` : `Folder ${id} deleted!`
-          this.show(msg)
-          this.refreshFilesTree()
+          console.log('delete items response', response.data)
+
+          if (!response.data.startsWith('deleted:')) {
+            this.showErr('Invalid response received')
+            this.refreshFilesTreeAndDeselectItems()
+            return
+          }
+
+          const deletedCount = response.data.split(':')[1]
+          this.show(`${deletedCount}/${selectedIds.length} items deleted!`)
+
+          this.refreshFilesTreeAndDeselectItems()
         })
         .catch((error) => {
           if (error && error.response && error.response.data) {
@@ -444,7 +531,10 @@ export default {
           this.showErr(`Delete failed, check the console!`)
         })
     },
-    refreshFilesTree() {
+    refreshFilesTreeAndDeselectItems() {
+      this.refreshFilesTree(true)
+    },
+    refreshFilesTree(deselectItems) {
       const vm = this
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
@@ -461,7 +551,9 @@ export default {
           // get root folder content - children
           vm.items = response.data.children
           vm.inputFiles = null
-          vm.selectedItem = null
+          if (deselectItems) {
+            vm.selectedItems = []
+          }
         })
         .catch((error) => {
           console.log(error)
