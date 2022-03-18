@@ -17,6 +17,9 @@
       <v-icon>mdi-firefox</v-icon>
     </v-btn>
     <v-btn>
+      <v-icon>mdi-wrench</v-icon>
+    </v-btn>
+    <v-btn>
       <v-icon>mdi-all-inclusive</v-icon>
     </v-btn>
   </v-btn-toggle>
@@ -27,7 +30,7 @@ export default {
   name: 'SearchFilterGroup',
   data: function () {
     return {
-      searchSource: 4
+      searchSource: 5
     }
   },
   methods: {

@@ -14,6 +14,13 @@
     mdi-apple-safari
   </v-icon>
   <v-icon
+    v-else-if="source === 'rabota'"
+    dense
+    color="light-blue darken-3"
+  >
+    mdi-wrench
+  </v-icon>
+  <v-icon
     v-else-if="source === 'pc'"
     dense
     color="yellow darken-2"
@@ -32,7 +39,7 @@
     dense
     color="light-green darken-2"
   >
-    mdi-crosshairs-question
+    mdi-help-circle
   </v-icon>
 </template>
 

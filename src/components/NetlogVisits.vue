@@ -107,7 +107,7 @@ export default {
       visitsPageLength: 0,
       filterInput: '',
       searchField: 0,
-      searchSource: 4,
+      searchSource: 5,
       iconIndex: 0,
       searchMode: false
     }
@@ -126,7 +126,10 @@ export default {
         return 'pc'
       } else if (this.searchSource === 3) {
         return 'firefox'
+      } else if (this.searchSource === 4) {
+        return 'rabota'
       }
+
       return 'all'
     },
     getSearchFieldType () {
