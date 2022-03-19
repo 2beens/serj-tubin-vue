@@ -5,7 +5,7 @@
 
     <SideBar />
 
-    <HomePage title="This is just a personal tech sandbox"/>
+    <HomePage title="A personal tech sandbox"/>
 
     <!-- <div id="app">
       <link-prevue url="https://www.accountingcoach.com/"></link-prevue>
