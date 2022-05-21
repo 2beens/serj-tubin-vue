@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+  <!-- TODO: after 2023 old Universal Analytics will have to be removed: -->
+  <!-- More info here: https://support.google.com/analytics/answer/11583528 -->
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166097926-1"></script>
   <script>
@@ -10,6 +12,18 @@
     gtag('js', new Date());
 
     gtag('config', 'UA-166097926-1');
+  </script>
+
+  <!-- Because the Universal Analytics (integration above) will be going away in 2033, 
+    that's why we need to integrate Google Analytics 4: -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZ8T2V80EK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LZ8T2V80EK');
   </script>
 
   <meta charset="utf-8">
