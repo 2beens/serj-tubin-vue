@@ -116,6 +116,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+const qs = require('querystring')
+
 export default {
   name: 'URLShortener',
   data: () => ({
@@ -185,6 +188,27 @@ export default {
   methods: {
     addUrl () {
       console.log('url', this.url)
+
+      const requestBody = {
+        url: this.url
+      }
+
+      // const vm = this
+      axios
+        .post(
+          process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new',
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*'
+            }
+          }
+        )
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     save () {
       this.snack = true
