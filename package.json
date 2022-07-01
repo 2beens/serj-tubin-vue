@@ -10,8 +10,8 @@
     "serve-prod": "vue-cli-service serve --port 1987 --mode production --watch"
   },
   "dependencies": {
-    "@mdi/font": "^3.6.95",
-    "axios": "^0.21.4",
+    "@mdi/font": "^6.9.96",
+    "axios": "^0.27.2",
     "link-prevue": "^1.2.0",
     "roboto-fontface": "*",
     "vue": "^2.7.0",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.1.1",
-    "@vue/cli-plugin-router": "3.12.1",
+    "@vue/cli-plugin-router": "5.0.6",
     "@vue/cli-service": "^3.12.1",
     "@vue/eslint-config-standard": "^5.1.2",
     "eslint": "^8.8.0",
@@ -30,6 +30,6 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^8.4.1",
     "vue-cli-plugin-vuetify": "~2.0.7",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.7.0"
   }
 }
