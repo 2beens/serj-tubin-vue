@@ -80,6 +80,20 @@
           </template>
         </v-edit-dialog>
       </template>
+      <template v-slot:item.ops="props">
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          x-small
+          color="error"
+          @click="deleteUrl(props.item.key)"
+        >
+          <v-icon>
+            mdi-close
+          </v-icon>
+        </v-btn>
+      </template>
     </v-data-table>
 
     <v-snackbar
@@ -148,6 +162,7 @@ export default {
         value: 'url',
       },
       { text: 'Key', value: 'key' },
+      { text: 'Ops',  value: 'ops', sortable: false }
     ],
     urls: [],
   }),
@@ -225,6 +240,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    deleteUrl (urlKey) {
+      console.log('will be deleting url:', urlKey)
     },
     save () {
       this.snack = true
