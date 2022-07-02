@@ -181,6 +181,15 @@ export default {
         }
         // console.log('received urls', response.data)
         vm.urls = response.data
+
+        for (let i = 0; i < vm.urls.length; i++) {
+          const redisKeyParts = vm.urls[i].key.split('::')
+          if (redisKeyParts.length != 2) {
+            console.warn('unexpected url redis key', vm.urls[i].key)
+            continue
+          }
+           vm.urls[i].key = redisKeyParts[1]
+        }
       })
       .catch((error) => {
         console.log(error)
