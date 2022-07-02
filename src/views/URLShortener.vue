@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="this.$root.loggedIn">
     <h2>URL Shortener</h2>
     <h4>Fun fact: uses a service written in Rust</h4>
 
@@ -152,6 +152,10 @@ export default {
     urls: [],
   }),
   mounted: function () {
+    if (!this.$root.loggedIn) {
+      return;
+    }
+
     const vm = this
     axios
       .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all')
@@ -160,7 +164,7 @@ export default {
           console.error('get all urls - received null response / data')
           return
         }
-        console.log('received urls', response.data)
+        // console.log('received urls', response.data)
         vm.urls = response.data
       })
       .catch((error) => {
@@ -254,6 +258,7 @@ h1, h2, h3, h4, h5 {
 #input-field {
   padding: 15px;
   padding-right: 80px;
+  padding-bottom: 0px;
   background: #26c6da;
   color: white;
   border-radius: 10px;
