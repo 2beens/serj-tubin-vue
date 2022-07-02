@@ -45,7 +45,7 @@
     <v-data-table
       style="padding: 20px; background: #26c6da; color: white; border-radius: 10px; margin-bottom: 50px;"
       :headers="headers"
-      :items="desserts"
+      :items="urls"
     >
       <template v-slot:item.name="props">
         <v-edit-dialog
@@ -124,6 +124,8 @@ export default {
   data: () => ({
     url: '',
     customid: '',
+
+    // table view stuff
     snack: false,
     snackColor: '',
     snackText: '',
@@ -131,60 +133,31 @@ export default {
     pagination: {},
     headers: [
       {
-        text: 'Dessert (100g serving)',
+        text: 'URL',
         align: 'start',
         sortable: false,
-        value: 'name',
+        value: 'url',
       },
-      { text: 'Calories', value: 'calories' },
-      { text: 'Fat (g)', value: 'fat' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
-      { text: 'Iron (%)', value: 'iron' },
+      { text: 'Key', value: 'key' },
     ],
-    desserts: [
-      {
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: '1%',
-      },
-      {
-        name: 'Ice cream sandwich',
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: '1%',
-      },
-      {
-        name: 'Eclair',
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: '7%',
-      },
-      {
-        name: 'Cupcake',
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: '8%',
-      },
-      {
-        name: 'Gingerbread',
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: '16%',
-      },
-    ],
+    urls: [],
   }),
+  mounted: function () {
+    const vm = this
+    axios
+      .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all')
+      .then((response) => {
+        if (response === null || response.data === null) {
+          console.error('get all urls - received null response / data')
+          return
+        }
+        console.log('received urls', response.data)
+        vm.urls = response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  },
   methods: {
     addUrl () {
       console.log('url', this.url)
