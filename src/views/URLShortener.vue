@@ -56,52 +56,26 @@
     </v-row>
 
     <v-data-table
-      style="padding: 20px; background: #26c6da; color: white; border-radius: 10px; margin-bottom: 50px;"
+      id="data-table"
       :headers="headers"
       :items="urls"
     >
-      <template v-slot:item.name="props">
+      <template v-slot:item.url="props">
         <v-edit-dialog
-          :return-value.sync="props.item.name"
+          :return-value.sync="props.item.url"
           @save="save"
           @cancel="cancel"
           @open="open"
           @close="close"
         >
-          {{ props.item.name }}
+          {{ props.item.url }}
           <template v-slot:input>
             <v-text-field
-              v-model="props.item.name"
+              v-model="props.item.url"
               :rules="[max25chars]"
               label="Edit"
               single-line
               counter
-            ></v-text-field>
-          </template>
-        </v-edit-dialog>
-      </template>
-      <template v-slot:item.iron="props">
-        <v-edit-dialog
-          :return-value.sync="props.item.iron"
-          large
-          persistent
-          @save="save"
-          @cancel="cancel"
-          @open="open"
-          @close="close"
-        >
-          <div>{{ props.item.iron }}</div>
-          <template v-slot:input>
-            <div class="mt-4 text-h6">
-              Update Iron
-            </div>
-            <v-text-field
-              v-model="props.item.iron"
-              :rules="[max25chars]"
-              label="Edit"
-              single-line
-              counter
-              autofocus
             ></v-text-field>
           </template>
         </v-edit-dialog>
@@ -144,6 +118,10 @@ const statuses = {
   "error": {
     type: "error",
     message: "Server Bad :("
+  },
+  "warning": {
+    type: "warning",
+    message: "Unexpected response"
   }
 }
 
@@ -192,7 +170,7 @@ export default {
     setInterval(function () {
       // TODO: if really needed, this can be better done via websockets
       vm.status = statuses["checking"]
-      console.log('checking server status...')
+      // console.log('checking server status...')
       axios
         .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/ping')
         .then((response) => {
@@ -201,8 +179,13 @@ export default {
             vm.status = statuses["error"]
             return
           }
-          console.log('received ping response: ', response.data)
-          vm.status = statuses["ok"]
+
+          if (String(response.data).trim() === 'Pong!') {
+            vm.status = statuses["ok"]
+          } else {
+            console.warn('received ping response:', response.data)
+            vm.status = statuses["warning"]
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -218,7 +201,7 @@ export default {
         url: this.url
       }
 
-      // const vm = this
+      const vm = this
       axios
         .post(
           process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new',
@@ -230,6 +213,10 @@ export default {
         )
         .then(function (response) {
           console.log(response)
+
+          vm.snack = true
+          vm.snackColor = 'success'
+          vm.snackText = response.data
         })
         .catch(function (error) {
           console.log(error)
@@ -267,8 +254,15 @@ h1, h2, h3, h4, h5 {
 #input-field {
   padding: 15px;
   padding-right: 80px;
-  background: #26c6da; 
-  color: white; 
+  background: #26c6da;
+  color: white;
   border-radius: 10px;
+}
+
+#data-table {
+  padding: 20px;
+  background: #26c6da;
+  border-radius: 10px;
+  margin-bottom: 50px;
 }
 </style>
