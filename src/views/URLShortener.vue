@@ -3,7 +3,7 @@
     <h2>URL Shortener</h2>
     <h4>Fun fact: uses a service written in Rust</h4>
 
-    <v-form style="padding: 20px; background: #26c6da; color: white; border-radius: 10px;">
+    <v-form id="input-field">
       <v-row>
         <v-col
           cols="8"
@@ -40,7 +40,20 @@
       </v-row>
     </v-form>
 
-    <h4 style="margin-top: 15px;">Current URLs saved</h4>
+    <v-row>
+      <v-col cols="3"></v-col>
+      <v-col cols="6">
+        <h4 style="margin-top: 15px;">Current URLs saved</h4>
+      </v-col>
+      <v-col cols="3" style="padding: 22px;">
+        <v-alert
+          dense
+          :type="status.type"
+        >
+          {{ status.message }}
+        </v-alert>
+      </v-col>
+    </v-row>
 
     <v-data-table
       style="padding: 20px; background: #26c6da; color: white; border-radius: 10px; margin-bottom: 50px;"
@@ -119,11 +132,29 @@
 import axios from 'axios'
 const qs = require('querystring')
 
+const statuses = {
+  "checking": {
+    type: "info",
+    message: "Checking ..."
+  },
+  "ok": {
+    type: "success",
+    message: "Server OK"
+  },
+  "error": {
+    type: "error",
+    message: "Server Bad :("
+  }
+}
+
 export default {
   name: 'URLShortener',
   data: () => ({
     url: '',
     customid: '',
+
+    // server status stuff
+    status: statuses["ok"],
 
     // table view stuff
     snack: false,
@@ -157,6 +188,27 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+
+    setInterval(function () {
+      // TODO: if really needed, this can be better done via websockets
+      vm.status = statuses["checking"]
+      console.log('checking server status...')
+      axios
+        .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/ping')
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('ping server - received null response / data')
+            vm.status = statuses["error"]
+            return
+          }
+          console.log('received ping response: ', response.data)
+          vm.status = statuses["ok"]
+        })
+        .catch((error) => {
+          console.log(error)
+          vm.status = statuses["error"]
+        })
+    }, 15000);
   },
   methods: {
     addUrl () {
@@ -208,5 +260,15 @@ export default {
 <style scoped>
 h1, h2, h3, h4, h5 {
   color: #26c6da;
+}
+</style>
+
+<style scoped>
+#input-field {
+  padding: 15px;
+  padding-right: 80px;
+  background: #26c6da; 
+  color: white; 
+  border-radius: 10px;
 }
 </style>
