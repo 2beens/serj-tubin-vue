@@ -232,8 +232,6 @@ export default {
   },
   methods: {
     addUrl () {
-      console.log('url', this.url)
-
       const requestBody = {
         url: this.url
       }
@@ -250,10 +248,13 @@ export default {
         )
         .then(function (response) {
           console.log(response)
+          const newId = response.data.trim()
+          console.log('new id', newId)
 
           vm.snack = true
           vm.snackColor = 'success'
-          vm.snackText = response.data
+          vm.snackText = `url added, id: ${newId}`
+          vm.urls.push({url: vm.url, key: newId})
         })
         .catch(function (error) {
           console.log(error)
