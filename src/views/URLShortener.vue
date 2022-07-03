@@ -250,8 +250,44 @@ export default {
           console.log(error)
         })
     },
-    deleteUrl (urlKey) {
-      console.log('will be deleting url:', urlKey)
+    deleteUrl (urlId) {
+      if (!urlId) {
+        console.warn('cannot delete url, empty id');
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to delete ${urlId}?`)) {
+        return
+      }
+
+      console.log('will be deleting url:', urlId)
+
+      const vm = this
+      axios
+        .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId)
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('delete url - received null response / data')
+            return
+          }
+
+          vm.snack = true
+          vm.snackColor = 'success'
+          vm.snackText = response.data
+
+          let urlIdx = -1;
+          for (let i = 0; i < vm.urls.length; i++) {
+            if (vm.urls[i].key == urlId) {
+              urlIdx = i
+              break
+            }
+          }
+
+          vm.urls.splice(urlIdx, 1)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     save () {
       this.snack = true
