@@ -80,6 +80,11 @@
           </template>
         </v-edit-dialog>
       </template>
+
+      <template v-slot:item.key="props">
+        <a :href="apiEndpoint + '/l/' + props.item.key" target="_blank">{{ props.item.key }}</a>
+      </template>
+
       <template v-slot:item.ops="props">
         <v-btn
           class="mx-2"
@@ -142,6 +147,8 @@ const statuses = {
 export default {
   name: 'URLShortener',
   data: () => ({
+    apiEndpoint: 'n/a',
+
     url: '',
     customid: '',
 
@@ -170,6 +177,8 @@ export default {
     if (!this.$root.loggedIn) {
       return;
     }
+
+    this.apiEndpoint = process.env.VUE_APP_URL_SHORTENER_ENDPOINT
 
     const vm = this
     axios
