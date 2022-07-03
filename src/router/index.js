@@ -52,6 +52,13 @@ const routes = [
     }
   },
   {
+    path: '/url-shortener',
+    name: 'URL Shortener',
+    component: function () {
+      return import('../views/URLShortener.vue')
+    }
+  },
+  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue')
