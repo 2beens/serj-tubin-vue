@@ -356,10 +356,13 @@ export default {
       const item = this.selectedItems[0]
 
       let path;
+      let downloadName;
       if (item.is_file) {
         path = `/f/download/file/${item.id}`
+        downloadName = `${item.name}`
       } else {
         path = `/f/download/folder/${item.id}`
+        downloadName = `${item.name}.zip`
       }
 
       axios
@@ -374,7 +377,7 @@ export default {
           const downloadUrl = window.URL.createObjectURL(new Blob([response.data]))
           const link = document.createElement('a')
           link.href = downloadUrl
-          link.setAttribute('download', `${this.selectedItems[0].name}`)
+          link.setAttribute('download', downloadName)
           document.body.appendChild(link)
           link.click()
           link.remove()
