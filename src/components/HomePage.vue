@@ -1,8 +1,9 @@
 <template>
   <div class="home-page">
     <h3 style="margin: 40px 0 0;">{{ title }}</h3>
+    <h5>* not adapted to small screens 🤷‍♂️</h5>
 
-    <h6 id="quote-info">I'm being a smartass by showing some cool stolen quotes here:</h6>
+    <h6 id="quote-info">I'm being a smartass 🤓 by showing some cool stolen quotes here:</h6>
     <div id="quote-section">
       <h3 id="quote-text"></h3>
       <h5 id="quote-author"></h5>
