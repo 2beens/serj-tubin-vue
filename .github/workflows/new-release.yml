@@ -1,0 +1,19 @@
+name: Run remote server build/deploy script
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Run remote build script 
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSR_HOST }}
+          username: ${{ secrets.SSR_USERNAME }}
+          key: ${{ secrets.SSR_KEY_ED25519 }}
+          port: ${{ secrets.SSR_PORT }}
+          script: sh /home/serj/build-and-deploy-serj-tubin-com.sh
