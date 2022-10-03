@@ -310,7 +310,7 @@ export default {
         return
       }
       const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
-      window.open(fileUrl,'') // TODO: in order to open private links, i need to store cookie in local storage,
+      window.open(fileUrl, '') // TODO: in order to open private links, i need to store cookie in local storage,
       // and later get it from there, in a page for the selected file
     },
     onUpdateFileConfirmClicked (fileInfo) {
