@@ -1,5 +1,5 @@
 module.exports = {
-  outputDir: '/var/www/serj-tubin-vue',
+  outputDir: '/home/serj/www/serj-tubin-com',
   chainWebpack: config => {
     config
       .plugin('html')
