@@ -91,22 +91,28 @@
             </v-col>
           </v-row>
 
-          <v-row>
-            <v-col cols="1"></v-col>
-            <v-col cols="10">
+          <v-row style="padding-left: 10px;padding-right: 10px;">
+            <v-col cols="12">
               <span v-html="post.content"></span>
             </v-col>
-            <v-col v-if="theRoot.loggedIn" cols="1">
-              <div class="delete-post-button">
-                <v-btn class="mx-2" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
-                  <v-icon dark>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn class="mx-2" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-              </div>
+          </v-row>
+          <v-row style="margin: 0px">
+            <v-col v-if="theRoot.loggedIn" style="padding: 0px" cols="2">
+              <v-btn class="mx-1" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
+                <v-icon dark>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn class="mx-1" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
+                <v-icon dark>mdi-minus</v-icon>
+              </v-btn>
             </v-col>
-            <v-col v-else cols="1"></v-col>
+            <v-col v-else cols="2" style="padding: 0px"/>
+            <v-col cols="8" style="padding: 0px"/>
+            <v-col cols="2" style="padding: 0px">
+              <v-btn icon @click="clap(post)">
+                <v-icon>mdi-hand-clap</v-icon>
+              </v-btn>
+              {{ post.claps }}
+            </v-col>
           </v-row>
         </div>
       </div>
@@ -181,6 +187,43 @@ export default {
           vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
         })
         .catch((error) => {
+          console.log(error)
+        })
+    },
+    clap: function (post) {
+      const requestBody = {
+        id: post.id
+      }
+
+      const vm = this
+      axios
+        .patch(
+          process.env.VUE_APP_API_ENDPOINT + '/blog/clap',
+          qs.stringify(requestBody), {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              // TODO: cookies are sent with each request, no need to place them in headers
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('updated:')) {
+            vm.snackbarText = 'Received unexpected response from server'
+            vm.showSnackbar = true
+            console.warn(response)
+            return
+          }
+
+          const receivedPostId = response.data.split(':')[1]
+          if (receivedPostId !== post.id) {
+            console.warn("received different blog post id from server", post.id, "vs", receivedPostId)
+          }
+          post.claps++
+        })
+        .catch(function (error) {
+          vm.snackbarText = error
+          vm.showSnackbar = true
           console.log(error)
         })
     },
@@ -272,7 +315,8 @@ export default {
             id: postId,
             title: requestBody.title,
             content: requestBody.content,
-            created_at: vm.date2string(Date.now())
+            created_at: vm.date2string(Date.now()),
+            claps: 0
           })
 
           if (vm.posts.length > vm.maxPostsPerPage) {
@@ -394,13 +438,7 @@ export default {
   background-color: #26A69A;
   border-radius: 5px;
 }
-.delete-post-button {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
-  margin-top: 10px;
-}
+
 #snackbar-div {
   margin-bottom: 200px;
 }
