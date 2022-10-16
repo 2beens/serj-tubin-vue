@@ -1,24 +1,64 @@
 <template>
-  <div class="home">
-    <h2>Work in constant progress 👨🏼‍💻🛠</h2>
-    <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
+  <v-container fluid>
+    <v-row>
+      <v-spacer></v-spacer>
+      <v-col>
+        <h2>Work in constant progress 👨🏼‍💻🛠</h2>
+        <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
+        <h3 style="margin: 40px 0 0;">A personal tech sandbox</h3>
+        <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
+      </v-col>
+      <v-spacer></v-spacer>
+    </v-row>
 
     <SideBar />
 
-    <HomePage title="A personal tech sandbox"/>
-  </div>
+    <v-row id="quote-info">
+      <h6>I'm being a smartass 🤓 by showing some cool stolen quotes here:</h6>
+    </v-row>
+    <v-row>
+      <v-col id="quote-section">
+        <h3 id="quote-text">{{ quote.text }}</h3>
+        <h5 id="quote-author">{{ quote.author }}</h5>
+      </v-col>
+    </v-row>
+
+    <Blog title="Recent Posts"/>
+  </v-container>
 </template>
 
-<script>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<script scoped>
 // @ is an alias to /src
-import HomePage from '@/components/HomePage.vue'
 import SideBar from '@/components/SideBar.vue'
+import Blog from '@/components/Blog.vue'
+import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
-    HomePage,
-    SideBar
+    SideBar,
+    Blog
+  },
+  data: function () {
+    return {
+      quote: {}
+    }
+  },
+  mounted: function () {
+    const vm = this
+    axios
+      .get(process.env.VUE_APP_API_ENDPOINT + '/quote/random')
+      .then(response => {
+        if (response === null || response.data === null) {
+          console.error('received null response / data')
+          return
+        }
+        vm.quote = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>
@@ -26,11 +66,31 @@ export default {
 <style scoped>
 #my-image {
     border-radius: 50%;
-    max-width: 20%;
+    max-width: 60%;
     height: auto;
 }
-
 #my-image:hover {
-    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    box-shadow: 0 0 8px 2px rgba(0, 140, 186, 0.5);
+}
+#quote-info {
+  margin-top: 75px;
+  margin-left: 45px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+#quote-section {
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 35px;
+  padding: 20px;
+  border: 2px solid #26A69A;
+  border-radius: 5px;
+}
+#quote-text {
+  margin-top: 5px;
+  color: rgb(51, 118, 118);
+}
+#quote-author {
+  color: #26A69A;
 }
 </style>
