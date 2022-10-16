@@ -110,9 +110,9 @@
             <v-col cols="2" style="padding: 0px">
               <v-btn icon @click="clap(post)">
                 <!-- TODO: not showing in production -->
-                <!-- <v-icon>mdi-hand-clap</v-icon> -->
+                <v-icon>mdi-hand-clap</v-icon>
                 <!-- <v-icon>👏</v-icon> -->
-                <v-icon>mdi-thumb-up</v-icon>
+                <!-- <v-icon>mdi-thumb-up</v-icon> -->
               </v-btn>
               {{ post.claps }}
             </v-col>
