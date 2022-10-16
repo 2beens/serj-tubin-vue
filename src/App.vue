@@ -2,13 +2,13 @@
   <v-app>
     <v-app-bar app color="black">
       <v-spacer></v-spacer>
-      <v-btn color="#305d8a" text rounded to="/">Home</v-btn>
-      <v-btn color="#305d8a" text rounded to="/about">About</v-btn>
-      <v-btn color="#305d8a" text rounded to="/board">Visitor Board</v-btn>
-      <v-btn color="#305d8a" text rounded to="/util">Util</v-btn>
-      <v-btn color="#305d8a" text rounded to="/netlog">Netlog 🕸</v-btn>
-      <v-btn color="#305d8a" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs 🌏</v-btn>
-      <v-btn color="#305d8a" text rounded to="/notes" v-if="this.$root.loggedIn">Notes 📝</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/">Home</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/about">About</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/board">Visitor Board</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/util">Util</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/netlog">Netlog 🕸</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs 🌏</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/notes" v-if="this.$root.loggedIn">Notes 📝</v-btn>
       <v-spacer></v-spacer>
       <LoginLogoutButton />
     </v-app-bar>
