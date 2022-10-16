@@ -1,25 +1,24 @@
 <template>
-<v-app>
-  <v-app-bar app color="black" dark>
-    <!-- <v-toolbar-title>Tech Sandbox</v-toolbar-title> -->
-    <v-spacer></v-spacer>
-    <v-btn color="#305d8a" text rounded to="/">Home</v-btn>
-    <v-btn color="#305d8a" text rounded to="/about">About</v-btn>
-    <v-btn color="#305d8a" text rounded to="/board">Visitor Board</v-btn>
-    <v-btn color="#305d8a" text rounded to="/util">Util</v-btn>
-    <v-btn color="#305d8a" text rounded to="/netlog">Netlog</v-btn>
-    <v-btn color="#305d8a" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs</v-btn>
-    <v-btn color="#305d8a" text rounded to="/notes" v-if="this.$root.loggedIn">Notes</v-btn>
-    <v-spacer></v-spacer>
-    <LoginLogoutButton />
-  </v-app-bar>
+  <v-app>
+    <v-app-bar app color="black">
+      <v-spacer></v-spacer>
+      <v-btn color="#305d8a" text rounded to="/">Home</v-btn>
+      <v-btn color="#305d8a" text rounded to="/about">About</v-btn>
+      <v-btn color="#305d8a" text rounded to="/board">Visitor Board</v-btn>
+      <v-btn color="#305d8a" text rounded to="/util">Util</v-btn>
+      <v-btn color="#305d8a" text rounded to="/netlog">Netlog 🕸</v-btn>
+      <v-btn color="#305d8a" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs 🌏</v-btn>
+      <v-btn color="#305d8a" text rounded to="/notes" v-if="this.$root.loggedIn">Notes 📝</v-btn>
+      <v-spacer></v-spacer>
+      <LoginLogoutButton />
+    </v-app-bar>
 
-  <v-main>
-    <router-view></router-view>
-  </v-main>
+    <v-main>
+      <router-view></router-view>
+    </v-main>
 
-  <Footer/>
-</v-app>
+    <Footer/>
+  </v-app>
 </template>
 
 <script>
@@ -59,14 +58,5 @@ export default {
   text-align: center;
   color: #264e77;
   background-color: black;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #264e77;
-}
-
-#nav a.router-link-exact-active {
-  color: #259965;
 }
 </style>
