@@ -136,7 +136,7 @@ export default {
       const vm = this
       axios
         .post(
-          process.env.VUE_APP_API_ENDPOINT + '/login',
+          process.env.VUE_APP_API_ENDPOINT + '/a/login',
           qs.stringify(requestBody))
         .then(function (response) {
           if (response.data === null) {
@@ -164,7 +164,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + '/logout', {
+          process.env.VUE_APP_API_ENDPOINT + '/a/logout', {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
