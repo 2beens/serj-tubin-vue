@@ -29,6 +29,6 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "vue-cli-plugin-vuetify": "~2.5.8",
-    "vue-template-compiler": "^2.7.0"
+    "vue-template-compiler": "^2.7.14"
   }
 }
