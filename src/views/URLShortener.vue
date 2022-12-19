@@ -182,7 +182,9 @@ export default {
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all')
+      .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all', {
+        withCredentials: true
+      })
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('get all urls - received null response / data')
@@ -242,6 +244,7 @@ export default {
         .post(
           process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new',
           qs.stringify(requestBody), {
+            withCredentials: true,
             headers: {
               'Access-Control-Allow-Origin': '*'
             }
@@ -275,7 +278,9 @@ export default {
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId)
+        .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId, {
+          withCredentials: true
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete url - received null response / data')
