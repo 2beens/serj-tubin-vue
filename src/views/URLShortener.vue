@@ -233,7 +233,8 @@ export default {
   methods: {
     addUrl () {
       const requestBody = {
-        url: this.url
+        url: this.url,
+        cid: this.customid
       }
 
       const vm = this
