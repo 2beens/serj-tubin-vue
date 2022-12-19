@@ -183,7 +183,9 @@ export default {
     const vm = this
     axios
       .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all', {
-        withCredentials: true
+        headers: {
+          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        }
       })
       .then((response) => {
         if (response === null || response.data === null) {
@@ -244,9 +246,9 @@ export default {
         .post(
           process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new',
           qs.stringify(requestBody), {
-            withCredentials: true,
             headers: {
-              'Access-Control-Allow-Origin': '*'
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }
         )
@@ -279,7 +281,9 @@ export default {
       const vm = this
       axios
         .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId, {
-          withCredentials: true
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
         })
         .then((response) => {
           if (response === null || response.data === null) {
