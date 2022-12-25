@@ -49,7 +49,7 @@ export default {
 
   props: {
     source: String
-  }
+  },
 
   mounted () {
     switch (this.source) {
@@ -62,6 +62,6 @@ export default {
       default:
         console.warn(`--> unknown netlog source: [${this.source}]`);
     }
-  },
+  }
 }
 </script>
