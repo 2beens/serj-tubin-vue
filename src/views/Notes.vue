@@ -177,8 +177,8 @@ export default {
             return
           }
 
-          var removedNoteIndex = -1
-          var i
+          let removedNoteIndex = -1
+          let i
           for (i = 0; i < vm.notes.length; i++) {
             if (vm.notes[i].id === id) {
               removedNoteIndex = i

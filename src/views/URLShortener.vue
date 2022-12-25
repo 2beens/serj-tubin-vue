@@ -197,7 +197,7 @@ export default {
 
         for (let i = 0; i < vm.urls.length; i++) {
           const redisKeyParts = vm.urls[i].key.split('::')
-          if (redisKeyParts.length != 2) {
+          if (redisKeyParts.length !== 2) {
             console.warn('unexpected url redis key', vm.urls[i].key)
             continue
           }
@@ -211,7 +211,6 @@ export default {
     setInterval(function () {
       // TODO: if really needed, this can be better done via websockets
       vm.status = statuses["checking"]
-      // console.log('checking server status...')
       axios
         .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/ping')
         .then((response) => {
@@ -232,13 +231,16 @@ export default {
           console.log(error)
           vm.status = statuses["error"]
         })
-    }, 15000);
+    }, 30000);
   },
   methods: {
     addUrl () {
       const requestBody = {
         url: this.url,
-        cid: this.customid
+      }
+
+      if (this.customid !== '') {
+        requestBody.cid = this.customid
       }
 
       const vm = this
@@ -297,7 +299,7 @@ export default {
 
           let urlIdx = -1;
           for (let i = 0; i < vm.urls.length; i++) {
-            if (vm.urls[i].key == urlId) {
+            if (vm.urls[i].key === urlId) {
               urlIdx = i
               break
             }
@@ -339,9 +341,7 @@ h1, h2, h3, h4, h5 {
 
 <style scoped>
 #input-field {
-  padding: 15px;
-  padding-right: 80px;
-  padding-bottom: 0px;
+  padding: 15px 80px 0 15px;
   background: #26c6da;
   color: white;
   border-radius: 10px;

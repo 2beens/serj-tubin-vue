@@ -129,8 +129,8 @@ export default {
             return
           }
 
-          var removedMessageIndex = -1
-          var i
+          let removedMessageIndex = -1
+          let i
           for (i = 0; i < vm.messages.length; i++) {
             if (vm.messages[i].id === id) {
               removedMessageIndex = i
@@ -179,8 +179,8 @@ function updateMessagesScroll () {
   color: #000000;
   border-style: groove;
   border-radius: 4px;
-  box-shadow: 0px 0px 6px rgba(66,66,66,.50);
-  text-shadow: 1px 0px 5px rgba(66,66,66,.75);
+  box-shadow: 0px 0 6px rgba(66,66,66,.50);
+  text-shadow: 1px 0 5px rgba(66,66,66,.75);
 }
 .board-input:focus {
      outline:none;
@@ -191,12 +191,8 @@ function updateMessagesScroll () {
 
   margin-left: 10%;
   margin-right: 10%;
-  /* margin-bottom: 20%; */
 
-  padding-top: 15px;
-  padding-bottom: 10px;
-  padding-right: 5px;
-  padding-left: 5px;
+  padding: 15px 5px 10px;
 
   max-height: 700px;
 
@@ -208,8 +204,8 @@ function updateMessagesScroll () {
   margin-bottom: 5px;
 }
 .message-content {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 .message-date{
   background-color: #000000;

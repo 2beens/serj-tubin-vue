@@ -391,7 +391,7 @@ export default {
         return;
       }
 
-      var folderName = prompt('New folder name', '')
+      let folderName = prompt('New folder name', '')
       if (folderName === null) {
         console.error('folder name empty')
         return

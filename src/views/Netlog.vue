@@ -194,9 +194,6 @@ export default {
       this.filterInput = ''
       this.getVisits()
     },
-    resetIcon () {
-      this.iconIndex = 0
-    },
     getVisits () {
       const source = this.getSeachSourceType()
       const field = this.getSearchFieldType()
@@ -238,14 +235,14 @@ export default {
 
 <style scoped>
 .url-title-row {
-  margin: 0px;
+  margin: 0;
 }
 .url-title-p{
-  margin: 0px;
+  margin: 0;
   color: #26A69A;
 }
 .url-endpoint-row{
-  margin: 0px;
+  margin: 0;
   border-bottom: 2px solid #26A69A;
 }
 </style>

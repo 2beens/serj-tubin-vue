@@ -96,11 +96,6 @@ function getIconsFromWeatherData (weatherData) {
 </script>
 
 <style scoped>
-.weather-icon-img {
-  display: none;
-  width: 15px;
-  height: auto;
-}
 #weather-tomorrow {
   margin-top: 5px;
 }
