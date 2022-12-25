@@ -254,8 +254,8 @@ export default {
             return
           }
 
-          var removedPostIndex = -1
-          var i
+          let removedPostIndex = -1
+          let i
           for (i = 0; i < vm.posts.length; i++) {
             if (vm.posts[i].id === id) {
               removedPostIndex = i

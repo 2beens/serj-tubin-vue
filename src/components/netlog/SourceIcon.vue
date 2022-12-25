@@ -46,8 +46,22 @@
 <script>
 export default {
   name: 'SourceIcon',
+
   props: {
     source: String
   }
+
+  mounted () {
+    switch (this.source) {
+      case 'chrome':
+      case 'safari':
+      case 'rabota':
+      case 'pc':
+      case 'firefox':
+        break;
+      default:
+        console.warn(`--> unknown netlog source: [${this.source}]`);
+    }
+  },
 }
 </script>
