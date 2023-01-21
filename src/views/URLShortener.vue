@@ -132,17 +132,19 @@ export default {
     snackText: '',
     max25chars: (v) => v.length <= 25 || 'Input too long!',
     pagination: {},
+    urls: [],
     headers: [
       { text: 'Ops', value: 'ops', sortable: false },
       { text: 'ID', value: 'id' },
+      { text: 'Created At', value: 'timestamp_for_humans' },
+      { text: 'Hits', value: 'hits' },
       {
         text: 'URL',
         align: 'start',
         sortable: false,
         value: 'url'
       }
-    ],
-    urls: []
+    ]
   }),
   mounted: function () {
     if (!this.$root.loggedIn) {
@@ -163,16 +165,12 @@ export default {
           console.error('get all urls - received null response / data')
           return
         }
-
         vm.urls = response.data
 
         for (let i = 0; i < vm.urls.length; i++) {
-          const redisKeyParts = vm.urls[i].key.split('::')
-          if (redisKeyParts.length !== 2) {
-            console.warn('unexpected url redis key', vm.urls[i].key)
-            continue
-          }
-          vm.urls[i].id = redisKeyParts[1]
+          vm.urls[i].timestamp_for_humans = this.getTimestampString(
+            new Date(vm.urls[i].timestamp * 1000)
+          )
         }
       })
       .catch((error) => {
@@ -226,13 +224,23 @@ export default {
         })
         .then(function (response) {
           console.log(response)
-          const newId = response.data.trim()
+          let newId
+          if (typeof newId === 'string') {
+            newId = response.data.trim()
+          } else {
+            newId = response.data
+          }
           console.log('new id', newId)
 
           vm.snack = true
           vm.snackColor = 'success'
           vm.snackText = `url added, id: ${newId}`
-          vm.urls.push({ url: vm.url, id: newId })
+          vm.urls.push({
+            url: vm.url,
+            id: newId,
+            hits: 0,
+            timestamp: this.getTimestampString(new Date())
+          })
         })
         .catch(function (error) {
           console.log(error)
