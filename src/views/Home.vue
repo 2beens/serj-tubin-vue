@@ -4,8 +4,8 @@
       <v-spacer></v-spacer>
       <v-col>
         <h2>Work in constant progress 👨🏼‍💻🛠</h2>
-        <img id="my-image" alt="serj-tubin" src="../assets/ja.png">
-        <h3 style="margin: 40px 0 0;">A personal tech sandbox</h3>
+        <img id="my-image" alt="serj-tubin" src="../assets/ja.png" />
+        <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
         <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
       </v-col>
       <v-spacer></v-spacer>
@@ -23,7 +23,7 @@
       </v-col>
     </v-row>
 
-    <Blog title="Recent Posts"/>
+    <Blog title="Recent Posts" />
   </v-container>
 </template>
 
@@ -49,14 +49,14 @@ export default {
     const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/quote/random')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
           return
         }
         vm.quote = response.data
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
   }
@@ -65,12 +65,12 @@ export default {
 
 <style scoped>
 #my-image {
-    border-radius: 50%;
-    max-width: 60%;
-    height: auto;
+  border-radius: 50%;
+  max-width: 60%;
+  height: auto;
 }
 #my-image:hover {
-    box-shadow: 0 0 8px 2px rgba(0, 140, 186, 0.5);
+  box-shadow: 0 0 8px 2px rgba(0, 140, 186, 0.5);
 }
 #quote-info {
   margin-top: 75px;
@@ -83,7 +83,7 @@ export default {
   margin-right: 40px;
   margin-bottom: 35px;
   padding: 20px;
-  border: 2px solid #26A69A;
+  border: 2px solid #26a69a;
   border-radius: 5px;
 }
 #quote-text {
@@ -91,6 +91,6 @@ export default {
   color: rgb(51, 118, 118);
 }
 #quote-author {
-  color: #26A69A;
+  color: #26a69a;
 }
 </style>

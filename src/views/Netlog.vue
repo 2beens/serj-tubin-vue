@@ -2,20 +2,14 @@
   <v-container>
     <h2>🕸 Personal Netlog 🕸</h2>
 
-    <hr/>
+    <hr />
 
     <h4 v-if="!theRoot.loggedIn">Can't show you this one, sorry 🤷‍♂️</h4>
     <div v-else class="ma-5">
       <v-row>
         <v-col cols="1"></v-col>
         <v-col cols="10">
-          <v-card
-            class="ma-xs-10"
-            color="#26A69A"
-            elevation="2"
-            rounded
-            dark
-          >
+          <v-card class="ma-xs-10" color="#26A69A" elevation="2" rounded dark>
             <v-card-text>
               <v-form @submit.prevent>
                 <v-text-field
@@ -35,16 +29,10 @@
               <v-row>
                 <v-col cols="12" justify="end" align="end">
                   <!-- SEARCH MODES HERE - SOURCE -->
-                  <SourceFilterGroup
-                    v-on:source-changed="onSourceFilterChanged"
-                  />
+                  <SourceFilterGroup v-on:source-changed="onSourceFilterChanged" />
 
                   <!-- SEARCH MODES HERE - FIELD -->
-                  <v-btn-toggle
-                    class="ml-3"
-                    v-model="searchField"
-                    rounded
-                  >
+                  <v-btn-toggle class="ml-3" v-model="searchField" rounded>
                     <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
                     <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
                   </v-btn-toggle>
@@ -74,7 +62,9 @@
                   <a :href="visit.url" target="_blank">{{ visit.url }}</a>
                 </v-col>
                 <v-col cols="2" class="pa-md-0">
-                  <p class="visit-timestamp">{{ getTimestampString(new Date(visit.timestamp)) }}</p>
+                  <p class="visit-timestamp">
+                    {{ getTimestampString(new Date(visit.timestamp)) }}
+                  </p>
                 </v-col>
               </v-row>
             </div>
@@ -83,7 +73,7 @@
       </v-row>
 
       <!-- PAGNIATION HERE -->
-      <v-row style="margin-bottom: 95px;">
+      <v-row style="margin-bottom: 95px">
         <v-col>
           <div class="text-center">
             <v-pagination
@@ -127,11 +117,11 @@ export default {
     }
   },
   methods: {
-    onSourceFilterChanged (source) {
+    onSourceFilterChanged(source) {
       this.searchSource = source
       this.filterVisits()
     },
-    getSeachSourceType () {
+    getSeachSourceType() {
       if (this.searchSource === 0) {
         return 'chrome'
       } else if (this.searchSource === 1) {
@@ -146,13 +136,13 @@ export default {
 
       return 'all'
     },
-    getSearchFieldType () {
+    getSearchFieldType() {
       if (this.searchField === 0) {
         return 'url'
       }
       return 'title'
     },
-    filterVisits () {
+    filterVisits() {
       if (!this.filterInput || this.filterInput.length === 0) {
         this.getVisits()
         return
@@ -169,12 +159,16 @@ export default {
 
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
           }
-        })
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('filter visits - received null response / data')
@@ -188,24 +182,28 @@ export default {
           console.log(error)
         })
     },
-    clearFilterInput () {
+    clearFilterInput() {
       this.searchMode = false
       console.warn('search off')
       this.filterInput = ''
       this.getVisits()
     },
-    getVisits () {
+    getVisits() {
       const source = this.getSeachSourceType()
       const field = this.getSearchFieldType()
 
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`, {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
+          {
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
           }
-        })
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('visits page - received null response / data')
@@ -219,7 +217,7 @@ export default {
           console.log(error)
         })
     },
-    onVisitsPageChange () {
+    onVisitsPageChange() {
       if (this.searchMode) {
         this.filterVisits()
       } else {
@@ -237,12 +235,12 @@ export default {
 .url-title-row {
   margin: 0;
 }
-.url-title-p{
+.url-title-p {
   margin: 0;
-  color: #26A69A;
+  color: #26a69a;
 }
-.url-endpoint-row{
+.url-endpoint-row {
   margin: 0;
-  border-bottom: 2px solid #26A69A;
+  border-bottom: 2px solid #26a69a;
 }
 </style>
