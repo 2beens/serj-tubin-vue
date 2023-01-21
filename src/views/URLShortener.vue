@@ -19,7 +19,12 @@
     </v-form>
 
     <v-row>
-      <v-col cols="3"></v-col>
+      <v-col cols="2" style="margin-top: 20px">
+        Use {{ use2beensUrl ? '2beens' : 'serj-tubin' }}
+      </v-col>
+      <v-col cols="1">
+        <v-switch v-model="use2beensUrl"></v-switch>
+      </v-col>
       <v-col cols="6">
         <h4 style="margin-top: 15px">Current URLs saved</h4>
       </v-col>
@@ -52,12 +57,14 @@
         </v-edit-dialog>
       </template>
 
-      <template v-slot:item.key="props">
-        <a :href="apiEndpoint + '/l/' + props.item.key" target="_blank">{{ props.item.key }}</a>
+      <template v-slot:item.id="props">
+        <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
+          props.item.id
+        }}</a>
       </template>
 
       <template v-slot:item.ops="props">
-        <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.key)">
+        <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
           <v-icon> mdi-close </v-icon>
         </v-btn>
       </template>
@@ -76,6 +83,11 @@
 <script>
 import axios from 'axios'
 const qs = require('querystring')
+
+const apiEndpoints = {
+  twoBeens: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_2BEENS,
+  serjt: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_SERJT
+}
 
 const statuses = {
   checking: {
@@ -98,8 +110,15 @@ const statuses = {
 
 export default {
   name: 'URLShortener',
+
+  computed: {
+    currentApiEndpoint() {
+      return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+    }
+  },
+
   data: () => ({
-    apiEndpoint: process.env.VUE_APP_URL_SHORTENER_ENDPOINT,
+    use2beensUrl: true,
 
     url: '',
     customid: '',
@@ -114,14 +133,14 @@ export default {
     max25chars: (v) => v.length <= 25 || 'Input too long!',
     pagination: {},
     headers: [
+      { text: 'Ops', value: 'ops', sortable: false },
+      { text: 'ID', value: 'id' },
       {
         text: 'URL',
         align: 'start',
         sortable: false,
         value: 'url'
-      },
-      { text: 'Key', value: 'key' },
-      { text: 'Ops', value: 'ops', sortable: false }
+      }
     ],
     urls: []
   }),
@@ -130,11 +149,11 @@ export default {
       return
     }
 
-    this.apiEndpoint = process.env.VUE_APP_URL_SHORTENER_ENDPOINT
+    const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all', {
+      .get(apiEndpoint + '/all', {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
@@ -153,7 +172,7 @@ export default {
             console.warn('unexpected url redis key', vm.urls[i].key)
             continue
           }
-          vm.urls[i].key = redisKeyParts[1]
+          vm.urls[i].id = redisKeyParts[1]
         }
       })
       .catch((error) => {
@@ -164,7 +183,7 @@ export default {
       // TODO: if really needed, this can be better done via websockets
       vm.status = statuses['checking']
       axios
-        .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/ping')
+        .get(apiEndpoint + '/ping')
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('ping server - received null response / data')
@@ -195,9 +214,11 @@ export default {
         requestBody.cid = this.customid
       }
 
+      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+
       const vm = this
       axios
-        .post(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new', qs.stringify(requestBody), {
+        .post(apiEndpoint + '/new', qs.stringify(requestBody), {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -211,7 +232,7 @@ export default {
           vm.snack = true
           vm.snackColor = 'success'
           vm.snackText = `url added, id: ${newId}`
-          vm.urls.push({ url: vm.url, key: newId })
+          vm.urls.push({ url: vm.url, id: newId })
         })
         .catch(function (error) {
           console.log(error)
@@ -228,10 +249,11 @@ export default {
       }
 
       console.log('will be deleting url:', urlId)
+      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId, {
+        .delete(apiEndpoint + '/delete?id=' + urlId, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
@@ -248,7 +270,7 @@ export default {
 
           let urlIdx = -1
           for (let i = 0; i < vm.urls.length; i++) {
-            if (vm.urls[i].key === urlId) {
+            if (vm.urls[i].id === urlId) {
               urlIdx = i
               break
             }
