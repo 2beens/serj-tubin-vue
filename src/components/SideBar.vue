@@ -1,15 +1,14 @@
 <template>
   <div id="sidebar">
     <div id="geo-info">
-        You are (probably) requesting from:
-        <p id="geo-city"></p>
+      You are (probably) requesting from:
+      <p id="geo-city"></p>
     </div>
     <div id="weather-info">
-        Weather there:
-        <p id="weather-now"></p>
-        Tomorrow:
-        <div id="weather-tomorrow">
-        </div>
+      Weather there:
+      <p id="weather-now"></p>
+      Tomorrow:
+      <div id="weather-tomorrow"></div>
     </div>
   </div>
 </template>
@@ -25,7 +24,7 @@ export default {
 
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/whereami')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
           return
@@ -34,13 +33,13 @@ export default {
         document.getElementById('geo-city').innerHTML = geoInfo.city + ', ' + geoInfo.country
         document.getElementById('geo-info').style.display = 'block'
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
 
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/weather/current')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
           return
@@ -56,13 +55,13 @@ export default {
           document.getElementById('weather-info').style.display = 'block'
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
 
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/weather/tomorrow')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data')
           return
@@ -77,13 +76,13 @@ export default {
           document.getElementById('weather-tomorrow').appendChild(weatherIcon)
         })
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
   }
 }
 
-function getIconsFromWeatherData (weatherData) {
+function getIconsFromWeatherData(weatherData) {
   const icons = []
   weatherData.forEach(function (item, i) {
     const descriptions = weatherData[i].descriptions
@@ -100,18 +99,18 @@ function getIconsFromWeatherData (weatherData) {
   margin-top: 5px;
 }
 #geo-city {
-    color: #42b983;
+  color: #42b983;
 }
 #weather-now {
-    color: #42b983;
+  color: #42b983;
 }
 
 #sidebar {
-    position: absolute;
-    top: 3%;
-    left: 3%;
-    float: left;
-    padding: 10px;
-    /* background-color: aliceblue; */
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  float: left;
+  padding: 10px;
+  /* background-color: aliceblue; */
 }
 </style>

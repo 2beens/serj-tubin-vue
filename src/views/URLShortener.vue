@@ -5,61 +5,37 @@
 
     <v-form id="input-field">
       <v-row>
-        <v-col
-          cols="8"
-          sm="8"
-        >
-          <v-text-field
-            v-model="url"
-            label="URL"
-            outlined
-          ></v-text-field>
+        <v-col cols="8" sm="8">
+          <v-text-field v-model="url" label="URL" outlined></v-text-field>
         </v-col>
 
-        <v-col
-          cols="3"
-          sm="3"
-        >
-          <v-text-field
-            v-model="customid"
-            label="Custom ID"
-            outlined
-          ></v-text-field>
+        <v-col cols="3" sm="3">
+          <v-text-field v-model="customid" label="Custom ID" outlined></v-text-field>
         </v-col>
-        <v-col
-          cols="1"
-          sm="1"
-        >
-          <v-btn
-            style="margin-top: 7px;"
-            @click="addUrl"
-          >
-            Shorten!
-          </v-btn>
+        <v-col cols="1" sm="1">
+          <v-btn style="margin-top: 7px" @click="addUrl"> Shorten! </v-btn>
         </v-col>
       </v-row>
     </v-form>
 
     <v-row>
-      <v-col cols="3"></v-col>
-      <v-col cols="6">
-        <h4 style="margin-top: 15px;">Current URLs saved</h4>
+      <v-col cols="2" style="margin-top: 20px">
+        Use {{ use2beensUrl ? '2beens' : 'serj-tubin' }}
       </v-col>
-      <v-col cols="3" style="padding: 22px;">
-        <v-alert
-          dense
-          :type="status.type"
-        >
+      <v-col cols="1">
+        <v-switch v-model="use2beensUrl"></v-switch>
+      </v-col>
+      <v-col cols="6">
+        <h4 style="margin-top: 15px">Current URLs saved</h4>
+      </v-col>
+      <v-col cols="3" style="padding: 22px">
+        <v-alert dense :type="status.type">
           {{ status.message }}
         </v-alert>
       </v-col>
     </v-row>
 
-    <v-data-table
-      id="data-table"
-      :headers="headers"
-      :items="urls"
-    >
+    <v-data-table id="data-table" :headers="headers" :items="urls">
       <template v-slot:item.url="props">
         <v-edit-dialog
           :return-value.sync="props.item.url"
@@ -81,41 +57,24 @@
         </v-edit-dialog>
       </template>
 
-      <template v-slot:item.key="props">
-        <a :href="apiEndpoint + '/l/' + props.item.key" target="_blank">{{ props.item.key }}</a>
+      <template v-slot:item.id="props">
+        <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
+          props.item.id
+        }}</a>
       </template>
 
       <template v-slot:item.ops="props">
-        <v-btn
-          class="mx-2"
-          fab
-          dark
-          x-small
-          color="error"
-          @click="deleteUrl(props.item.key)"
-        >
-          <v-icon>
-            mdi-close
-          </v-icon>
+        <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
+          <v-icon> mdi-close </v-icon>
         </v-btn>
       </template>
     </v-data-table>
 
-    <v-snackbar
-      v-model="snack"
-      :timeout="3000"
-      :color="snackColor"
-    >
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-          v-bind="attrs"
-          text
-          @click="snack = false"
-        >
-          Close
-        </v-btn>
+        <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -125,64 +84,76 @@
 import axios from 'axios'
 const qs = require('querystring')
 
+const apiEndpoints = {
+  twoBeens: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_2BEENS,
+  serjt: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_SERJT
+}
+
 const statuses = {
-  "checking": {
-    type: "info",
-    message: "Checking ..."
+  checking: {
+    type: 'info',
+    message: 'Checking ...'
   },
-  "ok": {
-    type: "success",
-    message: "Server OK"
+  ok: {
+    type: 'success',
+    message: 'Server OK'
   },
-  "error": {
-    type: "error",
-    message: "Server Bad :("
+  error: {
+    type: 'error',
+    message: 'Server Bad :('
   },
-  "warning": {
-    type: "warning",
-    message: "Unexpected response"
+  warning: {
+    type: 'warning',
+    message: 'Unexpected response'
   }
 }
 
 export default {
   name: 'URLShortener',
+
+  computed: {
+    currentApiEndpoint() {
+      return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+    }
+  },
+
   data: () => ({
-    apiEndpoint: 'n/a',
+    use2beensUrl: true,
 
     url: '',
     customid: '',
 
     // server status stuff
-    status: statuses["ok"],
+    status: statuses['ok'],
 
     // table view stuff
     snack: false,
     snackColor: '',
     snackText: '',
-    max25chars: v => v.length <= 25 || 'Input too long!',
+    max25chars: (v) => v.length <= 25 || 'Input too long!',
     pagination: {},
     headers: [
+      { text: 'Ops', value: 'ops', sortable: false },
+      { text: 'ID', value: 'id' },
       {
         text: 'URL',
         align: 'start',
         sortable: false,
-        value: 'url',
-      },
-      { text: 'Key', value: 'key' },
-      { text: 'Ops',  value: 'ops', sortable: false }
+        value: 'url'
+      }
     ],
-    urls: [],
+    urls: []
   }),
   mounted: function () {
     if (!this.$root.loggedIn) {
-      return;
+      return
     }
 
-    this.apiEndpoint = process.env.VUE_APP_URL_SHORTENER_ENDPOINT
+    const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/all', {
+      .get(apiEndpoint + '/all', {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
@@ -192,7 +163,7 @@ export default {
           console.error('get all urls - received null response / data')
           return
         }
-        // console.log('received urls', response.data)
+
         vm.urls = response.data
 
         for (let i = 0; i < vm.urls.length; i++) {
@@ -201,7 +172,7 @@ export default {
             console.warn('unexpected url redis key', vm.urls[i].key)
             continue
           }
-           vm.urls[i].key = redisKeyParts[1]
+          vm.urls[i].id = redisKeyParts[1]
         }
       })
       .catch((error) => {
@@ -210,50 +181,49 @@ export default {
 
     setInterval(function () {
       // TODO: if really needed, this can be better done via websockets
-      vm.status = statuses["checking"]
+      vm.status = statuses['checking']
       axios
-        .get(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/ping')
+        .get(apiEndpoint + '/ping')
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('ping server - received null response / data')
-            vm.status = statuses["error"]
+            vm.status = statuses['error']
             return
           }
 
           if (String(response.data).trim() === 'Pong!') {
-            vm.status = statuses["ok"]
+            vm.status = statuses['ok']
           } else {
             console.warn('received ping response:', response.data)
-            vm.status = statuses["warning"]
+            vm.status = statuses['warning']
           }
         })
         .catch((error) => {
           console.log(error)
-          vm.status = statuses["error"]
+          vm.status = statuses['error']
         })
-    }, 30000);
+    }, 30000)
   },
   methods: {
-    addUrl () {
+    addUrl() {
       const requestBody = {
-        url: this.url,
+        url: this.url
       }
 
       if (this.customid !== '') {
         requestBody.cid = this.customid
       }
 
+      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+
       const vm = this
       axios
-        .post(
-          process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/new',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .post(apiEndpoint + '/new', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           console.log(response)
           const newId = response.data.trim()
@@ -262,16 +232,16 @@ export default {
           vm.snack = true
           vm.snackColor = 'success'
           vm.snackText = `url added, id: ${newId}`
-          vm.urls.push({url: vm.url, key: newId})
+          vm.urls.push({ url: vm.url, id: newId })
         })
         .catch(function (error) {
           console.log(error)
         })
     },
-    deleteUrl (urlId) {
+    deleteUrl(urlId) {
       if (!urlId) {
-        console.warn('cannot delete url, empty id');
-        return;
+        console.warn('cannot delete url, empty id')
+        return
       }
 
       if (!confirm(`Are you sure you want to delete ${urlId}?`)) {
@@ -279,10 +249,11 @@ export default {
       }
 
       console.log('will be deleting url:', urlId)
+      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_URL_SHORTENER_ENDPOINT + '/delete?id=' + urlId, {
+        .delete(apiEndpoint + '/delete?id=' + urlId, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
@@ -297,9 +268,9 @@ export default {
           vm.snackColor = 'success'
           vm.snackText = response.data
 
-          let urlIdx = -1;
+          let urlIdx = -1
           for (let i = 0; i < vm.urls.length; i++) {
-            if (vm.urls[i].key === urlId) {
+            if (vm.urls[i].id === urlId) {
               urlIdx = i
               break
             }
@@ -311,30 +282,34 @@ export default {
           console.log(error)
         })
     },
-    save () {
+    save() {
       this.snack = true
       this.snackColor = 'success'
       this.snackText = 'Data saved'
     },
-    cancel () {
+    cancel() {
       this.snack = true
       this.snackColor = 'error'
       this.snackText = 'Canceled'
     },
-    open () {
+    open() {
       this.snack = true
       this.snackColor = 'info'
       this.snackText = 'Dialog opened'
     },
-    close () {
+    close() {
       console.log('Dialog closed')
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style scoped>
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   color: #26c6da;
 }
 </style>

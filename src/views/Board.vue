@@ -1,24 +1,50 @@
 <template>
   <v-container fluid>
-    <h5>Dear visitors, feel free to leave any junk messages here, and let's see if this board can be hacked and screwed 🤔👀🤷‍♂️</h5>
+    <h5>
+      Dear visitors, feel free to leave any junk messages here, and let's see if this board can be
+      hacked and screwed 🤔👀🤷‍♂️
+    </h5>
     <div id="board" data-app="true">
       <div id="board-messages">
         <div class="board-message" v-for="message in messages" :key="message.id">
           <div v-bind:id="'message-' + message.id">
             <p class="message-content">
-              <v-btn v-if="theRoot.loggedIn" class="mx-1" fab dark x-small color="error" @click="deleteMessage(message.id, message.message)">
+              <v-btn
+                v-if="theRoot.loggedIn"
+                class="mx-1"
+                fab
+                dark
+                x-small
+                color="error"
+                @click="deleteMessage(message.id, message.message)"
+              >
                 <v-icon dark>mdi-minus</v-icon>
               </v-btn>
-              <span class="message-date">{{ getTimestampString(new Date(message.timestamp * 1000)) }}</span>:
-              [{{ message.author }}]
+              <span class="message-date">{{
+                getTimestampString(new Date(message.timestamp * 1000))
+              }}</span
+              >: [{{ message.author }}]
               <strong>{{ message.message }}</strong>
             </p>
           </div>
         </div>
       </div>
       <div id="board-controls">
-        <input type="text" placeholder="author: anonymous" class="board-input" id="author-input" autocomplete="off"/>
-        <input type="text" placeholder="message ..." v-on:keyup="sendMessage" class="board-input" id="message-input" autocomplete="off"/>
+        <input
+          type="text"
+          placeholder="author: anonymous"
+          class="board-input"
+          id="author-input"
+          autocomplete="off"
+        />
+        <input
+          type="text"
+          placeholder="message ..."
+          v-on:keyup="sendMessage"
+          class="board-input"
+          id="message-input"
+          autocomplete="off"
+        />
       </div>
     </div>
   </v-container>
@@ -41,20 +67,20 @@ export default {
     const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/board/messages/last/140')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
           return
         }
         vm.messages = response.data
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
       .finally(() => updateMessagesScroll())
   },
   methods: {
-    sendMessage () {
+    sendMessage() {
       if (event.keyCode === 13) {
         const msgInput = document.getElementById('message-input')
         const msgContent = msgInput.value
@@ -71,9 +97,7 @@ export default {
 
         const vm = this
         axios
-          .post(
-            process.env.VUE_APP_API_ENDPOINT + '/board/messages/new',
-            qs.stringify(requestBody))
+          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', qs.stringify(requestBody))
           .then(function (response) {
             if (response.data === null || !response.data.startsWith('added:')) {
               console.warn(response)
@@ -108,13 +132,12 @@ export default {
 
       const vm = this
       axios
-        .delete(
-          process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id, {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
-          })
+        .delete(process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete message - received null response / data')
@@ -151,7 +174,7 @@ export default {
   }
 }
 
-function updateMessagesScroll () {
+function updateMessagesScroll() {
   const messagesBoard = document.getElementById('board-messages')
   messagesBoard.scrollTop = messagesBoard.scrollHeight
 }
@@ -175,18 +198,18 @@ function updateMessagesScroll () {
   font-size: 18px;
   border-width: 1px;
   border-color: #f5f2f2;
-  background-color: #26A69A;
+  background-color: #26a69a;
   color: #000000;
   border-style: groove;
   border-radius: 4px;
-  box-shadow: 0px 0 6px rgba(66,66,66,.50);
-  text-shadow: 1px 0 5px rgba(66,66,66,.75);
+  box-shadow: 0px 0 6px rgba(66, 66, 66, 0.5);
+  text-shadow: 1px 0 5px rgba(66, 66, 66, 0.75);
 }
 .board-input:focus {
-     outline:none;
+  outline: none;
 }
 #board-messages {
-  background-color: #26A69A;
+  background-color: #26a69a;
   text-align: left;
 
   margin-left: 10%;
@@ -207,7 +230,7 @@ function updateMessagesScroll () {
   padding: 0;
   margin: 0;
 }
-.message-date{
+.message-date {
   background-color: #000000;
   padding: 3px;
   border-radius: 10px;

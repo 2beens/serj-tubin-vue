@@ -2,23 +2,10 @@
   <v-container>
     <h2>📝 Notes 📝</h2>
 
-    <v-dialog
-      @keydown.esc="onAbortEditNote"
-      v-model="showDialog"
-      persistent
-      max-width="800px"
-    >
+    <v-dialog @keydown.esc="onAbortEditNote" v-model="showDialog" persistent max-width="800px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="teal lighten-1"
-          large
-          icon
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon dark>
-            mdi-plus
-          </v-icon>
+        <v-btn color="teal lighten-1" large icon v-bind="attrs" v-on="on">
+          <v-icon dark> mdi-plus </v-icon>
         </v-btn>
       </template>
       <notes-dialog
@@ -37,20 +24,11 @@
     />
 
     <div id="snackbar-div">
-      <v-snackbar
-        v-model="showSnackbar"
-      >
+      <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
 
         <template v-slot:action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
-            Close
-          </v-btn>
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
         </template>
       </v-snackbar>
     </div>
@@ -84,14 +62,14 @@ export default {
   },
 
   methods: {
-    onConfirmClicked (note) {
+    onConfirmClicked(note) {
       if (this.editMode) {
         this.onUpdateNote(note)
       } else {
         this.addNote()
       }
     },
-    onAbortEditNote () {
+    onAbortEditNote() {
       if (this.editMode) {
         this.selectedNote.title = this.editedNote.title
         this.selectedNote.content = this.editedNote.content
@@ -107,7 +85,7 @@ export default {
       this.editedNote = Object.assign({}, note)
       this.selectedNote = note
     },
-    onUpdateNote (note) {
+    onUpdateNote(note) {
       if (note.content === undefined || note.content === '') {
         console.error('emtpy content')
         return
@@ -121,15 +99,12 @@ export default {
 
       const vm = this
       axios
-        .put(
-          process.env.VUE_APP_API_ENDPOINT + '/notes',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .put(process.env.VUE_APP_API_ENDPOINT + '/notes', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
             vm.snackbarText = 'Received unexpected response from server'
@@ -153,20 +128,19 @@ export default {
           this.showDialog = false
         })
     },
-    deleteNote (id, title) {
+    deleteNote(id, title) {
       if (!confirm(`Are you sure you want to remove note [${id}] [${title}]?`)) {
         return
       }
 
       const vm = this
       axios
-        .delete(
-          process.env.VUE_APP_API_ENDPOINT + `/notes/${id}`, {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
-          })
+        .delete(process.env.VUE_APP_API_ENDPOINT + `/notes/${id}`, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete blog - received null response / data')
@@ -200,7 +174,7 @@ export default {
           console.log(error)
         })
     },
-    addNote () {
+    addNote() {
       this.editMode = false
 
       if (this.selectedNote.content === undefined || this.selectedNote.content === '') {
@@ -215,15 +189,12 @@ export default {
 
       const vm = this
       axios
-        .post(
-          process.env.VUE_APP_API_ENDPOINT + '/notes',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .post(process.env.VUE_APP_API_ENDPOINT + '/notes', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
             vm.snackbarText = 'Received unexpected response from server'

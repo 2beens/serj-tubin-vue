@@ -2,22 +2,10 @@
   <div id="blog" data-app="true">
     <h3>{{ title }}</h3>
 
-    <v-dialog
-      v-model="dialog"
-      v-if="theRoot.loggedIn"
-      persistent
-      max-width="600px"
-    >
+    <v-dialog v-model="dialog" v-if="theRoot.loggedIn" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="teal lighten-1"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon dark>
-            mdi-plus
-          </v-icon>
+        <v-btn color="teal lighten-1" dark v-bind="attrs" v-on="on">
+          <v-icon dark> mdi-plus </v-icon>
         </v-btn>
       </template>
       <v-card>
@@ -29,11 +17,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  label="Title"
-                  required
-                  v-model="selectedPost.title"
-                ></v-text-field>
+                <v-text-field label="Title" required v-model="selectedPost.title"></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-textarea
@@ -51,29 +35,11 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="abortEditPost"
-          >
-            Abort
-          </v-btn>
-          <v-btn
-            v-if="editBlogMode"
-            color="blue darken-1"
-            text
-            @click="updateBlogPost"
-          >
+          <v-btn color="blue darken-1" text @click="abortEditPost"> Abort </v-btn>
+          <v-btn v-if="editBlogMode" color="blue darken-1" text @click="updateBlogPost">
             Update!
           </v-btn>
-          <v-btn
-            v-else
-            color="blue darken-1"
-            text
-            @click="addBlogPost"
-          >
-            Post!
-          </v-btn>
+          <v-btn v-else color="blue darken-1" text @click="addBlogPost"> Post! </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -91,7 +57,7 @@
             </v-col>
           </v-row>
 
-          <v-row style="padding-left: 10px;padding-right: 10px;">
+          <v-row style="padding-left: 10px; padding-right: 10px">
             <v-col cols="12">
               <span v-html="post.content"></span>
             </v-col>
@@ -101,12 +67,19 @@
               <v-btn class="mx-1" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
                 <v-icon dark>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn class="mx-1" fab dark x-small color="error" @click="deletePost(post.id, post.title)">
+              <v-btn
+                class="mx-1"
+                fab
+                dark
+                x-small
+                color="error"
+                @click="deletePost(post.id, post.title)"
+              >
                 <v-icon dark>mdi-minus</v-icon>
               </v-btn>
             </v-col>
-            <v-col v-else cols="2" style="padding: 0px"/>
-            <v-col cols="8" style="padding: 0px"/>
+            <v-col v-else cols="2" style="padding: 0px" />
+            <v-col cols="8" style="padding: 0px" />
             <v-col cols="2" style="padding: 0px">
               <v-btn icon @click="clap(post)">
                 <!-- TODO: not showing in production -->
@@ -133,19 +106,10 @@
     </div>
 
     <div id="snackbar-div">
-      <v-snackbar
-        v-model="showSnackbar"
-      >
+      <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
         <template v-slot:action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
-            Close
-          </v-btn>
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
         </template>
       </v-snackbar>
     </div>
@@ -177,7 +141,7 @@ export default {
     }
   },
   methods: {
-    onBlogPageChange (page) {
+    onBlogPageChange(page) {
       const vm = this
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + `/blog/page/${page}/size/${vm.maxPostsPerPage}`)
@@ -200,16 +164,13 @@ export default {
 
       const vm = this
       axios
-        .patch(
-          process.env.VUE_APP_API_ENDPOINT + '/blog/clap',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              // TODO: cookies are sent with each request, no need to place them in headers
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            // TODO: cookies are sent with each request, no need to place them in headers
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
             vm.snackbarText = 'Received unexpected response from server'
@@ -220,7 +181,12 @@ export default {
 
           const receivedPostId = response.data.split(':')[1]
           if (receivedPostId !== post.id) {
-            console.warn("received different blog post id from server", post.id, "vs", receivedPostId)
+            console.warn(
+              'received different blog post id from server',
+              post.id,
+              'vs',
+              receivedPostId
+            )
           }
           post.claps++
         })
@@ -237,13 +203,12 @@ export default {
 
       const vm = this
       axios
-        .delete(
-          process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
-          })
+        .delete(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete blog - received null response / data')
@@ -296,15 +261,12 @@ export default {
 
       const vm = this
       axios
-        .post(
-          process.env.VUE_APP_API_ENDPOINT + '/blog/new',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
             vm.snackbarText = 'Received unexpected response from server'
@@ -369,15 +331,12 @@ export default {
 
       const vm = this
       axios
-        .post(
-          process.env.VUE_APP_API_ENDPOINT + '/blog/update',
-          qs.stringify(requestBody), {
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', qs.stringify(requestBody), {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
-        )
+        })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
             vm.snackbarText = 'Received unexpected response from server'
@@ -405,7 +364,9 @@ export default {
   mounted: function () {
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`)
+      .get(
+        process.env.VUE_APP_API_ENDPOINT + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
+      )
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('all blogs - received null response / data')
@@ -428,17 +389,17 @@ export default {
 .blog-post {
   margin: 15px 15% 15px 15%;
   background-color: cadetblue;
-  border-left: 20px solid #26A69A;
+  border-left: 20px solid #26a69a;
   border-radius: 5px;
   padding: 10px;
   position: relative;
 }
 .blog-post-title {
-  border-bottom: 10px solid #26A69A;
+  border-bottom: 10px solid #26a69a;
   border-radius: 5px;
 }
 .blog-post-date {
-  background-color: #26A69A;
+  background-color: #26a69a;
   border-radius: 5px;
 }
 

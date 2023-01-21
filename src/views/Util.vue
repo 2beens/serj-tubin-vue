@@ -27,14 +27,14 @@ export default {
 
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/myip')
-      .then(response => {
+      .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
           return
         }
         document.getElementById('ip-addr-value').innerHTML = response.data
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
       })
   }
@@ -46,9 +46,9 @@ export default {
   color: black;
 }
 .util-info-box {
-    background-color: #26A69A;
-    margin-left: 10%;
-    margin-right: 10%;
-    border-radius: 5px;
+  background-color: #26a69a;
+  margin-left: 10%;
+  margin-right: 10%;
+  border-radius: 5px;
 }
 </style>

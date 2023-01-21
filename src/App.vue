@@ -7,7 +7,9 @@
       <v-btn color="#4b9ff2" text rounded to="/board">Visitor Board</v-btn>
       <v-btn color="#4b9ff2" text rounded to="/util">Util</v-btn>
       <v-btn color="#4b9ff2" text rounded to="/netlog">Netlog 🕸</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs 🌏</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/url-shortener" v-if="this.$root.loggedIn"
+        >URLs 🌏</v-btn
+      >
       <v-btn color="#4b9ff2" text rounded to="/notes" v-if="this.$root.loggedIn">Notes 📝</v-btn>
       <v-spacer></v-spacer>
       <LoginLogoutButton />
@@ -17,7 +19,7 @@
       <router-view></router-view>
     </v-main>
 
-    <Footer/>
+    <Footer />
   </v-app>
 </template>
 
@@ -43,7 +45,7 @@ export default {
     this.$root.loggedIn = true
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       console.log(`app: route change from ${from.path} to ${to.path}`)
     }
   }
