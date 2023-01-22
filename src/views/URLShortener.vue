@@ -103,7 +103,18 @@
       {{ snackText }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
+        <v-btn v-bind="attrs" color="red" text @click="snack = false"> Close </v-btn>
+        <v-btn
+          v-bind="attrs"
+          color="primary"
+          text
+          @click="
+            copyLinkToClipboard(lastAddedId)
+            snack = false
+          "
+        >
+          Copy
+        </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -152,6 +163,7 @@ export default {
 
     url: '',
     customid: '',
+    lastAddedId: '',
 
     // server status stuff
     status: statuses['ok'],
@@ -271,6 +283,7 @@ export default {
             newId = response.data
           }
           console.log('new id', newId)
+          vm.lastAddedId = newId
 
           vm.snack = true
           vm.snackColor = 'success'
