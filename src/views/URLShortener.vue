@@ -35,46 +35,86 @@
       </v-col>
     </v-row>
 
-    <v-data-table id="data-table" :headers="headers" :items="urls">
-      <template v-slot:item.url="props">
-        <v-edit-dialog
-          :return-value.sync="props.item.url"
-          @save="save"
-          @cancel="cancel"
-          @open="open"
-          @close="close"
-        >
-          {{ props.item.url }}
-          <template v-slot:input>
+    <v-row>
+      <v-col>
+        <v-card id="table-row-card">
+          <v-card-title>
             <v-text-field
-              v-model="props.item.url"
-              :rules="[max25chars]"
-              label="Edit"
+              v-model="searchString"
+              append-icon="mdi-magnify"
+              label="Search"
               single-line
-              counter
+              hide-details
             ></v-text-field>
-          </template>
-        </v-edit-dialog>
-      </template>
+          </v-card-title>
 
-      <template v-slot:item.id="props">
-        <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
-          props.item.id
-        }}</a>
-      </template>
+          <v-data-table id="data-table" :headers="headers" :items="urls" :search="searchString">
+            <template v-slot:item.url="props">
+              <v-edit-dialog
+                :return-value.sync="props.item.url"
+                @save="save"
+                @cancel="cancel"
+                @open="open"
+                @close="close"
+              >
+                {{ props.item.url }}
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="props.item.url"
+                    :rules="[max25chars]"
+                    label="Edit"
+                    single-line
+                    counter
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+            </template>
 
-      <template v-slot:item.ops="props">
-        <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
-          <v-icon> mdi-close </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
+            <template v-slot:item.id="props">
+              <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
+                props.item.id
+              }}</a>
+            </template>
+
+            <template v-slot:item.copy="props">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="success"
+                @click="copyLinkToClipboard(props.item.id)"
+              >
+                <v-icon> mdi-content-copy </v-icon>
+              </v-btn>
+            </template>
+
+            <template v-slot:item.delete="props">
+              <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
+                <v-icon> mdi-close </v-icon>
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
 
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
+        <v-btn v-bind="attrs" color="red" text @click="snack = false"> Close </v-btn>
+        <v-btn
+          v-bind="attrs"
+          color="primary"
+          text
+          @click="
+            copyLinkToClipboard(lastAddedId)
+            snack = false
+          "
+        >
+          Copy
+        </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -119,9 +159,11 @@ export default {
 
   data: () => ({
     use2beensUrl: true,
+    searchString: '',
 
     url: '',
     customid: '',
+    lastAddedId: '',
 
     // server status stuff
     status: statuses['ok'],
@@ -134,9 +176,10 @@ export default {
     pagination: {},
     urls: [],
     headers: [
-      { text: 'Ops', value: 'ops', sortable: false },
+      { text: 'Copy', value: 'copy', sortable: false },
+      { text: 'Delete', value: 'delete', sortable: false },
       { text: 'ID', value: 'id' },
-      { text: 'Created At', value: 'timestamp_for_humans' },
+      { text: 'Created At', value: 'timestampForHumans' },
       { text: 'Hits', value: 'hits' },
       {
         text: 'URL',
@@ -146,16 +189,15 @@ export default {
       }
     ]
   }),
+
   mounted: function () {
     if (!this.$root.loggedIn) {
       return
     }
 
-    const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
-
     const vm = this
     axios
-      .get(apiEndpoint + '/all', {
+      .get(vm.getApiEndpoint() + '/all', {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
@@ -168,7 +210,7 @@ export default {
         vm.urls = response.data
 
         for (let i = 0; i < vm.urls.length; i++) {
-          vm.urls[i].timestamp_for_humans = this.getTimestampString(
+          vm.urls[i].timestampForHumans = this.getTimestampString(
             new Date(vm.urls[i].timestamp * 1000)
           )
         }
@@ -181,7 +223,7 @@ export default {
       // TODO: if really needed, this can be better done via websockets
       vm.status = statuses['checking']
       axios
-        .get(apiEndpoint + '/ping')
+        .get(vm.getApiEndpoint() + '/ping')
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('ping server - received null response / data')
@@ -203,6 +245,18 @@ export default {
     }, 30000)
   },
   methods: {
+    copyLinkToClipboard(linkId) {
+      const linkUrl = `${this.getApiEndpoint()}/l/${linkId}`
+      navigator.clipboard.writeText(linkUrl)
+      this.snack = true
+      this.snackColor = 'success'
+      this.snackText = `copied: ${linkUrl}`
+    },
+
+    getApiEndpoint() {
+      return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+    },
+
     addUrl() {
       const requestBody = {
         url: this.url
@@ -212,11 +266,9 @@ export default {
         requestBody.cid = this.customid
       }
 
-      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
-
       const vm = this
       axios
-        .post(apiEndpoint + '/new', qs.stringify(requestBody), {
+        .post(vm.getApiEndpoint() + '/new', qs.stringify(requestBody), {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -231,6 +283,7 @@ export default {
             newId = response.data
           }
           console.log('new id', newId)
+          vm.lastAddedId = newId
 
           vm.snack = true
           vm.snackColor = 'success'
@@ -239,7 +292,7 @@ export default {
             url: vm.url,
             id: newId,
             hits: 0,
-            timestamp: this.getTimestampString(new Date())
+            timestampForHumans: vm.getTimestampString(new Date())
           })
         })
         .catch(function (error) {
@@ -257,11 +310,10 @@ export default {
       }
 
       console.log('will be deleting url:', urlId)
-      const apiEndpoint = this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
 
       const vm = this
       axios
-        .delete(apiEndpoint + '/delete?id=' + urlId, {
+        .delete(vm.getApiEndpoint() + '/delete?id=' + urlId, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
@@ -330,10 +382,14 @@ h5 {
   border-radius: 10px;
 }
 
+#table-row-card {
+  background: #26c6da;
+  border-radius: 10px;
+  margin-bottom: 60px;
+}
+
 #data-table {
   padding: 20px;
   background: #26c6da;
-  border-radius: 10px;
-  margin-bottom: 50px;
 }
 </style>
