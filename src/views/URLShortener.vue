@@ -35,53 +35,69 @@
       </v-col>
     </v-row>
 
-    <v-data-table id="data-table" :headers="headers" :items="urls">
-      <template v-slot:item.url="props">
-        <v-edit-dialog
-          :return-value.sync="props.item.url"
-          @save="save"
-          @cancel="cancel"
-          @open="open"
-          @close="close"
-        >
-          {{ props.item.url }}
-          <template v-slot:input>
+    <v-row>
+      <v-col>
+        <v-card id="table-row-card">
+          <v-card-title>
             <v-text-field
-              v-model="props.item.url"
-              :rules="[max25chars]"
-              label="Edit"
+              v-model="searchString"
+              append-icon="mdi-magnify"
+              label="Search"
               single-line
-              counter
+              hide-details
             ></v-text-field>
-          </template>
-        </v-edit-dialog>
-      </template>
+          </v-card-title>
 
-      <template v-slot:item.id="props">
-        <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
-          props.item.id
-        }}</a>
-      </template>
+          <v-data-table id="data-table" :headers="headers" :items="urls" :search="searchString">
+            <template v-slot:item.url="props">
+              <v-edit-dialog
+                :return-value.sync="props.item.url"
+                @save="save"
+                @cancel="cancel"
+                @open="open"
+                @close="close"
+              >
+                {{ props.item.url }}
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="props.item.url"
+                    :rules="[max25chars]"
+                    label="Edit"
+                    single-line
+                    counter
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+            </template>
 
-      <template v-slot:item.copy="props">
-        <v-btn
-          class="mx-2"
-          fab
-          dark
-          x-small
-          color="success"
-          @click="copyLinkToClipboard(props.item.id)"
-        >
-          <v-icon> mdi-content-copy </v-icon>
-        </v-btn>
-      </template>
+            <template v-slot:item.id="props">
+              <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
+                props.item.id
+              }}</a>
+            </template>
 
-      <template v-slot:item.delete="props">
-        <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
-          <v-icon> mdi-close </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
+            <template v-slot:item.copy="props">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="success"
+                @click="copyLinkToClipboard(props.item.id)"
+              >
+                <v-icon> mdi-content-copy </v-icon>
+              </v-btn>
+            </template>
+
+            <template v-slot:item.delete="props">
+              <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
+                <v-icon> mdi-close </v-icon>
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-col>
+    </v-row>
 
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
@@ -132,6 +148,7 @@ export default {
 
   data: () => ({
     use2beensUrl: true,
+    searchString: '',
 
     url: '',
     customid: '',
@@ -352,10 +369,14 @@ h5 {
   border-radius: 10px;
 }
 
+#table-row-card {
+  background: #26c6da;
+  border-radius: 10px;
+  margin-bottom: 60px;
+}
+
 #data-table {
   padding: 20px;
   background: #26c6da;
-  border-radius: 10px;
-  margin-bottom: 50px;
 }
 </style>
