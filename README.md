@@ -1,9 +1,10 @@
 <div align="center">
 
-# VueJS for serj-tubin.com
+# VueJS project for serj-tubin.com / 2beens.xyz
 
 Frontend part of my personal playground site
-Hosted at https://www.serj-tubin.com/
+
+Hosted at [www.serj-tubin.com](https://www.serj-tubin.com) and/or [2beens.xyz](https://2beens.xyz)
 
 </div>
 
