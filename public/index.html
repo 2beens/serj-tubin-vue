@@ -7,11 +7,22 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166097926-1"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    function getConsentStatusCookie() {
+      var value = "; " + document.cookie;
+      var parts = value.split("; cookieconsent_status=");
+      if (parts.length == 2) {
+        return parts.pop().split(";").shift();
+      }
+    }
+    if (getConsentStatusCookie()) {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
 
-    gtag('config', 'UA-166097926-1');
+      gtag('config', 'UA-166097926-1');
+    } else {
+      console.warn('Cookies not allowed yet')
+    }
   </script>
 
   <!-- Because the Universal Analytics (integration above) will be going away in 2033, 
@@ -20,7 +31,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZ8T2V80EK"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-LZ8T2V80EK');
@@ -30,7 +41,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-  <title><%= htmlWebpackPlugin.options.title %></title>
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
 
   <!-- TODO: vendor, install via yarn/npm -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -42,7 +55,7 @@
 <body>
   <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-      Please enable it to continue.</strong>
+        Please enable it to continue.</strong>
   </noscript>
   <div id="app"></div>
   <!-- built files will be auto injected -->

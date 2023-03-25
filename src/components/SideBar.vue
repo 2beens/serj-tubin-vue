@@ -10,14 +10,34 @@
       Tomorrow:
       <div id="weather-tomorrow"></div>
     </div>
+    <div id="consent-div">
+      <cookie-consent>
+        <template slot="message">
+          <div style="color: white">
+            <p>Hey, over here 👋</p>
+            <p>
+              This site uses cookies to analyze website traffic and optimize your website experience. 
+              Cookies are used only for analytics purposes. By using this site, you consent to the use of these cookies.
+            </p>
+          </div>
+        </template>
+        <template slot="button">
+          <button style="background-color: black" class="btn btn-info" onclick="location.reload()">Yeah, sure...</button>
+        </template>
+      </cookie-consent>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import CookieConsent from 'vue-cookieconsent-component'
 
 export default {
   name: 'SideBar',
+  components: {
+    CookieConsent
+  },
   mounted: function () {
     document.getElementById('geo-info').style.display = 'none'
     document.getElementById('weather-info').style.display = 'none'
@@ -95,12 +115,21 @@ function getIconsFromWeatherData(weatherData) {
 </script>
 
 <style scoped>
+#consent-div {
+  max-width: 250px;
+  background-color: #26a69a;
+  border-radius: 5px;
+  padding-bottom: 10px;
+}
+
 #weather-tomorrow {
   margin-top: 5px;
 }
+
 #geo-city {
   color: #42b983;
 }
+
 #weather-now {
   color: #42b983;
 }
