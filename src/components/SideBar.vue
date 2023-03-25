@@ -22,7 +22,7 @@
           </div>
         </template>
         <template slot="button">
-          <button style="background-color: black" class="btn btn-info">Yeah, sure...</button>
+          <button style="background-color: black" class="btn btn-info" onclick="location.reload()">Yeah, sure...</button>
         </template>
       </cookie-consent>
     </div>
