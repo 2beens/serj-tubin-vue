@@ -1,15 +1,5 @@
 <template>
   <div id="sidebar">
-    <div id="geo-info">
-      You are (probably) requesting from:
-      <p id="geo-city"></p>
-    </div>
-    <div id="weather-info">
-      Weather there:
-      <p id="weather-now"></p>
-      Tomorrow:
-      <div id="weather-tomorrow"></div>
-    </div>
     <div id="consent-div">
       <cookie-consent>
         <template slot="message">
@@ -25,6 +15,16 @@
           <button style="background-color: black" class="btn btn-info" onclick="location.reload()">Yeah, sure...</button>
         </template>
       </cookie-consent>
+    </div>
+    <div id="geo-info">
+      You are (probably) requesting from:
+      <p id="geo-city"></p>
+    </div>
+    <div id="weather-info">
+      Weather there:
+      <p id="weather-now"></p>
+      Tomorrow:
+      <div id="weather-tomorrow"></div>
     </div>
   </div>
 </template>
