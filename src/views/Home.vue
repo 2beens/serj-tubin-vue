@@ -11,7 +11,7 @@
 
     <SideBar />
 
-    <div id="consent-div">
+    <div id="consent-div" v-show="showConsent">
       <cookie-consent>
         <template slot="message">
           <div style="color: white">
@@ -64,10 +64,13 @@ export default {
   },
   data: function () {
     return {
-      quote: {}
+      quote: {},
+      showConsent: true
     }
   },
   mounted: function () {
+    this.showConsent = !(this.getCookie('cookieconsent_status'))
+
     const vm = this
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/quote/random')
@@ -90,7 +93,6 @@ export default {
   max-width: 300px;
   background-color: #26a69a;
   border-radius: 5px;
-  padding-bottom: 10px;
   position: absolute;
   top: 5%;
   right: 5%;

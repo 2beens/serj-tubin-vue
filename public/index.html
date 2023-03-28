@@ -3,36 +3,25 @@
 
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZ8T2V80EK"></script>
   <script>
-    function getConsentStatusCookie() {
-      var value = "; " + document.cookie;
-      var parts = value.split("; cookieconsent_status=");
-      if (parts.length == 2) {
-        return parts.pop().split(";").shift();
-      }
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
     }
-    if (getConsentStatusCookie()) {
+    if (getCookie('cookieconsent_status')) {
+      const gtagScript = document.createElement('script');
+      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-LZ8T2V80EK';
+      document.head.appendChild(gtagScript);
+
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
 
       gtag('config', 'G-LZ8T2V80EK');
     } else {
       console.warn('Cookies not allowed yet')
     }
-  </script>
-
-  <!-- Because the Universal Analytics (integration above) will be going away in 2033, 
-    that's why we need to integrate Google Analytics 4: -->
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZ8T2V80EK"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-LZ8T2V80EK');
   </script>
 
   <meta charset="utf-8">
