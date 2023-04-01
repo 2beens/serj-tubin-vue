@@ -33,21 +33,27 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
   authUrl.searchParams.set('redirect_uri', redirectUri)
   authUrl.searchParams.set('code_challenge', challenge)
   authUrl.searchParams.set('code_challenge_method', 'S256')
-  authUrl.searchParams.set('scope', scope)
+  // TODO: check why we can't set scopes (results in 500)
+  // authUrl.searchParams.set('scope', scope)
   authUrl.searchParams.set('state', generateRandomString(16))
 
   return authUrl
 }
 
-async function exchangeCodeForToken(clientId, redirectUri, code, codeVerifier) {
+async function exchangeCodeForToken(clientId, clientSecret, redirectUri, code, codeVerifier) {
   const tokenUrl = 'https://api.sumup.com/token'
-  const response = await axios.post(tokenUrl, null, {
-    params: {
-      client_id: clientId,
-      grant_type: 'authorization_code',
-      redirect_uri: redirectUri,
-      code: code,
-      code_verifier: codeVerifier
+  const requestBody = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    grant_type: 'authorization_code',
+    redirect_uri: redirectUri,
+    code: code,
+    code_verifier: codeVerifier
+  })
+
+  const response = await axios.post(tokenUrl, requestBody.toString(), {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
 
