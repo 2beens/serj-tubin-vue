@@ -38,11 +38,13 @@
       <v-col v-if="user" cols="auto">
         <v-btn @click="onLogoutClick" color="warning" height="72" min-width="164">
           Logout from SumUp
+          <v-icon>mdi-logout</v-icon>
         </v-btn>
       </v-col>
       <v-col v-else cols="auto">
         <v-btn @click="onLoginClick" color="success" height="72" min-width="164">
           Login with SumUp
+          <v-icon>mdi-login</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -54,28 +56,58 @@
         <h4>Location: {{ user.address.city }}, {{ user.address.country }}</h4>
       </v-col>
     </v-row>
+
+    <v-row justify="center">
+      <v-divider :thickness="6" color="white"></v-divider>
+    </v-row>
+    <v-row>
+      <v-col cols="auto">
+        <v-btn @click="onGetMoreUserDetailsClick" color="info" height="50" min-width="120">
+          Get More User Details
+          <v-icon>mdi-account-arrow-down</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col>
+        <h3 style="color: aquamarine">{{ merchantCode }}</h3>
+      </v-col>
+    </v-row>
+    <v-row v-if="userDetailsJson">
+      <v-col>
+        <v-textarea v-model="userDetailsJson" rows="20" row-height="15" bg-color="light-blue" color="black"></v-textarea>
+      </v-col>
+    </v-row>
+
     <v-row justify="center">
       <v-divider :thickness="6" color="white"></v-divider>
     </v-row>
     <h3>Transactions</h3>
     <v-row>
       <v-col cols="auto">
-        <v-btn @click="onGetTransactionsClick" height="50" min-width="120">
+        <v-btn @click="onGetTransactionsClick" color="info" height="50" min-width="120">
           Get Transaction History
+          <v-icon>mdi-cash</v-icon>
         </v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col v-if="transactions" cols="10">
         <div v-for="tr in transactions" :key="tr.id">
-          <p v-if="tr.status === 'SUCCESSFUL'" style="background-color: green; border-radius: 5px;">
-            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          <p v-if="tr.status === 'SUCCESSFUL'" style="background-color: green; border-radius: 5px">
+            ** {{ tr.timestamp }} ->
+            <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
+            {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
           </p>
-          <p v-else-if="tr.status === 'FAILED'" style="background-color: red; border-radius: 5px;">
-            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          <p v-else-if="tr.status === 'FAILED'" style="background-color: red; border-radius: 5px">
+            ** {{ tr.timestamp }} ->
+            <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
+            {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
           </p>
-          <p v-else style="background-color: gray;">
-            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black; border-radius: 5px;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          <p v-else style="background-color: gray">
+            ** {{ tr.timestamp }} ->
+            <span style="font-weight: bold; background-color: black; border-radius: 5px">{{
+              tr.amount
+            }}</span>
+            {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
           </p>
         </div>
       </v-col>
@@ -117,6 +149,8 @@ export default {
       clientId: '',
       clientSecret: '',
       user: null,
+      userDetailsJson: null,
+      merchantCode: '',
       transactions: null
     }
   },
@@ -132,6 +166,11 @@ export default {
 
     if (!this.clientSecret) {
       console.warn('client secret missing')
+      return
+    }
+
+    if (this.user) {
+      // user already loaded
       return
     }
 
@@ -198,6 +237,13 @@ export default {
       }
       this.transactions = transactions.items
     },
+    async onGetMoreUserDetailsClick() {
+      console.log('getting more user data ...')
+      const userDetails = await this.getMoreUserDetails()
+      this.userDetailsJson = JSON.stringify(userDetails, null, 2)
+      this.merchantCode = userDetails.merchant_profile.merchant_code
+      console.log(this.merchantCode, userDetails)
+    },
     onLogoutClick() {
       this.eraseCookie('access_token')
       this.eraseCookie('refresh_token')
@@ -220,6 +266,9 @@ export default {
     },
     async listTransactions() {
       return await this.makeApiRequest('https://api.sumup.com/v0.1/me/transactions/history')
+    },
+    async getMoreUserDetails() {
+      return await this.makeApiRequest('https://api.sumup.com/v0.1/me')
     }
   }
 }
