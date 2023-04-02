@@ -8,6 +8,12 @@
       <h5 class="util-info-box-title">Your IP Info</h5>
       <h4 id="ip-addr-value">👀</h4>
     </div>
+    <div class="util-info-box" v-if="this.$root.loggedIn">
+      <h5 class="util-info-box-title">n8n</h5>
+      <button style="margin-bottom: 10px" class="btn btn-success" @click="openN8NInNewTab">
+        Open >> n8n.serj-tubin.com
+      </button>
+    </div>
 
     <file-box />
   </v-container>
@@ -37,6 +43,11 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+  },
+  methods: {
+    openN8NInNewTab() {
+      window.open('https://n8n.serj-tubin.com', '_blank').focus()
+    }
   }
 }
 </script>

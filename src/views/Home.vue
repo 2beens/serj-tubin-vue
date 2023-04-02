@@ -94,7 +94,7 @@ export default {
   background-color: #26a69a;
   border-radius: 5px;
   position: absolute;
-  top: 5%;
+  top: 50px;
   right: 5%;
   float: right;
   padding: 10px;
