@@ -41,24 +41,17 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
   return authUrl
 }
 
-async function exchangeCodeForToken(clientId, clientSecret, redirectUri, code, codeVerifier) {
-  const tokenUrl = 'https://api.sumup.com/token'
-  const requestBody = new URLSearchParams({
-    client_id: clientId,
-    client_secret: clientSecret,
-    grant_type: 'authorization_code',
-    redirect_uri: redirectUri,
-    code: code,
-    code_verifier: codeVerifier
-  })
-
-  const response = await axios.post(tokenUrl, requestBody.toString(), {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
-
-  return response.data
+async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier) {
+  try {
+    const response = await axios.post('https://sumup-token-exchange.serj-tubin.com/exchange_token', {
+      code: code,
+      redirect_uri: redirectUri,
+      code_verifier: codeVerifier
+    });
+    return response.data
+  } catch (error) {
+    console.error('Error exchanging code for access token:', error);
+  }
 }
 
-export { createCodeVerifierAndChallenge, buildAuthorizationUrl, exchangeCodeForToken }
+export { createCodeVerifierAndChallenge, buildAuthorizationUrl, exchangeCodeForAccessToken }
