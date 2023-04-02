@@ -59,6 +59,13 @@ const routes = [
     }
   },
   {
+    path: '/sumup',
+    name: 'SumUp Experimentation',
+    component: function () {
+      return import('../views/SumUp.vue')
+    }
+  },
+  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue')
