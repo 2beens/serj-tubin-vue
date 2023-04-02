@@ -19,7 +19,9 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12">
-            <v-btn @click="onSetClientCredentialsClick" height="50" min-width="100" color="green"> Set </v-btn>
+            <v-btn @click="onSetClientCredentialsClick" height="50" min-width="100" color="green">
+              Set
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -34,10 +36,14 @@
 
     <v-row justify="center" style="margin-top: 20px">
       <v-col v-if="user" cols="auto">
-        <v-btn @click="onLogoutClick" color="warning" height="72" min-width="164"> Logout from SumUp </v-btn>
+        <v-btn @click="onLogoutClick" color="warning" height="72" min-width="164">
+          Logout from SumUp
+        </v-btn>
       </v-col>
       <v-col v-else cols="auto">
-        <v-btn @click="onLoginClick" color="success" height="72" min-width="164"> Login with SumUp </v-btn>
+        <v-btn @click="onLoginClick" color="success" height="72" min-width="164">
+          Login with SumUp
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -56,9 +62,14 @@
       <h3>Notes:</h3>
     </v-row>
     <v-row>
-      <ul>
-        <li>How can we see the list of oauth apps we gave permissions to?</li>
-      </ul>
+      <v-col>
+        <p>How can we see the list of oauth apps we gave permissions to?</p>
+        <p>Scopes do not seem to work properly; can login only if we omit the "scope" parameter.</p>
+        <p>
+          An error message gets written only in the URL:
+          Requested+scope+is+invalid+or+not+available+to+this+client.
+        </p>
+      </v-col>
     </v-row>
   </v-container>
 </template>

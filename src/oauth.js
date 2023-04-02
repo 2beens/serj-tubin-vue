@@ -35,6 +35,7 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
   authUrl.searchParams.set('code_challenge_method', 'S256')
   // TODO: check why we can't set scopes (results in 500)
   // authUrl.searchParams.set('scope', scope)
+  // authUrl.searchParams.set('scope', 'payments')
   authUrl.searchParams.set('state', generateRandomString(16))
 
   return authUrl
