@@ -2,12 +2,42 @@
   <v-container id="main">
     <h2>📝 SumUp Testing / Experimenting / Learning 📝</h2>
 
+    <v-row>
+      <v-col cols="3"></v-col>
+      <v-col cols="6">
+        <v-row
+          style="background-color: azure; margin-top: 20px; padding: 10px; border-radius: 20px"
+        >
+          <v-col cols="12">
+            <v-text-field v-model="clientId" label="Client ID"></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="clientSecret"
+              variant="outlined"
+              label="Client Secret"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-btn @click="onSetClientCredentialsClick" height="50" min-width="100" color="green"> Set </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="3"></v-col>
+    </v-row>
+    <v-row justify="center">
+      <h5>
+        * Will need to input those for now, to not leak client id and secret on the client side;
+        will make a nodejs backend for exchanging the code for an access token.
+      </h5>
+    </v-row>
+
     <v-row justify="center" style="margin-top: 20px">
       <v-col v-if="user" cols="auto">
-        <v-btn @click="onLogoutClick" height="72" min-width="164"> Logout from SumUp </v-btn>
+        <v-btn @click="onLogoutClick" color="warning" height="72" min-width="164"> Logout from SumUp </v-btn>
       </v-col>
       <v-col v-else cols="auto">
-        <v-btn @click="onLoginClick" height="72" min-width="164"> Login with SumUp </v-btn>
+        <v-btn @click="onLoginClick" color="success" height="72" min-width="164"> Login with SumUp </v-btn>
       </v-col>
     </v-row>
 
@@ -40,20 +70,23 @@ import {
   buildAuthorizationUrl,
   exchangeCodeForToken
 } from '../oauth'
-const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
 const redirectUri = process.env.VUE_APP_SUMUP_REDIRECT_URI
-const clientSecret = process.env.VUE_APP_SUMUP_CLIENT_SECRET
 
 export default {
   name: 'SumUp',
 
   data: function () {
     return {
+      clientId: '',
+      clientSecret: '',
       user: null
     }
   },
 
   mounted: async function () {
+    this.clientId = this.getCookie('clientId')
+    this.clientSecret = this.getCookie('clientSecret')
+
     const userData = await this.getUserData()
     if (userData) {
       console.log('user data', userData)
@@ -72,7 +105,7 @@ export default {
     console.log('found verifier >', verifier)
 
     const vm = this
-    exchangeCodeForToken(clientId, clientSecret, redirectUri, code, verifier)
+    exchangeCodeForToken(this.clientId, this.clientSecret, redirectUri, code, verifier)
       .then((tokenData) => {
         console.log('received token data', tokenData)
         vm.setCookie('access_token', tokenData.access_token, 7)
@@ -92,13 +125,17 @@ export default {
   },
 
   methods: {
+    onSetClientCredentialsClick() {
+      this.setCookie('clientId', this.clientId, 7)
+      this.setCookie('clientSecret', this.clientSecret, 7)
+    },
     async onLoginClick() {
       const { verifier, challenge } = await createCodeVerifierAndChallenge()
       this.setCookie('verifier', verifier, 1)
 
       // TODO: scope is ignored atm
       const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrl = buildAuthorizationUrl(clientId, redirectUri, challenge, scope)
+      const authUrl = buildAuthorizationUrl(this.clientId, redirectUri, challenge, scope)
       window.location.href = authUrl.toString()
     },
     onLogoutClick() {
@@ -109,7 +146,7 @@ export default {
     async makeApiRequest(url) {
       const accessToken = this.getCookie('access_token')
       if (!accessToken) {
-        console.error(`can't make a request, no access token`)
+        console.log(`can't make a request, no access token`)
         return null
       }
 
