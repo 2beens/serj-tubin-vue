@@ -57,6 +57,32 @@
     <v-row justify="center">
       <v-divider :thickness="6" color="white"></v-divider>
     </v-row>
+    <h3>Transactions</h3>
+    <v-row>
+      <v-col cols="auto">
+        <v-btn @click="onGetTransactionsClick" height="50" min-width="120">
+          Get Transaction History
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-if="transactions" cols="10">
+        <div v-for="tr in transactions" :key="tr.id">
+          <p v-if="tr.status === 'SUCCESSFUL'" style="background-color: green; border-radius: 5px;">
+            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          </p>
+          <p v-else-if="tr.status === 'FAILED'" style="background-color: red; border-radius: 5px;">
+            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          </p>
+          <p v-else style="background-color: gray;">
+            ** {{ tr.timestamp }} -> <span style="font-weight: bold; background-color: black; border-radius: 5px;">{{ tr.amount }}</span> {{ tr.currency }}: {{  tr.status }}, {{ tr.payout_plan }}
+          </p>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-divider :thickness="6" color="white"></v-divider>
+    </v-row>
 
     <v-row>
       <h3>Notes:</h3>
@@ -90,7 +116,8 @@ export default {
     return {
       clientId: '',
       clientSecret: '',
-      user: null
+      user: null,
+      transactions: null
     }
   },
 
@@ -98,11 +125,25 @@ export default {
     this.clientId = this.getCookie('clientId')
     this.clientSecret = this.getCookie('clientSecret')
 
-    const userData = await this.getUserData()
-    if (userData) {
-      console.log('user data', userData)
-      this.user = userData
+    if (!this.clientId) {
+      console.warn('client id missing')
       return
+    }
+
+    if (!this.clientSecret) {
+      console.warn('client secret missing')
+      return
+    }
+
+    try {
+      const userData = await this.getUserData()
+      if (userData) {
+        console.log('user data', userData)
+        this.user = userData
+        return
+      }
+    } catch (error) {
+      console.error(error)
     }
 
     const urlParams = new URLSearchParams(window.location.search)
@@ -149,6 +190,14 @@ export default {
       const authUrl = buildAuthorizationUrl(this.clientId, redirectUri, challenge, scope)
       window.location.href = authUrl.toString()
     },
+    async onGetTransactionsClick() {
+      const transactions = await this.listTransactions()
+      console.log(transactions)
+      if (!transactions) {
+        return
+      }
+      this.transactions = transactions.items
+    },
     onLogoutClick() {
       this.eraseCookie('access_token')
       this.eraseCookie('refresh_token')
@@ -168,6 +217,9 @@ export default {
     },
     async getUserData() {
       return await this.makeApiRequest('https://api.sumup.com/v0.1/me/personal-profile')
+    },
+    async listTransactions() {
+      return await this.makeApiRequest('https://api.sumup.com/v0.1/me/transactions/history')
     }
   }
 }
