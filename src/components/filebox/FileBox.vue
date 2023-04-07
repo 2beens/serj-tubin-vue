@@ -362,7 +362,7 @@ export default {
         downloadName = `${item.name}`
       } else {
         path = `/f/download/folder/${item.id}`
-        downloadName = `${item.name}.zip`
+        downloadName = `${item.name}.tar.gz`
       }
 
       axios
