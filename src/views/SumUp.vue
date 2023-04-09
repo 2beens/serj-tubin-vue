@@ -163,10 +163,15 @@ export default {
 
     const vm = this
     exchangeCodeForAccessToken(code, redirectUri, verifier)
-      .then((tokenData) => {
-        console.log('received token data', tokenData)
-        vm.setCookie('access_token', tokenData.access_token, 7)
-        vm.setCookie('refresh_token', tokenData.refresh_token, 7)
+      .then((respData) => {
+        console.log('received token response data', respData)
+        if (respData.error) {
+          console.error(respData.error, ':', respData.error_description)
+          return
+        }
+
+        vm.setCookie('access_token', respData.access_token, 7)
+        vm.setCookie('refresh_token', respData.refresh_token, 7)
         vm.eraseCookie('verifier')
 
         // remove the search part from the URL
