@@ -135,17 +135,19 @@ export default {
   mounted: async function () {
     if (this.user) {
       // user already loaded
+      console.log('mounted: user already loaded')
       return
     }
 
     try {
       const userData = await this.getUserData()
       if (userData) {
-        console.log('user data', userData)
+        console.log('user data:', userData)
         this.user = userData
         return
       }
     } catch (error) {
+      this.user = null
       console.error(error)
     }
 
