@@ -184,10 +184,13 @@ export default {
       const { verifier, challenge } = await createCodeVerifierAndChallenge()
       this.setCookie('verifier', verifier, 1)
 
+      // TODO: add ability to set evn in the view
+      const environment = 'live'
+
       // TODO: scope is ignored atm
       const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
       const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrl = buildAuthorizationUrl(clientId, redirectUri, challenge, scope)
+      const authUrl = buildAuthorizationUrl(clientId, redirectUri, challenge, environment, scope)
       window.location.href = authUrl.toString()
     },
     async onGetTransactionsClick() {

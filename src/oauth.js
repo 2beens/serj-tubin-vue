@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const tokenExchangeEndpoint = 'https://sumup-token-exchange.serj-tubin.com/exchange_token'
+
 function generateRandomString(length) {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~'
   let randomString = ''
@@ -26,24 +28,26 @@ async function createCodeVerifierAndChallenge() {
   return { verifier, challenge }
 }
 
-function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
+function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
   const authUrl = new URL('https://api.sumup.com/authorize')
   authUrl.searchParams.set('client_id', clientId)
   authUrl.searchParams.set('response_type', 'code')
   authUrl.searchParams.set('redirect_uri', redirectUri)
   authUrl.searchParams.set('code_challenge', challenge)
   authUrl.searchParams.set('code_challenge_method', 'S256')
+  authUrl.searchParams.set('env', env)
+  authUrl.searchParams.set('state', generateRandomString(16))
+
   // TODO: check why we can't set scopes (results in 500)
   // authUrl.searchParams.set('scope', scope)
   // authUrl.searchParams.set('scope', 'payments')
-  authUrl.searchParams.set('state', generateRandomString(16))
 
   return authUrl
 }
 
 async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier) {
   try {
-    const response = await axios.post('https://sumup-token-exchange.serj-tubin.com/exchange_token', {
+    const response = await axios.post(tokenExchangeEndpoint, {
       code: code,
       redirect_uri: redirectUri,
       code_verifier: codeVerifier
