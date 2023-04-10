@@ -154,6 +154,7 @@ export default {
     const urlParams = new URLSearchParams(window.location.search)
     const code = urlParams.get('code')
     if (!code) {
+      console.warn('missing state param')
       return
     }
 
@@ -163,17 +164,20 @@ export default {
       return
     }
 
-    const verifier = this.getCookie('verifier')
-    console.log('found code >', code)
-    console.log('found state >', state)
-    console.log('found verifier >', verifier)
+    const foundVerifier = this.getCookie('verifier')
+    const foundState = this.getCookie('state')
+    console.log('received code >', code)
+    console.log('received state >', state)
+    console.log('found state >', foundState)
+    console.log('found verifier >', foundVerifier)
 
-    if (state !== verifier) {
-      console.warn('found state not equal to verifier')
+    if (state !== foundState) {
+      console.error('found/sent state not equal to received state')
+      return
     }
 
     const vm = this
-    exchangeCodeForAccessToken(code, redirectUri, state)
+    exchangeCodeForAccessToken(code, redirectUri, foundVerifier)
       .then((respData) => {
         console.log('received token response data', respData)
         if (respData.error) {
@@ -184,6 +188,7 @@ export default {
         vm.setCookie('access_token', respData.access_token, 7)
         vm.setCookie('refresh_token', respData.refresh_token, 7)
         vm.eraseCookie('verifier')
+        vm.eraseCookie('state')
 
         // remove the search part from the URL
         const newUrl =
@@ -208,8 +213,12 @@ export default {
       // TODO: scope is ignored atm
       const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
       const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrl = buildAuthorizationUrl(clientId, redirectUri, challenge, environment, scope)
-      window.location.href = authUrl.toString()
+      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, environment, scope)
+
+      const state = authUrlInfo.state
+      this.setCookie('state', state, 1)
+
+      window.location.href = authUrlInfo.url.toString()
     },
     async onGetTransactionsClick() {
       const transactions = await this.listTransactions()

@@ -29,6 +29,7 @@ async function createCodeVerifierAndChallenge() {
 }
 
 function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
+  const state = generateRandomString(20)
   const authUrl = new URL('https://api.sumup.com/authorize')
   authUrl.searchParams.set('client_id', clientId)
   authUrl.searchParams.set('response_type', 'code')
@@ -36,13 +37,13 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
   authUrl.searchParams.set('code_challenge', challenge)
   authUrl.searchParams.set('code_challenge_method', 'S256')
   authUrl.searchParams.set('env', env)
-  authUrl.searchParams.set('state', generateRandomString(16))
+  authUrl.searchParams.set('state', state)
 
   // TODO: check why we can't set scopes (results in 500)
   // authUrl.searchParams.set('scope', scope)
   // authUrl.searchParams.set('scope', 'payments')
 
-  return authUrl
+  return { url: authUrl, state: state }
 }
 
 async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier) {
