@@ -157,12 +157,23 @@ export default {
       return
     }
 
+    const state = urlParams.get('state')
+    if (!state) {
+      console.warn('missing state param')
+      return
+    }
+
     const verifier = this.getCookie('verifier')
     console.log('found code >', code)
+    console.log('found state >', state)
     console.log('found verifier >', verifier)
 
+    if (state !== verifier) {
+      console.warn('found state not equal to verifier')
+    }
+
     const vm = this
-    exchangeCodeForAccessToken(code, redirectUri, verifier)
+    exchangeCodeForAccessToken(code, redirectUri, state)
       .then((respData) => {
         console.log('received token response data', respData)
         if (respData.error) {
