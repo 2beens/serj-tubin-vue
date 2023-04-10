@@ -28,7 +28,7 @@ async function createCodeVerifierAndChallenge() {
   return { verifier, challenge }
 }
 
-function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
+function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
   const state = generateRandomString(20)
   const authUrl = new URL('https://api.sumup.com/authorize')
   authUrl.searchParams.set('client_id', clientId)
@@ -36,7 +36,6 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
   authUrl.searchParams.set('redirect_uri', redirectUri)
   authUrl.searchParams.set('code_challenge', challenge)
   authUrl.searchParams.set('code_challenge_method', 'S256')
-  authUrl.searchParams.set('env', env)
   authUrl.searchParams.set('state', state)
 
   // TODO: check why we can't set scopes (results in 500)
@@ -46,16 +45,17 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, env, scope) {
   return { url: authUrl, state: state }
 }
 
-async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier) {
+async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier, environment) {
   try {
     const response = await axios.post(tokenExchangeEndpoint, {
       code: code,
       redirect_uri: redirectUri,
-      code_verifier: codeVerifier
-    });
+      code_verifier: codeVerifier,
+      env: environment
+    })
     return response.data
   } catch (error) {
-    console.error('Error exchanging code for access token:', error);
+    console.error('Error exchanging code for access token:', error)
   }
 }
 

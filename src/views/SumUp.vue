@@ -176,8 +176,11 @@ export default {
       return
     }
 
+    // TODO: add ability to set evn in the view
+    const environment = 'live'
+
     const vm = this
-    exchangeCodeForAccessToken(code, redirectUri, foundVerifier)
+    exchangeCodeForAccessToken(code, redirectUri, foundVerifier, environment)
       .then((respData) => {
         console.log('received token response data', respData)
         if (respData.error) {
@@ -207,13 +210,10 @@ export default {
       const { verifier, challenge } = await createCodeVerifierAndChallenge()
       this.setCookie('verifier', verifier, 1)
 
-      // TODO: add ability to set evn in the view
-      const environment = 'live'
-
       // TODO: scope is ignored atm
       const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
       const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, environment, scope)
+      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, scope)
 
       const state = authUrlInfo.state
       this.setCookie('state', state, 1)
