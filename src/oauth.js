@@ -1,6 +1,18 @@
 import axios from 'axios'
 
-const tokenExchangeEndpoint = 'https://sumup-token-exchange.serj-tubin.com/exchange_token'
+const tokenExchangeEndpoints = {
+  local: 'http://localhost:10122/exchange_token',
+  theta: 'https://sumup-token-exchange.serj-tubin.com/exchange_token',
+  staging: 'https://sumup-token-exchange.serj-tubin.com/exchange_token',
+  live: 'https://sumup-token-exchange.serj-tubin.com/exchange_token'
+}
+
+const authUrlEndpoints = {
+  local: 'http://localhost:10122/authorize',
+  theta: 'https://api-theta.sam-app.ro/authorize',
+  staging: 'https://api.sam-app.ro/authorize',
+  live: 'https://api.sumup.com/authorize'
+}
 
 function generateRandomString(length) {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~'
@@ -28,9 +40,9 @@ async function createCodeVerifierAndChallenge() {
   return { verifier, challenge }
 }
 
-function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
+function buildAuthorizationUrl(clientId, redirectUri, challenge, scope, environment) {
   const state = generateRandomString(20)
-  const authUrl = new URL('https://api.sumup.com/authorize')
+  const authUrl = new URL(authUrlEndpoints[environment])
   authUrl.searchParams.set('client_id', clientId)
   authUrl.searchParams.set('response_type', 'code')
   authUrl.searchParams.set('redirect_uri', redirectUri)
@@ -47,7 +59,7 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, scope) {
 
 async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier, environment) {
   try {
-    const response = await axios.post(tokenExchangeEndpoint, {
+    const response = await axios.post(tokenExchangeEndpoints[environment], {
       code: code,
       redirect_uri: redirectUri,
       code_verifier: codeVerifier,

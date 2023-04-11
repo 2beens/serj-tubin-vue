@@ -1,6 +1,8 @@
 <template>
   <v-container id="main">
     <h2>📝 SumUp Testing / Experimenting / Learning 📝</h2>
+    <h4>Use this page to log in to your <a href="https://sumup.com/">SumUp account</a> via OAuth2 and get your personal details, transactions,
+      etc.</h4>
 
     <v-row justify="center" style="margin-top: 20px">
       <v-col v-if="user" cols="auto">
@@ -14,6 +16,14 @@
           Login with SumUp
           <v-icon>mdi-login</v-icon>
         </v-btn>
+        <v-combobox
+          style="cursor: pointer; margin-top: 20px;"
+          v-model="environment"
+          :items="['local', 'theta', 'staging', 'live']"
+          label="Environment"
+          chips
+          outlined
+        ></v-combobox>
       </v-col>
     </v-row>
 
@@ -83,8 +93,8 @@
             <p v-else style="background-color: gray">
               ** {{ tr.timestamp }} ->
               <span style="font-weight: bold; background-color: black; border-radius: 5px">{{
-                tr.amount
-              }}</span>
+                  tr.amount
+                }}</span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
           </div>
@@ -95,17 +105,29 @@
       </v-row>
     </div>
 
+    <div id="snackbar-div">
+      <v-snackbar v-model="showSnackbar">
+        {{ snackbarText }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+
     <v-row>
       <h3>Notes:</h3>
     </v-row>
-    <v-row>
+    <v-row style="text-align: left;">
       <v-col>
-        <p>How can we see the list of oauth apps we gave permissions to?</p>
-        <p>Scopes do not seem to work properly; can login only if we omit the "scope" parameter.</p>
-        <p>
-          An error message gets written only in the URL:
-          Requested+scope+is+invalid+or+not+available+to+this+client.
-        </p>
+        <ul>
+          <li>How can we see the list of oauth apps we gave permissions to in the SumUp Dashboard?</li>
+          <li>Scopes do not seem to work properly; can login only if we omit the "scope" parameter.</li>
+          <li>
+            An error message gets written only in the URL:
+            Requested+scope+is+invalid+or+not+available+to+this+client.
+          </li>
+        </ul>
       </v-col>
     </v-row>
   </v-container>
@@ -118,6 +140,7 @@ import {
   buildAuthorizationUrl,
   exchangeCodeForAccessToken
 } from '../oauth'
+
 const redirectUri = process.env.VUE_APP_SUMUP_REDIRECT_URI
 
 export default {
@@ -128,7 +151,10 @@ export default {
       user: null,
       userDetailsJson: null,
       merchantCode: '',
-      transactions: null
+      transactions: null,
+      environment: 'live',
+      snackbarText: '',
+      showSnackbar: false
     }
   },
 
@@ -173,18 +199,18 @@ export default {
 
     if (state !== foundState) {
       console.error('found/sent state not equal to received state')
+      this.snackbarText = `found/sent state not equal to received state`
+      this.showSnackbar = true
       return
     }
 
-    // TODO: add ability to set evn in the view
-    const environment = 'live'
-
     const vm = this
-    exchangeCodeForAccessToken(code, redirectUri, foundVerifier, environment)
+    exchangeCodeForAccessToken(code, redirectUri, foundVerifier, this.environment)
       .then((respData) => {
         console.log('received token response data', respData)
         if (respData.error) {
-          console.error(respData.error, ':', respData.error_description)
+          vm.snackbarText = `${respData.error}: ${respData.error_description}`
+          vm.showSnackbar = true
           return
         }
 
@@ -207,13 +233,13 @@ export default {
 
   methods: {
     async onLoginClick() {
-      const { verifier, challenge } = await createCodeVerifierAndChallenge()
+      const {verifier, challenge} = await createCodeVerifierAndChallenge()
       this.setCookie('verifier', verifier, 1)
 
       // TODO: scope is ignored atm
       const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
       const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, scope)
+      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, scope, this.environment)
 
       const state = authUrlInfo.state
       this.setCookie('state', state, 1)
@@ -248,7 +274,7 @@ export default {
       }
 
       const response = await axios.get(url, {
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: {Authorization: `Bearer ${accessToken}`}
       })
       return response.data
     },
