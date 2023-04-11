@@ -18,6 +18,29 @@
       <router-view></router-view>
     </v-main>
 
+    <div id="consent-div" v-show="showConsent">
+      <cookie-consent>
+        <template slot="message">
+          <div style="color: white">
+            <p>Hey, over here 👋</p>
+            <p>
+              This site uses cookies to analyze website traffic and optimize your website experience.
+            </p>
+            <p>
+              Cookies are used only for analytics purposes. By using this site, you consent to the use of these cookies.
+            </p>
+            <p>
+              🍪🍪🍪 ❓
+            </p>
+          </div>
+        </template>
+        <template slot="button">
+          <button id="cookies-ok-btn" style="background-color: black" class="btn btn-info"
+            onclick="location.reload()">Yeah, sure...</button>
+        </template>
+      </cookie-consent>
+    </div>
+
     <Footer />
   </v-app>
 </template>
@@ -25,14 +48,23 @@
 <script>
 import Footer from '@/components/Footer.vue'
 import LoginLogoutButton from '@/components/LoginLogoutButton.vue'
+import CookieConsent from 'vue-cookieconsent-component'
 
 export default {
   name: 'App',
   components: {
     Footer,
-    LoginLogoutButton
+    LoginLogoutButton,
+    CookieConsent
+  },
+  data: function () {
+    return {
+      showConsent: true
+    }
   },
   mounted: function () {
+    this.showConsent = !(this.getCookie('cookieconsent_status'))
+
     console.log('loaded env: ' + process.env.VUE_APP_ENV)
 
     const token = this.getCookie('sessionkolacic')
@@ -51,7 +83,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+#consent-div {
+  max-width: 300px;
+  background-color: #26a69a;
+  border-radius: 5px;
+  position: absolute;
+  top: 130px;
+  right: 5%;
+  float: right;
+  padding: 10px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
