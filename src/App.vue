@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="black">
+    <v-app-bar app id="main-menu-bar" color="black">
       <v-spacer></v-spacer>
       <v-btn color="#4b9ff2" text rounded to="/">Home</v-btn>
       <v-btn color="#4b9ff2" text rounded to="/about">About</v-btn>

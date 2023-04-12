@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-btn class="mt-1" icon v-if="this.$root.loggedIn" @click="logout" color="teal lighten-1">
+    <v-btn class="mt-1" id="logout-button" icon v-if="this.$root.loggedIn" @click="logout" color="teal lighten-1">
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
     <v-dialog v-model="showLoginDialog" persistent max-width="400px" v-else>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn class="ma-1" icon v-bind="attrs" v-on="on" color="teal lighten-1">
+        <v-btn class="ma-1" id="login-button" icon v-bind="attrs" v-on="on" color="teal lighten-1">
           <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>

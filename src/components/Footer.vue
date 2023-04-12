@@ -6,7 +6,7 @@
 
         <v-spacer></v-spacer>
 
-        {{ new Date().getFullYear() }} — {{ versionInfo }}
+        <div id="version-info">{{ new Date().getFullYear() }} — {{ versionInfo }}</div>
 
         <v-spacer></v-spacer>
 

@@ -1,0 +1,33 @@
+{
+  "posts": [
+    {
+      "id": 28,
+      "title": "Blog Post 28",
+      "created_at": "2023-02-05T18:09:33.029461Z",
+      "content": "Blog 28 content",
+      "claps": 2
+    },
+    {
+      "id": 27,
+      "title": "Spot on prediction by Gates 😅",
+      "created_at": "2022-12-09T09:30:21.995481Z",
+      "content": "Blog 27 content",
+      "claps": 0
+    },
+    {
+      "id": 25,
+      "title": "EU vs USA by Sunshine? 😎",
+      "created_at": "2022-10-01T10:26:28.891714Z",
+      "content": "Blog 25 content",
+      "claps": 5
+    },
+    {
+      "id": 24,
+      "title": "Switch from Logrus to Zerolog for logging in Go",
+      "created_at": "2022-10-01T10:14:57.244485Z",
+      "content": "Blog 24 content",
+      "claps": 2
+    }
+  ],
+  "total": 4
+}

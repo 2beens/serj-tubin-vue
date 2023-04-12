@@ -16,5 +16,8 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+// configs
+Cypress.config('apiEndpoint', 'http://localhost:9000')
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
