@@ -4,7 +4,7 @@ const fixWhereAmI = require('../../fixtures/where_am_i.json')
 const fixWeatherCurrent = require('../../fixtures/weather_current.json')
 const fixRandomQuote = require('../../fixtures/random_quote.json')
 
-describe('example to-do app', () => {
+describe('Home Page Tests', () => {
   beforeEach(() => {
     cy.apiMocksSetup()
     cy.visit('/')
@@ -61,15 +61,19 @@ describe('example to-do app', () => {
       expect(cookie).to.be.null
     })
 
+    cy.getAllCookies().should('be.empty')
     cy.get('#consent-div').should('exist').and('be.visible')
     cy.get('#cookies-ok-btn').should('exist')
 
     cy.get('#cookies-ok-btn').click()
 
-    // banner gone after consent buton clicked, and cookie set
+    // banner gone after consent button clicked, and cookie set
     cy.get('#consent-div').should('not.be.visible')
     cy.getCookie('cookieconsent_status').then((cookie) => {
       expect(cookie).to.exist
     })
+
+    // 2 Google Analytics + 1 cookies banner = 3 cookies in total
+    cy.getAllCookies().should('have.length', 3)
   })
 })
