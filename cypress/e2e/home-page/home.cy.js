@@ -1,20 +1,19 @@
 /// <reference types="cypress" />
 
-const fixWhereAmI = require('../../fixtures/where_am_i')
-const fixWeatherCurrent = require('../../fixtures/weather_current')
-const fixWeatherTomorrow = require('../../fixtures/weather_tomorrow')
-const fixRandomQuote = require('../../fixtures/random_quote')
-const fixBlogPosts = require('../../fixtures/blog_posts')
+const fixWhereAmI = require('../../fixtures/where_am_i.json')
+const fixWeatherCurrent = require('../../fixtures/weather_current.json')
+const fixRandomQuote = require('../../fixtures/random_quote.json')
 
 describe('example to-do app', () => {
   beforeEach(() => {
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/version`, 'v1').as('getVersion')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/whereami`, fixWhereAmI).as('whereAmI')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/weather/current`, fixWeatherCurrent).as('weatherCurrent')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/weather/tomorrow`, fixWeatherTomorrow).as('weatherTomorrow')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/quote/random`, fixRandomQuote).as('randomQuote')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/blog/page/1/size/20`, fixBlogPosts).as('blogPosts')
+    cy.apiMocksSetup()
     cy.visit('/')
+  })
+
+  it('contains 4 blog posts', () => {
+    cy.get('#blogs-list').
+      children().
+      should('have.length', 5) // 4 blogs + 1 footer
   })
 
   it('displays main photo', () => {
