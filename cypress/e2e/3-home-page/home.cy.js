@@ -62,17 +62,15 @@ describe('example to-do app', () => {
       expect(cookie).to.be.null
     })
 
-    cy.get('#consent-div').should('exist')
+    cy.get('#consent-div').should('exist').and('be.visible')
     cy.get('#cookies-ok-btn').should('exist')
 
-    // TODO: since I moved the cookies banner to all pages, cypress cannot
-    // find/get it since it's parent is now <template> which is not visible
-    // cy.get('#cookies-ok-btn').click()
+    cy.get('#cookies-ok-btn').click()
 
-    // // banner gone after consent buton clicked, and cookie set
-    // cy.get('#consent-div').should('not.be.visible')
-    // cy.getCookie('cookieconsent_status').then((cookie) => {
-    //   expect(cookie).to.exist
-    // })
+    // banner gone after consent buton clicked, and cookie set
+    cy.get('#consent-div').should('not.be.visible')
+    cy.getCookie('cookieconsent_status').then((cookie) => {
+      expect(cookie).to.exist
+    })
   })
 })
