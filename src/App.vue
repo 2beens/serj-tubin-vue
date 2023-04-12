@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="black">
+    <v-app-bar app id="main-menu-bar" color="black">
       <v-spacer></v-spacer>
       <v-btn color="#4b9ff2" text rounded to="/">Home</v-btn>
       <v-btn color="#4b9ff2" text rounded to="/about">About</v-btn>
@@ -20,7 +20,7 @@
 
     <div id="consent-div" v-show="showConsent">
       <cookie-consent>
-        <template slot="message">
+        <template v-slot:message>
           <div style="color: white">
             <p>Hey, over here 👋</p>
             <p>
@@ -34,7 +34,7 @@
             </p>
           </div>
         </template>
-        <template slot="button">
+        <template v-slot:button>
           <button id="cookies-ok-btn" style="background-color: black" class="btn btn-info"
             onclick="location.reload()">Yeah, sure...</button>
         </template>
