@@ -1,5 +1,5 @@
 module.exports = {
-  outputDir: '/home/serj/www/serj-tubin-com',
+  outputDir: process.env.VUE_APP_OUTPUT_DIR,
   chainWebpack: config => {
     config
       .plugin('html')
