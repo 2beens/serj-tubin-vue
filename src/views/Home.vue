@@ -11,29 +11,6 @@
 
     <SideBar />
 
-    <div id="consent-div" v-show="showConsent">
-      <cookie-consent>
-        <template slot="message">
-          <div style="color: white">
-            <p>Hey, over here 👋</p>
-            <p>
-              This site uses cookies to analyze website traffic and optimize your website experience.
-            </p>
-            <p>
-              Cookies are used only for analytics purposes. By using this site, you consent to the use of these cookies.
-            </p>
-            <p>
-              🍪🍪🍪 ❓
-            </p>
-          </div>
-        </template>
-        <template slot="button">
-          <button id="cookies-ok-btn" style="background-color: black" class="btn btn-info"
-            onclick="location.reload()">Yeah, sure...</button>
-        </template>
-      </cookie-consent>
-    </div>
-
     <v-row id="quote-info">
       <h6>I'm being a smartass 🤓 by showing some cool stolen quotes here:</h6>
     </v-row>
