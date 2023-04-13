@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn class="mt-1" id="logout-button" icon v-if="this.$root.loggedIn" @click="logout" color="teal lighten-1">
+    <v-btn class="mt-1" id="logout-button" icon v-if="this.$root.loggedIn" @click="onLogoutClick" color="teal lighten-1">
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
@@ -10,7 +10,7 @@
           <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>
-      <v-card>
+      <v-card id="login-form">
         <v-card-title>
           <span class="headline">Login</span>
         </v-card-title>
@@ -19,6 +19,7 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
+                  id="login-form-username"
                   label="Username"
                   required
                   autofocus
@@ -27,6 +28,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
+                  id="login-form-password"
                   label="Password"
                   required
                   v-model="user.password"
@@ -43,7 +45,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="showLoginDialog = false"> Abort </v-btn>
-          <v-btn color="blue darken-1" text @click="login"> Login! </v-btn>
+          <v-btn color="blue darken-1" text @click="onLoginClick" id="login-form-login-button"> Login! </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -80,13 +82,13 @@ export default {
         this.login()
       }
     },
-    login: function () {
+    onLoginClick: function () {
       if (this.user.name === undefined || this.user.name === '') {
-        console.error('emtpy username')
+        console.error('empty username')
         return
       }
       if (this.user.password === undefined || this.user.password === '') {
-        console.error('emtpy password')
+        console.error('empty password')
         return
       }
 
@@ -120,7 +122,7 @@ export default {
           vm.showLoginDialog = false
         })
     },
-    logout: function () {
+    onLogoutClick: function () {
       const vm = this
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/a/logout', {
