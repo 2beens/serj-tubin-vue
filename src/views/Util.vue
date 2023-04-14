@@ -10,7 +10,7 @@
     </div>
     <div class="util-info-box" v-if="theRoot.loggedIn">
       <h5 class="util-info-box-title">n8n</h5>
-      <button style="margin-bottom: 10px" class="btn btn-success" @click="openN8NInNewTab">
+      <button id="n8n-link" style="margin-bottom: 10px" class="btn btn-success" @click="openN8NInNewTab">
         Open >> n8n.serj-tubin.com
       </button>
     </div>

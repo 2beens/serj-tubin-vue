@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mb-10" v-if="this.$root.loggedIn">
+  <v-container id="files-box-container" class="mb-10" v-if="this.$root.loggedIn">
     <h2>Files Box</h2>
 
     <v-card
@@ -228,16 +228,6 @@ const fileTypes = {
 
 export default {
   name: 'FileBox',
-  mounted () {
-    this.refreshFilesTreeAndDeselectItems()
-
-    // deselect all files/folders on ESC
-    document.addEventListener("keydown", (e) => {
-      if (e.key === 'Escape') {
-        this.selectedItems = []
-      }
-    });
-  },
 
   components: {
     UpdateFileInfoDialog,
@@ -283,6 +273,17 @@ export default {
     filesForUploadSelected () {
       return this.inputFiles !== null
     },
+  },
+
+  mounted () {
+    this.refreshFilesTreeAndDeselectItems()
+
+    // deselect all files/folders on ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === 'Escape') {
+        this.selectedItems = []
+      }
+    });
   },
 
   methods: {
@@ -500,7 +501,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/del`, 
+          process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
           qs.stringify({ ids: selectedIds.join(',') }), {
             headers: {
               'Access-Control-Allow-Origin': '*',
