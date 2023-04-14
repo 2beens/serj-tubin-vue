@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-btn class="mt-1" id="logout-button" icon v-if="this.$root.loggedIn" @click="onLogoutClick" color="teal lighten-1">
+    <v-btn
+      class="mt-1"
+      id="logout-button"
+      icon
+      v-if="this.$root.loggedIn"
+      @click="onLogoutClick"
+      color="teal lighten-1"
+    >
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
@@ -45,7 +52,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="showLoginDialog = false"> Abort </v-btn>
-          <v-btn color="blue darken-1" text @click="onLoginClick" id="login-form-login-button"> Login! </v-btn>
+          <v-btn color="blue darken-1" text @click="onLoginClick" id="login-form-login-button">
+            Login!
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -78,7 +87,7 @@ export default {
   methods: {
     loginOnEnter: function (e) {
       if (e.keyCode === 13) {
-        this.login()
+        this.onLoginClick()
       }
     },
     onLoginClick: function () {
@@ -98,7 +107,11 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody)
+        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
         .then(function (response) {
           if (response.data === null) {
             console.warn(response)

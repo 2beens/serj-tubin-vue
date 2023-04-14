@@ -96,7 +96,11 @@ export default {
 
         const vm = this
         axios
-          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody)
+          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
           .then(function (response) {
             if (response.data === null || !response.data.startsWith('added:')) {
               console.warn(response)
