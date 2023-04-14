@@ -1,0 +1,233 @@
+{
+  "id": 0,
+  "parent_id": -1,
+  "name": "root",
+  "is_private": false,
+  "is_file": false,
+  "created_at": "0001-01-01T00:00:00Z",
+  "children": [
+    {
+      "id": 325235,
+      "parent_id": 0,
+      "name": "books",
+      "is_private": false,
+      "is_file": false,
+      "created_at": "0001-01-01T00:00:00Z",
+      "children": [
+        {
+          "id": 1432535,
+          "parent_id": 325235,
+          "name": "System Design Interview.pdf",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/pdf",
+          "created_at": "0001-01-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": 3465346,
+      "parent_id": 0,
+      "name": "pics",
+      "is_private": false,
+      "is_file": false,
+      "created_at": "0001-01-01T00:00:00Z",
+      "children": [
+        {
+          "id": 3456,
+          "parent_id": 3465346,
+          "name": "AI Generated",
+          "is_private": false,
+          "is_file": false,
+          "created_at": "2023-04-07T18:30:12.321208614+02:00",
+          "children": [
+            {
+              "id": 2057646,
+              "parent_id": 3456,
+              "name": "dude_in_mountains.jpg",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/jpeg",
+              "created_at": "2023-04-07T18:30:22.057947933+02:00"
+            },
+            {
+              "id": 2058867,
+              "parent_id": 3456,
+              "name": "girl_skating.jpg",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/jpeg",
+              "created_at": "2023-04-07T18:30:22.059233829+02:00"
+            },
+            {
+              "id": 2060117,
+              "parent_id": 3456,
+              "name": "girl_snowboarding.jpg",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/jpeg",
+              "created_at": "2023-04-07T18:30:22.0604098+02:00"
+            }
+          ]
+        },
+        {
+          "id": 1109,
+          "parent_id": 3465346,
+          "name": "blog",
+          "is_private": false,
+          "is_file": false,
+          "created_at": "0001-01-01T00:00:00Z",
+          "children": [
+            {
+              "id": 46610,
+              "parent_id": 1109,
+              "name": "argocd-k8s.png",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/png",
+              "created_at": "2022-10-01T10:19:34.701997648+02:00"
+            },
+            {
+              "id": 45776,
+              "parent_id": 1109,
+              "name": "dist-services-with-go-book.jpeg",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/jpeg",
+              "created_at": "0001-01-01T00:00:00Z"
+            },
+            {
+              "id": 42266,
+              "parent_id": 1109,
+              "name": "gates-minecraft-joke.jpeg",
+              "is_private": false,
+              "is_file": true,
+              "file": "image/jpeg",
+              "created_at": "2022-12-09T09:29:46.023058926+01:00"
+            }
+          ]
+        },
+        {
+          "id": 435234,
+          "parent_id": 3465346,
+          "name": "some-photo.jpg",
+          "is_private": true,
+          "is_file": true,
+          "file": "image/jpeg",
+          "created_at": "0001-01-01T00:00:00Z"
+        },
+        {
+          "id": 435847,
+          "parent_id": 3465346,
+          "name": "ja-gitara-2020.jpg",
+          "is_private": false,
+          "is_file": true,
+          "file": "image/jpeg",
+          "created_at": "2022-03-14T13:58:36.796210545+01:00"
+        }
+      ]
+    },
+    {
+      "id": 90909,
+      "parent_id": 0,
+      "name": "projects",
+      "is_private": false,
+      "is_file": false,
+      "created_at": "0001-01-01T00:00:00Z",
+      "children": [
+        {
+          "id": 4331353664,
+          "parent_id": 90909,
+          "name": ".zsh_history",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/octet-stream",
+          "created_at": "2022-03-08T13:44:01.354630778+01:00"
+        },
+        {
+          "id": 4337543114,
+          "parent_id": 90909,
+          "name": "backend-events-consumer.zip",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/zip",
+          "created_at": "0001-01-01T00:00:00Z"
+        },
+        {
+          "id": 4339038287,
+          "parent_id": 90909,
+          "name": "learning-projects.zip",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/zip",
+          "created_at": "0001-01-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": 9090911,
+      "parent_id": 0,
+      "name": "some-screenshots",
+      "is_private": false,
+      "is_file": false,
+      "created_at": "2023-04-04T16:20:23.404434039+02:00",
+      "children": [
+        {
+          "id": 34535968783,
+          "parent_id": 9090911,
+          "name": "convo.jpg",
+          "is_private": true,
+          "is_file": true,
+          "file": "image/jpeg",
+          "created_at": "2023-04-04T16:20:35.970768154+02:00"
+        }
+      ]
+    },
+    {
+      "id": 2454444,
+      "parent_id": 0,
+      "name": "tr-screenshots",
+      "is_private": false,
+      "is_file": false,
+      "created_at": "0001-01-01T00:00:00Z",
+      "children": [
+        {
+          "id": 24352341769795,
+          "parent_id": 2454444,
+          "name": "Archive 2.zip",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/zip",
+          "created_at": "0001-01-01T00:00:00Z"
+        },
+        {
+          "id": 24352344714276,
+          "parent_id": 2454444,
+          "name": "Archive 3.zip",
+          "is_private": true,
+          "is_file": true,
+          "file": "application/zip",
+          "created_at": "0001-01-01T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": 9000097540,
+      "parent_id": 0,
+      "name": "User_123.7z",
+      "is_private": true,
+      "is_file": true,
+      "file": "application/octet-stream",
+      "created_at": "2023-01-14T15:13:28.208403558+01:00"
+    },
+    {
+      "id": 9000046160,
+      "parent_id": 0,
+      "name": "cavina-svadba.jpg",
+      "is_private": false,
+      "is_file": true,
+      "file": "image/jpeg",
+      "created_at": "2022-03-14T10:57:16.847354788+01:00"
+    }
+  ]
+}

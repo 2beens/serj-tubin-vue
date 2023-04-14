@@ -18,6 +18,7 @@ import './commands'
 
 // configs
 Cypress.config('apiEndpoint', 'http://localhost:9000')
+Cypress.config('fileBoxEndpoint', 'http://localhost:1987')
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

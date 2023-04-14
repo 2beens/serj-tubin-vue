@@ -181,7 +181,7 @@
               {{ fileTypes[item.file] }}
             </v-icon>
             <v-hover v-slot:default="{ hover }">
-              <div style="cursor: pointer;">
+              <div style="cursor: pointer;" :id="`file-${item.id}`">
                 <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }}</span>
                 <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
                 <v-icon v-if="hover">mdi-file</v-icon>
