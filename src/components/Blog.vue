@@ -93,7 +93,7 @@
         </div>
       </div>
 
-      <!-- PAGNIATION HERE -->
+      <!-- PAGINATION HERE -->
       <div class="text-center">
         <v-pagination
           @input="onBlogPageChange"
