@@ -10,8 +10,8 @@
       </template>
       <v-card>
         <v-card-title>
-          <span v-if="editBlogMode" class="headline">Edit Blog Post</span>
-          <span v-else class="headline">Add Blog Post</span>
+          <span v-if="editBlogMode" class="text-h5">Edit Blog Post</span>
+          <span v-else class="text-h5">Add Blog Post</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -118,7 +118,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'Blog',
@@ -164,7 +163,7 @@ export default {
 
       const vm = this
       axios
-        .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', qs.stringify(requestBody), {
+        .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             // TODO: cookies are sent with each request, no need to place them in headers
@@ -261,7 +260,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', qs.stringify(requestBody), {
+        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -331,7 +330,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', qs.stringify(requestBody), {
+        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')

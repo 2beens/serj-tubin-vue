@@ -4,12 +4,13 @@ module.exports = {
     node: true
   },
   'extends': [
-    'plugin:vue/essential',
     'eslint:recommended',
+    'plugin:vue/base',
+    'plugin:vuetify/base',
     'plugin:cypress/recommended'
   ],
-  "plugins": [
-    "cypress"
+  'plugins': [
+    'cypress'
   ],
   parserOptions: {
     ecmaVersion: 2020

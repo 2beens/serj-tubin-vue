@@ -122,7 +122,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 const apiEndpoints = {
   twoBeens: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_2BEENS,
@@ -268,7 +267,7 @@ export default {
 
       const vm = this
       axios
-        .post(vm.getApiEndpoint() + '/new', qs.stringify(requestBody), {
+        .post(vm.getApiEndpoint() + '/new', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')

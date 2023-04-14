@@ -23,17 +23,18 @@
     "vuetify": "^2.6.15"
   },
   "devDependencies": {
-    "@vue/cli-plugin-eslint": "^3.1.1",
-    "@vue/cli-plugin-router": "5.0.6",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-standard": "^8.0.1",
-    "eslint": "^6.7.2",
+    "eslint": "^8.38.0",
     "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^9.10.0",
+    "eslint-plugin-vuetify": "1.1.0",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-template-compiler": "^2.7.14"
   }

@@ -12,7 +12,7 @@
       </template>
       <v-card id="login-form">
         <v-card-title>
-          <span class="headline">Login</span>
+          <span class="text-h5">Login</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -64,7 +64,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'LoginLogoutButton',
@@ -99,7 +98,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', qs.stringify(requestBody))
+        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody)
         .then(function (response) {
           if (response.data === null) {
             console.warn(response)

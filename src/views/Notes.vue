@@ -39,7 +39,6 @@
 import NotesDialog from '../components/notes/NotesDialog.vue'
 import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'Notes',
@@ -99,7 +98,7 @@ export default {
 
       const vm = this
       axios
-        .put(process.env.VUE_APP_API_ENDPOINT + '/notes', qs.stringify(requestBody), {
+        .put(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -189,7 +188,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/notes', qs.stringify(requestBody), {
+        .post(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')

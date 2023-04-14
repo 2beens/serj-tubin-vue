@@ -52,7 +52,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'Board',
@@ -97,7 +96,7 @@ export default {
 
         const vm = this
         axios
-          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', qs.stringify(requestBody))
+          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody)
           .then(function (response) {
             if (response.data === null || !response.data.startsWith('added:')) {
               console.warn(response)

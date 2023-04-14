@@ -2,8 +2,8 @@
   <v-container>
     <v-card color="#26c6da">
       <v-card-title>
-        <span v-if="editMode" class="headline">Edit Note</span>
-        <span v-else class="headline">Add Note</span>
+        <span v-if="editMode" class="text-h5">Edit Note</span>
+        <span v-else class="text-h5">Add Note</span>
       </v-card-title>
       <v-card-text>
         <v-row>

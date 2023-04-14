@@ -2,7 +2,7 @@
   <v-container>
     <v-card color="#26c6da">
       <v-card-title>
-        <span class="headline">Edit File Info</span>
+        <span class="text-h5">Edit File Info</span>
       </v-card-title>
       <v-card-text v-if="fileInfo">
         <v-row>

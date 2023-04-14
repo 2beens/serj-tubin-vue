@@ -211,7 +211,6 @@
 <script>
 import UpdateFileInfoDialog from './UpdateFileInfoDialog.vue'
 import axios from 'axios'
-const qs = require('querystring')
 
 const fileTypes = {
   'application/pdf': 'mdi-file-pdf',
@@ -325,7 +324,7 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
-          qs.stringify(requestBody), {
+          requestBody, {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -409,7 +408,7 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
-          qs.stringify(requestBody), {
+          requestBody, {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -502,7 +501,7 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
-          qs.stringify({ ids: selectedIds.join(',') }), {
+          { ids: selectedIds.join(',') }, {
             headers: {
               'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
