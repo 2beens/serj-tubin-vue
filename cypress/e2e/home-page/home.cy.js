@@ -20,7 +20,7 @@ describe('Home Page Tests', () => {
     cy.get('#my-image').should('exist')
   })
 
-  it('app bar shows correct buttons', () => {
+  it('app bar shows correct buttons when not logged in', () => {
     cy.get('#login-button').should('exist').and('be.visible')
     cy.get('#logout-button').should('not.exist')
     cy.get('#main-menu-bar').then((el) => {
@@ -29,6 +29,7 @@ describe('Home Page Tests', () => {
       expect(el).to.contain('Visitor Board')
       expect(el).to.contain('Util')
       expect(el).to.contain('Netlog 🕸')
+      expect(el).to.contain('🤑SumUp🤑')
     })
   })
 
