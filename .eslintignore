@@ -1,4 +1,8 @@
 # TODO: this will ignore eslint on the whole project
 # when i have more time and patience to mingle with it, I'll enable it and fix all warnings/errors
 
-**/*
+# ignore all
+# **/*
+
+cypress_examples
+dist
