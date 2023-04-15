@@ -89,7 +89,7 @@
                   class="text-left pa-md-0"
                 >
                   <a
-                    :href="visit.url"
+                    v-bind:href="visit.url"
                     target="_blank"
                   >{{ visit.url }}</a>
                 </v-col>
