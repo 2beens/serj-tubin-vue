@@ -3,8 +3,14 @@
     <v-row>
       <v-col>
         <h2>Work in constant progress 👨🏼‍💻🛠</h2>
-        <img id="my-image" alt="serj-tubin" src="../assets/ja.png" />
-        <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
+        <img
+          id="my-image"
+          alt="serj-tubin"
+          src="../assets/ja.png"
+        >
+        <h3 style="margin: 40px 0 0">
+          A personal tech sandbox
+        </h3>
         <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
       </v-col>
     </v-row>
@@ -16,8 +22,12 @@
     </v-row>
     <v-row>
       <v-col id="quote-section">
-        <h3 id="quote-text">{{ quote.text }}</h3>
-        <h5 id="quote-author">{{ quote.author }}</h5>
+        <h3 id="quote-text">
+          {{ quote.text }}
+        </h3>
+        <h5 id="quote-author">
+          {{ quote.author }}
+        </h5>
       </v-col>
     </v-row>
 

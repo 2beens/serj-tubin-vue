@@ -2,33 +2,53 @@
   <v-container>
     <h2>📝 Notes 📝</h2>
 
-    <v-dialog @keydown.esc="onAbortEditNote" v-model="showDialog" persistent max-width="800px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="teal lighten-1" large icon v-bind="attrs" v-on="on">
-          <v-icon dark> mdi-plus </v-icon>
+    <v-dialog
+      v-model="showDialog"
+      persistent
+      max-width="800px"
+      @keydown.esc="onAbortEditNote"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          color="teal lighten-1"
+          large
+          icon
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon dark>
+            mdi-plus
+          </v-icon>
         </v-btn>
       </template>
       <notes-dialog
-        :editMode="editMode"
-        :selectedNote="selectedNote"
-        :editedNote="editedNote"
-        v-on:confirm-clicked="onConfirmClicked($event)"
+        :edit-mode="editMode"
+        :selected-note="selectedNote"
+        :edited-note="editedNote"
+        @confirm-clicked="onConfirmClicked($event)"
       />
     </v-dialog>
 
     <notes-list
-      :notes="this.notes"
-      v-on:delete-note="deleteNote($event.id, $event.title)"
-      v-on:edit-note="onOpenEditNoteDialog($event)"
-      v-on:update-note-in-place="onUpdateNote($event)"
+      :notes="notes"
+      @delete-note="deleteNote($event.id, $event.title)"
+      @edit-note="onOpenEditNoteDialog($event)"
+      @update-note-in-place="onUpdateNote($event)"
     />
 
     <div id="snackbar-div">
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
 
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        <template #action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </div>
@@ -58,6 +78,28 @@ export default {
       snackbarText: '',
       showSnackbar: false
     }
+  },
+
+  mounted: function () {
+    const vm = this
+    axios
+      .get(process.env.VUE_APP_API_ENDPOINT + '/notes', {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        }
+      })
+      .then((response) => {
+        if (response === null || response.data === null) {
+          console.error('all notes - received null response / data')
+          return
+        }
+        vm.notes = response.data.notes
+        console.log(`received ${vm.notes.length} notes`)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
 
   methods: {
@@ -223,28 +265,6 @@ export default {
           vm.showDialog = false
         })
     }
-  },
-
-  mounted: function () {
-    const vm = this
-    axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/notes', {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-        }
-      })
-      .then((response) => {
-        if (response === null || response.data === null) {
-          console.error('all notes - received null response / data')
-          return
-        }
-        vm.notes = response.data.notes
-        console.log(`received ${vm.notes.length} notes`)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
   }
 }
 </script>

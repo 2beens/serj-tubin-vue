@@ -2,13 +2,13 @@
   <div id="sidebar">
     <div id="geo-info">
       You are (probably) requesting from:
-      <p id="geo-city"></p>
+      <p id="geo-city" />
     </div>
     <div id="weather-info">
       Weather there:
-      <p id="weather-now"></p>
+      <p id="weather-now" />
       Tomorrow:
-      <div id="weather-tomorrow"></div>
+      <div id="weather-tomorrow" />
     </div>
   </div>
 </template>

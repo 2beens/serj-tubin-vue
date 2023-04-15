@@ -8,25 +8,25 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
+              v-model="fileInfo.name"
               label="File Name"
               required
-              v-model="fileInfo.name"
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
             <v-checkbox
-              class="ma-0"
               v-model="fileInfo.is_private"
+              class="ma-0"
               hide-details
               label="Is Private?"
-            ></v-checkbox>
+            />
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           elevation="2"
           fab
@@ -34,12 +34,12 @@
           large
           outlined
           color="green"
-          @click="$emit('confirm-clicked', fileInfo)"
           :disabled="confirmDisabled"
+          @click="$emit('confirm-clicked', fileInfo)"
         >
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-spacer></v-spacer>
+        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-container>
@@ -49,6 +49,10 @@
 export default {
   name: 'NotesDialog',
 
+  props: {
+    fileInfo: Object,
+  },
+
   computed: {
     confirmDisabled () {
       return !this.fileInfo || !this.fileInfo.name || this.fileInfo.name === ''
@@ -57,10 +61,6 @@ export default {
 
   mounted () {
     console.log('dialog file info', this.fileInfo)
-  },
-
-  props: {
-    fileInfo: Object,
   }
 }
 </script>

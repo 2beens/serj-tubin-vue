@@ -1,5 +1,9 @@
 <template>
-  <v-container id="files-box-container" class="mb-10" v-if="this.$root.loggedIn">
+  <v-container
+    v-if="$root.loggedIn"
+    id="files-box-container"
+    class="mb-10"
+  >
     <h2>Files Box</h2>
 
     <v-card
@@ -8,19 +12,22 @@
     >
       <v-sheet class="pa-4 teal darken-3">
         <v-row class="ma-2 mt-0">
-          <v-col cols="12" class="pa-0 ma-0">
+          <v-col
+            cols="12"
+            class="pa-0 ma-0"
+          >
             <v-file-input
               v-model="inputFiles"
               multiple
               show-size
               label="File upload (select the dest folder first)"
-            ></v-file-input>
+            />
           </v-col>
           <v-progress-linear
-            color="teal"
             v-show="uploadingFile"
+            color="teal"
             :value="uploadPercentage"
-          ></v-progress-linear>
+          />
         </v-row>
 
         <v-row class="ma-2">
@@ -34,33 +41,60 @@
               <v-icon>mdi-close </v-icon>
             </v-btn>
           </v-col>
-          <v-col v-if="noItemsSelected" cols="1">
-            <br/>
+          <v-col
+            v-if="noItemsSelected"
+            cols="1"
+          >
+            <br>
           </v-col>
-          <v-col v-else-if="oneItemSelected" cols="10" class="ma-0">
-            <span v-if="oneFileSelected" style="color: white; float: left; font-weight: bold">{{ this.selectedItems[0].name }}</span>
-            <span v-else style="color: white; float: left; font-weight: bold">
+          <v-col
+            v-else-if="oneItemSelected"
+            cols="10"
+            class="ma-0"
+          >
+            <span
+              v-if="oneFileSelected"
+              style="color: white; float: left; font-weight: bold"
+            >{{ selectedItems[0].name }}</span>
+            <span
+              v-else
+              style="color: white; float: left; font-weight: bold"
+            >
               <v-icon style="float: left; color: blue;">mdi-folder</v-icon>
-              {{ this.selectedItems[0].name }} [{{ this.selectedItems[0].children ? this.selectedItems[0].children.length : 0 }}]
+              {{ selectedItems[0].name }} [{{ selectedItems[0].children ? selectedItems[0].children.length : 0 }}]
             </span>
           </v-col>
-          <v-col v-else cols="3" class="ma-0" style="color: white; float: left; font-weight: bold">
-            {{ this.selectedItems.length }} selected items
+          <v-col
+            v-else
+            cols="3"
+            class="ma-0"
+            style="color: white; float: left; font-weight: bold"
+          >
+            {{ selectedItems.length }} selected items
           </v-col>
         </v-row>
 
         <v-row class="ma-2">
-          <v-col cols="4" class="pa-0 ma-0">
+          <v-col
+            cols="4"
+            class="pa-0 ma-0"
+          >
             <v-checkbox
-              class="ma-0"
               v-model="caseSensitive"
+              class="ma-0"
               dark
               hide-details
               label="Case sensitive"
-            ></v-checkbox>
+            />
           </v-col>
-          <v-col class="pa-0 ma-0" cols="2" />
-          <v-col class="pa-0 ma-0" cols="6">
+          <v-col
+            class="pa-0 ma-0"
+            cols="2"
+          />
+          <v-col
+            class="pa-0 ma-0"
+            cols="6"
+          >
             <v-btn
               fab
               small
@@ -119,19 +153,19 @@
               <v-icon>mdi-file-find</v-icon>
             </v-btn>
             <v-dialog
-              @keydown.esc="showDialog = false"
               v-model="showDialog"
               persistent
               max-width="800px"
+              @keydown.esc="showDialog = false"
             >
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-btn
                   color="yellow"
                   large
                   icon
                   v-bind="attrs"
-                  v-on="on"
                   :disabled="!oneFileSelected"
+                  v-on="on"
                 >
                   <v-icon dark>
                     mdi-wrench
@@ -139,8 +173,8 @@
                 </v-btn>
               </template>
               <update-file-info-dialog
-                :fileInfo="this.selectedItems[0]"
-                v-on:confirm-clicked="onUpdateFileConfirmClicked($event)"
+                :file-info="selectedItems[0]"
+                @confirm-clicked="onUpdateFileConfirmClicked($event)"
               />
             </v-dialog>
           </v-col>
@@ -156,7 +190,7 @@
               hide-details
               clearable
               clear-icon="mdi-close-circle-outline"
-            ></v-text-field>
+            />
           </v-col>
         </v-row>
       </v-sheet>
@@ -172,19 +206,41 @@
           :search="search"
           :filter="filter"
         >
-          <template v-slot:label="{ item, open }">
-            <v-icon style="float: left; color: #930007;" v-if="item.is_file && item.is_private">mdi-lock</v-icon>
-            <v-icon style="float: left; color: #3147c0;"  v-if="!item.file">
+          <template #label="{ item, open }">
+            <v-icon
+              v-if="item.is_file && item.is_private"
+              style="float: left; color: #930007;"
+            >
+              mdi-lock
+            </v-icon>
+            <v-icon
+              v-if="!item.file"
+              style="float: left; color: #3147c0;"
+            >
               {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
             </v-icon>
-            <v-icon style="float: left; color: #3150f9;"  v-else>
+            <v-icon
+              v-else
+              style="float: left; color: #3150f9;"
+            >
               {{ fileTypes[item.file] }}
             </v-icon>
-            <v-hover v-slot:default="{ hover }">
-              <div style="cursor: pointer;" :id="`file-${item.id}`">
-                <span v-if="item.is_file" style="float: left; font-weight: bold">{{ item.name }}</span>
-                <span v-else style="float: left; font-weight: bold">{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
-                <v-icon v-if="hover">mdi-file</v-icon>
+            <v-hover v-slot="{ hover }">
+              <div
+                :id="`file-${item.id}`"
+                style="cursor: pointer;"
+              >
+                <span
+                  v-if="item.is_file"
+                  style="float: left; font-weight: bold"
+                >{{ item.name }}</span>
+                <span
+                  v-else
+                  style="float: left; font-weight: bold"
+                >{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
+                <v-icon v-if="hover">
+                  mdi-file
+                </v-icon>
               </div>
             </v-hover>
           </template>
@@ -194,7 +250,7 @@
 
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn
           :color="snackbarColor"
           text

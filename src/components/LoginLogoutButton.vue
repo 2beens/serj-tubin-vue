@@ -1,19 +1,31 @@
 <template>
   <div>
     <v-btn
-      class="mt-1"
+      v-if="$root.loggedIn"
       id="logout-button"
+      class="mt-1"
       icon
-      v-if="this.$root.loggedIn"
-      @click="onLogoutClick"
       color="teal lighten-1"
+      @click="onLogoutClick"
     >
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
-    <v-dialog v-model="showLoginDialog" persistent max-width="400px" v-else>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn class="ma-1" id="login-button" icon v-bind="attrs" v-on="on" color="teal lighten-1">
+    <v-dialog
+      v-else
+      v-model="showLoginDialog"
+      persistent
+      max-width="400px"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          id="login-button"
+          class="ma-1"
+          icon
+          v-bind="attrs"
+          color="teal lighten-1"
+          v-on="on"
+        >
           <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>
@@ -27,32 +39,43 @@
               <v-col cols="12">
                 <v-text-field
                   id="login-form-username"
+                  v-model="user.name"
                   label="Username"
                   required
                   autofocus
-                  v-model="user.name"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   id="login-form-password"
+                  v-model="user.password"
                   label="Password"
                   required
-                  v-model="user.password"
                   append-icon="mdi-eye-off"
                   type="password"
                   name="input-10-1"
                   counter
                   @keyup="loginOnEnter"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="showLoginDialog = false"> Abort </v-btn>
-          <v-btn color="blue darken-1" text @click="onLoginClick" id="login-form-login-button">
+          <v-spacer />
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="showLoginDialog = false"
+          >
+            Abort
+          </v-btn>
+          <v-btn
+            id="login-form-login-button"
+            color="blue darken-1"
+            text
+            @click="onLoginClick"
+          >
             Login!
           </v-btn>
         </v-card-actions>
@@ -63,8 +86,15 @@
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
 
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        <template #action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </div>

@@ -1,35 +1,68 @@
 <template>
-  <v-container v-if="this.$root.loggedIn">
+  <v-container v-if="$root.loggedIn">
     <h2>URL Shortener</h2>
     <h4>Fun fact: uses a service written in Rust</h4>
 
     <v-form id="input-field">
       <v-row>
-        <v-col cols="8" sm="8">
-          <v-text-field v-model="url" label="URL" outlined></v-text-field>
+        <v-col
+          cols="8"
+          sm="8"
+        >
+          <v-text-field
+            v-model="url"
+            label="URL"
+            outlined
+          />
         </v-col>
 
-        <v-col cols="3" sm="3">
-          <v-text-field v-model="customid" label="Custom ID" outlined></v-text-field>
+        <v-col
+          cols="3"
+          sm="3"
+        >
+          <v-text-field
+            v-model="customid"
+            label="Custom ID"
+            outlined
+          />
         </v-col>
-        <v-col cols="1" sm="1">
-          <v-btn style="margin-top: 7px" @click="addUrl"> Shorten! </v-btn>
+        <v-col
+          cols="1"
+          sm="1"
+        >
+          <v-btn
+            style="margin-top: 7px"
+            @click="addUrl"
+          >
+            Shorten!
+          </v-btn>
         </v-col>
       </v-row>
     </v-form>
 
     <v-row>
-      <v-col cols="2" style="margin-top: 20px">
+      <v-col
+        cols="2"
+        style="margin-top: 20px"
+      >
         Use {{ use2beensUrl ? '2beens' : 'serj-tubin' }}
       </v-col>
       <v-col cols="1">
-        <v-switch v-model="use2beensUrl"></v-switch>
+        <v-switch v-model="use2beensUrl" />
       </v-col>
       <v-col cols="6">
-        <h4 style="margin-top: 15px">Current URLs saved</h4>
+        <h4 style="margin-top: 15px">
+          Current URLs saved
+        </h4>
       </v-col>
-      <v-col cols="3" style="padding: 22px">
-        <v-alert dense :type="status.type">
+      <v-col
+        cols="3"
+        style="padding: 22px"
+      >
+        <v-alert
+          dense
+          :type="status.type"
+        >
           {{ status.message }}
         </v-alert>
       </v-col>
@@ -45,11 +78,16 @@
               label="Search"
               single-line
               hide-details
-            ></v-text-field>
+            />
           </v-card-title>
 
-          <v-data-table id="data-table" :headers="headers" :items="urls" :search="searchString">
-            <template v-slot:item.url="props">
+          <v-data-table
+            id="data-table"
+            :headers="headers"
+            :items="urls"
+            :search="searchString"
+          >
+            <template #item.url="props">
               <v-edit-dialog
                 :return-value.sync="props.item.url"
                 @save="save"
@@ -58,25 +96,28 @@
                 @close="close"
               >
                 {{ props.item.url }}
-                <template v-slot:input>
+                <template #input>
                   <v-text-field
                     v-model="props.item.url"
                     :rules="[max25chars]"
                     label="Edit"
                     single-line
                     counter
-                  ></v-text-field>
+                  />
                 </template>
               </v-edit-dialog>
             </template>
 
-            <template v-slot:item.id="props">
-              <a :href="currentApiEndpoint + '/l/' + props.item.id" target="_blank">{{
+            <template #item.id="props">
+              <a
+                :href="currentApiEndpoint + '/l/' + props.item.id"
+                target="_blank"
+              >{{
                 props.item.id
               }}</a>
             </template>
 
-            <template v-slot:item.copy="props">
+            <template #item.copy="props">
               <v-btn
                 class="mx-2"
                 fab
@@ -89,8 +130,15 @@
               </v-btn>
             </template>
 
-            <template v-slot:item.delete="props">
-              <v-btn class="mx-2" fab dark x-small color="error" @click="deleteUrl(props.item.id)">
+            <template #item.delete="props">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="error"
+                @click="deleteUrl(props.item.id)"
+              >
                 <v-icon> mdi-close </v-icon>
               </v-btn>
             </template>
@@ -99,11 +147,22 @@
       </v-col>
     </v-row>
 
-    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+    <v-snackbar
+      v-model="snack"
+      :timeout="3000"
+      :color="snackColor"
+    >
       {{ snackText }}
 
-      <template v-slot:action="{ attrs }">
-        <v-btn v-bind="attrs" color="red" text @click="snack = false"> Close </v-btn>
+      <template #action="{ attrs }">
+        <v-btn
+          v-bind="attrs"
+          color="red"
+          text
+          @click="snack = false"
+        >
+          Close
+        </v-btn>
         <v-btn
           v-bind="attrs"
           color="primary"
@@ -150,12 +209,6 @@ const statuses = {
 export default {
   name: 'URLShortener',
 
-  computed: {
-    currentApiEndpoint() {
-      return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
-    }
-  },
-
   data: () => ({
     use2beensUrl: true,
     searchString: '',
@@ -188,6 +241,12 @@ export default {
       }
     ]
   }),
+
+  computed: {
+    currentApiEndpoint() {
+      return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
+    }
+  },
 
   mounted: function () {
     if (!this.$root.loggedIn) {

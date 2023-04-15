@@ -1,26 +1,91 @@
 <template>
   <v-app>
-    <v-app-bar app id="main-menu-bar" color="black">
-      <v-spacer></v-spacer>
-      <v-btn color="#4b9ff2" text rounded to="/">Home</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/about">About</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/board">Visitor Board</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/util">Util</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/netlog">Netlog 🕸</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/url-shortener" v-if="this.$root.loggedIn">URLs 🌏</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/notes" v-if="this.$root.loggedIn">Notes 📝</v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/sumup">🤑SumUp🤑</v-btn>
-      <v-spacer></v-spacer>
+    <v-app-bar
+      id="main-menu-bar"
+      app
+      color="black"
+    >
+      <v-spacer />
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/"
+      >
+        Home
+      </v-btn>
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/about"
+      >
+        About
+      </v-btn>
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/board"
+      >
+        Visitor Board
+      </v-btn>
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/util"
+      >
+        Util
+      </v-btn>
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/netlog"
+      >
+        Netlog 🕸
+      </v-btn>
+      <v-btn
+        v-if="$root.loggedIn"
+        color="#4b9ff2"
+        text
+        rounded
+        to="/url-shortener"
+      >
+        URLs 🌏
+      </v-btn>
+      <v-btn
+        v-if="$root.loggedIn"
+        color="#4b9ff2"
+        text
+        rounded
+        to="/notes"
+      >
+        Notes 📝
+      </v-btn>
+      <v-btn
+        color="#4b9ff2"
+        text
+        rounded
+        to="/sumup"
+      >
+        🤑SumUp🤑
+      </v-btn>
+      <v-spacer />
       <LoginLogoutButton />
     </v-app-bar>
 
     <v-main>
-      <router-view></router-view>
+      <router-view />
     </v-main>
 
-    <div id="consent-div" v-show="showConsent">
+    <div
+      v-show="showConsent"
+      id="consent-div"
+    >
       <cookie-consent>
-        <template v-slot:message>
+        <template #message>
           <div style="color: white">
             <p>Hey, over here 👋</p>
             <p>
@@ -34,9 +99,15 @@
             </p>
           </div>
         </template>
-        <template v-slot:button>
-          <button id="cookies-ok-btn" style="background-color: black" class="btn btn-info"
-            onclick="location.reload()">Yeah, sure...</button>
+        <template #button>
+          <button
+            id="cookies-ok-btn"
+            style="background-color: black"
+            class="btn btn-info"
+            onclick="location.reload()"
+          >
+            Yeah, sure...
+          </button>
         </template>
       </cookie-consent>
     </div>
@@ -62,6 +133,11 @@ export default {
       showConsent: true
     }
   },
+  watch: {
+    $route(to, from) {
+      console.log(`app: route change from ${from.path} to ${to.path}`)
+    }
+  },
   mounted: function () {
     this.showConsent = !(this.getCookie('cookieconsent_status'))
 
@@ -74,11 +150,6 @@ export default {
     }
 
     this.$root.loggedIn = true
-  },
-  watch: {
-    $route(to, from) {
-      console.log(`app: route change from ${from.path} to ${to.path}`)
-    }
   }
 }
 </script>

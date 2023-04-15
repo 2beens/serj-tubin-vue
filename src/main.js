@@ -53,8 +53,8 @@ Vue.mixin({
 new Vue({
   router,
   vuetify,
-  render: function (h) { return h(App) },
   data: {
     loggedIn: false
-  }
+  },
+  render: function (h) { return h(App) }
 }).$mount('#app')
