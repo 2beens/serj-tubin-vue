@@ -1,29 +1,50 @@
 <template>
   <v-container id="main">
     <h2>📝 SumUp Testing / Experimenting / Learning 📝</h2>
-    <h4>Use this page to log in to your <a href="https://sumup.com/">SumUp account</a> via OAuth2 and get your personal details, transactions,
-      etc.</h4>
+    <h4>
+      Use this page to log in to your <a href="https://sumup.com/">SumUp account</a> via OAuth2 and get your personal details, transactions,
+      etc.
+    </h4>
 
-    <v-row justify="center" style="margin-top: 20px">
-      <v-col v-if="user" cols="auto">
-        <v-btn @click="onLogoutClick" color="warning" height="72" min-width="164">
+    <v-row
+      justify="center"
+      style="margin-top: 20px"
+    >
+      <v-col
+        v-if="user"
+        cols="auto"
+      >
+        <v-btn
+          color="warning"
+          height="72"
+          min-width="164"
+          @click="onLogoutClick"
+        >
           Logout from SumUp
           <v-icon>mdi-logout</v-icon>
         </v-btn>
       </v-col>
-      <v-col v-else cols="auto">
-        <v-btn @click="onLoginClick" color="success" height="72" min-width="164">
+      <v-col
+        v-else
+        cols="auto"
+      >
+        <v-btn
+          color="success"
+          height="72"
+          min-width="164"
+          @click="onLoginClick"
+        >
           Login with SumUp
           <v-icon>mdi-login</v-icon>
         </v-btn>
         <v-combobox
-          style="cursor: pointer; margin-top: 20px;"
           v-model="environment"
+          style="cursor: pointer; margin-top: 20px;"
           :items="['local', 'theta', 'staging', 'live']"
           label="Environment"
           chips
           outlined
-        ></v-combobox>
+        />
       </v-col>
     </v-row>
 
@@ -37,17 +58,27 @@
       </v-row>
 
       <v-row justify="center">
-        <v-divider :thickness="6" color="white"></v-divider>
+        <v-divider
+          :thickness="6"
+          color="white"
+        />
       </v-row>
       <v-row>
         <v-col cols="auto">
-          <v-btn @click="onGetMoreUserDetailsClick" color="info" height="50" min-width="120">
+          <v-btn
+            color="info"
+            height="50"
+            min-width="120"
+            @click="onGetMoreUserDetailsClick"
+          >
             Get More User Details
             <v-icon>mdi-account-arrow-down</v-icon>
           </v-btn>
         </v-col>
         <v-col>
-          <h3 style="color: aquamarine">{{ merchantCode }}</h3>
+          <h3 style="color: aquamarine">
+            {{ merchantCode }}
+          </h3>
         </v-col>
       </v-row>
       <v-row v-if="userDetailsJson">
@@ -58,25 +89,39 @@
             row-height="15"
             bg-color="light-blue"
             color="black"
-          ></v-textarea>
+          />
         </v-col>
       </v-row>
 
       <v-row justify="center">
-        <v-divider :thickness="6" color="white"></v-divider>
+        <v-divider
+          :thickness="6"
+          color="white"
+        />
       </v-row>
       <h3>Transactions</h3>
       <v-row>
         <v-col cols="auto">
-          <v-btn @click="onGetTransactionsClick" color="info" height="50" min-width="120">
+          <v-btn
+            color="info"
+            height="50"
+            min-width="120"
+            @click="onGetTransactionsClick"
+          >
             Get Transaction History
             <v-icon>mdi-cash</v-icon>
           </v-btn>
         </v-col>
       </v-row>
       <v-row>
-        <v-col v-if="transactions" cols="10">
-          <div v-for="tr in transactions" :key="tr.id">
+        <v-col
+          v-if="transactions"
+          cols="10"
+        >
+          <div
+            v-for="tr in transactions"
+            :key="tr.id"
+          >
             <p
               v-if="tr.status === 'SUCCESSFUL'"
               style="background-color: green; border-radius: 5px"
@@ -85,23 +130,32 @@
               <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
-            <p v-else-if="tr.status === 'FAILED'" style="background-color: red; border-radius: 5px">
+            <p
+              v-else-if="tr.status === 'FAILED'"
+              style="background-color: red; border-radius: 5px"
+            >
               ** {{ tr.timestamp }} ->
               <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
-            <p v-else style="background-color: gray">
+            <p
+              v-else
+              style="background-color: gray"
+            >
               ** {{ tr.timestamp }} ->
               <span style="font-weight: bold; background-color: black; border-radius: 5px">{{
-                  tr.amount
-                }}</span>
+                tr.amount
+              }}</span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
           </div>
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-divider :thickness="6" color="white"></v-divider>
+        <v-divider
+          :thickness="6"
+          color="white"
+        />
       </v-row>
     </div>
 
@@ -109,8 +163,15 @@
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
 
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        <template #action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </div>

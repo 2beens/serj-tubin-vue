@@ -4,10 +4,17 @@
       Dear visitors, feel free to leave any junk messages here, and let's see if this board can be
       hacked and screwed 🤔👀🤷‍♂️
     </h5>
-    <div id="board" data-app="true">
+    <div
+      id="board"
+      data-app="true"
+    >
       <div id="board-messages">
-        <div class="board-message" v-for="message in messages" :key="message.id">
-          <div v-bind:id="'message-' + message.id">
+        <div
+          v-for="message in messages"
+          :key="message.id"
+          class="board-message"
+        >
+          <div :id="'message-' + message.id">
             <p class="message-content">
               <v-btn
                 v-if="theRoot.loggedIn"
@@ -18,12 +25,13 @@
                 color="error"
                 @click="deleteMessage(message.id, message.message)"
               >
-                <v-icon dark>mdi-minus</v-icon>
+                <v-icon dark>
+                  mdi-minus
+                </v-icon>
               </v-btn>
               <span class="message-date">{{
                 getTimestampString(new Date(message.timestamp * 1000))
-              }}</span
-              >: [{{ message.author }}]
+              }}</span>: [{{ message.author }}]
               <strong>{{ message.message }}</strong>
             </p>
           </div>
@@ -31,20 +39,20 @@
       </div>
       <div id="board-controls">
         <input
+          id="author-input"
           type="text"
           placeholder="author: anonymous"
           class="board-input"
-          id="author-input"
           autocomplete="off"
-        />
+        >
         <input
+          id="message-input"
           type="text"
           placeholder="message ..."
-          v-on:keyup="sendMessage"
           class="board-input"
-          id="message-input"
           autocomplete="off"
-        />
+          @keyup="sendMessage"
+        >
       </div>
     </div>
   </v-container>
@@ -52,7 +60,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'Board',
@@ -81,49 +88,53 @@ export default {
   },
   methods: {
     sendMessage() {
-      if (event.keyCode === 13) {
-        const msgInput = document.getElementById('message-input')
-        const msgContent = msgInput.value
-        if (msgContent === '') {
-          return
-        }
-
-        const msgAuthor = document.getElementById('author-input').value
-
-        const requestBody = {
-          author: msgAuthor,
-          message: msgContent
-        }
-
-        const vm = this
-        axios
-          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', qs.stringify(requestBody))
-          .then(function (response) {
-            if (response.data === null || !response.data.startsWith('added:')) {
-              console.warn(response)
-              // TODO: show error
-              return
-            }
-
-            msgInput.value = ''
-            let msgCreator = 'anon'
-            if (msgAuthor !== '') {
-              msgCreator = msgAuthor
-            }
-
-            const newMessageId = response.data.split(':')[1]
-            vm.messages.push({
-              id: newMessageId,
-              timestamp: Math.floor(Date.now() / 1000),
-              message: msgContent,
-              author: msgCreator
-            })
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-          .finally(() => updateMessagesScroll())
+      if (event.keyCode !== 13) {
+        return
       }
+
+      const msgInput = document.getElementById('message-input')
+      const msgContent = msgInput.value
+      if (!msgContent) {
+        return
+      }
+
+      const requestBody = {
+        author: document.getElementById('author-input').value,
+        message: msgContent
+      }
+
+      const vm = this
+      axios
+        .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('added:')) {
+            console.warn(response)
+            // TODO: show error
+            return
+          }
+
+          msgInput.value = ''
+          let msgCreator = 'anon'
+          if (requestBody.author) {
+            msgCreator = requestBody.author
+          }
+
+          const newMessageId = response.data.split(':')[1]
+          vm.messages.push({
+            id: newMessageId,
+            timestamp: Math.floor(Date.now() / 1000),
+            message: msgContent,
+            author: msgCreator
+          })
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+        .finally(() => updateMessagesScroll())
     },
     deleteMessage: function (id, message) {
       if (!confirm('Are you sure you want to remove message [' + id + '] [' + message + ']?')) {

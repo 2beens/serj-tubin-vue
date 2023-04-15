@@ -1,16 +1,32 @@
 <template>
   <v-container class="mt-5">
     <div class="util-info-box">
-      <h5 class="util-info-box-title">Your User Agent</h5>
-      <h4 id="user-agent-value"></h4>
+      <h5 class="util-info-box-title">
+        Your User Agent
+      </h5>
+      <h4 id="user-agent-value" />
     </div>
     <div class="util-info-box">
-      <h5 class="util-info-box-title">Your IP Info</h5>
-      <h4 id="ip-addr-value">👀</h4>
+      <h5 class="util-info-box-title">
+        Your IP Info
+      </h5>
+      <h4 id="ip-addr-value">
+        👀
+      </h4>
     </div>
-    <div class="util-info-box" v-if="theRoot.loggedIn">
-      <h5 class="util-info-box-title">n8n</h5>
-      <button id="n8n-link" style="margin-bottom: 10px" class="btn btn-success" @click="openN8NInNewTab">
+    <div
+      v-if="theRoot.loggedIn"
+      class="util-info-box"
+    >
+      <h5 class="util-info-box-title">
+        n8n
+      </h5>
+      <button
+        id="n8n-link"
+        style="margin-bottom: 10px"
+        class="btn btn-success"
+        @click="openN8NInNewTab"
+      >
         Open >> n8n.serj-tubin.com
       </button>
     </div>
@@ -25,13 +41,13 @@ import FileBox from '@/components/filebox/FileBox.vue'
 
 export default {
   name: 'Util',
+  components: {
+    FileBox
+  },
   data: function () {
     return {
       theRoot: this.$root
     }
-  },
-  components: {
-    FileBox
   },
   mounted: function () {
     document.getElementById('user-agent-value').innerHTML = navigator.userAgent

@@ -1,18 +1,37 @@
 <template>
   <div>
-    <v-btn class="mt-1" id="logout-button" icon v-if="this.$root.loggedIn" @click="onLogoutClick" color="teal lighten-1">
+    <v-btn
+      v-if="$root.loggedIn"
+      id="logout-button"
+      class="mt-1"
+      icon
+      color="teal lighten-1"
+      @click="onLogoutClick"
+    >
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
-    <v-dialog v-model="showLoginDialog" persistent max-width="400px" v-else>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn class="ma-1" id="login-button" icon v-bind="attrs" v-on="on" color="teal lighten-1">
+    <v-dialog
+      v-else
+      v-model="showLoginDialog"
+      persistent
+      max-width="400px"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          id="login-button"
+          class="ma-1"
+          icon
+          v-bind="attrs"
+          color="teal lighten-1"
+          v-on="on"
+        >
           <v-icon>mdi-login</v-icon>
         </v-btn>
       </template>
       <v-card id="login-form">
         <v-card-title>
-          <span class="headline">Login</span>
+          <span class="text-h5">Login</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -20,32 +39,45 @@
               <v-col cols="12">
                 <v-text-field
                   id="login-form-username"
+                  v-model="user.name"
                   label="Username"
                   required
                   autofocus
-                  v-model="user.name"
-                ></v-text-field>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   id="login-form-password"
+                  v-model="user.password"
                   label="Password"
                   required
-                  v-model="user.password"
                   append-icon="mdi-eye-off"
                   type="password"
                   name="input-10-1"
                   counter
                   @keyup="loginOnEnter"
-                ></v-text-field>
+                />
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="showLoginDialog = false"> Abort </v-btn>
-          <v-btn color="blue darken-1" text @click="onLoginClick" id="login-form-login-button"> Login! </v-btn>
+          <v-spacer />
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="showLoginDialog = false"
+          >
+            Abort
+          </v-btn>
+          <v-btn
+            id="login-form-login-button"
+            color="blue darken-1"
+            text
+            @click="onLoginClick"
+          >
+            Login!
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -54,8 +86,15 @@
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
 
-        <template v-slot:action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        <template #action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="showSnackbar = false"
+          >
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </div>
@@ -64,7 +103,6 @@
 
 <script>
 import axios from 'axios'
-const qs = require('querystring')
 
 export default {
   name: 'LoginLogoutButton',
@@ -79,7 +117,7 @@ export default {
   methods: {
     loginOnEnter: function (e) {
       if (e.keyCode === 13) {
-        this.login()
+        this.onLoginClick()
       }
     },
     onLoginClick: function () {
@@ -99,7 +137,11 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', qs.stringify(requestBody))
+        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
         .then(function (response) {
           if (response.data === null) {
             console.warn(response)
