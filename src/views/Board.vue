@@ -80,53 +80,53 @@ export default {
   },
   methods: {
     sendMessage() {
-      if (event.keyCode === 13) {
-        const msgInput = document.getElementById('message-input')
-        const msgContent = msgInput.value
-        if (msgContent === '') {
-          return
-        }
-
-        const msgAuthor = document.getElementById('author-input').value
-
-        const requestBody = {
-          author: msgAuthor,
-          message: msgContent
-        }
-
-        const vm = this
-        axios
-          .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody, {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(function (response) {
-            if (response.data === null || !response.data.startsWith('added:')) {
-              console.warn(response)
-              // TODO: show error
-              return
-            }
-
-            msgInput.value = ''
-            let msgCreator = 'anon'
-            if (msgAuthor !== '') {
-              msgCreator = msgAuthor
-            }
-
-            const newMessageId = response.data.split(':')[1]
-            vm.messages.push({
-              id: newMessageId,
-              timestamp: Math.floor(Date.now() / 1000),
-              message: msgContent,
-              author: msgCreator
-            })
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-          .finally(() => updateMessagesScroll())
+      if (event.keyCode !== 13) {
+        return
       }
+
+      const msgInput = document.getElementById('message-input')
+      const msgContent = msgInput.value
+      if (!msgContent) {
+        return
+      }
+
+      const requestBody = {
+        author: document.getElementById('author-input').value,
+        message: msgContent
+      }
+
+      const vm = this
+      axios
+        .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function (response) {
+          if (response.data === null || !response.data.startsWith('added:')) {
+            console.warn(response)
+            // TODO: show error
+            return
+          }
+
+          msgInput.value = ''
+          let msgCreator = 'anon'
+          if (requestBody.author) {
+            msgCreator = msgAuthor
+          }
+
+          const newMessageId = response.data.split(':')[1]
+          vm.messages.push({
+            id: newMessageId,
+            timestamp: Math.floor(Date.now() / 1000),
+            message: msgContent,
+            author: msgCreator
+          })
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+        .finally(() => updateMessagesScroll())
     },
     deleteMessage: function (id, message) {
       if (!confirm('Are you sure you want to remove message [' + id + '] [' + message + ']?')) {
