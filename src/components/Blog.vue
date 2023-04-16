@@ -206,7 +206,6 @@
 
 <script>
 import axios from 'axios'
-import sanitizeHtml from 'sanitize-html'
 
 export default {
   name: 'Blog',
@@ -241,13 +240,6 @@ export default {
         }
         vm.posts = response.data.posts
         vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
-
-        // XSS: sanitize content
-        for (let i = 0; i < vm.posts.length; i++) {
-          if (vm.posts[i].content) {
-            vm.posts[i].content = sanitizeHtml(vm.posts[i].content)
-          }
-        }
       })
       .catch((error) => {
         console.log(error)
