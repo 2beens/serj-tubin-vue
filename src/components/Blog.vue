@@ -429,7 +429,7 @@ export default {
       }
 
       const requestBody = {
-        id: this.selectedPost.id,
+        id: parseInt(this.selectedPost.id),
         title: this.selectedPost.title,
         content: this.selectedPost.content
       }
