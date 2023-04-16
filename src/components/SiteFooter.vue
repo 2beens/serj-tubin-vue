@@ -25,10 +25,10 @@
           class="mx-4"
           dark
           icon
-          @click="goTo('fb')"
+          @click="goTo('gh')"
         >
-          <v-icon size="24px">
-            mdi-facebook
+          <v-icon size="35px">
+            mdi-github
           </v-icon>
         </v-btn>
 
@@ -36,11 +36,21 @@
           class="mx-4"
           dark
           icon
-          @click="goTo('gh')"
+          @click="goTo('insta')"
         >
-          <!-- TODO: FIXME -->
-          <v-icon size="24px">
-            mdi-github-circle
+          <v-icon size="35px">
+            mdi-instagram
+          </v-icon>
+        </v-btn>
+
+        <v-btn
+          class="mx-4"
+          dark
+          icon
+          @click="goTo('fb')"
+        >
+          <v-icon size="35px">
+            mdi-facebook
           </v-icon>
         </v-btn>
       </v-card-title>
@@ -77,6 +87,8 @@ export default {
     goTo: function (target) {
       if (target === 'gh') {
         window.open('https://github.com/2beens', '_blank').focus()
+      } else if (target === 'insta') {
+        window.open('https://www.instagram.com/2beens', '_blank').focus()
       } else if (target === 'fb') {
         window.open('https://www.facebook.com/srdjantubin', '_blank').focus()
       }
