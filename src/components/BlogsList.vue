@@ -208,7 +208,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Blog',
+  name: 'BlogsList',
   props: {
     title: String
   },

@@ -61,7 +61,7 @@ import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Notes',
+  name: 'NotesView',
 
   components: {
     NotesDialog,

@@ -131,7 +131,7 @@ import SourceIcon from '@/components/netlog/SourceIcon.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Netlog',
+  name: 'NetlogView',
   components: {
     SourceFilterGroup,
     SourceIcon

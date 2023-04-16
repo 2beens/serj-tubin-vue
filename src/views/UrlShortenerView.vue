@@ -207,7 +207,7 @@ const statuses = {
 }
 
 export default {
-  name: 'URLShortener',
+  name: 'UrlShortenerView',
 
   data: () => ({
     use2beensUrl: true,

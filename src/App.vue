@@ -112,19 +112,19 @@
       </cookie-consent>
     </div>
 
-    <Footer />
+    <SiteFooter />
   </v-app>
 </template>
 
 <script>
-import Footer from '@/components/Footer.vue'
+import SiteFooter from '@/components/SiteFooter.vue'
 import LoginLogoutButton from '@/components/LoginLogoutButton.vue'
 import CookieConsent from 'vue-cookieconsent-component'
 
 export default {
   name: 'App',
   components: {
-    Footer,
+    SiteFooter,
     LoginLogoutButton,
     CookieConsent
   },

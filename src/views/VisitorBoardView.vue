@@ -62,7 +62,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Board',
+  name: 'VisitorBoardView',
   data: function () {
     return {
       messages: [],

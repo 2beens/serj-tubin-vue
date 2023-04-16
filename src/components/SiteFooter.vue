@@ -38,6 +38,7 @@
           icon
           @click="goTo('gh')"
         >
+          <!-- TODO: FIXME -->
           <v-icon size="24px">
             mdi-github-circle
           </v-icon>
@@ -51,7 +52,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Footer',
+  name: 'SiteFooter',
   data: function () {
     return {
       versionInfo: '...'

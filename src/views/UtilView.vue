@@ -40,7 +40,7 @@ import axios from 'axios'
 import FileBox from '@/components/filebox/FileBox.vue'
 
 export default {
-  name: 'Util',
+  name: 'UtilView',
   components: {
     FileBox
   },

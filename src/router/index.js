@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '../views/HomeView.vue'
 
 Vue.use(VueRouter)
 
@@ -17,7 +17,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/Board.vue')
+      return import(/* webpackChunkName: "about" */ '../views/VisitorBoardView.vue')
     }
   },
   {
@@ -27,42 +27,42 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/About.vue')
+      return import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
     }
   },
   {
     path: '/util',
     name: 'Util',
     component: function () {
-      return import('../views/Util.vue')
+      return import('../views/UtilView.vue')
     }
   },
   {
     path: '/netlog',
     name: 'Netlog',
     component: function () {
-      return import('../views/Netlog.vue')
+      return import('../views/NetlogView.vue')
     }
   },
   {
     path: '/notes',
     name: 'Notes',
     component: function () {
-      return import('../views/Notes.vue')
+      return import('../views/NotesView.vue')
     }
   },
   {
     path: '/url-shortener',
     name: 'URL Shortener',
     component: function () {
-      return import('../views/URLShortener.vue')
+      return import('../views/UrlShortenerView.vue')
     }
   },
   {
     path: '/sumup',
     name: 'SumUp Experimentation',
     component: function () {
-      return import('../views/SumUp.vue')
+      return import('../views/SumUpView.vue')
     }
   },
   {
