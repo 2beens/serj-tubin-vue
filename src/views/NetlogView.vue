@@ -200,7 +200,6 @@ export default {
             `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }
@@ -235,7 +234,6 @@ export default {
             `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }

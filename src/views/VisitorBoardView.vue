@@ -145,7 +145,6 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })

@@ -382,7 +382,6 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
           requestBody, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }
@@ -424,7 +423,6 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           },
           responseType: 'blob'
@@ -466,7 +464,6 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
           requestBody, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }
@@ -510,7 +507,6 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             },
             onUploadProgress: function( progressEvent ) {
@@ -559,7 +555,6 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
           { ids: selectedIds.join(',') }, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
         })
@@ -598,7 +593,6 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })

@@ -169,7 +169,6 @@ export default {
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/a/logout', {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })
