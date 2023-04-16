@@ -110,7 +110,7 @@
 
             <template #item.id="props">
               <a
-                v-bind:href="currentApiEndpoint + '/l/' + props.item.id"
+                :href="currentApiEndpoint + '/l/' + props.item.id"
                 target="_blank"
               >{{
                 props.item.id

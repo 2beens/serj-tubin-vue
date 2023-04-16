@@ -6,9 +6,9 @@ module.exports = {
   'extends': [
     'eslint:recommended',
     'plugin:vue/base',
-    // 'plugin:vue/recommended',
+    // 'plugin:vuetify/base',
+    'plugin:vue/recommended',
     // 'plugin:vue/essential',
-    'plugin:vuetify/base',
     'plugin:cypress/recommended'
   ],
   'plugins': [
