@@ -7,8 +7,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/base',
     // 'plugin:vuetify/base',
-    'plugin:vue/recommended',
-    // 'plugin:vue/essential',
+    // 'plugin:vue/recommended',
+    'plugin:vue/essential',
     'plugin:cypress/recommended'
   ],
   'plugins': [
