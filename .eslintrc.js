@@ -5,8 +5,7 @@ module.exports = {
   },
   'extends': [
     'eslint:recommended',
-    'plugin:vue/base',
-    // 'plugin:vuetify/base',
+    'plugin:vuetify/base',
     // 'plugin:vue/recommended',
     'plugin:vue/essential',
     'plugin:cypress/recommended'
@@ -20,7 +19,6 @@ module.exports = {
   rules: {
     // override/add rules settings here, such as:
     // 'vue/no-unused-vars': 'error',
-    'vue/valid-v-slot': 'warn',
     'vue/no-mutating-props': 'warn',
     'no-console': process.env.VUE_APP_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.VUE_APP_ENV === 'production' ? 'warn' : 'off',
