@@ -366,7 +366,8 @@ export default {
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', requestBody, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {
@@ -435,7 +436,8 @@ export default {
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', requestBody, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {

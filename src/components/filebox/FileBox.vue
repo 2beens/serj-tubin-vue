@@ -383,7 +383,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
           requestBody, {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
           }
         )
@@ -465,7 +466,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
           requestBody, {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
           }
         )
@@ -508,7 +510,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData, {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             },
             onUploadProgress: function( progressEvent ) {
               const percentage = Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -556,7 +559,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
           { ids: selectedIds.join(',') }, {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
         })
         .then((response) => {

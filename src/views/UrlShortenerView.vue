@@ -328,7 +328,8 @@ export default {
       axios
         .post(vm.getApiEndpoint() + '/new', requestBody, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {
