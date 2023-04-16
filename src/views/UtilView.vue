@@ -40,7 +40,7 @@ import axios from 'axios'
 import FileBox from '@/components/filebox/FileBox.vue'
 
 export default {
-  name: 'Util',
+  name: 'UtilView',
   components: {
     FileBox
   },
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     openN8NInNewTab() {
-      window.open('https://n8n.serj-tubin.com', '_blank').focus()
+      window.open('https://n8n.serj-tubin.com', 'n8n serj', 'noopener').focus()
     }
   }
 }

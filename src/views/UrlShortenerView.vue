@@ -110,7 +110,7 @@
 
             <template #item.id="props">
               <a
-                v-bind:href="currentApiEndpoint + '/l/' + props.item.id"
+                :href="currentApiEndpoint + '/l/' + props.item.id"
                 target="_blank"
               >{{
                 props.item.id
@@ -207,7 +207,7 @@ const statuses = {
 }
 
 export default {
-  name: 'URLShortener',
+  name: 'UrlShortenerView',
 
   data: () => ({
     use2beensUrl: true,
@@ -328,8 +328,8 @@ export default {
       axios
         .post(vm.getApiEndpoint() + '/new', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {

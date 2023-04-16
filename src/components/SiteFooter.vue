@@ -1,46 +1,25 @@
 <template>
-  <v-footer
-    max-height="52"
-    dark
-    padless
-    fixed
-  >
-    <v-card
-      class="flex"
-      flat
-      tile
-    >
+  <v-footer max-height="52" dark padless fixed>
+    <v-card class="flex" flat tile>
       <v-card-title class="teal lighten-1">
         <strong class="subheading">Serj, Berlin 2021/2022</strong>
 
         <v-spacer />
 
-        <div id="version-info">
-          {{ new Date().getFullYear() }} — {{ versionInfo }}
-        </div>
+        <div id="version-info">{{ new Date().getFullYear() }} — {{ versionInfo }}</div>
 
         <v-spacer />
 
-        <v-btn
-          class="mx-4"
-          dark
-          icon
-          @click="goTo('fb')"
-        >
-          <v-icon size="24px">
-            mdi-facebook
-          </v-icon>
+        <v-btn class="mx-4" dark icon @click="goTo('gh')">
+          <v-icon size="35px"> mdi-github </v-icon>
         </v-btn>
 
-        <v-btn
-          class="mx-4"
-          dark
-          icon
-          @click="goTo('gh')"
-        >
-          <v-icon size="24px">
-            mdi-github-circle
-          </v-icon>
+        <v-btn class="mx-4" dark icon @click="goTo('insta')">
+          <v-icon size="35px"> mdi-instagram </v-icon>
+        </v-btn>
+
+        <v-btn class="mx-4" dark icon @click="goTo('fb')">
+          <v-icon size="35px"> mdi-facebook </v-icon>
         </v-btn>
       </v-card-title>
     </v-card>
@@ -51,7 +30,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Footer',
+  name: 'SiteFooter',
   data: function () {
     return {
       versionInfo: '...'
@@ -75,9 +54,11 @@ export default {
   methods: {
     goTo: function (target) {
       if (target === 'gh') {
-        window.open('https://github.com/2beens', '_blank').focus()
+        window.open('https://github.com/2beens', '2beens GitHub', 'noopener').focus()
+      } else if (target === 'insta') {
+        window.open('https://www.instagram.com/2beens', '2beens Insta', 'noopener').focus()
       } else if (target === 'fb') {
-        window.open('https://www.facebook.com/srdjantubin', '_blank').focus()
+        window.open('https://www.facebook.com/srdjantubin', 'Serj FB', 'noopener').focus()
       }
     }
   }

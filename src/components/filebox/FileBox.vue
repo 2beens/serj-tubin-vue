@@ -366,8 +366,9 @@ export default {
         return
       }
       const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
-      window.open(fileUrl, '') // TODO: in order to open private links, i need to store cookie in local storage,
+      // TODO: in order to open private links, i need to store cookie in local storage,
       // and later get it from there, in a page for the selected file
+      window.open(fileUrl, 'file', 'noopener')
     },
     onUpdateFileConfirmClicked (fileInfo) {
       this.showDialog = false
@@ -382,8 +383,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
           requestBody, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
           }
         )
@@ -424,7 +425,6 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           },
           responseType: 'blob'
@@ -466,8 +466,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
           requestBody, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
           }
         )
@@ -510,8 +510,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             },
             onUploadProgress: function( progressEvent ) {
               const percentage = Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -559,8 +559,8 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
           { ids: selectedIds.join(',') }, {
             headers: {
-              'Access-Control-Allow-Origin': '*',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+              'Content-Type': 'application/json'
             }
         })
         .then((response) => {
@@ -598,7 +598,6 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })

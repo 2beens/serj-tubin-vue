@@ -208,7 +208,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'Blog',
+  name: 'BlogsList',
   props: {
     title: String
   },
@@ -271,7 +271,6 @@ export default {
       axios
         .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             // TODO: cookies are sent with each request, no need to place them in headers
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
@@ -310,7 +309,6 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })
@@ -368,8 +366,8 @@ export default {
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {
@@ -438,8 +436,8 @@ export default {
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {

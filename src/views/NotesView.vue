@@ -61,7 +61,7 @@ import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Notes',
+  name: 'NotesView',
 
   components: {
     NotesDialog,
@@ -85,7 +85,6 @@ export default {
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/notes', {
         headers: {
-          'Access-Control-Allow-Origin': '*',
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
       })
@@ -142,8 +141,8 @@ export default {
       axios
         .put(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {
@@ -178,7 +177,6 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + `/notes/${id}`, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })
@@ -232,8 +230,8 @@ export default {
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
-            'Access-Control-Allow-Origin': '*',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            'Content-Type': 'application/json'
           }
         })
         .then(function (response) {

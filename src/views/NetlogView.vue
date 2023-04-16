@@ -38,10 +38,8 @@
               </v-form>
 
               <v-row>
-                <v-col
+                <v-col class="justify align"
                   cols="12"
-                  justify="end"
-                  align="end"
                 >
                   <!-- SEARCH MODES HERE - SOURCE -->
                   <SourceFilterGroup @source-changed="onSourceFilterChanged" />
@@ -89,7 +87,7 @@
                   class="text-left pa-md-0"
                 >
                   <a
-                    v-bind:href="visit.url"
+                    :href="visit.url"
                     target="_blank"
                   >{{ visit.url }}</a>
                 </v-col>
@@ -131,7 +129,7 @@ import SourceIcon from '@/components/netlog/SourceIcon.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Netlog',
+  name: 'NetlogView',
   components: {
     SourceFilterGroup,
     SourceIcon
@@ -202,7 +200,6 @@ export default {
             `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }
@@ -237,7 +234,6 @@ export default {
             `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'Access-Control-Allow-Origin': '*',
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
           }

@@ -31,7 +31,7 @@
       </v-col>
     </v-row>
 
-    <Blog title="Recent Posts" />
+    <BlogsList title="Recent Posts" />
   </v-container>
 </template>
 
@@ -39,14 +39,14 @@
 <script scoped>
 // @ is an alias to /src
 import SideBar from '@/components/SideBar.vue'
-import Blog from '@/components/Blog.vue'
+import BlogsList from '@/components/BlogsList.vue'
 import axios from 'axios'
 
 export default {
-  name: 'Home',
+  name: 'HomeView',
   components: {
     SideBar,
-    Blog
+    BlogsList
   },
   data: function () {
     return {
