@@ -38,10 +38,8 @@
               </v-form>
 
               <v-row>
-                <v-col
+                <v-col class="justify align"
                   cols="12"
-                  justify="end"
-                  align="end"
                 >
                   <!-- SEARCH MODES HERE - SOURCE -->
                   <SourceFilterGroup @source-changed="onSourceFilterChanged" />
