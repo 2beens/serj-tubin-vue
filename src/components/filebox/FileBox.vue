@@ -510,8 +510,7 @@ export default {
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData, {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-              'Content-Type': 'application/json'
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             },
             onUploadProgress: function( progressEvent ) {
               const percentage = Math.round((progressEvent.loaded / progressEvent.total) * 100)
