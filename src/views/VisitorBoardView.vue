@@ -30,7 +30,7 @@
                 </v-icon>
               </v-btn>
               <span class="message-date">{{
-                getTimestampString(new Date(message.timestamp * 1000))
+                getTimestampString(new Date(message.created_at))
               }}</span>: [{{ message.author }}]
               <strong>{{ message.message }}</strong>
             </p>
@@ -126,7 +126,7 @@ export default {
           const newMessageId = response.data.split(':')[1]
           vm.messages.push({
             id: newMessageId,
-            timestamp: Math.floor(Date.now() / 1000),
+            created_at: Date.now(),
             message: msgContent,
             author: msgCreator
           })
