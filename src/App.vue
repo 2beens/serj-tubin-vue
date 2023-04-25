@@ -165,13 +165,4 @@ export default {
   float: right;
   padding: 10px;
 }
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #264e77;
-  background-color: black;
-}
 </style>

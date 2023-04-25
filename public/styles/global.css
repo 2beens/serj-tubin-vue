@@ -1,1 +1,28 @@
-/* TODO: Check if needed  */
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2f72b5;
+  background-color: black;
+}
+
+/* * unvisited link */
+a:link {
+  color: rgb(20, 196, 255) !important;
+}
+
+/* visited link */
+a:visited {
+  color: rgb(5, 133, 175) !important;
+}
+
+/* mouse over link */
+a:hover {
+  color: rgb(7, 234, 158) !important;
+}
+
+/* selected link */
+a:active {
+  color: rgb(5, 152, 175) !important;
+}
