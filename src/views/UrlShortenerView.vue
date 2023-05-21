@@ -430,9 +430,7 @@ h4,
 h5 {
   color: #26c6da;
 }
-</style>
 
-<style scoped>
 #input-field {
   padding: 15px 80px 0 15px;
   background: #26c6da;

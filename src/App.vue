@@ -65,6 +65,7 @@
         Notes 📝
       </v-btn>
       <v-btn
+        v-if="$root.loggedIn"
         color="#4b9ff2"
         text
         rounded
