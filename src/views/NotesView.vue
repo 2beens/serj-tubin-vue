@@ -248,7 +248,7 @@ export default {
 
           const noteId = response.data.split(':')[1]
           vm.notes.unshift({
-            id: noteId,
+            id: parseInt(noteId),
             title: requestBody.title,
             content: requestBody.content,
             created_at: vm.date2string(Date.now())

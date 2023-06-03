@@ -80,6 +80,7 @@ export default {
         {text: 'IsTesting', value: 'isTesting'},
       ],
       stats: [],
+      total: 0,
     }
   },
 
@@ -90,7 +91,7 @@ export default {
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/gymstats/list', {
+      .get(process.env.VUE_APP_API_ENDPOINT + '/gymstats/list/page/1/size/200', {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
@@ -100,7 +101,8 @@ export default {
           console.error('get all urls - received null response / data')
           return
         }
-        vm.stats = response.data
+        vm.stats = response.data.exercises
+        vm.total = response.data.total
 
         for (let i = 0; i < vm.stats.length; i++) {
           vm.stats[i].metadataJson = JSON.stringify(vm.stats[i].metadata)
