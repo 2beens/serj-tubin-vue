@@ -303,9 +303,9 @@ export default {
     }, 30000)
   },
   methods: {
-    copyLinkToClipboard(linkId) {
+    async copyLinkToClipboard(linkId) {
       const linkUrl = `${this.getApiEndpoint()}/l/${linkId}`
-      navigator.clipboard.writeText(linkUrl)
+      await navigator.clipboard.writeText(linkUrl)
       this.snack = true
       this.snackColor = 'success'
       this.snackText = `copied: ${linkUrl}`
