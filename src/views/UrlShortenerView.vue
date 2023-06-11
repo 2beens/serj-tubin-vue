@@ -303,9 +303,9 @@ export default {
     }, 30000)
   },
   methods: {
-    copyLinkToClipboard(linkId) {
+    async copyLinkToClipboard(linkId) {
       const linkUrl = `${this.getApiEndpoint()}/l/${linkId}`
-      navigator.clipboard.writeText(linkUrl)
+      await navigator.clipboard.writeText(linkUrl)
       this.snack = true
       this.snackColor = 'success'
       this.snackText = `copied: ${linkUrl}`
@@ -430,9 +430,7 @@ h4,
 h5 {
   color: #26c6da;
 }
-</style>
 
-<style scoped>
 #input-field {
   padding: 15px 80px 0 15px;
   background: #26c6da;

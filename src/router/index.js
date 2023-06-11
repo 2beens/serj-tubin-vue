@@ -45,6 +45,13 @@ const routes = [
     }
   },
   {
+    path: '/gymstats',
+    name: 'GymStats',
+    component: function () {
+      return import('../views/GymStatsView.vue')
+    }
+  },
+  {
     path: '/notes',
     name: 'Notes',
     component: function () {
