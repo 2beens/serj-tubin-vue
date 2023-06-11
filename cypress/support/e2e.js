@@ -19,6 +19,8 @@ import './commands'
 // configs
 Cypress.config('apiEndpoint', 'http://localhost:9000')
 Cypress.config('fileBoxEndpoint', 'http://localhost:1987')
+Cypress.config('viewportHeight', 800)
+Cypress.config('viewportWidth', 1600)
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
