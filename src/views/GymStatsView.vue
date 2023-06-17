@@ -2,15 +2,34 @@
   <v-container>
     <h2>💪 GymStats 💪</h2>
 
-    <!-- PAGINATION HERE -->
-    <v-pagination
-      style="margin-top: 30px; margin-bottom: 15px;"
-      v-if="stats && stats.length > 0"
-      v-model="page"
-      :length="paginationLen"
-      :total-visible="7"
-      @input="onPageChange"
-    />
+    <v-row>
+      <v-col cols="2">
+        <v-text-field
+          dark
+          style="margin-top: 30px; margin-left: 15px;"
+          v-model="itemsPerPageInput"
+          label="Items per page"
+          type="number"
+          min="1"
+          step="5"
+          outlined
+          dense
+          @change="onItemsPerPageChange"
+        />
+      </v-col>
+      <v-col cols="8">
+        <v-pagination
+          style="margin-top: 30px; margin-bottom: 15px;"
+          v-if="stats && stats.length > 0"
+          v-model="page"
+          :length="paginationLen"
+          :total-visible="7"
+          @input="onPageChange"
+        />
+      </v-col>
+      <v-col cols="2">
+      </v-col>
+    </v-row>
 
     <template>
       <v-data-table
@@ -77,6 +96,7 @@ export default {
     return {
       page: 1,
       paginationLen: 0,
+      itemsPerPageInput: String,
       itemsPerPage: 50,
       stats: [],
       headers: [
@@ -98,6 +118,12 @@ export default {
   },
 
   mounted: function () {
+    const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
+    if (storedItemsPerPageInput) {
+      this.itemsPerPage = parseInt(storedItemsPerPageInput)
+    }
+
+    this.itemsPerPageInput = String(this.itemsPerPage)
     if (!this.$root.loggedIn) {
       return
     }
@@ -123,6 +149,12 @@ export default {
   },
 
   methods: {
+    onItemsPerPageChange() {
+      this.itemsPerPage = parseInt(this.itemsPerPageInput)
+      this.onPageChange(this.page)
+      localStorage.setItem('itemsPerPageInput', this.itemsPerPageInput)
+    },
+
     onPageChange(page) {
       const vm = this
       axios
@@ -150,6 +182,7 @@ export default {
         this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
       }
       this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
+      console.log('new pagination len: ' + this.paginationLen)
     },
 
     getKilosColor(kilos) {
