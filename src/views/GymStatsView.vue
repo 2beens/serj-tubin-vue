@@ -2,12 +2,24 @@
   <v-container>
     <h2>💪 GymStats 💪</h2>
 
+    <!-- PAGINATION HERE -->
+    <v-pagination
+      style="margin-top: 30px; margin-bottom: 15px;"
+      v-if="stats && stats.length > 0"
+      v-model="page"
+      :length="paginationLen"
+      :total-visible="7"
+      @input="onPageChange"
+    />
+
     <template>
       <v-data-table
         id="data-table"
         :headers="headers"
         :items="stats"
         :items-per-page="itemsPerPage"
+        hide-default-footer
+        disable-pagination
         class="elevation-1"
       >
         <template v-slot:item.kilos="{ item }">
@@ -63,7 +75,10 @@ export default {
 
   data() {
     return {
-      itemsPerPage: 150,
+      page: 1,
+      paginationLen: 0,
+      itemsPerPage: 50,
+      stats: [],
       headers: [
         {
           text: 'ID',
@@ -78,9 +93,7 @@ export default {
         {text: 'At', value: 'createdAt'},
         {text: 'Metadata', value: 'metadataJson'},
         {text: 'IsTesting', value: 'isTesting'},
-      ],
-      stats: [],
-      total: 0,
+      ]
     }
   },
 
@@ -91,7 +104,7 @@ export default {
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/gymstats/list/page/1/size/200', {
+      .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`, {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
         }
@@ -99,15 +112,10 @@ export default {
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('get all urls - received null response / data')
+          vm.stats = []
           return
         }
-        vm.stats = response.data.exercises
-        vm.total = response.data.total
-
-        for (let i = 0; i < vm.stats.length; i++) {
-          vm.stats[i].metadataJson = JSON.stringify(vm.stats[i].metadata)
-          vm.stats[i].isTesting = vm.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
-        }
+        vm.handleStatsResp(response)
       })
       .catch((error) => {
         console.log(error)
@@ -115,6 +123,35 @@ export default {
   },
 
   methods: {
+    onPageChange(page) {
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('get all urls - received null response / data')
+            return
+          }
+          vm.handleStatsResp(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    handleStatsResp(response) {
+      this.stats = response.data.exercises
+      for (let i = 0; i < this.stats.length; i++) {
+        this.stats[i].metadataJson = JSON.stringify(this.stats[i].metadata)
+        this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
+      }
+      this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
+    },
+
     getKilosColor(kilos) {
       // returns different shares of green color based on kilos
       if (kilos < 10) {
