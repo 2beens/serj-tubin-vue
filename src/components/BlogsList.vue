@@ -177,7 +177,7 @@
       <!-- PAGINATION HERE -->
       <div class="text-center">
         <v-pagination
-          v-if="posts.length > 0"
+          v-if="posts && posts.length > 0"
           v-model="blogPage"
           :length="blogPageLength"
           :total-visible="7"
@@ -234,8 +234,9 @@ export default {
         process.env.VUE_APP_API_ENDPOINT + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
       )
       .then((response) => {
-        if (response === null || response.data === null) {
+        if (!response || !response.data) {
           console.error('all blogs - received null response / data')
+          vm.posts = []
           return
         }
         vm.posts = response.data.posts
@@ -376,6 +377,10 @@ export default {
             vm.showSnackbar = true
             console.warn(response)
             return
+          }
+
+          if (!vm.posts) {
+            vm.posts = []
           }
 
           const postId = response.data.split(':')[1]
