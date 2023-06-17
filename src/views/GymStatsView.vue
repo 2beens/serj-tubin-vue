@@ -28,7 +28,7 @@
         </template>
         <template v-slot:item.isTesting="{ item }">
           <v-chip
-            :color="item.isTesting === 'yes' ? 'red' : 'green'"
+            :color="item.isTesting === 'yes' ? 'gray' : 'green'"
             dark
           >
             {{ item.isTesting }}
@@ -106,7 +106,7 @@ export default {
 
         for (let i = 0; i < vm.stats.length; i++) {
           vm.stats[i].metadataJson = JSON.stringify(vm.stats[i].metadata)
-          vm.stats[i].isTesting = vm.stats[i].metadata.isTesting ? 'yes' : 'no'
+          vm.stats[i].isTesting = vm.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
         }
       })
       .catch((error) => {
