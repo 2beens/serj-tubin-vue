@@ -6,7 +6,7 @@
       <v-col cols="2">
         <v-text-field
           dark
-          style="margin-top: 30px; margin-left: 15px;"
+          style="margin-top: 30px; margin-left: 15px"
           v-model="itemsPerPageInput"
           label="Items per page"
           type="number"
@@ -19,7 +19,7 @@
       </v-col>
       <v-col cols="8">
         <v-pagination
-          style="margin-top: 30px; margin-bottom: 15px;"
+          style="margin-top: 30px; margin-bottom: 15px"
           v-if="stats && stats.length > 0"
           v-model="page"
           :length="paginationLen"
@@ -28,6 +28,7 @@
         />
       </v-col>
       <v-col cols="2">
+        <AddExercise style="margin-top: 30px" />
       </v-col>
     </v-row>
 
@@ -42,26 +43,17 @@
         class="elevation-1"
       >
         <template v-slot:item.kilos="{ item }">
-          <v-chip
-            :color="getKilosColor(item.kilos)"
-            dark
-          >
+          <v-chip :color="getKilosColor(item.kilos)" dark>
             {{ item.kilos }}
           </v-chip>
         </template>
         <template v-slot:item.muscleGroup="{ item }">
-          <v-chip
-            :color="getMuscleGroupColor(item.muscleGroup)"
-            dark
-          >
+          <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
             {{ item.muscleGroup }}
           </v-chip>
         </template>
         <template v-slot:item.isTesting="{ item }">
-          <v-chip
-            :color="item.isTesting === 'yes' ? 'gray' : 'green'"
-            dark
-          >
+          <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
             {{ item.isTesting }}
           </v-chip>
         </template>
@@ -87,10 +79,14 @@ h5 {
 </style>
 
 <script scoped>
-import axios from "axios";
+import AddExercise from '@/components/gymstats/AddExercise.vue'
+import axios from 'axios'
 
 export default {
   name: 'GymStatsView',
+  components: {
+    AddExercise
+  },
 
   data() {
     return {
@@ -104,15 +100,15 @@ export default {
           text: 'ID',
           align: 'start',
           sortable: true,
-          value: 'id',
+          value: 'id'
         },
-        {text: 'Exercise', value: 'exerciseId'},
-        {text: 'Muscle Group', value: 'muscleGroup'},
-        {text: 'Kilos', value: 'kilos'},
-        {text: 'Reps', value: 'reps'},
-        {text: 'At', value: 'createdAt'},
-        {text: 'Metadata', value: 'metadataJson'},
-        {text: 'IsTesting', value: 'isTesting'},
+        { text: 'Exercise', value: 'exerciseId' },
+        { text: 'Muscle Group', value: 'muscleGroup' },
+        { text: 'Kilos', value: 'kilos' },
+        { text: 'Reps', value: 'reps' },
+        { text: 'At', value: 'createdAt' },
+        { text: 'Metadata', value: 'metadataJson' },
+        { text: 'IsTesting', value: 'isTesting' }
       ]
     }
   },
@@ -130,11 +126,14 @@ export default {
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`, {
-        headers: {
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+      .get(
+        process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
+        {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
         }
-      })
+      )
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('get all urls - received null response / data')
@@ -158,11 +157,14 @@ export default {
     onPageChange(page) {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
           }
-        })
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('get all urls - received null response / data')
@@ -230,7 +232,7 @@ export default {
         default:
           return 'black'
       }
-    },
-  },
+    }
+  }
 }
 </script>
