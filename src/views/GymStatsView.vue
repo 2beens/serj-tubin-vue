@@ -82,7 +82,7 @@
             </template>
           </v-edit-dialog>
         </template>
-        <!-- TIMESTAMP -->
+        <!-- CREATED AT -->
         <template v-slot:item.createdAt="{ item }">
           <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
             {{ item.createdAt }}
@@ -92,11 +92,11 @@
           </v-edit-dialog>
         </template>
         <!-- METADATA -->
-        <template v-slot:item.metadata="{ item }">
-          <v-edit-dialog :return-value.sync="item.metadata" @save="saveExercise(item)">
-            {{ item.metadata }}
+        <template v-slot:item.metadataJson="{ item }">
+          <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
+            {{ item.metadataJson }}
             <template v-slot:input>
-              <v-text-field v-model="item.metadata" label="Edit" single-line></v-text-field>
+              <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
             </template>
           </v-edit-dialog>
         </template>
@@ -213,10 +213,19 @@ export default {
 
     saveExercise(exercise) {
       console.warn('will save exercise', exercise)
+      const requestBody = {
+        id: exercise.id,
+        muscleGroup: exercise.muscleGroup,
+        exerciseId: exercise.exerciseId,
+        kilos: Number(exercise.kilos),
+        reps: Number(exercise.reps),
+        createdAt: exercise.createdAt,
+        metadata: JSON.parse(exercise.metadataJson)
+      }
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, exercise, {
+        .post(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
