@@ -156,6 +156,7 @@ export default {
           vm.snackbarText = `Exercise ${response.data.id} added!`
           vm.showSnackbar = true
           vm.showDialog = false
+          vm.$emit('exercise-added', response.data.id)
         })
         .catch(function (error) {
           vm.snackbarText = error

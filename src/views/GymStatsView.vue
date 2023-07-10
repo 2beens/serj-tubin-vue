@@ -28,7 +28,7 @@
         />
       </v-col>
       <v-col cols="2">
-        <AddExercise style="margin-top: 30px" />
+        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px;" />
       </v-col>
     </v-row>
 
@@ -114,40 +114,45 @@ export default {
   },
 
   mounted: function () {
-    const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
-    if (storedItemsPerPageInput) {
-      this.itemsPerPage = parseInt(storedItemsPerPageInput)
-    }
-
-    this.itemsPerPageInput = String(this.itemsPerPage)
-    if (!this.$root.loggedIn) {
-      return
-    }
-
-    const vm = this
-    axios
-      .get(
-        process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
-        {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
-        }
-      )
-      .then((response) => {
-        if (response === null || response.data === null) {
-          console.error('get all urls - received null response / data')
-          vm.stats = []
-          return
-        }
-        vm.handleStatsResp(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.getExercises()
   },
 
   methods: {
+    getExercises() {
+      const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
+      if (storedItemsPerPageInput) {
+        this.itemsPerPage = parseInt(storedItemsPerPageInput)
+      }
+
+      this.itemsPerPageInput = String(this.itemsPerPage)
+      if (!this.$root.loggedIn) {
+        return
+      }
+
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('get all urls - received null response / data')
+            vm.stats = []
+            return
+          }
+          vm.handleStatsResp(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     onItemsPerPageChange() {
       this.itemsPerPage = parseInt(this.itemsPerPageInput)
       this.onPageChange(this.page)
