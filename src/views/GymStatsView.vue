@@ -42,15 +42,63 @@
         disable-pagination
         class="elevation-1"
       >
-        <template v-slot:item.kilos="{ item }">
-          <v-chip :color="getKilosColor(item.kilos)" dark>
-            {{ item.kilos }}
-          </v-chip>
+        <!-- EXERCISE ID -->
+        <template v-slot:item.exerciseId="{ item }">
+          <v-edit-dialog :return-value.sync="item.exerciseId" @save="saveExercise(item)">
+            {{ item.exerciseId }}
+            <template v-slot:input>
+              <v-text-field v-model="item.exerciseId" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
         </template>
+        <!-- MUSCLE GROUP -->
         <template v-slot:item.muscleGroup="{ item }">
-          <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
-            {{ item.muscleGroup }}
-          </v-chip>
+          <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
+            <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
+              {{ item.muscleGroup }}
+            </v-chip>
+            <template v-slot:input>
+              <v-text-field v-model="item.muscleGroup" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <!-- KILOS -->
+        <template v-slot:item.kilos="{ item }">
+          <v-edit-dialog :return-value.sync="item.kilos" @save="saveExercise(item)">
+            <v-chip :color="getKilosColor(item.kilos)" dark>
+              {{ item.kilos }}
+            </v-chip>
+            <template v-slot:input>
+              <v-text-field v-model="item.kilos" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <!-- REPS -->
+        <template v-slot:item.reps="{ item }">
+          <v-edit-dialog :return-value.sync="item.reps" @save="saveExercise(item)">
+            {{ item.reps }}
+            <template v-slot:input>
+              <v-text-field v-model="item.reps" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <!-- CREATED AT -->
+        <template v-slot:item.createdAt="{ item }">
+          <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
+            {{ item.createdAt }}
+            <template v-slot:input>
+              <v-text-field v-model="item.createdAt" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <!-- METADATA -->
+        <template v-slot:item.metadataJson="{ item }">
+          <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
+            {{ item.metadataJson }}
+            <template v-slot:input>
+              <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
+            </template>
+          </v-edit-dialog>
         </template>
         <template v-slot:item.isTesting="{ item }">
           <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
@@ -58,19 +106,8 @@
           </v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editExercise(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteExercise(item)"
-          >
-            mdi-delete
-          </v-icon>
+          <v-icon small class="mr-2" @click="editExercise(item)"> mdi-pencil </v-icon>
+          <v-icon small @click="deleteExercise(item)"> mdi-delete </v-icon>
         </template>
       </v-data-table>
     </template>
@@ -124,7 +161,7 @@ export default {
         { text: 'At', value: 'createdAt' },
         { text: 'Metadata', value: 'metadataJson' },
         { text: 'IsTesting', value: 'isTesting' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: 'Actions', value: 'actions', sortable: false }
       ]
     }
   },
@@ -174,8 +211,43 @@ export default {
       // TODO: implement
     },
 
+    saveExercise(exercise) {
+      console.warn('will save exercise', exercise)
+      const requestBody = {
+        id: exercise.id,
+        muscleGroup: exercise.muscleGroup,
+        exerciseId: exercise.exerciseId,
+        kilos: Number(exercise.kilos),
+        reps: Number(exercise.reps),
+        createdAt: exercise.createdAt,
+        metadata: JSON.parse(exercise.metadataJson)
+      }
+
+      const vm = this
+      axios
+        .post(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, requestBody, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('save exercise - received null response / data')
+            return
+          }
+          vm.getExercises()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     deleteExercise(exercise) {
-      if (!confirm(`Are you sure you want to delete exercise: [' ${ exercise.id } '] ${ exercise.exerciseId } ?`)) {
+      if (
+        !confirm(
+          `Are you sure you want to delete exercise: [' ${exercise.id} '] ${exercise.exerciseId} ?`
+        )
+      ) {
         return
       }
 
