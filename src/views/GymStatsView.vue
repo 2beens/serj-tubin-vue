@@ -48,9 +48,21 @@
           </v-chip>
         </template>
         <template v-slot:item.muscleGroup="{ item }">
-          <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
-            {{ item.muscleGroup }}
-          </v-chip>
+          <v-edit-dialog
+            :return-value.sync="item.muscleGroup"
+            @save="saveExercise(item)"
+          >
+            <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
+              {{ item.muscleGroup }}
+            </v-chip>
+            <template v-slot:input>
+              <v-text-field
+                v-model="item.muscleGroup"
+                label="Edit"
+                single-line
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
         </template>
         <template v-slot:item.isTesting="{ item }">
           <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
@@ -172,6 +184,28 @@ export default {
     editExercise(exercise) {
       console.warn('will edit exercise', exercise)
       // TODO: implement
+    },
+
+    saveExercise(exercise) {
+      console.warn('will save exercise', exercise)
+      
+      const vm = this
+      axios
+        .post(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, exercise, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('save exercise - received null response / data')
+            return
+          }
+          vm.getExercises()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
 
     deleteExercise(exercise) {
