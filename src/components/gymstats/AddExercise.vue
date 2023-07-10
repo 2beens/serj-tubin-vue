@@ -132,8 +132,11 @@ export default {
       // store added exercise in local storage, and get it from there when adding next time
       localStorage.setItem('lastAddedExercise', JSON.stringify(this.exercise))
 
+      // remove emoji at the end of muscleGroup string
+      const muscleGroup = this.exercise.muscleGroup.split(' ')[0]
+
       const requestBody = {
-        muscleGroup: this.exercise.muscleGroup,
+        muscleGroup: muscleGroup,
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
