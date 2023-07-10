@@ -28,7 +28,7 @@
         />
       </v-col>
       <v-col cols="2">
-        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px;" />
+        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
       </v-col>
     </v-row>
 
@@ -56,6 +56,21 @@
           <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
             {{ item.isTesting }}
           </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editExercise(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="deleteExercise(item)"
+          >
+            mdi-delete
+          </v-icon>
         </template>
       </v-data-table>
     </template>
@@ -108,7 +123,8 @@ export default {
         { text: 'Reps', value: 'reps' },
         { text: 'At', value: 'createdAt' },
         { text: 'Metadata', value: 'metadataJson' },
-        { text: 'IsTesting', value: 'isTesting' }
+        { text: 'IsTesting', value: 'isTesting' },
+        { text: 'Actions', value: 'actions', sortable: false },
       ]
     }
   },
@@ -147,6 +163,35 @@ export default {
             return
           }
           vm.handleStatsResp(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    editExercise(exercise) {
+      console.warn('will edit exercise', exercise)
+      // TODO: implement
+    },
+
+    deleteExercise(exercise) {
+      if (!confirm(`Are you sure you want to delete exercise: [' ${ exercise.id } '] ${ exercise.exerciseId } ?`)) {
+        return
+      }
+
+      const vm = this
+      axios
+        .delete(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('delete exercise - received null response / data')
+            return
+          }
+          vm.getExercises()
         })
         .catch((error) => {
           console.log(error)

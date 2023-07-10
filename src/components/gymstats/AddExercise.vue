@@ -59,7 +59,14 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="error" dark large @click="showDialog = false"> Close </v-btn>
-          <v-btn color="success" dark large @click="addExercise" :disabled="addDisabled" style="margin-left: 50px;">
+          <v-btn
+            color="success"
+            dark
+            large
+            @click="addExercise"
+            :disabled="addDisabled"
+            style="margin-left: 50px"
+          >
             Add
           </v-btn>
         </v-card-actions>
@@ -90,7 +97,7 @@ export default {
         kilos: '',
         reps: '',
         createdAt: '2023-07-10T18:34:00Z',
-        metadataJson: '{"env":"prod","testing":"true"}'
+        metadataJson: `{ env: 'prod', testing: 'true' }`
       },
       snackbarText: '',
       showSnackbar: false
@@ -106,10 +113,7 @@ export default {
         return true
       }
 
-      return (
-        !this.exercise.muscleGroup ||
-        !this.exercise.exerciseId
-      )
+      return !this.exercise.muscleGroup || !this.exercise.exerciseId
     }
   },
 
@@ -134,7 +138,7 @@ export default {
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
         createdAt: this.exercise.createdAt,
-        metadataJson: this.exercise.metadataJson
+        metadata: JSON.parse(this.exercise.metadataJson)
       }
 
       const vm = this
@@ -153,7 +157,7 @@ export default {
             return
           }
 
-          vm.snackbarText = `Exercise ${response.data.id} added!`
+          vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}]!`
           vm.showSnackbar = true
           vm.showDialog = false
           vm.$emit('exercise-added', response.data.id)
