@@ -6,7 +6,7 @@
       <v-col cols="2">
         <v-text-field
           dark
-          style="margin-top: 30px; margin-left: 15px;"
+          style="margin-top: 30px; margin-left: 15px"
           v-model="itemsPerPageInput"
           label="Items per page"
           type="number"
@@ -19,7 +19,7 @@
       </v-col>
       <v-col cols="8">
         <v-pagination
-          style="margin-top: 30px; margin-bottom: 15px;"
+          style="margin-top: 30px; margin-bottom: 15px"
           v-if="stats && stats.length > 0"
           v-model="page"
           :length="paginationLen"
@@ -28,6 +28,7 @@
         />
       </v-col>
       <v-col cols="2">
+        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
       </v-col>
     </v-row>
 
@@ -42,28 +43,34 @@
         class="elevation-1"
       >
         <template v-slot:item.kilos="{ item }">
-          <v-chip
-            :color="getKilosColor(item.kilos)"
-            dark
-          >
+          <v-chip :color="getKilosColor(item.kilos)" dark>
             {{ item.kilos }}
           </v-chip>
         </template>
         <template v-slot:item.muscleGroup="{ item }">
-          <v-chip
-            :color="getMuscleGroupColor(item.muscleGroup)"
-            dark
-          >
+          <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
             {{ item.muscleGroup }}
           </v-chip>
         </template>
         <template v-slot:item.isTesting="{ item }">
-          <v-chip
-            :color="item.isTesting === 'yes' ? 'gray' : 'green'"
-            dark
-          >
+          <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
             {{ item.isTesting }}
           </v-chip>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editExercise(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            @click="deleteExercise(item)"
+          >
+            mdi-delete
+          </v-icon>
         </template>
       </v-data-table>
     </template>
@@ -87,10 +94,14 @@ h5 {
 </style>
 
 <script scoped>
-import axios from "axios";
+import AddExercise from '@/components/gymstats/AddExercise.vue'
+import axios from 'axios'
 
 export default {
   name: 'GymStatsView',
+  components: {
+    AddExercise
+  },
 
   data() {
     return {
@@ -104,51 +115,89 @@ export default {
           text: 'ID',
           align: 'start',
           sortable: true,
-          value: 'id',
+          value: 'id'
         },
-        {text: 'Exercise', value: 'exerciseId'},
-        {text: 'Muscle Group', value: 'muscleGroup'},
-        {text: 'Kilos', value: 'kilos'},
-        {text: 'Reps', value: 'reps'},
-        {text: 'At', value: 'createdAt'},
-        {text: 'Metadata', value: 'metadataJson'},
-        {text: 'IsTesting', value: 'isTesting'},
+        { text: 'Exercise', value: 'exerciseId' },
+        { text: 'Muscle Group', value: 'muscleGroup' },
+        { text: 'Kilos', value: 'kilos' },
+        { text: 'Reps', value: 'reps' },
+        { text: 'At', value: 'createdAt' },
+        { text: 'Metadata', value: 'metadataJson' },
+        { text: 'IsTesting', value: 'isTesting' },
+        { text: 'Actions', value: 'actions', sortable: false },
       ]
     }
   },
 
   mounted: function () {
-    const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
-    if (storedItemsPerPageInput) {
-      this.itemsPerPage = parseInt(storedItemsPerPageInput)
-    }
-
-    this.itemsPerPageInput = String(this.itemsPerPage)
-    if (!this.$root.loggedIn) {
-      return
-    }
-
-    const vm = this
-    axios
-      .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`, {
-        headers: {
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-        }
-      })
-      .then((response) => {
-        if (response === null || response.data === null) {
-          console.error('get all urls - received null response / data')
-          vm.stats = []
-          return
-        }
-        vm.handleStatsResp(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.getExercises()
   },
 
   methods: {
+    getExercises() {
+      const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
+      if (storedItemsPerPageInput) {
+        this.itemsPerPage = parseInt(storedItemsPerPageInput)
+      }
+
+      this.itemsPerPageInput = String(this.itemsPerPage)
+      if (!this.$root.loggedIn) {
+        return
+      }
+
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('get all urls - received null response / data')
+            vm.stats = []
+            return
+          }
+          vm.handleStatsResp(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    editExercise(exercise) {
+      console.warn('will edit exercise', exercise)
+      // TODO: implement
+    },
+
+    deleteExercise(exercise) {
+      if (!confirm(`Are you sure you want to delete exercise: [' ${ exercise.id } '] ${ exercise.exerciseId } ?`)) {
+        return
+      }
+
+      const vm = this
+      axios
+        .delete(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('delete exercise - received null response / data')
+            return
+          }
+          vm.getExercises()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     onItemsPerPageChange() {
       this.itemsPerPage = parseInt(this.itemsPerPageInput)
       this.onPageChange(this.page)
@@ -158,11 +207,14 @@ export default {
     onPageChange(page) {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
           }
-        })
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('get all urls - received null response / data')
@@ -230,7 +282,7 @@ export default {
         default:
           return 'black'
       }
-    },
-  },
+    }
+  }
 }
 </script>
