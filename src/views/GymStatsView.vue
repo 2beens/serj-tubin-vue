@@ -225,7 +225,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, requestBody, {
+        .put(process.env.VUE_APP_API_ENDPOINT + `/gymstats`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
