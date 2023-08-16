@@ -6,7 +6,7 @@
         <img
           id="my-image"
           alt="serj-tubin"
-          src="../assets/ja.png"
+          src="../assets/ja-2022-dec.jpg"
         >
         <h3 style="margin: 40px 0 0">
           A personal tech sandbox
