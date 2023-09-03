@@ -27,7 +27,6 @@
     "@vue/cli-plugin-router": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-standard": "^8.0.1",
-    "@vue/runtime-dom": "^3.2.47",
     "eslint": "^8.38.0",
     "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-import": "^2.20.2",
