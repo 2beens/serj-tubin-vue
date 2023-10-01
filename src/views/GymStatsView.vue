@@ -2,6 +2,10 @@
   <v-container>
     <h2>💪 GymStats 💪</h2>
 
+    <v-divider :thickness="3" color="#54ab80"></v-divider>
+    <AvgSetDuration />
+    <v-divider :thickness="3" color="#54ab80"></v-divider>
+
     <v-row>
       <v-col cols="2">
         <v-text-field
@@ -132,12 +136,14 @@ h5 {
 
 <script scoped>
 import AddExercise from '@/components/gymstats/AddExercise.vue'
+import AvgSetDuration from '@/components/gymstats/AvgSetDuration.vue'
 import axios from 'axios'
 
 export default {
   name: 'GymStatsView',
   components: {
-    AddExercise
+    AddExercise,
+    AvgSetDuration
   },
 
   data() {
