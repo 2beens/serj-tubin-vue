@@ -37,7 +37,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + `/gymstats/sets/avgduration`, {
+          process.env.VUE_APP_API_ENDPOINT + `/gymstats/sets/avgduration?only_prod=true&exclude_testing_data=true`, {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }
