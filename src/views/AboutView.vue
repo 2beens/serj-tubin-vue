@@ -2,8 +2,14 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h1>This is an about page... still empty</h1>
-        <h4>Not sure what and if I want to leave anything here</h4>
+        <v-img
+          id="my-image"
+          src="https://file-box.serj-tubin.com/link/1701546652343293"
+          width="60%"
+          class="mx-auto"
+        ></v-img>
+
+        <h4>Not sure I want to leave too much stuff here... anyway, some technicalities bellow</h4>
         <h3>🤔</h3>
         <h5>
           I use this website and underlying servers/machines as a tech sandbox mostly, so... I do
@@ -36,7 +42,7 @@
           <a href="https://2beens.xyz/">2beens.xyz</a>
         </h4>
 
-        <v-row>
+        <v-row style="margin-bottom: 10%;">
           <v-col>
             <h6>Started rewriting everything in NextJS / React, but stopped. No time for now.</h6>
             <h6>
@@ -53,3 +59,11 @@
     </v-row>
   </v-container>
 </template>
+
+<style scoped>
+#my-image {
+  border-radius: 50%;
+  max-width: 20%;
+  height: auto;
+}
+</style>
