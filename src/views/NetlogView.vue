@@ -210,7 +210,7 @@ export default {
             return
           }
           if (response.data.visits === null) {
-            console.error('filter visits - received null visits', `response.data: ${response.data}`)
+            console.error('filter visits - received null visits', `response.data: ${stringify(response.data)}`)
             vm.visits = []
             vm.totalVisits = 0
             vm.visitsPageLength = 0
