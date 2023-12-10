@@ -9,8 +9,6 @@
           class="mx-auto"
         ></v-img>
 
-        <h4>Not sure I want to leave too much stuff here... anyway, some technicalities bellow</h4>
-        <h3>🤔</h3>
         <h5>
           I use this website and underlying servers/machines as a tech sandbox mostly, so... I do
           not intend to write a lot of stuff here.

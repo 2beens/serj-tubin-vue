@@ -209,6 +209,13 @@ export default {
             console.error('filter visits - received null response / data')
             return
           }
+          if (response.data.visits === null) {
+            console.error('filter visits - received null visits', `response.data: ${response.data}`)
+            vm.visits = []
+            vm.totalVisits = 0
+            vm.visitsPageLength = 0
+            return
+          }
           vm.visits = response.data.visits
           vm.totalVisits = response.data.total
           vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
