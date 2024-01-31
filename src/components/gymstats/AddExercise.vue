@@ -96,8 +96,8 @@ export default {
         exerciseId: '',
         kilos: '',
         reps: '',
-        createdAt: '2023-07-10T18:34:00Z',
-        metadataJson: `{ env: 'prod', testing: 'true' }`
+        createdAt: '',
+        metadataJson: `{"env": "prod", "testing": "true"}`
       },
       snackbarText: '',
       showSnackbar: false
@@ -127,8 +127,6 @@ export default {
 
   methods: {
     addExercise() {
-      console.log('adding exercise', this.exercise)
-
       // store added exercise in local storage, and get it from there when adding next time
       localStorage.setItem('lastAddedExercise', JSON.stringify(this.exercise))
 
@@ -140,9 +138,14 @@ export default {
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
-        createdAt: this.exercise.createdAt,
         metadata: JSON.parse(this.exercise.metadataJson)
       }
+
+      if (this.exercise.createdAt) {
+        requestBody.createdAt = this.exercise.createdAt
+      }
+
+      console.log('adding exercise', requestBody)
 
       const vm = this
       axios
