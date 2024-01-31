@@ -39,6 +39,15 @@
         Util
       </v-btn>
       <v-btn
+        v-if="$root.loggedIn"
+        color="#4b9ff2"
+        text
+        rounded
+        to="/gymstats"
+      >
+        GymStats 🏋️‍♀️
+      </v-btn>
+      <v-btn
         color="#4b9ff2"
         text
         rounded
@@ -63,15 +72,6 @@
         to="/notes"
       >
         Notes 📝
-      </v-btn>
-      <v-btn
-        v-if="$root.loggedIn"
-        color="#4b9ff2"
-        text
-        rounded
-        to="/gymstats"
-      >
-        GymStats 🏋️‍♀️
       </v-btn>
       <v-btn
         color="#4b9ff2"

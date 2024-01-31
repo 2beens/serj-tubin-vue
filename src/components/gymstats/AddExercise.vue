@@ -14,24 +14,16 @@
               <v-col cols="12" sm="6">
                 <v-autocomplete
                   v-model="exercise.muscleGroup"
-                  :items="[
-                    'biceps 💪',
-                    'triceps 💪',
-                    'legs 🦵',
-                    'shoulders 🤷‍♂️',
-                    'chest 🙌',
-                    'back 🚶‍♂️',
-                    'other 🚀'
-                  ]"
+                  :items="muscleGroups"
                   label="Muscle Group"
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
+                <v-autocomplete
                   v-model="exercise.exerciseId"
-                  label="Exercise ID"
-                  required
-                ></v-text-field>
+                  :items="muscleGroupToExercises[exercise.muscleGroup]"
+                  label="Exercise"
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field v-model="exercise.kilos" label="Kilos" required></v-text-field>
@@ -86,14 +78,105 @@
 <script>
 import axios from 'axios'
 
+// muscle group to text mapping
+const muscleGroups = ['biceps', 'triceps', 'legs', 'shoulders', 'chest', 'back', 'other']
+
+// muscle group to exercise mapping
+const muscleGroupToExercises = {
+  biceps: [
+    'preacher_curl',
+    'barbell_curl',
+    'barbell_vertical_curl',
+    'ez_bar_curl',
+    'ez_bar_curl_declined',
+    'dumbells',
+    'dumbells_inclined',
+    'dumbells_declined'
+  ],
+  triceps: [
+    'skullcrusher_with_ez_bar',
+    'triceps_pushdown',
+    'skull_crushers',
+    'close_grip_bench_press',
+    'bench_dip',
+    'dumbbell_overhead_triceps_extension',
+    'cable_overhead_extension_with_rope',
+    'cable_push_down',
+    'barbell_push_down',
+    'barbell_push_down_ez'
+  ],
+  chest: [
+    'bench_press',
+    'bench_press_inclined',
+    'bench_press_declined',
+    'dips',
+    'chest_fly_machine',
+    'chest_press_machine',
+    'pushups',
+    'dumbbell_pull_over'
+  ],
+  legs: [
+    'leg_press',
+    'calf_raise_seated',
+    'calf_raise_standing',
+    'walking_dumbbell_lunges',
+    'leg_extension_machine',
+    'leg_curl_machine'
+  ],
+  shoulders: [
+    'lateral_raise',
+    'side_lateral_raise',
+    'lateral_raise_single_arm_cable',
+    'front_raise',
+    'front_raise_single_arm_cable',
+    'back_raise',
+    'back_push_machine',
+    'press_barbell_standing',
+    'press_dumbell_standing',
+    'press_barbell_seated',
+    'press_dumbell_seated',
+    'arnold_press',
+    'rear_delt_fly'
+  ],
+  back: [
+    'dumbbell_row_inclined',
+    'barbell_row_inclined',
+    'single_arm_dumbell_row',
+    'bent_over_row',
+    't_bar_row',
+    'pull_up',
+    'seated_row_barbell',
+    'seated_row_v_handle',
+    'hyperextensions',
+    'lat_pull_down_barbell',
+    'lat_pull_down_v_handle'
+  ],
+  other: [
+    'oblique_crunch_hyperext_bench',
+    'crunch',
+    'tuck_crunch',
+    'leg_raise_core',
+    'squat',
+    'squat_jump',
+    'burpee',
+    'plank',
+    'hanging_knee_raise',
+    'v_sit',
+    'test'
+  ]
+}
+
 export default {
   name: 'AddExercise',
   data: function () {
     return {
+      muscleGroups: muscleGroups,
+      muscleGroupToExercises: muscleGroupToExercises,
       showDialog: false,
       exercise: {
-        muscleGroup: '',
-        exerciseId: '',
+        // take the biceps[preacher_curl] as default
+        muscleGroup: muscleGroups.biceps,
+        exerciseId: muscleGroupToExercises.biceps.preacher_curl,
         kilos: '',
         reps: '',
         createdAt: '',
