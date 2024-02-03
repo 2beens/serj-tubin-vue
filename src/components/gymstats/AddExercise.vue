@@ -15,7 +15,10 @@
                 <v-autocomplete
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
+                  item-text="text"
+                  item-value="id"
                   label="Muscle Group"
+                  return-object
                   solo
                   dense
                 ></v-autocomplete>
@@ -23,7 +26,7 @@
               <v-col cols="12">
                 <v-autocomplete
                   v-model="exercise.exerciseId"
-                  :items="muscleGroupToExercises[exercise.muscleGroup]"
+                  :items="muscleGroupToExercises[exercise.muscleGroup.id]"
                   label="Exercise"
                   solo
                   dense
@@ -97,7 +100,15 @@
 import axios from 'axios'
 
 // muscle group to text mapping
-const muscleGroups = ['biceps', 'triceps', 'legs', 'shoulders', 'chest', 'back', 'other']
+const muscleGroups = [
+  { id: 'biceps', text: 'Biceps 💪' },
+  { id: 'triceps', text: 'Triceps 💪' },
+  { id: 'legs', text: 'Legs 🦵' },
+  { id: 'shoulders', text: 'Shoulders 🤷‍♂️' },
+  { id: 'chest', text: 'Chest 🙌' },
+  { id: 'back', text: 'Back 🚶‍♂️' },
+  { id: 'other', text: 'Other 🚀' }
+]
 
 // muscle group to exercise mapping
 const muscleGroupToExercises = {
@@ -231,11 +242,8 @@ export default {
       // store added exercise in local storage, and get it from there when adding next time
       localStorage.setItem('lastAddedExercise', JSON.stringify(this.exercise))
 
-      // remove emoji at the end of muscleGroup string
-      const muscleGroup = this.exercise.muscleGroup.split(' ')[0]
-
       const requestBody = {
-        muscleGroup: muscleGroup,
+        muscleGroup: this.exercise.muscleGroup.id,
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
