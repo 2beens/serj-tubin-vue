@@ -11,25 +11,43 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="6">
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
                   label="Muscle Group"
+                  solo
+                  dense
                 ></v-autocomplete>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12">
                 <v-autocomplete
                   v-model="exercise.exerciseId"
                   :items="muscleGroupToExercises[exercise.muscleGroup]"
                   label="Exercise"
+                  solo
+                  dense
                 ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field v-model="exercise.kilos" label="Kilos" required></v-text-field>
+                <v-text-field
+                  v-model="exercise.kilos"
+                  label="Kilos"
+                  type="number"
+                  required
+                  dense
+                  solo
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field v-model="exercise.reps" label="Reps" required></v-text-field>
+                <v-text-field
+                  v-model="exercise.reps"
+                  label="Reps"
+                  type="number"
+                  required
+                  dense
+                  solo
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
