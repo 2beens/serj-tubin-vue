@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on"> Add Exercise ➕ </v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on">Add Exercise ➕</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -26,7 +26,9 @@
               <v-col cols="12">
                 <v-autocomplete
                   v-model="exercise.exerciseId"
-                  :items="muscleGroupToExercises[exercise.muscleGroup.id]"
+                  :items="exercisesForSelectedMuscleGroup"
+                  item-text="text"
+                  item-value="id"
                   label="Exercise"
                   solo
                   dense
@@ -71,7 +73,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" dark large @click="showDialog = false"> Close </v-btn>
+          <v-btn color="error" dark large @click="showDialog = false">Close</v-btn>
           <v-btn
             color="success"
             dark
@@ -88,9 +90,8 @@
 
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
-
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
       </template>
     </v-snackbar>
   </v-row>
@@ -99,113 +100,109 @@
 <script>
 import axios from 'axios'
 
-// muscle group to text mapping
-const muscleGroups = [
-  { id: 'biceps', text: 'Biceps 💪' },
-  { id: 'triceps', text: 'Triceps 💪' },
-  { id: 'legs', text: 'Legs 🦵' },
-  { id: 'shoulders', text: 'Shoulders 🤷‍♂️' },
-  { id: 'chest', text: 'Chest 🙌' },
-  { id: 'back', text: 'Back 🚶‍♂️' },
-  { id: 'other', text: 'Other 🚀' }
-]
-
-// muscle group to exercise mapping
-const muscleGroupToExercises = {
-  biceps: [
-    'preacher_curl',
-    'barbell_curl',
-    'barbell_vertical_curl',
-    'ez_bar_curl',
-    'ez_bar_curl_declined',
-    'dumbells',
-    'dumbells_inclined',
-    'dumbells_declined'
-  ],
-  triceps: [
-    'skullcrusher_with_ez_bar',
-    'triceps_pushdown',
-    'skull_crushers',
-    'close_grip_bench_press',
-    'bench_dip',
-    'dumbbell_overhead_triceps_extension',
-    'cable_overhead_extension_with_rope',
-    'cable_push_down',
-    'barbell_push_down',
-    'barbell_push_down_ez'
-  ],
-  chest: [
-    'bench_press',
-    'bench_press_inclined',
-    'bench_press_declined',
-    'dips',
-    'chest_fly_machine',
-    'chest_press_machine',
-    'pushups',
-    'dumbbell_pull_over'
-  ],
-  legs: [
-    'leg_press',
-    'calf_raise_seated',
-    'calf_raise_standing',
-    'walking_dumbbell_lunges',
-    'leg_extension_machine',
-    'leg_curl_machine'
-  ],
-  shoulders: [
-    'lateral_raise',
-    'side_lateral_raise',
-    'lateral_raise_single_arm_cable',
-    'front_raise',
-    'front_raise_single_arm_cable',
-    'back_raise',
-    'back_push_machine',
-    'press_barbell_standing',
-    'press_dumbell_standing',
-    'press_barbell_seated',
-    'press_dumbell_seated',
-    'arnold_press',
-    'rear_delt_fly'
-  ],
-  back: [
-    'dumbbell_row_inclined',
-    'barbell_row_inclined',
-    'single_arm_dumbell_row',
-    'bent_over_row',
-    't_bar_row',
-    'pull_up',
-    'seated_row_barbell',
-    'seated_row_v_handle',
-    'hyperextensions',
-    'lat_pull_down_barbell',
-    'lat_pull_down_v_handle'
-  ],
-  other: [
-    'oblique_crunch_hyperext_bench',
-    'crunch',
-    'tuck_crunch',
-    'leg_raise_core',
-    'squat',
-    'squat_jump',
-    'burpee',
-    'plank',
-    'hanging_knee_raise',
-    'v_sit',
-    'test'
-  ]
-}
-
 export default {
   name: 'AddExercise',
   data: function () {
     return {
-      muscleGroups: muscleGroups,
-      muscleGroupToExercises: muscleGroupToExercises,
+      muscleGroups: [
+        { id: 'biceps', text: 'Biceps 💪' },
+        { id: 'triceps', text: 'Triceps 💪' },
+        { id: 'legs', text: 'Legs 🦵' },
+        { id: 'shoulders', text: 'Shoulders 🤷‍♂️' },
+        { id: 'chest', text: 'Chest 🙌' },
+        { id: 'back', text: 'Back 🚶‍♂️' },
+        { id: 'other', text: 'Other 🚀' }
+      ],
+      muscleGroupToExercises: {
+        biceps: [
+          { id: 'preacher_curl', text: 'Preacher Curl' },
+          { id: 'barbell_curl', text: 'Barbell Curl' },
+          { id: 'barbell_vertical_curl', text: 'Barbell Curl [vertical grip]' },
+          { id: 'ez_bar_curl', text: 'EZ Bar Curl' },
+          { id: 'ez_bar_curl_declined', text: 'EZ Bar Curl [declined]' },
+          { id: 'dumbells', text: 'Dumbells' },
+          { id: 'dumbells_inclined', text: 'Dumbells [inclined]' },
+          { id: 'dumbells_declined', text: 'Dumbells [declined]' }
+        ],
+        triceps: [
+          { id: 'skullcrusher_with_ez_bar', text: 'Skullcrusher w EZ 💀' },
+          { id: 'triceps_pushdown', text: 'Tricep Pushdown' },
+          { id: 'skull_crushers', text: 'Skull Crushers' },
+          { id: 'close_grip_bench_press', text: 'Close-Grip Bench Press' },
+          { id: 'bench_dip', text: 'Bench Dip' },
+          {
+            id: 'dumbbell_overhead_triceps_extension',
+            text: 'Dumbbell Overhead Triceps Extension'
+          },
+          { id: 'cable_overhead_extension_with_rope', text: 'Cable Overhead Extension With Rope' },
+          { id: 'cable_push_down', text: 'Cable Push-Down' },
+          { id: 'barbell_push_down', text: 'Barbell Push-Down' },
+          { id: 'barbell_push_down_ez', text: 'Barbell EZ Push-Down' }
+        ],
+        chest: [
+          { id: 'bench_press', text: 'Bench Press' },
+          { id: 'bench_press_inclined', text: 'Bench Press [inclined]' },
+          { id: 'bench_press_declined', text: 'Bench Press [declined]' },
+          { id: 'dips', text: 'Dips' },
+          { id: 'chest_fly_machine', text: 'Chest Fly [machine]' },
+          { id: 'chest_press_machine', text: 'Chest Press [machine]' },
+          { id: 'pushups', text: 'Push-Ups' },
+          { id: 'dumbbell_pull_over', text: 'Dumbbell Pull-Over' }
+        ],
+        legs: [
+          { id: 'leg_press', text: 'Leg Press' },
+          { id: 'calf_raise_seated', text: 'Calf Raise [seated]' },
+          { id: 'calf_raise_standing', text: 'Calf Raise [standing]' },
+          { id: 'walking_dumbbell_lunges', text: 'Walking Dumbbell Lunges' },
+          { id: 'leg_extension_machine', text: 'Leg Extension Machine' },
+          { id: 'leg_curl_machine', text: 'Leg Curl Machine' }
+        ],
+        shoulders: [
+          { id: 'lateral_raise', text: 'Lateral Raise 👐' },
+          { id: 'side_lateral_raise', text: 'Side Lateral Raise 👐' },
+          { id: 'lateral_raise_single_arm_cable', text: 'Lateral Raise 👐 [single] [cable]' },
+          { id: 'front_raise', text: 'Front Raise ➬' },
+          { id: 'front_raise_single_arm_cable', text: 'Front Raise 👐 [single] [cable]' },
+          { id: 'back_raise', text: 'Back Raise 🔙' },
+          { id: 'back_push_machine', text: 'Back Push 🔙 [machine]' },
+          { id: 'press_barbell_standing', text: 'Press [barbell] [standing]' },
+          { id: 'press_dumbell_standing', text: 'Press [dumbell] [standing]' },
+          { id: 'press_barbell_seated', text: 'Press [barbell] [seated]' },
+          { id: 'press_dumbell_seated', text: 'Press [dumbell] [seated]' },
+          { id: 'arnold_press', text: 'Arnold Press' },
+          { id: 'rear_delt_fly', text: 'Rear Delt Fly' }
+        ],
+        back: [
+          { id: 'dumbbell_row_inclined', text: 'Inclined Dumbbell Row' },
+          { id: 'barbell_row_inclined', text: 'Inclined Barbell Row' },
+          { id: 'single_arm_dumbell_row', text: 'Single-Arm Dumbell Row' },
+          { id: 'bent_over_row', text: 'Bent Over Row' },
+          { id: 't_bar_row', text: 'T-Bar Row' },
+          { id: 'pull_up', text: 'Pull Up' },
+          { id: 'seated_row_barbell', text: 'Seated Row [barbell]' },
+          { id: 'seated_row_v_handle', text: 'Seated Row [V handle]' },
+          { id: 'hyperextensions', text: 'Hyperextensions' },
+          { id: 'lat_pull_down_barbell', text: 'Lat Pull-Down [barbell]' },
+          { id: 'lat_pull_down_v_handle', text: 'Lat Pull-Down [V handle]' }
+        ],
+        other: [
+          { id: 'oblique_crunch_hyperext_bench', text: 'Oblique Crunch [Hyperextension Bench]' },
+          { id: 'crunch', text: 'Crunch' },
+          { id: 'tuck_crunch', text: 'Tuck Crunch' },
+          { id: 'leg_raise_core', text: 'Leg Raise [core]' },
+          { id: 'squat', text: 'Squat' },
+          { id: 'squat_jump', text: 'Squat Jump' },
+          { id: 'burpee', text: 'Burpee' },
+          { id: 'plank', text: 'Plank' },
+          { id: 'hanging_knee_raise', text: 'Hanging Knee Raise' },
+          { id: 'v_sit', text: 'V-sit' },
+          { id: 'test', text: '🛠️Test🛠️[dummy]🛠️' }
+        ]
+      },
       showDialog: false,
       exercise: {
-        // take the biceps[preacher_curl] as default
-        muscleGroup: muscleGroups.biceps,
-        exerciseId: muscleGroupToExercises.biceps.preacher_curl,
+        muscleGroup: null,
+        exerciseId: null,
         kilos: '',
         reps: '',
         createdAt: '',
@@ -218,14 +215,19 @@ export default {
 
   computed: {
     addDisabled() {
-      if (!this.exercise.kilos || isNaN(this.exercise.kilos)) {
-        return true
-      }
-      if (!this.exercise.reps || isNaN(this.exercise.reps)) {
-        return true
-      }
+      return (
+        !this.exercise.kilos ||
+        isNaN(this.exercise.kilos) ||
+        !this.exercise.reps ||
+        isNaN(this.exercise.reps) ||
+        !this.exercise.muscleGroup ||
+        !this.exercise.exerciseId
+      )
+    },
 
-      return !this.exercise.muscleGroup || !this.exercise.exerciseId
+    exercisesForSelectedMuscleGroup() {
+      if (!this.exercise.muscleGroup) return []
+      return this.muscleGroupToExercises[this.exercise.muscleGroup.id] || []
     }
   },
 
@@ -258,7 +260,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/gymstats', requestBody, {
+        .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json'
@@ -278,7 +280,7 @@ export default {
           vm.$emit('exercise-added', response.data.id)
         })
         .catch(function (error) {
-          vm.snackbarText = error
+          vm.snackbarText = `Error adding exercise: ${error.message}`
           vm.showSnackbar = true
           console.log(error)
         })
