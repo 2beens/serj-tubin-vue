@@ -18,7 +18,7 @@
     <SideBar />
 
     <v-row id="quote-info">
-      <h6>I'm being a smartass 🤓 by showing some cool stolen quotes here:</h6>
+      <h6>Random quotes here:</h6>
     </v-row>
     <v-row>
       <v-col id="quote-section">
