@@ -2,7 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">Add Exercise ➕</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp">Add Exercise ➕</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>➕</v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -12,7 +13,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-autocomplete
+                <v-select
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
                   item-text="text"
@@ -21,10 +22,10 @@
                   return-object
                   solo
                   dense
-                ></v-autocomplete>
+                ></v-select>
               </v-col>
               <v-col cols="12">
-                <v-autocomplete
+                <v-select
                   v-model="exercise.exerciseId"
                   :items="exercisesForSelectedMuscleGroup"
                   item-text="text"
@@ -32,7 +33,7 @@
                   label="Exercise"
                   solo
                   dense
-                ></v-autocomplete>
+                ></v-select>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
@@ -54,7 +55,7 @@
                   solo
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp">
                 <v-text-field
                   v-model="exercise.createdAt"
                   label="Created At"

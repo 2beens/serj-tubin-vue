@@ -7,7 +7,7 @@
     <v-divider :thickness="3" color="#54ab80"></v-divider>
 
     <v-row>
-      <v-col cols="2">
+      <v-col :cols="$vuetify.breakpoint.smAndUp ? '2' : '4'">
         <v-text-field
           dark
           style="margin-top: 30px; margin-left: 15px"
@@ -21,18 +21,21 @@
           @change="onItemsPerPageChange"
         />
       </v-col>
-      <v-col cols="8">
+      <v-col :cols="$vuetify.breakpoint.smAndUp ? '8' : '0'">
         <v-pagination
           style="margin-top: 30px; margin-bottom: 15px"
           v-if="stats && stats.length > 0"
           v-model="page"
           :length="paginationLen"
-          :total-visible="7"
+          :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
           @input="onPageChange"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col v-if="$vuetify.breakpoint.smAndUp" cols="2">
         <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
+      </v-col>
+      <v-col v-else cols="2">
+        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 15px" />
       </v-col>
     </v-row>
 
