@@ -6,7 +6,7 @@
     <AvgSetDuration />
     <v-divider :thickness="3" color="#54ab80"></v-divider>
 
-    <v-row>
+    <v-row v-if="$vuetify.breakpoint.mdAndUp">
       <v-col cols="2">
         <v-text-field
           dark
@@ -27,7 +27,7 @@
           v-if="stats && stats.length > 0"
           v-model="page"
           :length="paginationLen"
-          :total-visible="7"
+          :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
           @input="onPageChange"
         />
       </v-col>
@@ -35,6 +35,43 @@
         <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
       </v-col>
     </v-row>
+
+    <!-- v-else - next three rows for small devices -->
+    <!------------------------------------------------->
+    <v-row v-if="$vuetify.breakpoint.smAndDown">
+      <v-col style="margin-top: 10px; padding: 0%;">
+        <v-text-field
+          dark
+          style="margin-right: 20%; margin-left: 20%; margin-bottom: 5px;"
+          v-model="itemsPerPageInput"
+          label="Items per page"
+          type="number"
+          min="1"
+          step="5"
+          outlined
+          dense
+          @change="onItemsPerPageChange"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="$vuetify.breakpoint.smAndDown">
+      <v-col>
+        <v-pagination
+          v-if="stats && stats.length > 0"
+          style="margin-top: 0px;"
+          v-model="page"
+          :length="paginationLen"
+          :total-visible="8"
+          @input="onPageChange"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="$vuetify.breakpoint.smAndDown">
+      <v-col>
+        <AddExercise @exercise-added="getExercises" style="margin-bottom: 10px" />
+      </v-col>
+    </v-row>
+    <!------------------------------------------------->
 
     <template>
       <v-data-table

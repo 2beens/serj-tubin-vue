@@ -1,86 +1,66 @@
 <template>
   <v-app>
-    <v-app-bar
-      id="main-menu-bar"
-      app
-      color="black"
-    >
+    <v-app-bar id="main-menu-bar" app color="black">
+      <v-btn icon v-if="$vuetify.breakpoint.smAndDown" @click="drawer = !drawer">
+        <v-icon color="teal lighten-1">mdi-menu</v-icon>
+      </v-btn>
       <v-spacer />
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/"
-      >
-        Home
+      <LoginLogoutButton />
+    </v-app-bar>
+
+    <!-- Navigation drawer for small screens -->
+    <!------------------------------------------>
+    <v-navigation-drawer v-model="drawer" app v-if="$vuetify.breakpoint.smAndDown" color="black">
+      <v-btn icon @click="drawer = false">
+        <v-icon color="teal lighten-1">mdi-close</v-icon>
       </v-btn>
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/about"
-      >
-        About
-      </v-btn>
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/board"
-      >
-        Visitor Board
-      </v-btn>
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/util"
-      >
-        Util
-      </v-btn>
-      <v-btn
-        v-if="$root.loggedIn"
-        color="#4b9ff2"
-        text
-        rounded
-        to="/gymstats"
-      >
-        GymStats 🏋️‍♀️
-      </v-btn>
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/netlog"
-      >
-        Netlog 🕸
-      </v-btn>
-      <v-btn
-        v-if="$root.loggedIn"
-        color="#4b9ff2"
-        text
-        rounded
-        to="/url-shortener"
-      >
+      <v-list>
+        <v-list-item to="/">
+          <v-list-item-title>Home</v-list-item-title>
+        </v-list-item>
+        <!-- Add more v-list-item components for each route -->
+        <v-list-item to="/about">
+          <v-list-item-title>About</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/board">
+          <v-list-item-title>Visitor Board</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/util">
+          <v-list-item-title>Util</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="$root.loggedIn" to="/gymstats">
+          <v-list-item-title>GymStats 🏋️‍♀️</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/netlog">
+          <v-list-item-title>Netlog 🕸</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="$root.loggedIn" to="/url-shortener">
+          <v-list-item-title>URLs 🌏</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-if="$root.loggedIn" to="/notes">
+          <v-list-item-title>Notes 📝</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/sumup">
+          <v-list-item-title>🤑SumUp🤑</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <!-- Navigation bar for large screens -->
+    <!------------------------------------------>
+    <v-app-bar app color="black" v-else>
+      <v-spacer />
+      <v-btn color="#4b9ff2" text rounded to="/"> Home </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/about"> About </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/board"> Visitor Board </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/util"> Util </v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/gymstats"> GymStats 🏋️‍♀️ </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/netlog"> Netlog 🕸 </v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/url-shortener">
         URLs 🌏
       </v-btn>
-      <v-btn
-        v-if="$root.loggedIn"
-        color="#4b9ff2"
-        text
-        rounded
-        to="/notes"
-      >
-        Notes 📝
-      </v-btn>
-      <v-btn
-        color="#4b9ff2"
-        text
-        rounded
-        to="/sumup"
-      >
-        🤑SumUp🤑
-      </v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/notes"> Notes 📝 </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/sumup"> 🤑SumUp🤑 </v-btn>
       <v-spacer />
       <LoginLogoutButton />
     </v-app-bar>
@@ -89,23 +69,20 @@
       <router-view />
     </v-main>
 
-    <div
-      v-show="showConsent"
-      id="consent-div"
-    >
+    <div v-show="showConsent" id="consent-div">
       <cookie-consent>
         <template #message>
           <div style="color: white">
             <p>Hey, over here 👋</p>
             <p>
-              This site uses cookies to analyze website traffic and optimize your website experience.
+              This site uses cookies to analyze website traffic and optimize your website
+              experience.
             </p>
             <p>
-              Cookies are used only for analytics purposes. By using this site, you consent to the use of these cookies.
+              Cookies are used only for analytics purposes. By using this site, you consent to the
+              use of these cookies.
             </p>
-            <p>
-              🍪🍪🍪 ❓
-            </p>
+            <p>🍪🍪🍪 ❓</p>
           </div>
         </template>
         <template #button>
@@ -139,7 +116,8 @@ export default {
   },
   data: function () {
     return {
-      showConsent: true
+      showConsent: true,
+      drawer: false
     }
   },
   watch: {
@@ -148,7 +126,7 @@ export default {
     }
   },
   mounted: function () {
-    this.showConsent = !(this.getCookie('cookieconsent_status'))
+    this.showConsent = !this.getCookie('cookieconsent_status')
 
     console.log('loaded env: ' + process.env.VUE_APP_ENV)
 
