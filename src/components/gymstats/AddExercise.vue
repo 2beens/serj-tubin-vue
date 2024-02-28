@@ -3,7 +3,7 @@
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp">Add Exercise ➕</v-btn>
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>➕</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>Add ➕</v-btn>
       </template>
       <v-card>
         <v-card-title>
