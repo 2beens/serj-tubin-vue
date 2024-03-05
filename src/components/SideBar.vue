@@ -1,16 +1,18 @@
 <template>
-  <div id="sidebar">
-    <div id="geo-info">
-      You are (probably) requesting from:
-      <p id="geo-city" />
-    </div>
-    <div id="weather-info">
-      Weather there:
-      <p id="weather-now" />
-      Tomorrow:
-      <div id="weather-tomorrow" />
-    </div>
-  </div>
+  <v-row id="sidebar">
+    <v-col>
+      <div id="geo-info">
+        You are (probably) requesting from:
+        <p id="geo-city" />
+      </div>
+      <div id="weather-info">
+        Weather there:
+        <p id="weather-now" />
+        Tomorrow:
+        <div id="weather-tomorrow" />
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -109,7 +111,7 @@ function getIconsFromWeatherData(weatherData) {
 
 #sidebar {
   position: absolute;
-  top: 3%;
+  top: 2%;
   left: 3%;
   float: left;
   padding: 10px;
