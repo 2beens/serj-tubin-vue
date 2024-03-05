@@ -3,15 +3,17 @@
     <v-row>
       <v-col>
         <v-row>
-          <v-col>
+          <v-col cols="3" class="pa-0">
+            <SideBar />
+          </v-col>
+          <v-col cols="6" class="pa-0">
             <h2>Work in constant progress 👨🏼‍💻🛠</h2>
             <img id="my-image" alt="serj-tubin" src="../assets/ja-2022-dec.jpg" />
             <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
             <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
           </v-col>
+          <v-col cols="3"> </v-col>
         </v-row>
-
-        <SideBar />
 
         <v-row id="quote-info">
           <h6>Random quotes here:</h6>
@@ -27,7 +29,9 @@
           </v-col>
         </v-row>
 
-        <BlogsList title="Recent Posts" />
+        <v-row>
+          <BlogsList title="Recent Posts" />
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -72,7 +76,7 @@ export default {
 <style scoped>
 #my-image {
   border-radius: 50%;
-  max-width: 20%;
+  max-width: 35%;
   height: auto;
 }
 

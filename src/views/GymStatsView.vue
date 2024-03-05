@@ -61,7 +61,7 @@
           style="margin-top: 0px;"
           v-model="page"
           :length="paginationLen"
-          :total-visible="8"
+          :total-visible="6"
           @input="onPageChange"
         />
       </v-col>

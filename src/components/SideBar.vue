@@ -1,5 +1,5 @@
 <template>
-  <v-row id="sidebar">
+  <v-row>
     <v-col>
       <div id="geo-info">
         You are (probably) requesting from:
@@ -107,14 +107,5 @@ function getIconsFromWeatherData(weatherData) {
 
 #weather-now {
   color: #42b983;
-}
-
-#sidebar {
-  position: absolute;
-  top: 2%;
-  left: 3%;
-  float: left;
-  padding: 10px;
-  /* background-color: aliceblue; */
 }
 </style>

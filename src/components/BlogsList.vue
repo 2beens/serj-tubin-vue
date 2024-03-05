@@ -1,207 +1,125 @@
 <template>
-  <div
-    id="blog"
-    data-app="true"
-  >
-    <h3>{{ title }}</h3>
+  <v-row>
+    <v-col>
+      <h3>{{ title }}</h3>
 
-    <v-dialog
-      v-if="theRoot.loggedIn"
-      v-model="dialog"
-      persistent
-      max-width="600px"
-    >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          color="teal lighten-1"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon dark>
-            mdi-plus
-          </v-icon>
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span
-            v-if="editBlogMode"
-            class="text-h5"
-          >Edit Blog Post</span>
-          <span
-            v-else
-            class="text-h5"
-          >Add Blog Post</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
+      <v-dialog v-if="theRoot.loggedIn" v-model="dialog" persistent max-width="600px">
+        <template #activator="{ on, attrs }">
+          <v-btn color="teal lighten-1" dark v-bind="attrs" v-on="on">
+            <v-icon dark> mdi-plus </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span v-if="editBlogMode" class="text-h5">Edit Blog Post</span>
+            <span v-else class="text-h5">Add Blog Post</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="selectedPost.title" label="Title" required />
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    v-model="selectedPost.content"
+                    required
+                    name="input-7-1"
+                    filled
+                    label="Content"
+                    auto-grow
+                    value=""
+                  />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn color="blue darken-1" text @click="abortEditPost"> Abort </v-btn>
+            <v-btn v-if="editBlogMode" color="blue darken-1" text @click="updateBlogPost">
+              Update!
+            </v-btn>
+            <v-btn v-else color="blue darken-1" text @click="addBlogPost"> Post! </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <div id="blogs-list">
+        <div v-for="post in posts" :key="post.id">
+          <div :id="'blog-' + post.id" class="blog-post">
             <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="selectedPost.title"
-                  label="Title"
-                  required
-                />
+              <v-col cols="2" />
+              <v-col cols="8">
+                <h4 class="blog-post-title">
+                  {{ post.title }}
+                </h4>
               </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="selectedPost.content"
-                  required
-                  name="input-7-1"
-                  filled
-                  label="Content"
-                  auto-grow
-                  value=""
-                />
+              <v-col cols="2">
+                <p class="blog-post-date">
+                  {{ date2string(Date.parse(post.created_at)) }}
+                </p>
               </v-col>
             </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="abortEditPost"
-          >
-            Abort
-          </v-btn>
-          <v-btn
-            v-if="editBlogMode"
-            color="blue darken-1"
-            text
-            @click="updateBlogPost"
-          >
-            Update!
-          </v-btn>
-          <v-btn
-            v-else
-            color="blue darken-1"
-            text
-            @click="addBlogPost"
-          >
-            Post!
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
-    <div id="blogs-list">
-      <div
-        v-for="post in posts"
-        :key="post.id"
-      >
-        <div
-          :id="'blog-' + post.id"
-          class="blog-post"
-        >
-          <v-row>
-            <v-col cols="2" />
-            <v-col cols="8">
-              <h4 class="blog-post-title">
-                {{ post.title }}
-              </h4>
-            </v-col>
-            <v-col cols="2">
-              <p class="blog-post-date">
-                {{ date2string(Date.parse(post.created_at)) }}
-              </p>
-            </v-col>
-          </v-row>
+            <v-row style="padding-left: 10px; padding-right: 10px">
+              <v-col cols="12">
+                <span v-html="post.content" />
+              </v-col>
+            </v-row>
+            <v-row style="margin: 0px">
+              <v-col v-if="theRoot.loggedIn" style="padding: 0px" cols="2">
+                <v-btn class="mx-1" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
+                  <v-icon dark> mdi-pencil </v-icon>
+                </v-btn>
+                <v-btn
+                  class="mx-1"
+                  fab
+                  dark
+                  x-small
+                  color="error"
+                  @click="deletePost(post.id, post.title)"
+                >
+                  <v-icon dark> mdi-minus </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col v-else cols="2" style="padding: 0px" />
+              <v-col cols="8" style="padding: 0px" />
+              <v-col cols="2" style="padding: 0px">
+                <v-btn icon @click="clap(post)">
+                  <!-- TODO: not showing in production -->
+                  <!-- <v-icon>mdi-hand-clap</v-icon> -->
+                  <v-icon>👏</v-icon>
+                  <!-- <v-icon>mdi-thumb-up</v-icon> -->
+                </v-btn>
+                {{ post.claps }}
+              </v-col>
+            </v-row>
+          </div>
+        </div>
 
-          <v-row style="padding-left: 10px; padding-right: 10px">
-            <v-col cols="12">
-              <span v-html="post.content" />
-            </v-col>
-          </v-row>
-          <v-row style="margin: 0px">
-            <v-col
-              v-if="theRoot.loggedIn"
-              style="padding: 0px"
-              cols="2"
-            >
-              <v-btn
-                class="mx-1"
-                fab
-                dark
-                x-small
-                color="cyan"
-                @click="openEditPostDialog(post)"
-              >
-                <v-icon dark>
-                  mdi-pencil
-                </v-icon>
-              </v-btn>
-              <v-btn
-                class="mx-1"
-                fab
-                dark
-                x-small
-                color="error"
-                @click="deletePost(post.id, post.title)"
-              >
-                <v-icon dark>
-                  mdi-minus
-                </v-icon>
-              </v-btn>
-            </v-col>
-            <v-col
-              v-else
-              cols="2"
-              style="padding: 0px"
-            />
-            <v-col
-              cols="8"
-              style="padding: 0px"
-            />
-            <v-col
-              cols="2"
-              style="padding: 0px"
-            >
-              <v-btn
-                icon
-                @click="clap(post)"
-              >
-                <!-- TODO: not showing in production -->
-                <!-- <v-icon>mdi-hand-clap</v-icon> -->
-                <v-icon>👏</v-icon>
-                <!-- <v-icon>mdi-thumb-up</v-icon> -->
-              </v-btn>
-              {{ post.claps }}
-            </v-col>
-          </v-row>
+        <!-- PAGINATION HERE -->
+        <div class="text-center">
+          <v-pagination
+            v-if="posts && posts.length > 0"
+            v-model="blogPage"
+            :length="blogPageLength"
+            :total-visible="7"
+            @input="onBlogPageChange"
+          />
         </div>
       </div>
 
-      <!-- PAGINATION HERE -->
-      <div class="text-center">
-        <v-pagination
-          v-if="posts && posts.length > 0"
-          v-model="blogPage"
-          :length="blogPageLength"
-          :total-visible="7"
-          @input="onBlogPageChange"
-        />
+      <div id="snackbar-div">
+        <v-snackbar v-model="showSnackbar">
+          {{ snackbarText }}
+          <template #action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+          </template>
+        </v-snackbar>
       </div>
-    </div>
-
-    <div id="snackbar-div">
-      <v-snackbar v-model="showSnackbar">
-        {{ snackbarText }}
-        <template #action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -473,9 +391,6 @@ export default {
 </script>
 
 <style scoped>
-#blog {
-  margin-bottom: 100px;
-}
 .blog-post {
   margin: 15px 15% 15px 15%;
   background-color: cadetblue;
