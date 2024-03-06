@@ -98,7 +98,7 @@
       </cookie-consent>
     </div>
 
-    <SiteFooter />
+    <SiteFooter v-if="$route.path !== '/gymstats'" />
   </v-app>
 </template>
 
