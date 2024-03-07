@@ -46,20 +46,14 @@
     <v-row v-if="loadedExerciseDistributions" class="mb-12">
       <v-col>
         <v-divider :thickness="3" color="#54ab80"></v-divider>
-        <v-list dense color="teal lighten-4" style="border-radius: 5px;">
-          <v-list-item-group 
-            color="primary"
-            active-class="pink--text"
-          >
+        <v-list color="teal lighten-4" style="border-radius: 5px">
+          <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
               v-for="(percentage, exercise) in loadedExerciseDistributions"
               :key="exercise.id"
             >
               <v-list-item-icon>
-                <v-icon color="green" v-if="percentage > 10">mdi-check</v-icon>
-                <v-icon color="yellow" v-else-if="percentage > 5">mdi-check</v-icon>
-                <v-icon color="orange" v-else-if="percentage > 2">mdi-check</v-icon>
-                <v-icon color="red" v-else>mdi-check</v-icon>
+                <v-icon :color="getPercentageColor(percentage)">mdi-circle</v-icon>
               </v-list-item-icon>
               <v-list-item-content @click="onExerciseSelected(selectedMuscleGroup, exercise)">
                 <v-list-item-title>
@@ -142,6 +136,20 @@ export default {
   },
 
   methods: {
+    getPercentageColor(percentage) {
+      if (percentage < 2) {
+        return 'red'
+      } else if (percentage < 6) {
+        return 'orange'
+      } else if (percentage < 12) {
+        return 'yellow'
+      } else if (percentage < 20) {
+        return 'green'
+      } else {
+        return 'dark-green'
+      }
+    },
+
     onExerciseSelected(group, exerciseId) {
       console.log('selectedExercise', exerciseId, 'from group', group.id)
     },
@@ -164,25 +172,7 @@ export default {
             console.error('response is null')
             return
           }
-
           vm.loadedExerciseDistributions = response.data
-          // response.data can look like this:
-          // {
-          //   "barbell_row_inclined": 15.83,
-          //   "bent_over_row": 0.94,
-          //   "deadlift": 1.41,
-          //   "exercise1": 1.18,
-          //   "exercise2": 0.23,
-          //   "hyperextensions": 20.56,
-          //   "lat_pull_down_barbell": 21.51,
-          //   "lat_pull_down_v_handle": 4.72,
-          //   "pull_up": 10.4,
-          //   "seated_row_barbell": 0.94,
-          //   "seated_row_v_handle": 18.43,
-          //   "single_arm_dumbell_row": 2.36,
-          //   "t_bar_row": 0.94
-          // }
-          console.log('loadedExerciseDistributions', vm.loadedExerciseDistributions)
         })
         .catch((err) => {
           console.error(err)
