@@ -144,9 +144,11 @@ export default {
       } else if (percentage < 12) {
         return 'yellow'
       } else if (percentage < 20) {
+        return 'lightgreen'
+      } else if (percentage < 30) {
         return 'green'
       } else {
-        return 'dark-green'
+        return 'darkgreen'
       }
     },
 

@@ -40,6 +40,7 @@ const muscleGroupToExercises = {
     { id: 'bench_press_declined', text: 'Bench Press [declined]' },
     { id: 'dips', text: 'Dips' },
     { id: 'chest_fly_machine', text: 'Chest Fly [machine]' },
+    { id: 'chest_fly_machine_inclined', text: 'Chest Fly [machine][inclined]' },
     { id: 'chest_press_machine', text: 'Chest Press [machine]' },
     { id: 'pushups', text: 'Push-Ups' },
     { id: 'dumbbell_pull_over', text: 'Dumbbell Pull-Over' }

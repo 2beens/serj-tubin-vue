@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-row v-if="loadingData">
-      <v-skeleton-loader class="mx-auto" type="sentences"></v-skeleton-loader>
-      <v-skeleton-loader class="mx-auto" type="table-heading"></v-skeleton-loader>
-      <v-skeleton-loader class="mx-auto" type="table-tbody"></v-skeleton-loader>
+      <v-skeleton-loader type="sentences"></v-skeleton-loader>
+      <v-skeleton-loader type="table-heading"></v-skeleton-loader>
+      <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
     </v-row>
 
     <v-row v-if="$vuetify.breakpoint.mdAndUp">
