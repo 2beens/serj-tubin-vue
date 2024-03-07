@@ -4,7 +4,7 @@
 
     <div v-if="currentTab === 'stats'">
       <v-divider :thickness="3" color="#54ab80"></v-divider>
-      <AvgSetDuration />
+      <ExerciseStats />
       <v-divider :thickness="3" color="#54ab80"></v-divider>
     </div>
 
@@ -38,13 +38,13 @@ h5 {
 
 <script scoped>
 import ExercisesList from '@/components/gymstats/ExercisesList.vue'
-import AvgSetDuration from '@/components/gymstats/AvgSetDuration.vue'
+import ExerciseStats from '@/components/gymstats/ExerciseStats.vue'
 
 export default {
   name: 'GymStatsView',
   components: {
     ExercisesList,
-    AvgSetDuration
+    ExerciseStats
   },
 
   data() {
