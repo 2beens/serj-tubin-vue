@@ -3,9 +3,7 @@
     <h2>💪 GymStats 💪</h2>
 
     <div v-if="currentTab === 'stats'">
-      <v-divider :thickness="3" color="#54ab80"></v-divider>
       <ExerciseStats />
-      <v-divider :thickness="3" color="#54ab80"></v-divider>
     </div>
 
     <div v-if="currentTab === 'list'">
