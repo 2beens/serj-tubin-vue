@@ -1,16 +1,25 @@
 <template>
-  <Bar
-    v-if="loaded"
-    id="avg-set-duration-chart"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <v-container>
+    <v-row v-if="$vuetify.breakpoint.mdAndUp">
+      <v-col>
+        <Bar v-if="loaded" id="avg-set-duration-chart" :options="chartOptions" :data="chartData" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import axios from 'axios'
 import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -37,7 +46,9 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + `/gymstats/sets/avgduration?only_prod=true&exclude_testing_data=true`, {
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/sets/avgduration?only_prod=true&exclude_testing_data=true`,
+          {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
             }

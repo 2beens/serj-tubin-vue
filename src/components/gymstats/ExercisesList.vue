@@ -1,5 +1,11 @@
 <template>
   <v-container>
+    <v-row v-if="loadingData">
+      <v-skeleton-loader class="mx-auto" type="sentences"></v-skeleton-loader>
+      <v-skeleton-loader class="mx-auto" type="table-heading"></v-skeleton-loader>
+      <v-skeleton-loader class="mx-auto" type="table-tbody"></v-skeleton-loader>
+    </v-row>
+
     <v-row v-if="$vuetify.breakpoint.mdAndUp">
       <v-col cols="2">
         <v-text-field
@@ -169,6 +175,7 @@ export default {
 
   data() {
     return {
+      loadingData: false,
       page: 1,
       paginationLen: 0,
       itemsPerPageInput: String,
@@ -199,6 +206,8 @@ export default {
 
   methods: {
     getExercises() {
+      this.loadingData = true
+
       const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
       if (storedItemsPerPageInput) {
         this.itemsPerPage = parseInt(storedItemsPerPageInput)
@@ -230,6 +239,9 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+        })
+        .finally(() => {
+          vm.loadingData = false
         })
     },
 
