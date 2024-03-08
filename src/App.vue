@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar id="main-menu-bar" app color="black">
-      <v-btn icon v-if="$vuetify.breakpoint.smAndDown" @click="drawer = !drawer">
+    <v-app-bar v-if="$vuetify.breakpoint.smAndDown" id="main-menu-bar-sm" app color="black">
+      <v-btn icon @click="drawer = !drawer">
         <v-icon color="teal lighten-1">mdi-menu</v-icon>
       </v-btn>
       <v-spacer />
@@ -48,7 +48,7 @@
 
     <!-- Navigation bar for large screens -->
     <!------------------------------------------>
-    <v-app-bar app color="black" v-else>
+    <v-app-bar id="main-menu-bar" app color="black" v-else>
       <v-spacer />
       <v-btn color="#4b9ff2" text rounded to="/"> Home </v-btn>
       <v-btn color="#4b9ff2" text rounded to="/about"> About </v-btn>
