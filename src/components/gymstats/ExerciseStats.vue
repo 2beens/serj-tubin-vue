@@ -94,6 +94,25 @@
         }
       }
     } -->
+    <v-row v-if="loadedExerciseHistory" class="mb-12">
+      <v-col>
+        <v-divider :thickness="3" color="#54ab80"></v-divider>
+        <v-list color="teal lighten-4" style="border-radius: 5px">
+          <v-list-item-group color="primary" active-class="pink--text">
+            <v-list-item v-for="(stats, date) in loadedExerciseHistory.stats" :key="date">
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ date }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ stats.avgKilos }} kg, {{ stats.avgReps }} reps, {{ stats.sets }} sets
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -121,7 +140,9 @@ export default {
     return {
       loaded: false,
       selectedMuscleGroup: null,
+      selectedExercise: null,
       loadedExerciseDistributions: null,
+      loadedExerciseHistory: null,
       muscleGroups: GymStatsData.muscleGroups,
       muscleGroupToExerciseToExerciseText: GymStatsData.muscleGroupToExerciseToExerciseText,
       chartData: null,
@@ -144,16 +165,44 @@ export default {
       } else if (percentage < 12) {
         return 'yellow'
       } else if (percentage < 20) {
-        return 'lightgreen'
+        return 'light-green'
       } else if (percentage < 30) {
         return 'green'
       } else {
-        return 'darkgreen'
+        return 'blue'
       }
     },
 
     onExerciseSelected(group, exerciseId) {
       console.log('selectedExercise', exerciseId, 'from group', group.id)
+      this.selectedExercise = {
+        group: group,
+        exerciseId: exerciseId
+      }
+
+      // get exercise history from the server
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/exercise/${exerciseId}/group/${group.id}/history?only_prod=true&exclude_testing_data=true`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('response is null')
+            return
+          }
+          vm.loadedExerciseHistory = response.data
+          console.log('exercise history', vm.loadedExerciseHistory)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
 
     onMuscleGroupChange() {
