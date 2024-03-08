@@ -8,152 +8,157 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="$vuetify.breakpoint.mdAndUp">
-      <v-col cols="2">
-        <v-text-field
-          dark
-          style="margin-top: 30px; margin-left: 15px"
-          v-model="itemsPerPageInput"
-          label="Items per page"
-          type="number"
-          min="1"
-          step="5"
-          outlined
-          dense
-          @change="onItemsPerPageChange"
-        />
-      </v-col>
-      <v-col cols="8">
-        <v-pagination
-          style="margin-top: 30px; margin-bottom: 15px"
-          v-if="stats && stats.length > 0"
-          v-model="page"
-          :length="paginationLen"
-          :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
-          @input="onPageChange"
-        />
-      </v-col>
-      <v-col cols="2">
-        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
-      </v-col>
-    </v-row>
+    <div v-else>
+      <v-row v-if="$vuetify.breakpoint.mdAndUp">
+        <v-col cols="2">
+          <v-text-field
+            dark
+            style="margin-top: 30px; margin-left: 15px"
+            v-model="itemsPerPageInput"
+            label="Items per page"
+            type="number"
+            min="1"
+            step="5"
+            outlined
+            dense
+            @change="onItemsPerPageChange"
+          />
+        </v-col>
+        <v-col cols="8">
+          <v-pagination
+            style="margin-top: 30px; margin-bottom: 15px"
+            v-if="stats && stats.length > 0"
+            v-model="page"
+            :length="paginationLen"
+            :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
+            @input="onPageChange"
+          />
+        </v-col>
+        <v-col cols="2">
+          <AddExercise
+            @exercise-added="getExercises"
+            style="margin-top: 30px; margin-right: 40px"
+          />
+        </v-col>
+      </v-row>
 
-    <!-- v-else - next three rows for small devices -->
-    <!------------------------------------------------->
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col style="margin-top: 10px; padding: 0%">
-        <v-text-field
-          dark
-          style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
-          v-model="itemsPerPageInput"
-          label="Items per page"
-          type="number"
-          min="1"
-          step="5"
-          outlined
-          dense
-          @change="onItemsPerPageChange"
-        />
-      </v-col>
-    </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col>
-        <v-pagination
-          v-if="stats && stats.length > 0"
-          style="margin-top: -20px"
-          v-model="page"
-          :length="paginationLen"
-          :total-visible="6"
-          @input="onPageChange"
-        />
-      </v-col>
-    </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col>
-        <AddExercise @exercise-added="getExercises" style="margin-bottom: 10px" />
-      </v-col>
-    </v-row>
-    <!------------------------------------------------->
+      <!-- v-else - next three rows for small devices -->
+      <!------------------------------------------------->
+      <v-row v-if="$vuetify.breakpoint.smAndDown">
+        <v-col style="margin-top: 10px; padding: 0%">
+          <v-text-field
+            dark
+            style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
+            v-model="itemsPerPageInput"
+            label="Items per page"
+            type="number"
+            min="1"
+            step="5"
+            outlined
+            dense
+            @change="onItemsPerPageChange"
+          />
+        </v-col>
+      </v-row>
+      <v-row v-if="$vuetify.breakpoint.smAndDown">
+        <v-col>
+          <v-pagination
+            v-if="stats && stats.length > 0"
+            style="margin-top: -20px"
+            v-model="page"
+            :length="paginationLen"
+            :total-visible="6"
+            @input="onPageChange"
+          />
+        </v-col>
+      </v-row>
+      <v-row v-if="$vuetify.breakpoint.smAndDown">
+        <v-col>
+          <AddExercise @exercise-added="getExercises" style="margin-bottom: 10px" />
+        </v-col>
+      </v-row>
+      <!------------------------------------------------->
 
-    <template>
-      <v-data-table
-        id="data-table"
-        :headers="headers"
-        :items="stats"
-        :items-per-page="itemsPerPage"
-        hide-default-footer
-        disable-pagination
-        class="elevation-1"
-      >
-        <!-- EXERCISE ID -->
-        <template v-slot:item.exerciseId="{ item }">
-          <v-edit-dialog :return-value.sync="item.exerciseId" @save="saveExercise(item)">
-            {{ item.exerciseId }}
-            <template v-slot:input>
-              <v-text-field v-model="item.exerciseId" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- MUSCLE GROUP -->
-        <template v-slot:item.muscleGroup="{ item }">
-          <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
-            <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
-              {{ item.muscleGroup }}
+      <template>
+        <v-data-table
+          id="data-table"
+          :headers="headers"
+          :items="stats"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          disable-pagination
+          class="elevation-1"
+        >
+          <!-- EXERCISE ID -->
+          <template v-slot:item.exerciseId="{ item }">
+            <v-edit-dialog :return-value.sync="item.exerciseId" @save="saveExercise(item)">
+              {{ item.exerciseId }}
+              <template v-slot:input>
+                <v-text-field v-model="item.exerciseId" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <!-- MUSCLE GROUP -->
+          <template v-slot:item.muscleGroup="{ item }">
+            <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
+              <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
+                {{ item.muscleGroup }}
+              </v-chip>
+              <template v-slot:input>
+                <v-text-field v-model="item.muscleGroup" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <!-- KILOS -->
+          <template v-slot:item.kilos="{ item }">
+            <v-edit-dialog :return-value.sync="item.kilos" @save="saveExercise(item)">
+              <v-chip :color="getKilosColor(item.kilos)" dark>
+                {{ item.kilos }}
+              </v-chip>
+              <template v-slot:input>
+                <v-text-field v-model="item.kilos" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <!-- REPS -->
+          <template v-slot:item.reps="{ item }">
+            <v-edit-dialog :return-value.sync="item.reps" @save="saveExercise(item)">
+              {{ item.reps }}
+              <template v-slot:input>
+                <v-text-field v-model="item.reps" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <!-- CREATED AT -->
+          <template v-slot:item.createdAt="{ item }">
+            <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
+              {{ item.createdAt }}
+              <template v-slot:input>
+                <v-text-field v-model="item.createdAt" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <!-- METADATA -->
+          <template v-slot:item.metadataJson="{ item }">
+            <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
+              {{ item.metadataJson }}
+              <template v-slot:input>
+                <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
+              </template>
+            </v-edit-dialog>
+          </template>
+          <template v-slot:item.isTesting="{ item }">
+            <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
+              {{ item.isTesting }}
             </v-chip>
-            <template v-slot:input>
-              <v-text-field v-model="item.muscleGroup" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- KILOS -->
-        <template v-slot:item.kilos="{ item }">
-          <v-edit-dialog :return-value.sync="item.kilos" @save="saveExercise(item)">
-            <v-chip :color="getKilosColor(item.kilos)" dark>
-              {{ item.kilos }}
-            </v-chip>
-            <template v-slot:input>
-              <v-text-field v-model="item.kilos" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- REPS -->
-        <template v-slot:item.reps="{ item }">
-          <v-edit-dialog :return-value.sync="item.reps" @save="saveExercise(item)">
-            {{ item.reps }}
-            <template v-slot:input>
-              <v-text-field v-model="item.reps" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- CREATED AT -->
-        <template v-slot:item.createdAt="{ item }">
-          <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
-            {{ item.createdAt }}
-            <template v-slot:input>
-              <v-text-field v-model="item.createdAt" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- METADATA -->
-        <template v-slot:item.metadataJson="{ item }">
-          <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
-            {{ item.metadataJson }}
-            <template v-slot:input>
-              <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <template v-slot:item.isTesting="{ item }">
-          <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
-            {{ item.isTesting }}
-          </v-chip>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editExercise(item)"> mdi-pencil </v-icon>
-          <v-icon small @click="deleteExercise(item)"> mdi-delete </v-icon>
-        </template>
-      </v-data-table>
-    </template>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon small class="mr-2" @click="editExercise(item)"> mdi-pencil </v-icon>
+            <v-icon small @click="deleteExercise(item)"> mdi-delete </v-icon>
+          </template>
+        </v-data-table>
+      </template>
+    </div>
   </v-container>
 </template>
 
