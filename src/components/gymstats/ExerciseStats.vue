@@ -28,7 +28,11 @@
 
     <!-- and we display it as a list of different shade of green color, depending on the percentage -->
     <v-row>
-      <v-col>
+      <v-col
+        class="d-flex"
+        cols="6"
+        sm="3"
+      >
         <v-select
           v-model="selectedMuscleGroup"
           :items="muscleGroups"
@@ -36,6 +40,7 @@
           item-value="id"
           label="Muscle Group"
           return-object
+          dark
           solo
           dense
           @change="onMuscleGroupChange"
@@ -43,7 +48,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseDistributions" class="mb-12">
+    <v-row v-if="loadedExerciseDistributions" class="mb-12" ref="loadedExerciseDistributions">
       <v-col>
         <v-divider :thickness="3" color="#54ab80"></v-divider>
         <v-list color="teal lighten-4" style="border-radius: 5px">
@@ -94,7 +99,7 @@
         }
       }
     } -->
-    <v-row v-if="loadedExerciseHistory" class="mb-12">
+    <v-row v-if="loadedExerciseHistory" class="mb-12" ref="loadedExerciseHistory">
       <v-col>
         <v-divider :thickness="3" color="#54ab80"></v-divider>
         <v-list color="teal lighten-4" style="border-radius: 5px">
@@ -198,7 +203,9 @@ export default {
             return
           }
           vm.loadedExerciseHistory = response.data
-          console.log('exercise history', vm.loadedExerciseHistory)
+          this.$nextTick(() => {
+            this.$refs.loadedExerciseHistory.scrollIntoView({ behavior: 'smooth' });
+          });
         })
         .catch((err) => {
           console.error(err)
@@ -224,6 +231,9 @@ export default {
             return
           }
           vm.loadedExerciseDistributions = response.data
+          this.$nextTick(() => {
+            this.$refs.loadedExerciseDistributions.scrollIntoView({ behavior: 'smooth' });
+          });
         })
         .catch((err) => {
           console.error(err)
