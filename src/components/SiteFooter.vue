@@ -2,7 +2,7 @@
   <v-footer max-height="52" dark padless fixed>
     <v-card class="flex" flat tile>
       <v-card-title class="teal lighten-1">
-        <strong class="subheading">Serj, Berlin 2021/2022/2023/2024</strong>
+        <strong class="subheading">Serj, Berlin 2024</strong>
 
         <v-spacer />
 

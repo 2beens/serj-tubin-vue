@@ -1,60 +1,56 @@
 <template>
   <v-container fluid>
-    <h5>
-      Dear visitors, feel free to leave any junk messages here, and let's see if this board can be
-      hacked and screwed 🤔👀🤷‍♂️
-    </h5>
-    <div
-      id="board"
-      data-app="true"
-    >
-      <div id="board-messages">
-        <div
-          v-for="message in messages"
-          :key="message.id"
-          class="board-message"
-        >
-          <div :id="'message-' + message.id">
-            <p class="message-content">
-              <v-btn
-                v-if="theRoot.loggedIn"
-                class="mx-1"
-                fab
-                dark
-                x-small
-                color="error"
-                @click="deleteMessage(message.id, message.message)"
-              >
-                <v-icon dark>
-                  mdi-minus
-                </v-icon>
-              </v-btn>
-              <span class="message-date">{{
-                getTimestampString(new Date(message.created_at))
-              }}</span>: [{{ message.author }}]
-              <strong>{{ message.message }}</strong>
-            </p>
+    <v-row>
+      <v-col>
+        <h5>
+          Dear visitors, feel free to leave any junk messages here, and let's see if this board can
+          be hacked and screwed 🤔👀🤷‍♂️
+        </h5>
+        <div id="board" data-app="true">
+          <div id="board-messages">
+            <div v-for="message in messages" :key="message.id" class="board-message">
+              <div :id="'message-' + message.id">
+                <p class="message-content">
+                  <v-btn
+                    v-if="theRoot.loggedIn"
+                    class="mx-1"
+                    fab
+                    dark
+                    x-small
+                    color="error"
+                    @click="deleteMessage(message.id, message.message)"
+                  >
+                    <v-icon dark> mdi-minus </v-icon>
+                  </v-btn>
+                  <span class="message-date">{{
+                    getTimestampString(new Date(message.created_at))
+                  }}</span
+                  >: [{{ message.author }}]
+                  <strong>{{ message.message }}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div id="board-controls">
+            <input
+              id="author-input"
+              type="text"
+              placeholder="author: anonymous"
+              class="board-input"
+              autocomplete="off"
+            />
+            <input
+              id="message-input"
+              type="text"
+              placeholder="message ..."
+              class="board-input"
+              autocomplete="off"
+              @keyup="sendMessage"
+            />
           </div>
         </div>
-      </div>
-      <div id="board-controls">
-        <input
-          id="author-input"
-          type="text"
-          placeholder="author: anonymous"
-          class="board-input"
-          autocomplete="off"
-        >
-        <input
-          id="message-input"
-          type="text"
-          placeholder="message ..."
-          class="board-input"
-          autocomplete="off"
-          @keyup="sendMessage"
-        >
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
