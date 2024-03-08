@@ -28,11 +28,7 @@
 
     <!-- and we display it as a list of different shade of green color, depending on the percentage -->
     <v-row>
-      <v-col
-        class="d-flex"
-        cols="6"
-        sm="3"
-      >
+      <v-col class="d-flex" cols="6" sm="3">
         <v-select
           v-model="selectedMuscleGroup"
           :items="muscleGroups"
@@ -202,10 +198,28 @@ export default {
             console.error('response is null')
             return
           }
-          vm.loadedExerciseHistory = response.data
+
+          const loadedExerciseHistory = response.data
+
+          //sort by date desc
+          loadedExerciseHistory.stats = Object.fromEntries(
+            Object.entries(loadedExerciseHistory.stats).sort(
+              (a, b) => new Date(b[0]) - new Date(a[0])
+            )
+          )
+          // format timestamps to a human readable string in EU/DE format: dd.mm.yyyy
+          Object.keys(loadedExerciseHistory.stats).forEach((key) => {
+            const date = new Date(key)
+            loadedExerciseHistory.stats[date.toLocaleDateString('de-DE')] =
+              loadedExerciseHistory.stats[key]
+            delete loadedExerciseHistory.stats[key]
+          })
+
+          vm.loadedExerciseHistory = loadedExerciseHistory
+
           this.$nextTick(() => {
-            this.$refs.loadedExerciseHistory.scrollIntoView({ behavior: 'smooth' });
-          });
+            this.$refs.loadedExerciseHistory.scrollIntoView({ behavior: 'smooth' })
+          })
         })
         .catch((err) => {
           console.error(err)
@@ -232,8 +246,8 @@ export default {
           }
           vm.loadedExerciseDistributions = response.data
           this.$nextTick(() => {
-            this.$refs.loadedExerciseDistributions.scrollIntoView({ behavior: 'smooth' });
-          });
+            this.$refs.loadedExerciseDistributions.scrollIntoView({ behavior: 'smooth' })
+          })
         })
         .catch((err) => {
           console.error(err)
