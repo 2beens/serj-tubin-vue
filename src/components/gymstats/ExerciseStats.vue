@@ -63,7 +63,11 @@
                     exercise
                   }}
                 </v-list-item-title>
-                <v-list-item-subtitle>{{ percentage }}%</v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-chip color="teal lighten-1">
+                    {{ percentage }}%
+                  </v-chip>
+                </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -97,21 +101,38 @@
     } -->
     <v-row v-if="loadedExerciseHistory" class="mb-12" ref="loadedExerciseHistory">
       <v-col>
-        <v-divider :thickness="3" color="#54ab80"></v-divider>
-        <v-list color="teal lighten-4" style="border-radius: 5px">
-          <v-list-item-group color="primary" active-class="pink--text">
-            <v-list-item v-for="(stats, date) in loadedExerciseHistory.stats" :key="date">
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ date }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ stats.avgKilos }} kg, {{ stats.avgReps }} reps, {{ stats.sets }} sets
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
+        <v-timeline align-top dense dark>
+          <v-timeline-item v-for="(stats, date) in loadedExerciseHistory.stats" :key="date" small>
+            <v-card dark class="mx-auto pa-0" max-width="600">
+              <v-card-title>{{ date }}</v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-weight-lifter </v-icon>
+                      Avg. Kilos
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.avgKilos }}</v-chip>
+                  </v-col>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-dumbbell </v-icon>
+                      Avg. Reps
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.avgReps }}</v-chip>
+                  </v-col>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-clock-time-four-outline </v-icon>
+                      Sets
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.sets }}</v-chip>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-timeline-item>
+        </v-timeline>
       </v-col>
     </v-row>
   </v-container>
@@ -207,11 +228,13 @@ export default {
               (a, b) => new Date(b[0]) - new Date(a[0])
             )
           )
-          // format timestamps to a human readable string in EU/DE format: dd.mm.yyyy
+          // format timestamps to a human readable string in EU/DE format: dd.mm.yyyy [day name]
           Object.keys(loadedExerciseHistory.stats).forEach((key) => {
             const date = new Date(key)
-            loadedExerciseHistory.stats[date.toLocaleDateString('de-DE')] =
-              loadedExerciseHistory.stats[key]
+            const newKey = `${date.toLocaleDateString('de-DE')} [${date.toLocaleString('de-DE', {
+              weekday: 'long'
+            })}]`
+            loadedExerciseHistory.stats[newKey] = loadedExerciseHistory.stats[key]
             delete loadedExerciseHistory.stats[key]
           })
 
