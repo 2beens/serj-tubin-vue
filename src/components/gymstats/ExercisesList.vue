@@ -156,6 +156,13 @@
         </v-data-table>
       </template>
     </div>
+
+    <v-snackbar v-model="showSnackbar">
+      {{ snackbarText }}
+      <template #action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -200,7 +207,9 @@ export default {
         { text: 'Metadata', value: 'metadataJson' },
         { text: 'IsTesting', value: 'isTesting' },
         { text: 'Actions', value: 'actions', sortable: false }
-      ]
+      ],
+      snackbarText: '',
+      showSnackbar: false
     }
   },
 
@@ -279,16 +288,20 @@ export default {
             return
           }
           vm.getExercises()
+          vm.snackbarText = `Exercise [${exercise.id}] ${exercise.exerciseId} saved`
+          vm.showSnackbar = true
         })
         .catch((error) => {
           console.log(error)
+          vm.snackbarText = `Error saving exercise [${exercise.id}] ${exercise.exerciseId}: ${error.message}`
+          vm.showSnackbar = true
         })
     },
 
     deleteExercise(exercise) {
       if (
         !confirm(
-          `Are you sure you want to delete exercise: [' ${exercise.id} '] ${exercise.exerciseId} ?`
+          `Are you sure you want to delete exercise: [${exercise.id}] ${exercise.exerciseId} ?`
         )
       ) {
         return
@@ -307,9 +320,13 @@ export default {
             return
           }
           vm.getExercises()
+          vm.snackbarText = `Exercise [${exercise.id}] ${exercise.exerciseId} deleted`
+          vm.showSnackbar = true
         })
         .catch((error) => {
           console.log(error)
+          vm.snackbarText = `Error deleting exercise [${exercise.id}] ${exercise.exerciseId}: ${error.message}`
+          vm.showSnackbar = true
         })
     },
 
