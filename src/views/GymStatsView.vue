@@ -58,7 +58,7 @@ export default {
 
   data() {
     return {
-      currentTab: 'list'
+      currentTab: 'log'
     }
   }
 }
