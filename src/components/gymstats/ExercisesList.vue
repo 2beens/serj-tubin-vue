@@ -1,38 +1,124 @@
 <template>
-  <v-container>
-    <!-- now: an input box to select a muscle group, and after it's selected, we call "/api/gymstats/group/<selected-group>/percentages" -->
-    <!-- and we display results: all exercises with their percentage distribution, e.g. backend might return: -->
-    <!-- {
-      "barbell_row_inclined": 15.83,
-      "bent_over_row": 0.94,
-      "deadlift": 1.41,
-      "exercise1": 1.18,
-      "exercise2": 0.23,
-      "hyperextensions": 20.56,
-      "lat_pull_down_barbell": 21.51,
-      "lat_pull_down_v_handle": 4.72,
-      "pull_up": 10.4,
-      "seated_row_barbell": 0.94,
-      "seated_row_v_handle": 18.43,
-      "single_arm_dumbell_row": 2.36,
-      "t_bar_row": 0.94
-    } -->
-
-    <!-- and we display it as a list of different shade of green color, depending on the percentage -->
-    <v-row>
-      <v-col class="d-flex" cols="12" sm="12">
-        <v-select
-          v-model="selectedMuscleGroup"
-          :items="muscleGroups"
-          item-text="text"
-          item-value="id"
-          label="Muscle Group"
-          return-object
-          dark
-          solo
-          dense
-          @change="onMuscleGroupChange"
-        ></v-select>
+  <v-container style="text-align: left">
+    <v-row class="mb-12">
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[0]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/biceps.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Biceps </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[1]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/triceps.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Triceps </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[2]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/legs.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Legs </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[3]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/shoulders.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Shoulders </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[4]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/chest.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Chest </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[5]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/back_2.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Back </v-card-title>
+        </v-card>
+      </v-col>
+      <v-col cols="6" sm="3">
+        <v-card
+          @click="
+            selectedMuscleGroup = muscleGroups[6]
+            onMuscleGroupChange()
+          "
+          class="teal lighten-4"
+        >
+          <v-img
+            src="../../assets/gymstats/core.png"
+            height="80"
+            class="grey darken-4"
+            contain
+          ></v-img>
+          <v-card-title class="text-h6"> Other </v-card-title>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -65,30 +151,6 @@
       </v-col>
     </v-row>
 
-    <!-- TODO: when an exercise is clicked in the list, we get its history from the server, and show bellow -->
-    <!-- path: /api/gymstats/exercise/<exerciseId>/group/<muscleGroup>/history -->
-    <!-- server might return something like: -->
-    <!-- {
-      "exerciseId": "dumbells",
-      "muscleGroup": "biceps",
-      "stats": {
-        "2023-05-12T00:00:00Z": {
-          "avgKilos": 50,
-          "avgReps": 11,
-          "sets": 1
-        },
-        "2023-05-15T00:00:00Z": {
-          "avgKilos": 17,
-          "avgReps": 18,
-          "sets": 4
-        },
-        "2023-05-20T00:00:00Z": {
-          "avgKilos": 32,
-          "avgReps": 11,
-          "sets": 4
-        }
-      }
-    } -->
     <v-row v-if="loadedExerciseHistory" class="mb-12" ref="loadedExerciseHistory">
       <v-col>
         <v-timeline align-top dense dark>

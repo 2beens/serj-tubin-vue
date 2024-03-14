@@ -1,11 +1,11 @@
 const muscleGroups = [
-  { id: 'biceps', text: 'Biceps 💪' },
-  { id: 'triceps', text: 'Triceps 💪' },
-  { id: 'legs', text: 'Legs 🦵' },
-  { id: 'shoulders', text: 'Shoulders 🤷‍♂️' },
-  { id: 'chest', text: 'Chest 🙌' },
-  { id: 'back', text: 'Back 🚶‍♂️' },
-  { id: 'other', text: 'Other 🚀' }
+  { id: 'biceps', text: 'Biceps 💪', imgPath: '../../assets/gymstats/biceps.png' },
+  { id: 'triceps', text: 'Triceps 💪', imgPath: '../../assets/gymstats/triceps.png' },
+  { id: 'legs', text: 'Legs 🦵', imgPath: '../../assets/gymstats/legs.png' },
+  { id: 'shoulders', text: 'Shoulders 🤷‍♂️', imgPath: '../../assets/gymstats/shoulders.png' },
+  { id: 'chest', text: 'Chest 🙌', imgPath: '../../assets/gymstats/chest.png' },
+  { id: 'back', text: 'Back 🚶‍♂️', imgPath: '../../assets/gymstats/back_1.png' },
+  { id: 'other', text: 'Other 🚀', imgPath: '../../assets/gymstats/core.png' }
 ]
 
 const muscleGroupToExercises = {
