@@ -1,230 +1,190 @@
 <template>
   <v-container>
-    <v-row v-if="loadingData">
-      <v-col>
-        <v-skeleton-loader type="sentences"></v-skeleton-loader>
-        <v-skeleton-loader type="table-heading"></v-skeleton-loader>
-        <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
-      </v-col>
-    </v-row>
+    <!-- now: an input box to select a muscle group, and after it's selected, we call "/api/gymstats/group/<selected-group>/percentages" -->
+    <!-- and we display results: all exercises with their percentage distribution, e.g. backend might return: -->
+    <!-- {
+      "barbell_row_inclined": 15.83,
+      "bent_over_row": 0.94,
+      "deadlift": 1.41,
+      "exercise1": 1.18,
+      "exercise2": 0.23,
+      "hyperextensions": 20.56,
+      "lat_pull_down_barbell": 21.51,
+      "lat_pull_down_v_handle": 4.72,
+      "pull_up": 10.4,
+      "seated_row_barbell": 0.94,
+      "seated_row_v_handle": 18.43,
+      "single_arm_dumbell_row": 2.36,
+      "t_bar_row": 0.94
+    } -->
 
-    <v-row v-if="$vuetify.breakpoint.mdAndUp">
-      <v-col cols="2">
-        <v-text-field
+    <!-- and we display it as a list of different shade of green color, depending on the percentage -->
+    <v-row>
+      <v-col class="d-flex" cols="12" sm="12">
+        <v-select
+          v-model="selectedMuscleGroup"
+          :items="muscleGroups"
+          item-text="text"
+          item-value="id"
+          label="Muscle Group"
+          return-object
           dark
-          style="margin-top: 30px; margin-left: 15px"
-          v-model="itemsPerPageInput"
-          label="Items per page"
-          type="number"
-          min="1"
-          step="5"
-          outlined
+          solo
           dense
-          @change="onItemsPerPageChange"
-        />
-      </v-col>
-      <v-col cols="8">
-        <v-pagination
-          style="margin-top: 30px; margin-bottom: 15px"
-          v-if="stats && stats.length > 0"
-          v-model="page"
-          :length="paginationLen"
-          :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
-          @input="onPageChange"
-        />
-      </v-col>
-      <v-col cols="2">
-        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
+          @change="onMuscleGroupChange"
+        ></v-select>
       </v-col>
     </v-row>
 
-    <!-- v-else - next three rows for small devices -->
-    <!------------------------------------------------->
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col style="margin-top: 10px; padding: 0%">
-        <v-text-field
-          dark
-          style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
-          v-model="itemsPerPageInput"
-          label="Items per page"
-          type="number"
-          min="1"
-          step="5"
-          outlined
-          dense
-          @change="onItemsPerPageChange"
-        />
-      </v-col>
-    </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
+    <v-row v-if="loadedExerciseDistributions" class="mb-12" ref="loadedExerciseDistributions">
       <v-col>
-        <v-pagination
-          v-if="stats && stats.length > 0"
-          style="margin-top: -20px"
-          v-model="page"
-          :length="paginationLen"
-          :total-visible="6"
-          @input="onPageChange"
-        />
+        <v-divider :thickness="3" color="#54ab80"></v-divider>
+        <v-list color="teal lighten-4" style="border-radius: 5px">
+          <v-list-item-group color="primary" active-class="pink--text">
+            <v-list-item
+              v-for="(percentage, exercise) in loadedExerciseDistributions"
+              :key="exercise.id"
+            >
+              <v-list-item-icon>
+                <v-icon :color="getPercentageColor(percentage)">mdi-circle</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content @click="onExerciseSelected(selectedMuscleGroup, exercise)">
+                <v-list-item-title>
+                  {{
+                    muscleGroupToExerciseToExerciseText[selectedMuscleGroup.id][exercise] ??
+                    exercise
+                  }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-chip color="teal lighten-1"> {{ percentage }}% </v-chip>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
       </v-col>
     </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col>
-        <AddExercise @exercise-added="getExercises" style="margin-bottom: 10px" />
-      </v-col>
-    </v-row>
-    <!------------------------------------------------->
 
-    <template>
-      <v-data-table
-        id="data-table"
-        :headers="headers"
-        :items="stats"
-        :items-per-page="itemsPerPage"
-        hide-default-footer
-        disable-pagination
-        class="elevation-1"
-      >
-        <!-- EXERCISE ID -->
-        <template v-slot:item.exerciseId="{ item }">
-          <v-edit-dialog :return-value.sync="item.exerciseId" @save="saveExercise(item)">
-            {{ item.exerciseId }}
-            <template v-slot:input>
-              <v-text-field v-model="item.exerciseId" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- MUSCLE GROUP -->
-        <template v-slot:item.muscleGroup="{ item }">
-          <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
-            <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
-              {{ item.muscleGroup }}
-            </v-chip>
-            <template v-slot:input>
-              <v-text-field v-model="item.muscleGroup" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- KILOS -->
-        <template v-slot:item.kilos="{ item }">
-          <v-edit-dialog :return-value.sync="item.kilos" @save="saveExercise(item)">
-            <v-chip :color="getKilosColor(item.kilos)" dark>
-              {{ item.kilos }}
-            </v-chip>
-            <template v-slot:input>
-              <v-text-field v-model="item.kilos" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- REPS -->
-        <template v-slot:item.reps="{ item }">
-          <v-edit-dialog :return-value.sync="item.reps" @save="saveExercise(item)">
-            {{ item.reps }}
-            <template v-slot:input>
-              <v-text-field v-model="item.reps" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- CREATED AT -->
-        <template v-slot:item.createdAt="{ item }">
-          <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
-            {{ item.createdAt }}
-            <template v-slot:input>
-              <v-text-field v-model="item.createdAt" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <!-- METADATA -->
-        <template v-slot:item.metadataJson="{ item }">
-          <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
-            {{ item.metadataJson }}
-            <template v-slot:input>
-              <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
-            </template>
-          </v-edit-dialog>
-        </template>
-        <template v-slot:item.isTesting="{ item }">
-          <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
-            {{ item.isTesting }}
-          </v-chip>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editExercise(item)"> mdi-pencil </v-icon>
-          <v-icon small @click="deleteExercise(item)"> mdi-delete </v-icon>
-        </template>
-      </v-data-table>
-    </template>
+    <!-- TODO: when an exercise is clicked in the list, we get its history from the server, and show bellow -->
+    <!-- path: /api/gymstats/exercise/<exerciseId>/group/<muscleGroup>/history -->
+    <!-- server might return something like: -->
+    <!-- {
+      "exerciseId": "dumbells",
+      "muscleGroup": "biceps",
+      "stats": {
+        "2023-05-12T00:00:00Z": {
+          "avgKilos": 50,
+          "avgReps": 11,
+          "sets": 1
+        },
+        "2023-05-15T00:00:00Z": {
+          "avgKilos": 17,
+          "avgReps": 18,
+          "sets": 4
+        },
+        "2023-05-20T00:00:00Z": {
+          "avgKilos": 32,
+          "avgReps": 11,
+          "sets": 4
+        }
+      }
+    } -->
+    <v-row v-if="loadedExerciseHistory" class="mb-12" ref="loadedExerciseHistory">
+      <v-col>
+        <v-timeline align-top dense dark>
+          <v-timeline-item v-for="(stats, date) in loadedExerciseHistory.stats" :key="date" small>
+            <v-card dark class="mx-auto pa-0" max-width="600">
+              <v-card-title>{{ date }}</v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-weight-lifter </v-icon>
+                      Avg. Kilos
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.avgKilos }}</v-chip>
+                  </v-col>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-dumbbell </v-icon>
+                      Avg. Reps
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.avgReps }}</v-chip>
+                  </v-col>
+                  <v-col>
+                    <v-chip color="teal lighten-1" label>
+                      <v-icon left> mdi-clock-time-four-outline </v-icon>
+                      Sets
+                    </v-chip>
+                    <v-chip class="ml-2" color="primary">{{ stats.sets }}</v-chip>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-timeline-item>
+        </v-timeline>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
-<style scoped>
-#data-table {
-  padding: 20px;
-  margin-bottom: 100px;
-  background: #26c6da;
-}
-</style>
-
-<script scoped>
-import AddExercise from '@/components/gymstats/AddExercise.vue'
+<script>
 import axios from 'axios'
+import GymStatsData from '@/gymstats'
 
 export default {
-  name: 'ExercisesList',
-  components: {
-    AddExercise
-  },
+  name: 'ExerciseList',
 
-  data() {
+  data: function () {
     return {
-      loadingData: false,
-      page: 1,
-      paginationLen: 0,
-      itemsPerPageInput: String,
-      itemsPerPage: 50,
-      stats: [],
-      headers: [
-        {
-          text: 'ID',
-          align: 'start',
-          sortable: true,
-          value: 'id'
-        },
-        { text: 'Exercise', value: 'exerciseId' },
-        { text: 'Muscle Group', value: 'muscleGroup' },
-        { text: 'Kilos', value: 'kilos' },
-        { text: 'Reps', value: 'reps' },
-        { text: 'At', value: 'createdAt' },
-        { text: 'Metadata', value: 'metadataJson' },
-        { text: 'IsTesting', value: 'isTesting' },
-        { text: 'Actions', value: 'actions', sortable: false }
-      ]
+      loaded: false,
+      selectedMuscleGroup: null,
+      selectedExercise: null,
+      loadedExerciseDistributions: null,
+      loadedExerciseHistory: null,
+      muscleGroups: GymStatsData.muscleGroups,
+      muscleGroupToExerciseToExerciseText: GymStatsData.muscleGroupToExerciseToExerciseText,
+      chartData: null,
+      chartOptions: {
+        responsive: true
+      }
     }
   },
 
-  mounted: function () {
-    this.getExercises()
+  mounted() {
+    console.log('ex. list mounted')
   },
 
   methods: {
-    getExercises() {
-      this.loadingData = true
+    getPercentageColor(percentage) {
+      if (percentage < 2) {
+        return 'red'
+      } else if (percentage < 6) {
+        return 'orange'
+      } else if (percentage < 12) {
+        return 'yellow'
+      } else if (percentage < 20) {
+        return 'light-green'
+      } else if (percentage < 30) {
+        return 'green'
+      } else {
+        return 'blue'
+      }
+    },
 
-      const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
-      if (storedItemsPerPageInput) {
-        this.itemsPerPage = parseInt(storedItemsPerPageInput)
+    onExerciseSelected(group, exerciseId) {
+      console.log('selectedExercise', exerciseId, 'from group', group.id)
+      this.selectedExercise = {
+        group: group,
+        exerciseId: exerciseId
       }
 
-      this.itemsPerPageInput = String(this.itemsPerPage)
-      if (!this.$root.loggedIn) {
-        return
-      }
-
+      // get exercise history from the server
       const vm = this
       axios
         .get(
           process.env.VUE_APP_API_ENDPOINT +
-            `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
+            `/gymstats/exercise/${exerciseId}/group/${group.id}/history?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -233,95 +193,46 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('get all urls - received null response / data')
-            vm.stats = []
+            console.error('response is null')
             return
           }
-          vm.handleStatsResp(response)
+
+          const loadedExerciseHistory = response.data
+
+          //sort by date desc
+          loadedExerciseHistory.stats = Object.fromEntries(
+            Object.entries(loadedExerciseHistory.stats).sort(
+              (a, b) => new Date(b[0]) - new Date(a[0])
+            )
+          )
+          // format timestamps to a human readable string in EU/DE format: dd.mm.yyyy [day name]
+          Object.keys(loadedExerciseHistory.stats).forEach((key) => {
+            const date = new Date(key)
+            const newKey = `${date.toLocaleDateString('de-DE')} [${date.toLocaleString('de-DE', {
+              weekday: 'long'
+            })}]`
+            loadedExerciseHistory.stats[newKey] = loadedExerciseHistory.stats[key]
+            delete loadedExerciseHistory.stats[key]
+          })
+
+          vm.loadedExerciseHistory = loadedExerciseHistory
+
+          this.$nextTick(() => {
+            this.$refs.loadedExerciseHistory.scrollIntoView({ behavior: 'smooth' })
+          })
         })
-        .catch((error) => {
-          console.log(error)
-        })
-        .finally(() => {
-          vm.loadingData = false
+        .catch((err) => {
+          console.error(err)
         })
     },
 
-    editExercise(exercise) {
-      console.warn('will edit exercise', exercise)
-      // TODO: implement
-    },
-
-    saveExercise(exercise) {
-      console.warn('will save exercise', exercise)
-      const requestBody = {
-        id: exercise.id,
-        muscleGroup: exercise.muscleGroup,
-        exerciseId: exercise.exerciseId,
-        kilos: Number(exercise.kilos),
-        reps: Number(exercise.reps),
-        createdAt: exercise.createdAt,
-        metadata: JSON.parse(exercise.metadataJson)
-      }
-
-      const vm = this
-      axios
-        .put(process.env.VUE_APP_API_ENDPOINT + `/gymstats`, requestBody, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
-        })
-        .then((response) => {
-          if (response === null || response.data === null) {
-            console.error('save exercise - received null response / data')
-            return
-          }
-          vm.getExercises()
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    deleteExercise(exercise) {
-      if (
-        !confirm(
-          `Are you sure you want to delete exercise: [' ${exercise.id} '] ${exercise.exerciseId} ?`
-        )
-      ) {
-        return
-      }
-
-      const vm = this
-      axios
-        .delete(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
-        })
-        .then((response) => {
-          if (response === null || response.data === null) {
-            console.error('delete exercise - received null response / data')
-            return
-          }
-          vm.getExercises()
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    onItemsPerPageChange() {
-      this.itemsPerPage = parseInt(this.itemsPerPageInput)
-      this.onPageChange(this.page)
-      localStorage.setItem('itemsPerPageInput', this.itemsPerPageInput)
-    },
-
-    onPageChange(page) {
+    onMuscleGroupChange() {
+      console.log('selectedMuscleGroup', this.selectedMuscleGroup.id, '=', this.selectedMuscleGroup)
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/group/${this.selectedMuscleGroup.id}/percentages?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
@@ -330,72 +241,17 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('get all urls - received null response / data')
+            console.error('response is null')
             return
           }
-          vm.handleStatsResp(response)
+          vm.loadedExerciseDistributions = response.data
+          this.$nextTick(() => {
+            this.$refs.loadedExerciseDistributions.scrollIntoView({ behavior: 'smooth' })
+          })
         })
-        .catch((error) => {
-          console.log(error)
+        .catch((err) => {
+          console.error(err)
         })
-    },
-
-    handleStatsResp(response) {
-      this.stats = response.data.exercises
-      for (let i = 0; i < this.stats.length; i++) {
-        this.stats[i].metadataJson = JSON.stringify(this.stats[i].metadata)
-        this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
-      }
-      this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
-      console.log('new pagination len: ' + this.paginationLen)
-    },
-
-    getKilosColor(kilos) {
-      // returns different shares of green color based on kilos
-      if (kilos < 10) {
-        return 'green lighten-5'
-      } else if (kilos < 20) {
-        return 'green lighten-4'
-      } else if (kilos < 30) {
-        return 'green lighten-3'
-      } else if (kilos < 40) {
-        return 'green lighten-2'
-      } else if (kilos < 50) {
-        return 'green lighten-1'
-      } else if (kilos < 60) {
-        return 'green'
-      } else if (kilos < 70) {
-        return 'green darken-1'
-      } else if (kilos < 80) {
-        return 'green darken-2'
-      } else if (kilos < 90) {
-        return 'green darken-3'
-      } else if (kilos < 100) {
-        return 'green darken-4'
-      } else {
-        return 'green'
-      }
-    },
-
-    getMuscleGroupColor(muscleGroup) {
-      switch (muscleGroup) {
-        case 'biceps':
-          return 'red'
-        case 'triceps':
-          return 'blue'
-        case 'legs':
-          return 'green'
-        case 'shoulders':
-          return 'orange'
-        case 'chest':
-          return 'purple'
-        case 'back':
-          return 'brown'
-        case 'other':
-          return 'grey'
-        default:
-          return 'black'
-      }
     }
   }
 }
