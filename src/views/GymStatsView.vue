@@ -14,22 +14,24 @@
       <ExercisesList />
     </div>
 
-    <v-bottom-navigation v-model="currentTab" dark shift fixed background-color="black">
-      <v-btn value="log">
-        <span>Log</span>
-        <v-icon color="teal lighten-1">mdi-timeline-text</v-icon>
-      </v-btn>
+    <div class="mt-12">
+      <v-bottom-navigation v-model="currentTab" dark shift fixed background-color="black">
+        <v-btn value="log">
+          <span>Log</span>
+          <v-icon color="teal lighten-1">mdi-timeline-text</v-icon>
+        </v-btn>
 
-      <v-btn value="stats">
-        <span>Stats</span>
-        <v-icon color="teal lighten-1">mdi-chart-bar</v-icon>
-      </v-btn>
+        <v-btn value="stats">
+          <span>Stats</span>
+          <v-icon color="teal lighten-1">mdi-chart-bar</v-icon>
+        </v-btn>
 
-      <v-btn value="list">
-        <span>List</span>
-        <v-icon color="teal lighten-1">mdi-format-list-bulleted</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
+        <v-btn value="list">
+          <span>List</span>
+          <v-icon color="teal lighten-1">mdi-format-list-bulleted</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </div>
   </v-container>
 </template>
 

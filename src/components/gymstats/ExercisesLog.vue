@@ -163,9 +163,9 @@
         </v-data-table>
       </template>
     </div>
-    <row v-else style="text-align: left">
+    <div v-else style="text-align: left">
       <!-- used for small devices, ability to show exercises log in a simple list instead of a table -->
-      <v-list dark dense class="mb-12 ml-0 mr-0">
+      <v-list dark dense style="border-radius: 5px">
         <v-list-item-group v-for="(exercise, index) in stats" :key="index">
           <v-divider v-if="index > 0" dark class="ma-0"></v-divider>
 
@@ -193,7 +193,7 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-    </row>
+    </div>
 
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}

@@ -1,6 +1,6 @@
 <template>
   <v-container style="text-align: left">
-    <v-row class="mb-12">
+    <v-row>
       <v-col cols="6" sm="3">
         <v-card
           @click="
@@ -122,9 +122,8 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseDistributions" class="mb-12" ref="loadedExerciseDistributions">
+    <v-row v-if="loadedExerciseDistributions" class="mb-0 mt-2" ref="loadedExerciseDistributions">
       <v-col>
-        <v-divider :thickness="3" color="#54ab80"></v-divider>
         <v-list color="teal lighten-4" style="border-radius: 5px">
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
@@ -151,7 +150,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseHistory" class="mb-12" ref="loadedExerciseHistory">
+    <v-row v-if="loadedExerciseHistory" ref="loadedExerciseHistory">
       <v-col>
         <v-timeline align-top dense dark>
           <v-timeline-item v-for="(stats, date) in loadedExerciseHistory.stats" :key="date" small>
