@@ -8,6 +8,16 @@ const muscleGroups = [
   { id: 'other', text: 'Other 🚀', imgPath: '../../assets/gymstats/core.png' }
 ]
 
+const muscleGroupToText = {
+  biceps: 'Biceps 💪',
+  triceps: 'Triceps 💪',
+  legs: 'Legs 🦵',
+  shoulders: 'Shoulders 🤷‍♂️',
+  chest: 'Chest 🙌',
+  back: 'Back 🚶‍♂️',
+  other: 'Other 🚀'
+}
+
 const muscleGroupToExercises = {
   biceps: [
     { id: 'preacher_curl', text: 'Preacher Curl' },
@@ -106,6 +116,7 @@ for (let muscleGroup in muscleGroupToExercises) {
 
 export default {
   muscleGroups,
+  muscleGroupToText,
   muscleGroupToExercises,
   muscleGroupToExerciseToExerciseText
 }

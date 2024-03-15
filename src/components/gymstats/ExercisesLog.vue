@@ -33,7 +33,7 @@
     <!-- v-else - next three rows for small devices -->
     <!------------------------------------------------->
     <v-row v-if="$vuetify.breakpoint.smAndDown">
-      <v-col style="margin-top: 10px; padding: 0%">
+      <v-col cols="7" style="padding: 0%">
         <v-text-field
           dark
           style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
@@ -46,6 +46,14 @@
           dense
           @change="onItemsPerPageChange"
         />
+      </v-col>
+      <v-col cols="5" style="padding: 0%">
+        <v-checkbox
+          v-model="showTable"
+          label="Show table"
+          dark
+          @change="onShowTableChange"
+        ></v-checkbox>
       </v-col>
     </v-row>
     <v-row v-if="$vuetify.breakpoint.smAndDown">
@@ -74,8 +82,7 @@
         <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
       </v-col>
     </v-row>
-
-    <div v-else>
+    <div v-else-if="showTable">
       <template>
         <v-data-table
           id="data-table"
@@ -156,6 +163,37 @@
         </v-data-table>
       </template>
     </div>
+    <row v-else style="text-align: left">
+      <!-- used for small devices, ability to show exercises log in a simple list instead of a table -->
+      <v-list dark dense class="mb-12 ml-0 mr-0">
+        <v-list-item-group v-for="(exercise, index) in stats" :key="index">
+          <v-divider v-if="index > 0" dark class="ma-0"></v-divider>
+
+          <v-list-item :key="exercise.id">
+            <v-list-item-icon>
+              <v-chip small class="mt-2">
+                {{ index + 1 }}
+              </v-chip>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{
+                  muscleGroupToExerciseToExerciseText[exercise.muscleGroup][exercise.exerciseId] ??
+                  exercise.exerciseId
+                }}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                {{ muscleGroupToText[exercise.muscleGroup] }}
+                <v-chip small color="teal lighten-1"> {{ exercise.kilos }} kg </v-chip>
+                <v-chip small color="teal lighten-4" text-color="black">
+                  {{ exercise.reps }} reps
+                </v-chip>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </row>
 
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
@@ -176,6 +214,7 @@
 
 <script scoped>
 import AddExercise from '@/components/gymstats/AddExercise.vue'
+import GymStatsData from '@/gymstats'
 import axios from 'axios'
 
 export default {
@@ -209,15 +248,26 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
+      showTable: true,
+      muscleGroupToText: GymStatsData.muscleGroupToText,
+      muscleGroupToExerciseToExerciseText: GymStatsData.muscleGroupToExerciseToExerciseText
     }
   },
 
   mounted: function () {
+    const storedShowTable = localStorage.getItem('showExercisesLogTable')
+    if (storedShowTable) {
+      this.showTable = storedShowTable === 'true'
+    }
     this.getExercises()
   },
 
   methods: {
+    onShowTableChange() {
+      localStorage.setItem('showExercisesLogTable', this.showTable)
+    },
+
     getExercises() {
       this.loadingData = true
 
@@ -366,7 +416,6 @@ export default {
         this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
       }
       this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
-      console.log('new pagination len: ' + this.paginationLen)
     },
 
     getKilosColor(kilos) {
