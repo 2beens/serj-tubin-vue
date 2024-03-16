@@ -16,17 +16,17 @@
 
     <div class="mt-12">
       <v-bottom-navigation v-model="currentTab" dark shift fixed background-color="black">
-        <v-btn value="log">
+        <v-btn value="log" @click="onTabChange('log')">
           <span>Log</span>
           <v-icon color="teal lighten-1">mdi-timeline-text</v-icon>
         </v-btn>
 
-        <v-btn value="stats">
+        <v-btn value="stats" @click="onTabChange('stats')">
           <span>Stats</span>
           <v-icon color="teal lighten-1">mdi-chart-bar</v-icon>
         </v-btn>
 
-        <v-btn value="list">
+        <v-btn value="list" @click="onTabChange('list')">
           <span>List</span>
           <v-icon color="teal lighten-1">mdi-format-list-bulleted</v-icon>
         </v-btn>
@@ -62,6 +62,18 @@ export default {
     return {
       currentTab: 'log'
     }
+  },
+
+  mounted() {
+    // get currentTab from local storage
+    this.currentTab = localStorage.getItem('currentTab') || 'log'
+  },
+
+  methods: {
+    onTabChange(tab) {
+      // save currentTab to local storage
+      localStorage.setItem('currentTab', tab)
+    },
   }
 }
 </script>
