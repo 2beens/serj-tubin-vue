@@ -176,7 +176,12 @@
         </v-tab-item>
         <v-tab-item value="setup">
           <v-card flat>
-            <v-card-text>setup</v-card-text>
+            <v-card-text>
+              <ExerciseSetup
+                :muscleGroup="selectedMuscleGroup.id"
+                :exerciseId="selectedExercise.exerciseId"
+              />
+            </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -188,11 +193,13 @@
 import axios from 'axios'
 import GymStatsData from '@/gymstats'
 import ExercisesTimeline from '@/components/gymstats/ExerciseTimeline.vue'
+import ExerciseSetup from '@/components/gymstats/ExerciseSetup.vue'
 
 export default {
   name: 'ExerciseList',
   components: {
-    ExercisesTimeline
+    ExercisesTimeline,
+    ExerciseSetup
   },
 
   data: function () {
