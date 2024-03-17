@@ -150,11 +150,37 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseHistory" ref="loadedExerciseHistory">
-      <v-col>
-        <ExercisesTimeline :loadedExerciseStats="loadedExerciseHistory.stats" />
-      </v-col>
-    </v-row>
+    <div v-if="loadedExerciseHistory">
+      <v-tabs class="mt-4" v-model="tab" background-color="teal lighten-4" centered icons-and-text>
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab href="#timeline">
+          Timeline
+          <v-icon>mdi-timeline-text</v-icon>
+        </v-tab>
+        <v-tab href="#setup">
+          Setup
+          <v-icon>mdi-wrench</v-icon>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab" class="pa-0">
+        <v-tab-item value="timeline">
+          <v-card flat class="pa-0">
+            <v-card-text>
+              <v-row class="pa-0" ref="loadedExerciseHistory">
+                <v-col class="pa-0">
+                  <ExercisesTimeline :loadedExerciseStats="loadedExerciseHistory.stats" />
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item value="setup">
+          <v-card flat>
+            <v-card-text>setup</v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
   </v-container>
 </template>
 
@@ -171,6 +197,7 @@ export default {
 
   data: function () {
     return {
+      tab: 'timeline',
       loaded: false,
       selectedMuscleGroup: null,
       selectedExercise: null,
