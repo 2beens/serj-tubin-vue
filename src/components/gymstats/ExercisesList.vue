@@ -120,6 +120,9 @@
           <v-card-title class="text-h6"> Other </v-card-title>
         </v-card>
       </v-col>
+      <v-col cols="6" sm="3">
+        <AddExerciseType @exerciseTypeAdded="onExerciseTypeAdded" />
+      </v-col>
     </v-row>
 
     <v-row v-if="loadedExerciseDistributions" class="mb-0 mt-2" ref="loadedExerciseDistributions">
@@ -186,6 +189,13 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+
+    <v-snackbar v-model="showSnackbar">
+      {{ snackbarText }}
+      <template #action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -194,12 +204,14 @@ import axios from 'axios'
 import GymStatsData from '@/gymstats'
 import ExercisesTimeline from '@/components/gymstats/ExerciseTimeline.vue'
 import ExerciseSetup from '@/components/gymstats/ExerciseSetup.vue'
+import AddExerciseType from '@/components/gymstats/AddExerciseType.vue'
 
 export default {
   name: 'ExerciseList',
   components: {
     ExercisesTimeline,
-    ExerciseSetup
+    ExerciseSetup,
+    AddExerciseType
   },
 
   data: function () {
@@ -215,12 +227,10 @@ export default {
       chartData: null,
       chartOptions: {
         responsive: true
-      }
+      },
+      snackbarText: '',
+      showSnackbar: false
     }
-  },
-
-  mounted() {
-    console.log('ex. list mounted')
   },
 
   methods: {
@@ -320,6 +330,18 @@ export default {
         .catch((err) => {
           console.error(err)
         })
+    },
+
+    onExerciseTypeAdded(exerciseType) {
+      console.log('exerciseTypeAdded', exerciseType)
+      this.muscleGroups.forEach((group) => {
+        if (group.id === exerciseType.muscleGroup) {
+          this.selectedMuscleGroup = group
+          this.onMuscleGroupChange()
+        }
+      })
+      this.snackbarText = `Added exercise type: ${exerciseType.name}`
+      this.showSnackbar = true
     }
   }
 }
