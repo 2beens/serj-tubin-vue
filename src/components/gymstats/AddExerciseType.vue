@@ -21,7 +21,12 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field outlined v-model="exerciseType.id" label="ID" required></v-text-field>
+                  <v-text-field
+                    outlined
+                    v-model="exerciseType.id"
+                    label="ID"
+                    required
+                  ></v-text-field>
                 </v-col>
 
                 <v-col cols="12" sm="6">
@@ -34,12 +39,15 @@
                 </v-col>
 
                 <v-col cols="12" sm="6">
-                  <v-text-field
-                    outlined
+                  <v-select
                     v-model="exerciseType.muscleGroup"
+                    :items="muscleGroups"
+                    item-text="text"
+                    item-value="id"
                     label="Muscle Group"
-                    required
-                  ></v-text-field>
+                    return-object
+                    solo
+                  ></v-select>
                 </v-col>
 
                 <v-col cols="12" sm="6">
@@ -81,12 +89,14 @@
 
 <script scoped>
 import axios from 'axios'
+import GymStatsData from '@/gymstats'
 
 export default {
   name: 'AddExerciseType',
 
   data() {
     return {
+      muscleGroups: GymStatsData.muscleGroups,
       showDialog: false,
       exerciseType: {
         id: '',
@@ -107,9 +117,16 @@ export default {
 
   methods: {
     addExerciseType() {
+      const requestBody = {
+        id: this.exerciseType.id,
+        name: this.exerciseType.name,
+        muscleGroup: this.exerciseType.muscleGroup.id,
+        description: this.exerciseType.description
+      }
+
       const vm = this
       axios
-        .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, this.exerciseType, {
+        .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, requestBody, {
           headers: {
             'Content-Type': 'application/json',
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
