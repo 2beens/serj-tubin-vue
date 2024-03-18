@@ -154,7 +154,14 @@
     </v-row>
 
     <div v-if="loadedExerciseHistory">
-      <v-tabs class="mt-4" v-model="tab" background-color="teal lighten-4" centered icons-and-text>
+      <v-tabs
+        class="mt-4"
+        v-model="tab"
+        style="border-top-left-radius: 5px; border-top-right-radius: 5px"
+        background-color="teal lighten-4"
+        centered
+        icons-and-text
+      >
         <v-tabs-slider></v-tabs-slider>
         <v-tab href="#timeline">
           Timeline

@@ -46,7 +46,7 @@
                     item-value="id"
                     label="Muscle Group"
                     return-object
-                    solo
+                    outlined
                   ></v-select>
                 </v-col>
 
@@ -71,8 +71,9 @@
               :disabled="addDisabled"
               style="margin-left: 50px"
               @click="addExerciseType"
-              >Add</v-btn
             >
+              Add
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
