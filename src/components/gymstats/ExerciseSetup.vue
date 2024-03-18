@@ -27,8 +27,17 @@
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col cols="12">
+      <v-row class="ma-0">
+        <v-col class="ma-0 pa-0" cols="6">
+          <h5>Images</h5>
+        </v-col>
+        <!-- add images button bellow: -->
+        <v-col class="ma-0 pa-0 d-flex justify-end" cols="6">
+          <v-btn color="primary" @click="showAddImageDialog = true">Add Image</v-btn>
+        </v-col>
+      </v-row>
+      <v-row class="ma-0">
+        <v-col class="ma-0 pa-0" cols="12">
           <v-divider></v-divider>
         </v-col>
       </v-row>
@@ -39,11 +48,35 @@
         <v-col cols="12">
           <v-row>
             <v-col v-for="image in exerciseType.images" :key="image.id" cols="12" sm="6">
-              <v-img :src="`${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${image.id}`" />
+              <v-img :src="getImageUrl(image.id)" contain></v-img>
             </v-col>
           </v-row>
         </v-col>
       </v-row>
+
+      <v-dialog v-model="showAddImageDialog" max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Add Image</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-file-input v-model="image" label="Image" accept="image/*"></v-file-input>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error" @click="showAddImageDialog = false">Close</v-btn>
+            <v-btn color="success" @click="uploadImage">Upload</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
@@ -77,6 +110,8 @@ export default {
       muscleGroups: GymStatsData.muscleGroups,
       exerciseTypeLoaded: false,
       exerciseType: null,
+      showAddImageDialog: false,
+      image: null,
       showSnackbar: false,
       snackbarText: ''
     }
@@ -106,6 +141,38 @@ export default {
         })
         .catch((error) => {
           console.error('error loading exercise type', error)
+          vm.showSnackbar = true
+          vm.snackbarText = `${error}: ${error.response.data}`
+        })
+    },
+
+    getImageUrl(imageId) {
+      return `${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`
+    },
+
+    uploadImage() {
+      const formData = new FormData()
+      formData.append('image', this.image)
+
+      const vm = this
+      axios
+        .post(
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.id}/image`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
+          }
+        )
+        .then((response) => {
+          console.log('image uploaded', response)
+          vm.showAddImageDialog = false
+          vm.refresh()
+        })
+        .catch((error) => {
+          console.error('error uploading image', error)
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
