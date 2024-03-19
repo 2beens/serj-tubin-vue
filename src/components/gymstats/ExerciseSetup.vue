@@ -2,15 +2,15 @@
   <v-row>
     <v-col v-if="exerciseTypeLoaded">
       <v-row>
-        <v-col cols="12" sm="6">
+        <v-col cols="4">
           <v-text-field outlined v-model="exerciseType.id" label="ID" required></v-text-field>
         </v-col>
 
-        <v-col cols="12" sm="6">
+        <v-col cols="4">
           <v-text-field outlined v-model="exerciseType.name" label="Name" required></v-text-field>
         </v-col>
 
-        <v-col cols="12" sm="6">
+        <v-col cols="4">
           <v-select
             outlined
             v-model="exerciseType.muscleGroup"
@@ -21,9 +21,15 @@
             return-object
           ></v-select>
         </v-col>
-
-        <v-col cols="12" sm="6">
+      </v-row>
+      <v-row>
+        <v-col cols="6">
           <v-textarea outlined v-model="exerciseType.description" label="Description"></v-textarea>
+        </v-col>
+
+        <!-- update button -->
+        <v-col cols="6">
+          <v-btn color="primary" @click="updateExerciseType">Update</v-btn>
         </v-col>
       </v-row>
 
@@ -117,6 +123,15 @@ export default {
     }
   },
 
+  watch: {
+    muscleGroup() {
+      this.refresh()
+    },
+    exerciseId() {
+      this.refresh()
+    }
+  },
+
   mounted() {
     this.refresh()
   },
@@ -173,6 +188,26 @@ export default {
         })
         .catch((error) => {
           console.error('error uploading image', error)
+          vm.showSnackbar = true
+          vm.snackbarText = `${error}: ${error.response.data}`
+        })
+    },
+
+    updateExerciseType() {
+      const vm = this
+      axios
+        .put(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, this.exerciseType, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          console.log('exercise type updated', response)
+          vm.showSnackbar = true
+          vm.snackbarText = 'Exercise type updated'
+        })
+        .catch((error) => {
+          console.error('error updating exercise type', error)
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
