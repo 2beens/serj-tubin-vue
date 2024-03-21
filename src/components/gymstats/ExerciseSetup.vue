@@ -26,11 +26,19 @@
         <v-col cols="6">
           <v-textarea outlined v-model="exerciseType.description" label="Description"></v-textarea>
         </v-col>
-
-        <!-- update button -->
         <v-col cols="6">
-          <v-btn color="primary" @click="updateExerciseType">Update</v-btn>
+          <v-row>
+            <v-col>
+              <v-btn color="primary" @click="updateExerciseType">Update</v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn color="error" @click="deleteExerciseType">Delete</v-btn>
+            </v-col>
+          </v-row>
         </v-col>
+        <v-col cols="4"></v-col>
       </v-row>
 
       <v-row class="ma-0">
@@ -53,8 +61,26 @@
       <v-row>
         <v-col cols="12">
           <v-row>
-            <v-col v-for="image in exerciseType.images" :key="image.id" cols="12" sm="6">
-              <v-img :src="getImageUrl(image.id)" contain></v-img>
+            <v-col
+              v-for="image in exerciseType.images"
+              :key="image.id"
+              cols="12"
+              sm="6"
+              style="position: relative"
+            >
+              <v-img
+                :src="getImageUrl(image.id)"
+                max-width="350px"
+                contain
+                style="border-radius: 5px"
+              ></v-img>
+              <v-icon
+                class="delete-icon"
+                style="position: absolute; top: 5%; left: 5%"
+                color="red"
+                @click="deleteImage(image.id)"
+                >mdi-delete</v-icon
+              >
             </v-col>
           </v-row>
         </v-col>
@@ -117,7 +143,7 @@ export default {
       exerciseTypeLoaded: false,
       exerciseType: null,
       showAddImageDialog: false,
-      image: null,
+      image: null, // for image upload dialog
       showSnackbar: false,
       snackbarText: ''
     }
@@ -185,6 +211,7 @@ export default {
           console.log('image uploaded', response)
           vm.showAddImageDialog = false
           vm.refresh()
+          vm.image = null
         })
         .catch((error) => {
           console.error('error uploading image', error)
@@ -193,10 +220,40 @@ export default {
         })
     },
 
-    updateExerciseType() {
+    deleteImage(imageId) {
+      // show a simple confirmation dialog
+      if (!confirm(`Are you sure you want to delete image ${imageId}?`)) {
+        return
+      }
       const vm = this
       axios
-        .put(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, this.exerciseType, {
+        .delete(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          console.log('image deleted', response)
+          vm.refresh()
+        })
+        .catch((error) => {
+          console.error('error deleting image', error)
+          vm.showSnackbar = true
+          vm.snackbarText = `${error}: ${error.response.data}`
+        })
+    },
+
+    updateExerciseType() {
+      const requestBody = {
+        id: this.exerciseType.id,
+        name: this.exerciseType.name,
+        muscleGroup: this.exerciseType.muscleGroup,
+        description: this.exerciseType.description
+      }
+
+      const vm = this
+      axios
+        .put(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
@@ -208,6 +265,30 @@ export default {
         })
         .catch((error) => {
           console.error('error updating exercise type', error)
+          vm.showSnackbar = true
+          vm.snackbarText = `${error}: ${error.response.data}`
+        })
+    },
+
+    deleteExerciseType() {
+      // show a simple confirmation dialog
+      if (!confirm('Are you sure you want to delete this exercise type?')) {
+        return
+      }
+      const vm = this
+      axios
+        .delete(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.id}`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        })
+        .then((response) => {
+          console.log('exercise type deleted', response)
+          vm.showSnackbar = true
+          vm.snackbarText = 'Exercise type deleted'
+        })
+        .catch((error) => {
+          console.error('error deleting exercise type', error)
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
