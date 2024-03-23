@@ -190,6 +190,7 @@
               <ExerciseSetup
                 :muscleGroup="selectedMuscleGroup.id"
                 :exerciseId="selectedExercise.exerciseId"
+                @exerciseTypeDeleted="onExerciseTypeDeleted"
               />
             </v-card-text>
           </v-card>
@@ -340,14 +341,38 @@ export default {
     },
 
     onExerciseTypeAdded(exerciseType) {
-      console.log('exerciseTypeAdded', exerciseType)
+      this.muscleGroups.forEach((group) => {
+        if (group.id === exerciseType.muscleGroup.id) {
+          this.selectedMuscleGroup = group
+          this.onMuscleGroupChange()
+        }
+      })
+
+      // now select the new exercise type
+      this.selectedExercise = {
+        group: exerciseType.muscleGroup,
+        exerciseId: exerciseType.id
+      }
+      this.onExerciseSelected(exerciseType.muscleGroup, exerciseType.id)
+
+      this.snackbarText = `Added exercise type: ${exerciseType.name}`
+      this.showSnackbar = true
+    },
+
+    onExerciseTypeDeleted(exerciseType) {
       this.muscleGroups.forEach((group) => {
         if (group.id === exerciseType.muscleGroup) {
           this.selectedMuscleGroup = group
           this.onMuscleGroupChange()
         }
       })
-      this.snackbarText = `Added exercise type: ${exerciseType.name}`
+
+      // deselect the deleted exercise type
+      this.selectedExercise = null
+      this.loadedExerciseHistory = null
+      this.loadedExerciseDistributions = null
+
+      this.snackbarText = `Deleted exercise type: ${exerciseType.name}`
       this.showSnackbar = true
     }
   }

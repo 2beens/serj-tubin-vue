@@ -181,7 +181,7 @@ export default {
           vm.exerciseTypeLoaded = true
         })
         .catch((error) => {
-          console.error('error loading exercise type', error)
+          console.error(`error loading exercise type ${this.muscleGroup}/${this.exerciseId}`, error)
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
@@ -284,8 +284,7 @@ export default {
         })
         .then((response) => {
           console.log('exercise type deleted', response)
-          vm.showSnackbar = true
-          vm.snackbarText = 'Exercise type deleted'
+          vm.$emit('exerciseTypeDeleted', this.exerciseType)
         })
         .catch((error) => {
           console.error('error deleting exercise type', error)
