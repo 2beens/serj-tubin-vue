@@ -2,7 +2,9 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp">Add Exercise ➕</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp"
+          >Add Exercise ➕</v-btn
+        >
         <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>Add ➕</v-btn>
       </template>
       <v-card>
@@ -16,7 +18,7 @@
                 <v-select
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
-                  item-text="text"
+                  item-text="name"
                   item-value="id"
                   label="Muscle Group"
                   return-object
@@ -28,7 +30,7 @@
                 <v-select
                   v-model="exercise.exerciseId"
                   :items="exercisesForSelectedMuscleGroup"
-                  item-text="text"
+                  item-text="name"
                   item-value="id"
                   label="Exercise"
                   solo
@@ -73,6 +75,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <v-btn color="primary" dark large @click="refreshExerciseTypes">Refresh</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="error" dark large @click="showDialog = false">Close</v-btn>
           <v-btn
@@ -146,9 +149,58 @@ export default {
     if (lastAddedExercise) {
       this.exercise = JSON.parse(lastAddedExercise)
     }
+
+    // get exercise types from local storage
+    const exerciseTypes = localStorage.getItem('exerciseTypes')
+    if (exerciseTypes) {
+      this.muscleGroupToExercises = JSON.parse(exerciseTypes)
+    } else {
+      this.refreshExerciseTypes()
+    }
   },
 
   methods: {
+    refreshExerciseTypes() {
+      console.log('refreshing exercise types')
+      const vm = this
+      axios
+        .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          },
+          timeout: 3500
+        })
+        .then(function (response) {
+          if (!response.data) {
+            vm.snackbarText = 'Received unexpected response from server'
+            vm.showSnackbar = true
+            console.warn(response)
+            // fallback to local hardcoded data
+            vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
+            return
+          }
+
+          const muscleGroupToExercises = {}
+          response.data.forEach((exerciseType) => {
+            if (!muscleGroupToExercises[exerciseType.muscleGroup]) {
+              muscleGroupToExercises[exerciseType.muscleGroup] = []
+            }
+            muscleGroupToExercises[exerciseType.muscleGroup].push(exerciseType)
+          })
+          vm.muscleGroupToExercises = muscleGroupToExercises
+
+          // store exercise types in local storage
+          localStorage.setItem('exerciseTypes', JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+          vm.snackbarText = `Error getting muscle groups: ${error.message}`
+          vm.showSnackbar = true
+          // fallback to local hardcoded data
+          vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
+          vm.snackbarText = `${error}: ${error.response.data}`
+        })
+    },
+
     addExercise() {
       // store added exercise in local storage, and get it from there when adding next time
       localStorage.setItem('lastAddedExercise', JSON.stringify(this.exercise))

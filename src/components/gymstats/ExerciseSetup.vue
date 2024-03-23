@@ -15,7 +15,7 @@
             outlined
             v-model="exerciseType.muscleGroup"
             :items="muscleGroups"
-            item-text="text"
+            item-text="name"
             item-value="id"
             label="Muscle Group"
             return-object
