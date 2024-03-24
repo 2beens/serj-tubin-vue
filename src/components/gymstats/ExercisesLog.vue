@@ -15,7 +15,15 @@
           @change="onItemsPerPageChange"
         />
       </v-col>
-      <v-col cols="8">
+      <v-col cols="1">
+        <v-checkbox
+          v-model="showTable"
+          label="Show table"
+          dark
+          @change="onShowTableChange"
+        ></v-checkbox>
+      </v-col>
+      <v-col cols="7">
         <v-pagination
           style="margin-top: 30px; margin-bottom: 15px"
           v-if="stats && stats.length > 0"

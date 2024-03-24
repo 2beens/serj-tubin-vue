@@ -120,6 +120,9 @@
           <v-card-title class="text-h6"> Other </v-card-title>
         </v-card>
       </v-col>
+      <v-col cols="6" sm="3">
+        <AddExerciseType @exerciseTypeAdded="onExerciseTypeAdded" />
+      </v-col>
     </v-row>
 
     <v-row v-if="loadedExerciseDistributions" class="mb-0 mt-2" ref="loadedExerciseDistributions">
@@ -128,7 +131,7 @@
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
               v-for="(percentage, exercise) in loadedExerciseDistributions"
-              :key="exercise.id"
+              :key="exercise.exerciseId"
             >
               <v-list-item-icon>
                 <v-icon :color="getPercentageColor(percentage)">mdi-circle</v-icon>
@@ -150,11 +153,57 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseHistory" ref="loadedExerciseHistory">
-      <v-col>
-        <ExercisesTimeline :loadedExerciseStats="loadedExerciseHistory.stats" />
-      </v-col>
-    </v-row>
+    <div v-if="loadedExerciseHistory">
+      <v-tabs
+        class="mt-4"
+        v-model="tab"
+        style="border-top-left-radius: 5px; border-top-right-radius: 5px"
+        background-color="teal lighten-4"
+        centered
+        icons-and-text
+      >
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab href="#timeline">
+          Timeline
+          <v-icon>mdi-timeline-text</v-icon>
+        </v-tab>
+        <v-tab href="#setup">
+          Setup
+          <v-icon>mdi-wrench</v-icon>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab" class="pa-0">
+        <v-tab-item value="timeline">
+          <v-card flat class="pa-0">
+            <v-card-text>
+              <v-row class="pa-0" ref="loadedExerciseHistory">
+                <v-col class="pa-0">
+                  <ExercisesTimeline :loadedExerciseStats="loadedExerciseHistory.stats" />
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item value="setup">
+          <v-card flat>
+            <v-card-text>
+              <ExerciseSetup
+                :muscleGroup="selectedMuscleGroup.id"
+                :exerciseId="selectedExercise.exerciseId"
+                @exerciseTypeDeleted="onExerciseTypeDeleted"
+              />
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+
+    <v-snackbar v-model="showSnackbar">
+      {{ snackbarText }}
+      <template #action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -162,15 +211,20 @@
 import axios from 'axios'
 import GymStatsData from '@/gymstats'
 import ExercisesTimeline from '@/components/gymstats/ExerciseTimeline.vue'
+import ExerciseSetup from '@/components/gymstats/ExerciseSetup.vue'
+import AddExerciseType from '@/components/gymstats/AddExerciseType.vue'
 
 export default {
   name: 'ExerciseList',
   components: {
-    ExercisesTimeline
+    ExercisesTimeline,
+    ExerciseSetup,
+    AddExerciseType
   },
 
   data: function () {
     return {
+      tab: 'timeline',
       loaded: false,
       selectedMuscleGroup: null,
       selectedExercise: null,
@@ -181,12 +235,10 @@ export default {
       chartData: null,
       chartOptions: {
         responsive: true
-      }
+      },
+      snackbarText: '',
+      showSnackbar: false
     }
-  },
-
-  mounted() {
-    console.log('ex. list mounted')
   },
 
   methods: {
@@ -286,6 +338,42 @@ export default {
         .catch((err) => {
           console.error(err)
         })
+    },
+
+    onExerciseTypeAdded(exerciseType) {
+      this.muscleGroups.forEach((group) => {
+        if (group.id === exerciseType.muscleGroup.id) {
+          this.selectedMuscleGroup = group
+          this.onMuscleGroupChange()
+        }
+      })
+
+      // now select the new exercise type
+      this.selectedExercise = {
+        group: exerciseType.muscleGroup,
+        exerciseId: exerciseType.exerciseId
+      }
+      this.onExerciseSelected(exerciseType.muscleGroup, exerciseType.exerciseId)
+
+      this.snackbarText = `Added exercise type: ${exerciseType.name}`
+      this.showSnackbar = true
+    },
+
+    onExerciseTypeDeleted(exerciseType) {
+      this.muscleGroups.forEach((group) => {
+        if (group.id === exerciseType.muscleGroup) {
+          this.selectedMuscleGroup = group
+          this.onMuscleGroupChange()
+        }
+      })
+
+      // deselect the deleted exercise type
+      this.selectedExercise = null
+      this.loadedExerciseHistory = null
+      this.loadedExerciseDistributions = null
+
+      this.snackbarText = `Deleted exercise type: ${exerciseType.name}`
+      this.showSnackbar = true
     }
   }
 }
