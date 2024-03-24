@@ -131,7 +131,7 @@
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
               v-for="(percentage, exercise) in loadedExerciseDistributions"
-              :key="exercise.id"
+              :key="exercise.exerciseId"
             >
               <v-list-item-icon>
                 <v-icon :color="getPercentageColor(percentage)">mdi-circle</v-icon>
@@ -351,9 +351,9 @@ export default {
       // now select the new exercise type
       this.selectedExercise = {
         group: exerciseType.muscleGroup,
-        exerciseId: exerciseType.id
+        exerciseId: exerciseType.exerciseId
       }
-      this.onExerciseSelected(exerciseType.muscleGroup, exerciseType.id)
+      this.onExerciseSelected(exerciseType.muscleGroup, exerciseType.exerciseId)
 
       this.snackbarText = `Added exercise type: ${exerciseType.name}`
       this.showSnackbar = true

@@ -2,9 +2,9 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp"
-          >Add Exercise ➕</v-btn
-        >
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp">
+          Add Exercise ➕
+        </v-btn>
         <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>Add ➕</v-btn>
       </template>
       <v-card>
@@ -31,7 +31,7 @@
                   v-model="exercise.exerciseId"
                   :items="exercisesForSelectedMuscleGroup"
                   item-text="name"
-                  item-value="id"
+                  item-value="exerciseId"
                   label="Exercise"
                   solo
                   dense
@@ -138,30 +138,42 @@ export default {
     },
 
     exercisesForSelectedMuscleGroup() {
-      if (!this.exercise.muscleGroup) return []
-      return this.muscleGroupToExercises[this.exercise.muscleGroup.id] || []
+      if (!this.exercise.muscleGroup)
+        return [
+          {
+            exerciseId: null,
+            name: 'Select a muscle group first ⛔️'
+          }
+        ]
+      const exercises = this.muscleGroupToExercises[this.exercise.muscleGroup.id]
+      if (!exercises)
+        return [
+          {
+            exerciseId: null,
+            name: `No exercises for selected muscle group: ${this.exercise.muscleGroup.id} ⛔️`
+          }
+        ]
+      return exercises
     }
   },
 
   mounted() {
-    // get last added exercise from local storage
     const lastAddedExercise = localStorage.getItem('lastAddedExercise')
     if (lastAddedExercise) {
       this.exercise = JSON.parse(lastAddedExercise)
     }
-
     // get exercise types from local storage
-    const exerciseTypes = localStorage.getItem('exerciseTypes')
-    if (exerciseTypes) {
-      this.muscleGroupToExercises = JSON.parse(exerciseTypes)
+    const muscleGroupToExercises = localStorage.getItem('exerciseTypes')
+    if (muscleGroupToExercises && muscleGroupToExercises.length > 0) {
+      this.muscleGroupToExercises = JSON.parse(muscleGroupToExercises)
     } else {
+      console.log('no exercise types in local storage, will refresh')
       this.refreshExerciseTypes()
     }
   },
 
   methods: {
     refreshExerciseTypes() {
-      console.log('refreshing exercise types')
       const vm = this
       axios
         .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
@@ -190,7 +202,7 @@ export default {
           vm.muscleGroupToExercises = muscleGroupToExercises
 
           // store exercise types in local storage
-          localStorage.setItem('exerciseTypes', JSON.stringify(response.data))
+          localStorage.setItem('exerciseTypes', JSON.stringify(vm.muscleGroupToExercises))
         })
         .catch(function (error) {
           vm.snackbarText = `Error getting muscle groups: ${error.message}`

@@ -23,7 +23,7 @@
                 <v-col cols="12" sm="6">
                   <v-text-field
                     outlined
-                    v-model="exerciseType.id"
+                    v-model="exerciseType.exerciseId"
                     label="ID"
                     required
                   ></v-text-field>
@@ -112,14 +112,14 @@ export default {
 
   computed: {
     addDisabled() {
-      return !this.exerciseType.name || !this.exerciseType.muscleGroup || !this.exerciseType.id
+      return !this.exerciseType.name || !this.exerciseType.muscleGroup || !this.exerciseType.exerciseId
     }
   },
 
   methods: {
     addExerciseType() {
       const requestBody = {
-        id: this.exerciseType.id,
+        exerciseId: this.exerciseType.exerciseId,
         name: this.exerciseType.name,
         muscleGroup: this.exerciseType.muscleGroup.id,
         description: this.exerciseType.description

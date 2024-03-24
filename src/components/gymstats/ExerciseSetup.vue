@@ -3,7 +3,12 @@
     <v-col v-if="exerciseTypeLoaded">
       <v-row>
         <v-col cols="4">
-          <v-text-field outlined v-model="exerciseType.id" label="ID" required></v-text-field>
+          <v-text-field
+            outlined
+            v-model="exerciseType.exerciseId"
+            label="ID"
+            required
+          ></v-text-field>
         </v-col>
 
         <v-col cols="4">
@@ -109,14 +114,13 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
-      <v-snackbar v-model="showSnackbar">
-        {{ snackbarText }}
-        <template #action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
-        </template>
-      </v-snackbar>
     </v-col>
+    <v-snackbar v-model="showSnackbar">
+      {{ snackbarText }}
+      <template #action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -169,14 +173,19 @@ export default {
         .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
           params: {
             muscleGroup: this.muscleGroup,
-            id: this.exerciseId
+            exerciseId: this.exerciseId
           },
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
           }
         })
         .then((response) => {
-          console.log('get exercise resp', response.data)
+          if (!response.data || response.data.length === 0) {
+            console.error(`no exercise type found for ${this.muscleGroup}/${this.exerciseId}`)
+            vm.showSnackbar = true
+            vm.snackbarText = `Unexpected response, no exercise type found for ${this.muscleGroup}/${this.exerciseId}`
+            return
+          }
           vm.exerciseType = response.data[0]
           vm.exerciseTypeLoaded = true
         })
@@ -198,7 +207,7 @@ export default {
       const vm = this
       axios
         .post(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.id}/image`,
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.muscleGroup}/image`,
           formData,
           {
             headers: {
@@ -245,7 +254,7 @@ export default {
 
     updateExerciseType() {
       const requestBody = {
-        id: this.exerciseType.id,
+        exerciseId: this.exerciseType.exerciseId,
         name: this.exerciseType.name,
         muscleGroup: this.exerciseType.muscleGroup,
         description: this.exerciseType.description
@@ -277,11 +286,14 @@ export default {
       }
       const vm = this
       axios
-        .delete(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.id}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .delete(
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            }
           }
-        })
+        )
         .then((response) => {
           console.log('exercise type deleted', response)
           vm.$emit('exerciseTypeDeleted', this.exerciseType)
