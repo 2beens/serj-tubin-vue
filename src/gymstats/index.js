@@ -106,17 +106,8 @@ const muscleGroupToExercises = {
   ]
 }
 
-let muscleGroupToExerciseToExerciseText = {}
-for (let muscleGroup in muscleGroupToExercises) {
-  muscleGroupToExerciseToExerciseText[muscleGroup] = {}
-  for (let exercise of muscleGroupToExercises[muscleGroup]) {
-    muscleGroupToExerciseToExerciseText[muscleGroup][exercise.exerciseId] = exercise.text
-  }
-}
-
 export default {
   muscleGroups,
   muscleGroupToText,
-  muscleGroupToExercises,
-  muscleGroupToExerciseToExerciseText
+  muscleGroupToExercises
 }

@@ -130,21 +130,18 @@
         <v-list color="teal lighten-4" style="border-radius: 5px">
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
-              v-for="(percentage, exercise) in loadedExerciseDistributions"
-              :key="exercise.exerciseId"
+              v-for="(percentageInfo, exerciseId) in loadedExerciseDistributions"
+              :key="exerciseId"
             >
               <v-list-item-icon>
-                <v-icon :color="getPercentageColor(percentage)">mdi-circle</v-icon>
+                <v-icon :color="getPercentageColor(percentageInfo.percentage)">mdi-circle</v-icon>
               </v-list-item-icon>
-              <v-list-item-content @click="onExerciseSelected(selectedMuscleGroup, exercise)">
+              <v-list-item-content @click="onExerciseSelected(selectedMuscleGroup, exerciseId)">
                 <v-list-item-title>
-                  {{
-                    muscleGroupToExerciseToExerciseText[selectedMuscleGroup.id][exercise] ??
-                    exercise
-                  }}
+                  {{ percentageInfo.exerciseName }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  <v-chip color="teal lighten-1"> {{ percentage }}% </v-chip>
+                  <v-chip color="teal lighten-1"> {{ percentageInfo.percentage }}% </v-chip>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -231,7 +228,6 @@ export default {
       loadedExerciseDistributions: null,
       loadedExerciseHistory: null,
       muscleGroups: GymStatsData.muscleGroups,
-      muscleGroupToExerciseToExerciseText: GymStatsData.muscleGroupToExerciseToExerciseText,
       chartData: null,
       chartOptions: {
         responsive: true

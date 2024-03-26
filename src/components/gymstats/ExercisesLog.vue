@@ -110,6 +110,10 @@
               </template>
             </v-edit-dialog>
           </template>
+          <!-- EXERCISE NAME (not editable) -->
+          <template v-slot:item.exerciseName="{ item }">
+            {{ item.exerciseName }}
+          </template>
           <!-- MUSCLE GROUP -->
           <template v-slot:item.muscleGroup="{ item }">
             <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
@@ -185,10 +189,7 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>
-                {{
-                  muscleGroupToExerciseToExerciseText[exercise.muscleGroup][exercise.exerciseId] ??
-                  exercise.exerciseId
-                }}
+                {{ exercise.exerciseName }}
               </v-list-item-title>
               <v-list-item-subtitle>
                 {{ muscleGroupToText[exercise.muscleGroup] }}
@@ -241,12 +242,13 @@ export default {
       stats: [],
       headers: [
         {
-          text: 'ID',
+          text: 'DB ID',
           align: 'start',
           sortable: true,
           value: 'id'
         },
-        { text: 'Exercise', value: 'exerciseId' },
+        { text: 'ID', value: 'exerciseId' },
+        { text: 'Name', value: 'exerciseName' },
         { text: 'Muscle Group', value: 'muscleGroup' },
         { text: 'Kilos', value: 'kilos' },
         { text: 'Reps', value: 'reps' },
@@ -259,7 +261,6 @@ export default {
       showSnackbar: false,
       showTable: true,
       muscleGroupToText: GymStatsData.muscleGroupToText,
-      muscleGroupToExerciseToExerciseText: GymStatsData.muscleGroupToExerciseToExerciseText
     }
   },
 
