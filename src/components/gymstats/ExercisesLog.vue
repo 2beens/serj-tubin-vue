@@ -183,7 +183,12 @@
 
           <v-list-item :key="exercise.id">
             <v-list-item-icon>
-              <v-chip small class="mt-2">
+              <v-chip
+                :color="getColorFromName(exercise.exerciseName)"
+                :style="{ color: getTextColor(getColorFromName(exercise.exerciseName)) }"
+                small
+                class="mt-2"
+              >
                 {{ index + 1 }}
               </v-chip>
             </v-list-item-icon>
@@ -191,7 +196,7 @@
               <v-list-item-title>
                 {{ exercise.exerciseName }}
               </v-list-item-title>
-              <v-list-item-subtitle style="font-size: 0.9em; color: teal">
+              <v-list-item-subtitle style="font-size: 0.8em; color: teal">
                 {{ new Date(exercise.createdAt).toLocaleString() }}
               </v-list-item-subtitle>
               <v-list-item-subtitle>
@@ -428,6 +433,30 @@ export default {
         this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
       }
       this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
+    },
+
+    getColorFromName(name) {
+      let hash = 0
+      for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash)
+      }
+      let color = (hash & 0x00ffffff).toString(16).toUpperCase()
+      color = '#' + '00000'.substring(0, 6 - color.length) + color
+      let r = Math.max(parseInt(color.substring(1, 3), 16), 30)
+      let g = Math.max(parseInt(color.substring(3, 5), 16), 30)
+      let b = Math.max(parseInt(color.substring(5, 7), 16), 30)
+      r = Math.floor((255 - r) * 0.1) + r
+      g = Math.floor((255 - g) * 0.1) + g
+      b = Math.floor((255 - b) * 0.1) + b
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+    },
+
+    getTextColor(color) {
+      let r = parseInt(color.substring(1, 3), 16)
+      let g = parseInt(color.substring(3, 5), 16)
+      let b = parseInt(color.substring(5, 7), 16)
+      let luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+      return luminance > 0.5 ? '#000000' : '#FFFFFF'
     },
 
     getKilosColor(kilos) {
