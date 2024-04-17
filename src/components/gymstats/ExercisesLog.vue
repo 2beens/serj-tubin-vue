@@ -191,6 +191,9 @@
               <v-list-item-title>
                 {{ exercise.exerciseName }}
               </v-list-item-title>
+              <v-list-item-subtitle style="font-size: 0.9em; color: teal">
+                {{ new Date(exercise.createdAt).toLocaleString() }}
+              </v-list-item-subtitle>
               <v-list-item-subtitle>
                 {{ muscleGroupToText[exercise.muscleGroup] }}
                 <v-chip small color="teal lighten-1"> {{ exercise.kilos }} kg </v-chip>
@@ -260,7 +263,7 @@ export default {
       snackbarText: '',
       showSnackbar: false,
       showTable: true,
-      muscleGroupToText: GymStatsData.muscleGroupToText,
+      muscleGroupToText: GymStatsData.muscleGroupToText
     }
   },
 
