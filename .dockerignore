@@ -1,0 +1,10 @@
+node_modules
+.git
+.dockerignore
+Dockerfile
+npm-debug.log
+.idea
+
+# cypress stuff
+cypress
+cypress_examples
