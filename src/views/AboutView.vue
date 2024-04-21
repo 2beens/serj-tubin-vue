@@ -14,7 +14,7 @@
           not intend to write a lot of stuff here.
         </h5>
         <h2>👨🏼‍💻</h2>
-        <h3>Curious to look under the hood, see the code of all this? Take a look at:</h3>
+        <h3>Curious to look under the hood, see the code of all this?? Take a look at:</h3>
         <h4>
           main backend 🚂 @
           <a href="https://github.com/2beens/serj-tubin-com">github.com/2beens/serj-tubin-com</a>

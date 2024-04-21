@@ -25,3 +25,7 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:latest
+
+    - name: Notify the server to redeploy via webhook
+      run: |
+        curl -X POST -H "Authorization: Bearer ${{ secrets.REDEPLOY_WEBHOOK_SECRET_TOKEN }}" https://serj-tubin.com/st-vue-redeploy
