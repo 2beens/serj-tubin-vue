@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  st-vue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_OUTPUT_DIR: dist
+        NODE_ENV: production
+    image: stubin87/serj-tubin-vue:latest
+    container_name: st-vue
+    ports:
+      - "8080:80"
+    restart: unless-stopped
