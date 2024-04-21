@@ -14,7 +14,7 @@
           not intend to write a lot of stuff here.
         </h5>
         <h2>👨🏼‍💻</h2>
-        <h3>Curious to look under the hood, see the code of all this?? Take a look at:</h3>
+        <h3>Curious to look under the hood, see the code of all this? Take a look at:</h3>
         <h4>
           main backend 🚂 @
           <a href="https://github.com/2beens/serj-tubin-com">github.com/2beens/serj-tubin-com</a>
@@ -30,7 +30,7 @@
           <a href="https://github.com/2beens/serj-tubin-vue">github.com/2beens/serj-tubin-vue</a>
         </h4>
 
-        <h3>Frontend is served from 🇩🇪</h3>
+        <h3>Frontend is served from 🇫🇮</h3>
         <h3>Backend lives in 🇫🇮 and 🇩🇪</h3>
 
         <h5>My other silly project: <a href="https://iconfess.me/">iConfess</a></h5>
