@@ -28,4 +28,7 @@ jobs:
 
     - name: Notify the server to redeploy via webhook
       run: |
-        curl -X POST -H "Authorization: Bearer ${{ secrets.REDEPLOY_WEBHOOK_SECRET_TOKEN }}" https://serj-tubin.com/st-vue-redeploy
+        curl -v https://serj-tubin.com/st-vue-redeploy \
+          -X POST \
+          -H "Authorization: Bearer ${{ secrets.REDEPLOY_WEBHOOK_SECRET_TOKEN }}" \
+          --retry 5 --retry-delay 2 --retry-max-time 60
