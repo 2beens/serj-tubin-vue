@@ -21,6 +21,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Extract branch or tag name
+      id: extract_ref
       shell: bash
       run: |
         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
@@ -28,7 +29,7 @@ jobs:
         elif [[ "${{ github.event_name }}" == "release" ]]; then
           REF_NAME=${GITHUB_REF#refs/tags/}
         fi
-        echo "DOCKER_IMAGE_TAG=${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:$REF_NAME" >> $GITHUB_ENV
+        echo "docker_image_tag=${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:$REF_NAME" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -36,7 +37,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:$REF_NAME
+        tags: ${{ steps.extract_ref.outputs.docker_image_tag }}
 
     - name: Notify the server to redeploy via webhook
       run: |
