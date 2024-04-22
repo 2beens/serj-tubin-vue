@@ -24,7 +24,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:$GITHUB_REF_NAME
 
     - name: Notify the server to redeploy via webhook
       run: |
