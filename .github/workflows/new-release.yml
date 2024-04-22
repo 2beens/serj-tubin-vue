@@ -26,6 +26,8 @@ jobs:
       run: |
         if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
           REF_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')
+          # if master branch, then use 'latest' tag
+          [[ "$REF_NAME" == "master" ]] && REF_NAME='latest'
         elif [[ "${{ github.event_name }}" == "release" ]]; then
           REF_NAME=${GITHUB_REF#refs/tags/}
         fi
