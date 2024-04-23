@@ -1,6 +1,8 @@
-name: Cypress CI Checks
+name: CI Checks
+
 on:
   pull_request:
+
 jobs:
   eslint:
     runs-on: ubuntu-22.04

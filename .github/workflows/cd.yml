@@ -1,10 +1,9 @@
-name: Build and Push Docker Image
+name: Continuous Delivery [Build and Push Docker Image]
 
 on:
   release:
     types: [created]
   workflow_dispatch:
-    # TODO: Add branch filter
 
 jobs:
   build:
