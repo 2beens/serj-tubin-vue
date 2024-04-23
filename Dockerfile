@@ -17,5 +17,6 @@ RUN VUE_APP_OUTPUT_DIR=$VUE_APP_OUTPUT_DIR NODE_ENV=$NODE_ENV yarn build
 # copy the dist folder to the nginx container
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/docker-nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
