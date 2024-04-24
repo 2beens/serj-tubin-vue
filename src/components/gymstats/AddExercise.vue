@@ -199,10 +199,39 @@ export default {
             }
             muscleGroupToExercises[exerciseType.muscleGroup].push(exerciseType)
           })
+
           vm.muscleGroupToExercises = muscleGroupToExercises
 
-          // store exercise types in local storage
-          localStorage.setItem('exerciseTypes', JSON.stringify(vm.muscleGroupToExercises))
+          // now, for each muscle group, get exercise distributions
+          // and add them to the exercise type name (name + (percentage%))
+          for (const muscleGroup in muscleGroupToExercises) {
+            vm.getExerciseDistributions(muscleGroup)
+              .then((response) => {
+                if (response === null || response.data === null) {
+                  console.error('response is null')
+                  return
+                }
+                const exerciseDistributions = response.data
+                muscleGroupToExercises[muscleGroup].forEach((exerciseType) => {
+                  const exerciseDistribution = exerciseDistributions[exerciseType.exerciseId]
+                  if (exerciseDistribution) {
+                    exerciseType.name = `${
+                      exerciseType.name
+                    } (${exerciseDistribution.percentage.toFixed(2)}%)`
+                    exerciseType.percentage = exerciseDistribution.percentage
+                  }
+                })
+              })
+              .catch((err) => {
+                console.error(
+                  `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
+                )
+              })
+              .finally(() => {
+                // store exercise types in local storage
+                localStorage.setItem('exerciseTypes', JSON.stringify(vm.muscleGroupToExercises))
+              })
+          }
         })
         .catch(function (error) {
           vm.snackbarText = `Error getting muscle groups: ${error.message}`
@@ -211,6 +240,22 @@ export default {
           vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
           vm.snackbarText = `${error}: ${error.response.data}`
         })
+        .finally(function () {
+          vm.snackbarText = 'Exercise types refreshed!'
+          vm.showSnackbar = true
+        })
+    },
+
+    getExerciseDistributions(muscleGroup) {
+      return axios.get(
+        process.env.VUE_APP_API_ENDPOINT +
+          `/gymstats/group/${muscleGroup}/percentages?only_prod=true&exclude_testing_data=true`,
+        {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+          }
+        }
+      )
     },
 
     addExercise() {
