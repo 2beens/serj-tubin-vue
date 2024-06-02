@@ -66,11 +66,19 @@ export default {
 
           // response.data.durationPerDay values represent duration in nanoseconds, let's convert them to seconds
           const dayLabels = []
-          const durationPerDayMinutes = {}
+          const durationPerDayMinutes = []
+          const backgroundColors = []
           Object.keys(response.data.durationPerDay).forEach((key) => {
             const dayOnly = key.split('T')[0]
-            durationPerDayMinutes[dayOnly] = response.data.durationPerDay[key] / 1000000000 / 60
+            const durationInMinutes = response.data.durationPerDay[key] / 1000000000 / 60
+            durationPerDayMinutes.push(durationInMinutes)
             dayLabels.push(dayOnly)
+
+            // Calculate color based on duration
+            const hue =
+              180 *
+              (1 - Math.min(Math.max((durationInMinutes - 1.5) / (3 - 1.8), 0), 1))
+            backgroundColors.push(['hsl(', hue, ',100%,50%)'].join(''))
           })
 
           vm.chartData = {
@@ -78,7 +86,7 @@ export default {
             datasets: [
               {
                 label: `Duration [avg total ${response.data.duration / 1000000000 / 60} min]`,
-                backgroundColor: '#54ab80',
+                backgroundColor: backgroundColors,
                 data: durationPerDayMinutes
               }
             ]
