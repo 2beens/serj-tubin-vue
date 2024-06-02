@@ -171,7 +171,7 @@
       </v-tabs>
       <v-tabs-items v-model="tab" class="pa-0">
         <v-tab-item value="timeline">
-          <v-card flat class="pa-0">
+          <v-card flat class="pa-0" color="black">
             <v-card-text>
               <v-row class="pa-0" ref="loadedExerciseHistory">
                 <v-col class="pa-0">
