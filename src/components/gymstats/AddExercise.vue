@@ -8,13 +8,13 @@
         <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>Add ➕</v-btn>
       </template>
       <v-card>
-        <v-card-title>
+        <v-card-title class="justify-center">
           <span class="text-h5">Add Exercise</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" class="ma-0 mt-5 pa-0">
                 <v-select
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
@@ -26,7 +26,7 @@
                   dense
                 ></v-select>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="ma-0 pa-0">
                 <v-select
                   v-model="exercise.exerciseId"
                   :items="exercisesForSelectedMuscleGroup"
@@ -37,7 +37,7 @@
                   dense
                 ></v-select>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6" class="ma-0 pa-0">
                 <v-text-field
                   v-model="exercise.kilos"
                   label="Kilos"
@@ -47,7 +47,7 @@
                   solo
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6" class="ma-0 pa-0">
                 <v-text-field
                   v-model="exercise.reps"
                   label="Reps"
@@ -57,7 +57,7 @@
                   solo
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp">
+              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp" class="ma-0 pa-0">
                 <v-text-field
                   v-model="exercise.createdAt"
                   label="Created At"
