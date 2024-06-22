@@ -29,9 +29,7 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <BlogsList title="Recent Posts" />
-        </v-row>
+        <BlogsList title="Recent Posts" />
       </v-col>
     </v-row>
   </v-container>

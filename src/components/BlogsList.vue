@@ -47,7 +47,7 @@
 
       <div id="blogs-list">
         <div v-for="post in posts" :key="post.id">
-          <div :id="'blog-' + post.id" class="blog-post">
+          <div :id="'blog-' + post.id" :class="{'blog-post': !isSmallScreen, 'blog-post-small': isSmallScreen}">
             <v-row>
               <v-col cols="2" />
               <v-col cols="8">
@@ -142,10 +142,13 @@ export default {
       editedPost: {},
       snackbarText: '',
       showSnackbar: false,
-      theRoot: this.$root
+      theRoot: this.$root,
+      screenWidth: window.innerWidth,
     }
   },
   mounted: function () {
+    window.addEventListener('resize', this.handleResize);
+
     const vm = this
     axios
       .get(
@@ -164,7 +167,21 @@ export default {
         console.log(error)
       })
   },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+
+  computed: {
+    isSmallScreen() {
+      return this.screenWidth <= 600;
+    },
+  },
+
   methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+    },
     onBlogPageChange(page) {
       const vm = this
       axios
@@ -393,6 +410,14 @@ export default {
 <style scoped>
 .blog-post {
   margin: 15px 15% 15px 15%;
+  background-color: cadetblue;
+  border-left: 20px solid #26a69a;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+}
+.blog-post-small {
+  margin-bottom: 15%;
   background-color: cadetblue;
   border-left: 20px solid #26a69a;
   border-radius: 5px;
