@@ -292,7 +292,8 @@ export default {
             return
           }
 
-          vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}]!`
+          const minutesSinceLast = response.data.minutesSincePreviousSet || 0
+          vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}] [since last: ${Math.round(minutesSinceLast * 10) / 10}]`
           vm.showSnackbar = true
           vm.showDialog = false
           vm.$emit('exercise-added', response.data.id)
