@@ -292,8 +292,16 @@ export default {
             return
           }
 
-          const minutesSinceLast = response.data.minutesSincePreviousSet || 0
-          vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}] [since last: ${Math.round(minutesSinceLast * 10) / 10}]`
+          const secondsSincePreviousSet = response.data.secondsSincePreviousSet || -1;
+          // if no previous set was found (e.g. first set of the day), backend will return -1
+          let timeSincePreviousSetMessage = 'no previous set found';
+          if (secondsSincePreviousSet >= 0) {
+            const minutes = Math.floor(secondsSincePreviousSet / 60);
+            const seconds = secondsSincePreviousSet % 60;
+            timeSincePreviousSetMessage = `${minutes}m${seconds}s`;
+          }
+
+          vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}] [since last: ${timeSincePreviousSetMessage}]`
           vm.showSnackbar = true
           vm.showDialog = false
           vm.$emit('exercise-added', response.data.id)
