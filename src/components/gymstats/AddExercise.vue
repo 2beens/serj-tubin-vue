@@ -292,6 +292,7 @@ export default {
             return
           }
 
+          console.log(`Exercise ${response.data.id} added, today: ${response.data.countToday}, seconds since last: ${response.data.secondsSincePreviousSet}`)
           const secondsSincePreviousSet = response.data.secondsSincePreviousSet || -1;
           // if no previous set was found (e.g. first set of the day), backend will return -1
           let timeSincePreviousSetMessage = 'no previous set found';
