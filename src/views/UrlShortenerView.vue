@@ -2,6 +2,7 @@
   <v-container v-if="$root.loggedIn">
     <h2>URL Shortener</h2>
     <h4>Fun fact: uses a service written in Rust</h4>
+    <h6>Endpoints: {{ endpoints }}</h6>
 
     <v-form id="input-field">
       <v-row>
@@ -212,6 +213,8 @@ export default {
   data: () => ({
     use2beensUrl: true,
     searchString: '',
+
+    endpoints: apiEndpoints,
 
     url: '',
     customid: '',
