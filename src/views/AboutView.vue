@@ -37,7 +37,7 @@
         <h4>
           This one is reachable both via
           <a href="https://www.serj-tubin.com/">www.serj-tubin.com</a> and
-          <a href="https://2beens.xyz/">2beens.xyz</a>
+          <a href="https://2beens.online/">2beens.online</a>
         </h4>
 
         <v-row style="margin-bottom: 10%;">
