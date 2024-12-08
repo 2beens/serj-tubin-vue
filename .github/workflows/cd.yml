@@ -30,7 +30,7 @@ jobs:
         elif [[ "${{ github.event_name }}" == "release" ]]; then
           REF_NAME=${GITHUB_REF#refs/tags/}
         fi
-        echo "docker_image_tag=${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:$REF_NAME" >> $GITHUB_OUTPUT
+        echo "docker_image_tag=$REF_NAME" >> $GITHUB_OUTPUT
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
@@ -38,7 +38,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ steps.extract_ref.outputs.docker_image_tag }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:${{ steps.extract_ref.outputs.docker_image_tag }},${{ secrets.DOCKER_USERNAME }}/serj-tubin-vue:latest
 
     - name: Notify the server to redeploy via webhook
       run: |
