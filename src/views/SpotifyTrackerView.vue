@@ -6,7 +6,7 @@
         <p>
           Status: <strong>{{ status }}</strong>
         </p>
-        <p>Message: {{ message }}</p>
+        <p v-if="message">Message: {{ message }}</p>
         <v-btn
           color="primary"
           :href="authUrl"
