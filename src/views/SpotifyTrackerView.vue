@@ -7,13 +7,13 @@
           Status: <strong>{{ status }}</strong>
         </p>
         <p v-if="message">Message: {{ message }}</p>
-        <v-btn
-          color="primary"
-          :href="authUrl"
-          target="_blank"
-        >
-          Init Tracker
-        </v-btn>
+        <v-btn color="primary" :href="authUrl" target="_blank"> Init Tracker </v-btn>
+        <v-divider></v-divider>
+        <v-card>
+          <v-card-text>
+            <v-text-field v-model="authUrl" label="Auth URL" outlined></v-text-field>
+          </v-card-text>
+        </v-card>
         <v-divider></v-divider>
         <v-btn color="success" @click="startTracker">Start Tracker</v-btn>
         <v-btn color="error" @click="stopTracker">Stop Tracker</v-btn>
@@ -34,7 +34,7 @@ export default {
       status: 'loading...',
       // message is at the moment returned only if the tracker is stopped with an error/reason
       message: '',
-      authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth'
+      authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth?token=TODO'
     }
   },
 
