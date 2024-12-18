@@ -1,5 +1,5 @@
 # build stage
-FROM node:19 as build-stage
+FROM node:22 as build-stage
 WORKDIR /app
 
 # copy package files and install dependencies
