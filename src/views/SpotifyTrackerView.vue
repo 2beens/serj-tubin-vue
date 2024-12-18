@@ -4,10 +4,13 @@
       <v-col>
         <h1>Spotify Tracker</h1>
         <h3>
-          Status: <strong>{{ status }}</strong>
+          Status:
+          <strong>{{ status }}</strong>
         </h3>
         <h4 v-if="message">Message: {{ message }}</h4>
-        <v-btn color="primary" :href="authUrl" target="_blank"> Init Tracker </v-btn>
+        <v-btn color="primary" :href="authUrl" target="_blank">
+          Init Tracker
+        </v-btn>
         <v-divider></v-divider>
 
         <v-divider></v-divider>
@@ -31,7 +34,9 @@
             </v-col>
             <v-col cols="1" sm="1">
               <!-- a call to: /spotify/page/{page}/size/{size} on backend -->
-              <v-btn style="margin-top: 7px" @click="getPageFromDB"> Get from DB </v-btn>
+              <v-btn style="margin-top: 7px" @click="getPageFromDB">
+                Get from DB
+              </v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -105,7 +110,7 @@ export default {
       authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth?token=todo',
       page: 1,
       size: 10,
-      trackRecords: []
+      trackRecords: [],
     }
   },
 
@@ -119,8 +124,8 @@ export default {
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/status', {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -129,7 +134,9 @@ export default {
           }
           vm.status = response.data.status
           vm.message = response.data.message
-          console.log(`get tracker status: received ${vm.status} status and message: ${vm.message}`)
+          console.log(
+            `get tracker status: received ${vm.status} status and message: ${vm.message}`
+          )
         })
         .catch((error) => {
           console.log(error)
@@ -141,8 +148,8 @@ export default {
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/start', {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -151,7 +158,9 @@ export default {
           }
           vm.status = response.data.status
           vm.message = response.data.message
-          console.log(`start tracker: received ${vm.status} status and message: ${vm.message}`)
+          console.log(
+            `start tracker: received ${vm.status} status and message: ${vm.message}`
+          )
         })
         .catch((error) => {
           vm.status = error.response.data.status
@@ -165,8 +174,8 @@ export default {
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/stop', {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -175,7 +184,9 @@ export default {
           }
           vm.status = response.data.status
           vm.message = response.data.message
-          console.log(`stop tracker: received ${vm.status} status and message: ${vm.message}`)
+          console.log(
+            `stop tracker: received ${vm.status} status and message: ${vm.message}`
+          )
         })
         .catch((error) => {
           vm.status = error.response.data.status
@@ -188,11 +199,15 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + '/spotify/page/' + this.page + '/size/' + this.size,
+          process.env.VUE_APP_API_ENDPOINT +
+            '/spotify/page/' +
+            this.page +
+            '/size/' +
+            this.size,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -201,13 +216,15 @@ export default {
             return
           }
           vm.trackRecords = response.data
-          console.log(`get page from db: received ${vm.trackRecords.length} records`)
+          console.log(
+            `get page from db: received ${vm.trackRecords.length} records`
+          )
         })
         .catch((error) => {
           console.log(error)
         })
-    }
-  }
+    },
+  },
 }
 </script>
 
