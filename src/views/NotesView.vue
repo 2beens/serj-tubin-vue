@@ -2,10 +2,15 @@
   <v-container>
     <h2>📝 Notes 📝</h2>
 
-    <v-dialog v-model="showDialog" persistent max-width="800px" @keydown.esc="onAbortEditNote">
+    <v-dialog
+      v-model="showDialog"
+      persistent
+      max-width="800px"
+      @keydown.esc="onAbortEditNote"
+    >
       <template #activator="{ on, attrs }">
         <v-btn color="teal lighten-1" large icon v-bind="attrs" v-on="on">
-          <v-icon dark> mdi-plus </v-icon>
+          <v-icon dark>mdi-plus</v-icon>
         </v-btn>
       </template>
       <notes-dialog
@@ -28,7 +33,9 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </div>
@@ -45,7 +52,7 @@ export default {
 
   components: {
     NotesDialog,
-    NotesList
+    NotesList,
   },
 
   data: function () {
@@ -56,7 +63,7 @@ export default {
       editMode: false,
       showDialog: false,
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
 
@@ -69,8 +76,8 @@ export default {
     axios
       .get(process.env.VUE_APP_API_ENDPOINT + '/notes', {
         headers: {
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-        }
+          'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+        },
       })
       .then((response) => {
         if (response === null || response.data === null) {
@@ -118,7 +125,7 @@ export default {
       const requestBody = {
         id: note.id,
         title: note.title,
-        content: note.content
+        content: note.content,
       }
 
       const vm = this
@@ -126,8 +133,8 @@ export default {
         .put(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
@@ -153,7 +160,9 @@ export default {
         })
     },
     deleteNote(id, title) {
-      if (!confirm(`Are you sure you want to remove note [${id}] [${title}]?`)) {
+      if (
+        !confirm(`Are you sure you want to remove note [${id}] [${title}]?`)
+      ) {
         return
       }
 
@@ -161,8 +170,8 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + `/notes/${id}`, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -170,7 +179,9 @@ export default {
             return
           }
           if (!response.data.startsWith('deleted:')) {
-            console.error('delete blog - invalid response received: ' + response.data)
+            console.error(
+              'delete blog - invalid response received: ' + response.data
+            )
             return
           }
 
@@ -200,14 +211,17 @@ export default {
     addNote() {
       this.editMode = false
 
-      if (this.selectedNote.content === undefined || this.selectedNote.content === '') {
+      if (
+        this.selectedNote.content === undefined ||
+        this.selectedNote.content === ''
+      ) {
         console.error('emtpy content')
         return
       }
 
       const requestBody = {
         title: this.selectedNote.title,
-        content: this.selectedNote.content
+        content: this.selectedNote.content,
       }
 
       const vm = this
@@ -215,8 +229,8 @@ export default {
         .post(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
@@ -231,7 +245,7 @@ export default {
             id: parseInt(noteId),
             title: requestBody.title,
             content: requestBody.content,
-            created_at: vm.date2string(Date.now())
+            created_at: vm.date2string(Date.now()),
           })
 
           vm.snackbarText = `Note ${requestBody.title} added!`
@@ -246,7 +260,7 @@ export default {
         .finally(() => {
           vm.showDialog = false
         })
-    }
-  }
+    },
+  },
 }
 </script>
