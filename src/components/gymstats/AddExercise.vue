@@ -2,10 +2,18 @@
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-if="$vuetify.breakpoint.mdAndUp">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          v-if="$vuetify.breakpoint.mdAndUp"
+        >
           Add Exercise ➕
         </v-btn>
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>Add ➕</v-btn>
+        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>
+          Add ➕
+        </v-btn>
       </template>
       <v-card>
         <v-card-title class="justify-center">
@@ -57,7 +65,12 @@
                   solo
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp" class="ma-0 pa-0">
+              <v-col
+                cols="12"
+                sm="6"
+                v-if="$vuetify.breakpoint.mdAndUp"
+                class="ma-0 pa-0"
+              >
                 <v-text-field
                   v-model="exercise.createdAt"
                   label="Created At"
@@ -75,9 +88,13 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" dark large @click="refreshExerciseTypes">Refresh</v-btn>
+          <v-btn color="primary" dark large @click="refreshExerciseTypes">
+            Refresh
+          </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="error" dark large @click="showDialog = false">Close</v-btn>
+          <v-btn color="error" dark large @click="showDialog = false">
+            Close
+          </v-btn>
           <v-btn
             color="success"
             dark
@@ -95,7 +112,9 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </v-row>
@@ -118,10 +137,10 @@ export default {
         kilos: '',
         reps: '',
         createdAt: '',
-        metadataJson: `{"env": "prod", "testing": "true"}`
+        metadataJson: `{"env": "prod", "testing": "true"}`,
       },
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
 
@@ -142,19 +161,20 @@ export default {
         return [
           {
             exerciseId: null,
-            name: 'Select a muscle group first ⛔️'
-          }
+            name: 'Select a muscle group first ⛔️',
+          },
         ]
-      const exercises = this.muscleGroupToExercises[this.exercise.muscleGroup.id]
+      const exercises =
+        this.muscleGroupToExercises[this.exercise.muscleGroup.id]
       if (!exercises)
         return [
           {
             exerciseId: null,
-            name: `No exercises for selected muscle group: ${this.exercise.muscleGroup.id} ⛔️`
-          }
+            name: `No exercises for selected muscle group: ${this.exercise.muscleGroup.id} ⛔️`,
+          },
         ]
       return exercises
-    }
+    },
   },
 
   mounted() {
@@ -178,9 +198,9 @@ export default {
       axios
         .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
-          timeout: 3500
+          timeout: 3500,
         })
         .then(function (response) {
           if (!response.data) {
@@ -213,7 +233,8 @@ export default {
                 }
                 const exerciseDistributions = response.data
                 muscleGroupToExercises[muscleGroup].forEach((exerciseType) => {
-                  const exerciseDistribution = exerciseDistributions[exerciseType.exerciseId]
+                  const exerciseDistribution =
+                    exerciseDistributions[exerciseType.exerciseId]
                   if (exerciseDistribution) {
                     exerciseType.name = `${
                       exerciseType.name
@@ -229,7 +250,10 @@ export default {
               })
               .finally(() => {
                 // store exercise types in local storage
-                localStorage.setItem('exerciseTypes', JSON.stringify(vm.muscleGroupToExercises))
+                localStorage.setItem(
+                  'exerciseTypes',
+                  JSON.stringify(vm.muscleGroupToExercises)
+                )
               })
           }
         })
@@ -252,8 +276,8 @@ export default {
           `/gymstats/group/${muscleGroup}/percentages?only_prod=true&exclude_testing_data=true`,
         {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         }
       )
     },
@@ -267,7 +291,7 @@ export default {
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
-        metadata: JSON.parse(this.exercise.metadataJson)
+        metadata: JSON.parse(this.exercise.metadataJson),
       }
 
       if (this.exercise.createdAt) {
@@ -281,8 +305,8 @@ export default {
         .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (!response.data) {
@@ -292,14 +316,17 @@ export default {
             return
           }
 
-          console.log(`Exercise ${response.data.id} added, today: ${response.data.countToday}, seconds since last: ${response.data.secondsSincePreviousSet}`)
-          const secondsSincePreviousSet = response.data.secondsSincePreviousSet || -1;
+          console.log(
+            `Exercise ${response.data.id} added, today: ${response.data.countToday}, seconds since last: ${response.data.secondsSincePreviousSet}`
+          )
+          const secondsSincePreviousSet =
+            response.data.secondsSincePreviousSet || -1
           // if no previous set was found (e.g. first set of the day), backend will return -1
-          let timeSincePreviousSetMessage = 'no previous set found';
+          let timeSincePreviousSetMessage = 'no previous set found'
           if (secondsSincePreviousSet >= 0) {
-            const minutes = Math.floor(secondsSincePreviousSet / 60);
-            const seconds = secondsSincePreviousSet % 60;
-            timeSincePreviousSetMessage = `${minutes}m${seconds}s`;
+            const minutes = Math.floor(secondsSincePreviousSet / 60)
+            const seconds = secondsSincePreviousSet % 60
+            timeSincePreviousSetMessage = `${minutes}m${seconds}s`
           }
 
           vm.snackbarText = `Exercise ${response.data.id} added [today: ${response.data.countToday}] [since last: ${timeSincePreviousSetMessage}]`
@@ -312,7 +339,7 @@ export default {
           vm.showSnackbar = true
           console.log(error)
         })
-    }
-  }
+    },
+  },
 }
 </script>

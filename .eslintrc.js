@@ -1,20 +1,18 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    node: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:vuetify/recommended',
     // 'plugin:vue/recommended',
     'plugin:vue/essential',
-    'plugin:cypress/recommended'
+    'plugin:cypress/recommended',
   ],
-  'plugins': [
-    'cypress'
-  ],
+  plugins: ['cypress'],
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 2020,
   },
   rules: {
     // override/add rules settings here, such as:
@@ -27,6 +25,6 @@ module.exports = {
     'cypress/assertion-before-screenshot': 'warn',
     'cypress/no-force': 'warn',
     'cypress/no-async-tests': 'error',
-    'cypress/no-pause': 'error'
-  }
+    'cypress/no-pause': 'error',
+  },
 }

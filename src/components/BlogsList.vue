@@ -3,10 +3,15 @@
     <v-col>
       <h3>{{ title }}</h3>
 
-      <v-dialog v-if="theRoot.loggedIn" v-model="dialog" persistent max-width="600px">
+      <v-dialog
+        v-if="theRoot.loggedIn"
+        v-model="dialog"
+        persistent
+        max-width="600px"
+      >
         <template #activator="{ on, attrs }">
           <v-btn color="teal lighten-1" dark v-bind="attrs" v-on="on">
-            <v-icon dark> mdi-plus </v-icon>
+            <v-icon dark>mdi-plus</v-icon>
           </v-btn>
         </template>
         <v-card>
@@ -18,7 +23,11 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="selectedPost.title" label="Title" required />
+                  <v-text-field
+                    v-model="selectedPost.title"
+                    label="Title"
+                    required
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
@@ -36,18 +45,33 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn color="blue darken-1" text @click="abortEditPost"> Abort </v-btn>
-            <v-btn v-if="editBlogMode" color="blue darken-1" text @click="updateBlogPost">
+            <v-btn color="blue darken-1" text @click="abortEditPost">
+              Abort
+            </v-btn>
+            <v-btn
+              v-if="editBlogMode"
+              color="blue darken-1"
+              text
+              @click="updateBlogPost"
+            >
               Update!
             </v-btn>
-            <v-btn v-else color="blue darken-1" text @click="addBlogPost"> Post! </v-btn>
+            <v-btn v-else color="blue darken-1" text @click="addBlogPost">
+              Post!
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
       <div id="blogs-list">
         <div v-for="post in posts" :key="post.id">
-          <div :id="'blog-' + post.id" :class="{'blog-post': !isSmallScreen, 'blog-post-small': isSmallScreen}">
+          <div
+            :id="'blog-' + post.id"
+            :class="{
+              'blog-post': !isSmallScreen,
+              'blog-post-small': isSmallScreen,
+            }"
+          >
             <v-row>
               <v-col cols="2" />
               <v-col cols="8">
@@ -69,8 +93,15 @@
             </v-row>
             <v-row style="margin: 0px">
               <v-col v-if="theRoot.loggedIn" style="padding: 0px" cols="2">
-                <v-btn class="mx-1" fab dark x-small color="cyan" @click="openEditPostDialog(post)">
-                  <v-icon dark> mdi-pencil </v-icon>
+                <v-btn
+                  class="mx-1"
+                  fab
+                  dark
+                  x-small
+                  color="cyan"
+                  @click="openEditPostDialog(post)"
+                >
+                  <v-icon dark>mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn
                   class="mx-1"
@@ -80,7 +111,7 @@
                   color="error"
                   @click="deletePost(post.id, post.title)"
                 >
-                  <v-icon dark> mdi-minus </v-icon>
+                  <v-icon dark>mdi-minus</v-icon>
                 </v-btn>
               </v-col>
               <v-col v-else cols="2" style="padding: 0px" />
@@ -114,7 +145,14 @@
         <v-snackbar v-model="showSnackbar">
           {{ snackbarText }}
           <template #action="{ attrs }">
-            <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
+            <v-btn
+              color="pink"
+              text
+              v-bind="attrs"
+              @click="showSnackbar = false"
+            >
+              Close
+            </v-btn>
           </template>
         </v-snackbar>
       </div>
@@ -128,7 +166,7 @@ import axios from 'axios'
 export default {
   name: 'BlogsList',
   props: {
-    title: String
+    title: String,
   },
   data: function () {
     return {
@@ -147,12 +185,13 @@ export default {
     }
   },
   mounted: function () {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize)
 
     const vm = this
     axios
       .get(
-        process.env.VUE_APP_API_ENDPOINT + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
+        process.env.VUE_APP_API_ENDPOINT +
+          `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
       )
       .then((response) => {
         if (!response || !response.data) {
@@ -169,30 +208,35 @@ export default {
   },
 
   beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
 
   computed: {
     isSmallScreen() {
-      return this.screenWidth <= 600;
+      return this.screenWidth <= 600
     },
   },
 
   methods: {
     handleResize() {
-      this.screenWidth = window.innerWidth;
+      this.screenWidth = window.innerWidth
     },
     onBlogPageChange(page) {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + `/blog/page/${page}/size/${vm.maxPostsPerPage}`)
+        .get(
+          process.env.VUE_APP_API_ENDPOINT +
+            `/blog/page/${page}/size/${vm.maxPostsPerPage}`
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('all blogs - received null response / data')
             return
           }
           vm.posts = response.data.posts
-          vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
+          vm.blogPageLength = Math.ceil(
+            response.data.total / vm.maxPostsPerPage
+          )
         })
         .catch((error) => {
           console.log(error)
@@ -200,7 +244,7 @@ export default {
     },
     clap: function (post) {
       const requestBody = {
-        id: post.id
+        id: post.id,
       }
 
       const vm = this
@@ -208,8 +252,8 @@ export default {
         .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', requestBody, {
           headers: {
             // TODO: cookies are sent with each request, no need to place them in headers
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
@@ -237,7 +281,9 @@ export default {
         })
     },
     deletePost: function (id, title) {
-      if (!confirm('Are you sure you want to remove blog post [' + title + ']?')) {
+      if (
+        !confirm('Are you sure you want to remove blog post [' + title + ']?')
+      ) {
         return
       }
 
@@ -245,8 +291,8 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -254,7 +300,9 @@ export default {
             return
           }
           if (!response.data.startsWith('deleted:')) {
-            console.error('delete blog - invalid response received: ' + response.data)
+            console.error(
+              'delete blog - invalid response received: ' + response.data
+            )
             return
           }
 
@@ -284,18 +332,24 @@ export default {
     addBlogPost: function () {
       this.editBlogMode = false
 
-      if (this.selectedPost.title === undefined || this.selectedPost.title === '') {
+      if (
+        this.selectedPost.title === undefined ||
+        this.selectedPost.title === ''
+      ) {
         console.error('emtpy title')
         return
       }
-      if (this.selectedPost.content === undefined || this.selectedPost.content === '') {
+      if (
+        this.selectedPost.content === undefined ||
+        this.selectedPost.content === ''
+      ) {
         console.error('emtpy content')
         return
       }
 
       const requestBody = {
         title: this.selectedPost.title,
-        content: this.selectedPost.content
+        content: this.selectedPost.content,
       }
 
       const vm = this
@@ -303,8 +357,8 @@ export default {
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
@@ -324,7 +378,7 @@ export default {
             title: requestBody.title,
             content: requestBody.content,
             created_at: vm.date2string(Date.now()),
-            claps: 0
+            claps: 0,
           })
 
           if (vm.posts.length > vm.maxPostsPerPage) {
@@ -357,11 +411,17 @@ export default {
       this.selectedPost = post
     },
     updateBlogPost: function () {
-      if (this.selectedPost.title === undefined || this.selectedPost.title === '') {
+      if (
+        this.selectedPost.title === undefined ||
+        this.selectedPost.title === ''
+      ) {
         console.error('emtpy title')
         return
       }
-      if (this.selectedPost.content === undefined || this.selectedPost.content === '') {
+      if (
+        this.selectedPost.content === undefined ||
+        this.selectedPost.content === ''
+      ) {
         console.error('emtpy content')
         return
       }
@@ -369,7 +429,7 @@ export default {
       const requestBody = {
         id: parseInt(this.selectedPost.id),
         title: this.selectedPost.title,
-        content: this.selectedPost.content
+        content: this.selectedPost.content,
       }
 
       const vm = this
@@ -377,8 +437,8 @@ export default {
         .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('updated:')) {
@@ -402,8 +462,8 @@ export default {
           this.editBlogMode = false
           this.dialog = false
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

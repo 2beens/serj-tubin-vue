@@ -15,7 +15,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Biceps </v-card-title>
+          <v-card-title class="text-h6">Biceps</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -32,7 +32,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Triceps </v-card-title>
+          <v-card-title class="text-h6">Triceps</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -49,7 +49,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Legs </v-card-title>
+          <v-card-title class="text-h6">Legs</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -66,7 +66,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Shoulders </v-card-title>
+          <v-card-title class="text-h6">Shoulders</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -83,7 +83,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Chest </v-card-title>
+          <v-card-title class="text-h6">Chest</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -100,7 +100,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Back </v-card-title>
+          <v-card-title class="text-h6">Back</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -117,7 +117,7 @@
             class="grey darken-4"
             contain
           ></v-img>
-          <v-card-title class="text-h6"> Other </v-card-title>
+          <v-card-title class="text-h6">Other</v-card-title>
         </v-card>
       </v-col>
       <v-col cols="6" sm="3">
@@ -125,23 +125,35 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="loadedExerciseDistributions" class="mb-0 mt-2" ref="loadedExerciseDistributions">
+    <v-row
+      v-if="loadedExerciseDistributions"
+      class="mb-0 mt-2"
+      ref="loadedExerciseDistributions"
+    >
       <v-col>
         <v-list color="teal lighten-4" style="border-radius: 5px">
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
-              v-for="(percentageInfo, exerciseId) in loadedExerciseDistributions"
+              v-for="(
+                percentageInfo, exerciseId
+              ) in loadedExerciseDistributions"
               :key="exerciseId"
             >
               <v-list-item-icon>
-                <v-icon :color="getPercentageColor(percentageInfo.percentage)">mdi-circle</v-icon>
+                <v-icon :color="getPercentageColor(percentageInfo.percentage)">
+                  mdi-circle
+                </v-icon>
               </v-list-item-icon>
-              <v-list-item-content @click="onExerciseSelected(selectedMuscleGroup, exerciseId)">
+              <v-list-item-content
+                @click="onExerciseSelected(selectedMuscleGroup, exerciseId)"
+              >
                 <v-list-item-title>
                   {{ percentageInfo.exerciseName }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  <v-chip color="teal lighten-1"> {{ percentageInfo.percentage }}% </v-chip>
+                  <v-chip color="teal lighten-1">
+                    {{ percentageInfo.percentage }}%
+                  </v-chip>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -175,7 +187,9 @@
             <v-card-text>
               <v-row class="pa-0" ref="loadedExerciseHistory">
                 <v-col class="pa-0">
-                  <ExercisesTimeline :loadedExerciseStats="loadedExerciseHistory.stats" />
+                  <ExercisesTimeline
+                    :loadedExerciseStats="loadedExerciseHistory.stats"
+                  />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -198,7 +212,9 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -216,7 +232,7 @@ export default {
   components: {
     ExercisesTimeline,
     ExerciseSetup,
-    AddExerciseType
+    AddExerciseType,
   },
 
   data: function () {
@@ -230,10 +246,10 @@ export default {
       muscleGroups: GymStatsData.muscleGroups,
       chartData: null,
       chartOptions: {
-        responsive: true
+        responsive: true,
       },
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
 
@@ -258,7 +274,7 @@ export default {
       console.log('selectedExercise', exerciseId, 'from group', group.id)
       this.selectedExercise = {
         group: group,
-        exerciseId: exerciseId
+        exerciseId: exerciseId,
       }
 
       // get exercise history from the server
@@ -269,8 +285,8 @@ export default {
             `/gymstats/exercise/${exerciseId}/group/${group.id}/history?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -290,17 +306,22 @@ export default {
           // format timestamps to a human readable string in EU/DE format: dd.mm.yyyy [day name]
           Object.keys(loadedExerciseHistory.stats).forEach((key) => {
             const date = new Date(key)
-            const newKey = `${date.toLocaleDateString('de-DE')} [${date.toLocaleString('de-DE', {
-              weekday: 'long'
+            const newKey = `${date.toLocaleDateString(
+              'de-DE'
+            )} [${date.toLocaleString('de-DE', {
+              weekday: 'long',
             })}]`
-            loadedExerciseHistory.stats[newKey] = loadedExerciseHistory.stats[key]
+            loadedExerciseHistory.stats[newKey] =
+              loadedExerciseHistory.stats[key]
             delete loadedExerciseHistory.stats[key]
           })
 
           vm.loadedExerciseHistory = loadedExerciseHistory
 
           this.$nextTick(() => {
-            this.$refs.loadedExerciseHistory.scrollIntoView({ behavior: 'smooth' })
+            this.$refs.loadedExerciseHistory.scrollIntoView({
+              behavior: 'smooth',
+            })
           })
         })
         .catch((err) => {
@@ -309,7 +330,12 @@ export default {
     },
 
     onMuscleGroupChange() {
-      console.log('selectedMuscleGroup', this.selectedMuscleGroup.id, '=', this.selectedMuscleGroup)
+      console.log(
+        'selectedMuscleGroup',
+        this.selectedMuscleGroup.id,
+        '=',
+        this.selectedMuscleGroup
+      )
       const vm = this
       axios
         .get(
@@ -317,8 +343,8 @@ export default {
             `/gymstats/group/${this.selectedMuscleGroup.id}/percentages?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -328,7 +354,9 @@ export default {
           }
           vm.loadedExerciseDistributions = response.data
           this.$nextTick(() => {
-            this.$refs.loadedExerciseDistributions.scrollIntoView({ behavior: 'smooth' })
+            this.$refs.loadedExerciseDistributions.scrollIntoView({
+              behavior: 'smooth',
+            })
           })
         })
         .catch((err) => {
@@ -347,7 +375,7 @@ export default {
       // now select the new exercise type
       this.selectedExercise = {
         group: exerciseType.muscleGroup,
-        exerciseId: exerciseType.exerciseId
+        exerciseId: exerciseType.exerciseId,
       }
       this.onExerciseSelected(exerciseType.muscleGroup, exerciseType.exerciseId)
 
@@ -370,7 +398,7 @@ export default {
 
       this.snackbarText = `Deleted exercise type: ${exerciseType.name}`
       this.showSnackbar = true
-    }
-  }
+    },
+  },
 }
 </script>

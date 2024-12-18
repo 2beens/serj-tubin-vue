@@ -3,12 +3,16 @@
     <v-row>
       <v-col>
         <h5>
-          Dear visitors, feel free to leave any junk messages here, and let's see if this board can
-          be hacked and screwed 🤔👀🤷‍♂️
+          Dear visitors, feel free to leave any junk messages here, and let's
+          see if this board can be hacked and screwed 🤔👀🤷‍♂️
         </h5>
         <div id="board" data-app="true">
           <div id="board-messages">
-            <div v-for="message in messages" :key="message.id" class="board-message">
+            <div
+              v-for="message in messages"
+              :key="message.id"
+              class="board-message"
+            >
               <div :id="'message-' + message.id">
                 <p class="message-content">
                   <v-btn
@@ -20,12 +24,12 @@
                     color="error"
                     @click="deleteMessage(message.id, message.message)"
                   >
-                    <v-icon dark> mdi-minus </v-icon>
+                    <v-icon dark>mdi-minus</v-icon>
                   </v-btn>
-                  <span class="message-date">{{
-                    getTimestampString(new Date(message.created_at))
-                  }}</span
-                  >: [{{ message.author }}]
+                  <span class="message-date">
+                    {{ getTimestampString(new Date(message.created_at)) }}
+                  </span>
+                  : [{{ message.author }}]
                   <strong>{{ message.message }}</strong>
                 </p>
               </div>
@@ -63,7 +67,7 @@ export default {
     return {
       messages: [],
       theRoot: this.$root,
-      loading: false
+      loading: false,
     }
   },
   mounted: function () {
@@ -96,16 +100,20 @@ export default {
 
       const requestBody = {
         author: document.getElementById('author-input').value,
-        message: msgContent
+        message: msgContent,
       }
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/board/messages/new', requestBody, {
-          headers: {
-            'Content-Type': 'application/json'
+        .post(
+          process.env.VUE_APP_API_ENDPOINT + '/board/messages/new',
+          requestBody,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           }
-        })
+        )
         .then(function (response) {
           if (response.data === null || !response.data.startsWith('added:')) {
             console.warn(response)
@@ -124,7 +132,7 @@ export default {
             id: newMessageId,
             created_at: Date.now(),
             message: msgContent,
-            author: msgCreator
+            author: msgCreator,
           })
         })
         .catch(function (error) {
@@ -133,17 +141,28 @@ export default {
         .finally(() => updateMessagesScroll())
     },
     deleteMessage: function (id, message) {
-      if (!confirm('Are you sure you want to remove message [' + id + '] [' + message + ']?')) {
+      if (
+        !confirm(
+          'Are you sure you want to remove message [' +
+            id +
+            '] [' +
+            message +
+            ']?'
+        )
+      ) {
         return
       }
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .delete(
+          process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
-        })
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete message - received null response / data')
@@ -154,7 +173,9 @@ export default {
             return
           }
           if (response.data !== true) {
-            console.error('delete message - invalid response received: ' + response.data)
+            console.error(
+              'delete message - invalid response received: ' + response.data
+            )
             return
           }
 
@@ -176,8 +197,8 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-    }
-  }
+    },
+  },
 }
 
 function updateMessagesScroll() {

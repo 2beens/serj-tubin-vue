@@ -32,7 +32,8 @@ export default {
           return
         }
         const geoInfo = response.data
-        document.getElementById('geo-city').innerHTML = geoInfo.city + ', ' + geoInfo.country
+        document.getElementById('geo-city').innerHTML =
+          geoInfo.city + ', ' + geoInfo.country
         document.getElementById('geo-info').style.display = 'block'
       })
       .catch((error) => {
@@ -53,7 +54,8 @@ export default {
         })
 
         if (weatherDescriptions.length > 0) {
-          document.getElementById('weather-now').innerHTML = weatherDescriptions.join(', ')
+          document.getElementById('weather-now').innerHTML =
+            weatherDescriptions.join(', ')
           document.getElementById('weather-info').style.display = 'block'
         }
       })
@@ -73,7 +75,8 @@ export default {
         icons.forEach(function (item, i) {
           const weatherIcon = document.createElement('img')
           weatherIcon.classList.add('weather-icon-img')
-          weatherIcon.src = 'https://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
+          weatherIcon.src =
+            'https://openweathermap.org/img/wn/' + icons[i] + '@2x.png'
           weatherIcon.width = 30
           document.getElementById('weather-tomorrow').appendChild(weatherIcon)
         })
@@ -81,7 +84,7 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-  }
+  },
 }
 
 function getIconsFromWeatherData(weatherData) {

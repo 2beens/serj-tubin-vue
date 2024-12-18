@@ -6,7 +6,9 @@ describe('Home Page Tests', () => {
   beforeEach(() => {
     cy.apiMocksSetup()
     cy.fileBoxMockSetup()
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/myip`, testIp).as('loginApiCall')
+    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/myip`, testIp).as(
+      'loginApiCall'
+    )
     cy.visit('/util')
   })
 
@@ -34,6 +36,9 @@ describe('Home Page Tests', () => {
     // open the first folder "books"
     cy.get('#file-1432535').should('not.exist')
     cy.get('.v-icon--link.mdi.mdi-menu-down').first().click()
-    cy.get('#file-1432535').children().first().contains('System Design Interview.pdf')
+    cy.get('#file-1432535')
+      .children()
+      .first()
+      .contains('System Design Interview.pdf')
   })
 })

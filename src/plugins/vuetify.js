@@ -6,5 +6,4 @@ import { Bar } from 'vue-chartjs'
 Vue.use(Vuetify)
 Vue.use(Bar)
 
-export default new Vuetify({
-})
+export default new Vuetify({})

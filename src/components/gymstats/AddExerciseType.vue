@@ -8,7 +8,7 @@
           class="grey darken-4"
           contain
         ></v-img>
-        <v-card-title class="text-h6"> Add </v-card-title>
+        <v-card-title class="text-h6">Add</v-card-title>
       </v-card>
 
       <v-dialog v-model="showDialog" max-width="600px">
@@ -63,7 +63,9 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" dark large @click="showDialog = false">Cancel</v-btn>
+            <v-btn color="error" dark large @click="showDialog = false">
+              Cancel
+            </v-btn>
             <v-btn
               color="success"
               dark
@@ -81,7 +83,9 @@
       <v-snackbar v-model="showSnackbar">
         {{ snackbarText }}
         <template #action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+            Close
+          </v-btn>
         </template>
       </v-snackbar>
     </v-col>
@@ -103,17 +107,21 @@ export default {
         id: '',
         name: '',
         muscleGroup: '',
-        description: ''
+        description: '',
       },
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
 
   computed: {
     addDisabled() {
-      return !this.exerciseType.name || !this.exerciseType.muscleGroup || !this.exerciseType.exerciseId
-    }
+      return (
+        !this.exerciseType.name ||
+        !this.exerciseType.muscleGroup ||
+        !this.exerciseType.exerciseId
+      )
+    },
   },
 
   methods: {
@@ -122,17 +130,21 @@ export default {
         exerciseId: this.exerciseType.exerciseId,
         name: this.exerciseType.name,
         muscleGroup: this.exerciseType.muscleGroup.id,
-        description: this.exerciseType.description
+        description: this.exerciseType.description,
       }
 
       const vm = this
       axios
-        .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, requestBody, {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .post(
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`,
+          requestBody,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
-        })
+        )
         .then((response) => {
           console.log(response)
           vm.showDialog = false
@@ -143,7 +155,7 @@ export default {
           vm.snackbarText = `${error}, ${error.response.data}`
           vm.showSnackbar = true
         })
-    }
-  }
+    },
+  },
 }
 </script>

@@ -8,11 +8,15 @@
           </v-col>
           <v-col cols="6" class="pa-0">
             <h2>Work in constant progress 👨🏼‍💻🛠</h2>
-            <img id="my-image" alt="serj-tubin" src="../assets/ja-2022-dec.jpg" />
+            <img
+              id="my-image"
+              alt="serj-tubin"
+              src="../assets/ja-2022-dec.jpg"
+            />
             <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
             <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
           </v-col>
-          <v-col cols="3"> </v-col>
+          <v-col cols="3"></v-col>
         </v-row>
 
         <v-row id="quote-info">
@@ -46,11 +50,11 @@ export default {
   name: 'HomeView',
   components: {
     SideBar,
-    BlogsList
+    BlogsList,
   },
   data: function () {
     return {
-      quote: {}
+      quote: {},
     }
   },
   mounted: function () {
@@ -67,7 +71,7 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-  }
+  },
 }
 </script>
 

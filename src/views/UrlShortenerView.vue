@@ -6,64 +6,31 @@
 
     <v-form id="input-field">
       <v-row>
-        <v-col
-          cols="8"
-          sm="8"
-        >
-          <v-text-field
-            v-model="url"
-            label="URL"
-            outlined
-          />
+        <v-col cols="8" sm="8">
+          <v-text-field v-model="url" label="URL" outlined />
         </v-col>
 
-        <v-col
-          cols="3"
-          sm="3"
-        >
-          <v-text-field
-            v-model="customid"
-            label="Custom ID"
-            outlined
-          />
+        <v-col cols="3" sm="3">
+          <v-text-field v-model="customid" label="Custom ID" outlined />
         </v-col>
-        <v-col
-          cols="1"
-          sm="1"
-        >
-          <v-btn
-            style="margin-top: 7px"
-            @click="addUrl"
-          >
-            Shorten!
-          </v-btn>
+        <v-col cols="1" sm="1">
+          <v-btn style="margin-top: 7px" @click="addUrl">Shorten!</v-btn>
         </v-col>
       </v-row>
     </v-form>
 
     <v-row>
-      <v-col
-        cols="2"
-        style="margin-top: 20px"
-      >
+      <v-col cols="2" style="margin-top: 20px">
         Use {{ use2beensUrl ? '2beens' : 'serj-tubin' }}
       </v-col>
       <v-col cols="1">
         <v-switch v-model="use2beensUrl" />
       </v-col>
       <v-col cols="6">
-        <h4 style="margin-top: 15px">
-          Current URLs saved
-        </h4>
+        <h4 style="margin-top: 15px">Current URLs saved</h4>
       </v-col>
-      <v-col
-        cols="3"
-        style="padding: 22px"
-      >
-        <v-alert
-          dense
-          :type="status.type"
-        >
+      <v-col cols="3" style="padding: 22px">
+        <v-alert dense :type="status.type">
           {{ status.message }}
         </v-alert>
       </v-col>
@@ -113,9 +80,9 @@
               <a
                 :href="currentApiEndpoint + '/l/' + props.item.id"
                 target="_blank"
-              >{{
-                props.item.id
-              }}</a>
+              >
+                {{ props.item.id }}
+              </a>
             </template>
 
             <template #item.copy="props">
@@ -127,7 +94,7 @@
                 color="success"
                 @click="copyLinkToClipboard(props.item.id)"
               >
-                <v-icon> mdi-content-copy </v-icon>
+                <v-icon>mdi-content-copy</v-icon>
               </v-btn>
             </template>
 
@@ -140,7 +107,7 @@
                 color="error"
                 @click="deleteUrl(props.item.id)"
               >
-                <v-icon> mdi-close </v-icon>
+                <v-icon>mdi-close</v-icon>
               </v-btn>
             </template>
           </v-data-table>
@@ -148,20 +115,11 @@
       </v-col>
     </v-row>
 
-    <v-snackbar
-      v-model="snack"
-      :timeout="3000"
-      :color="snackColor"
-    >
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
 
       <template #action="{ attrs }">
-        <v-btn
-          v-bind="attrs"
-          color="red"
-          text
-          @click="snack = false"
-        >
+        <v-btn v-bind="attrs" color="red" text @click="snack = false">
           Close
         </v-btn>
         <v-btn
@@ -185,26 +143,26 @@ import axios from 'axios'
 
 const apiEndpoints = {
   twoBeens: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_2BEENS,
-  serjt: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_SERJT
+  serjt: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_SERJT,
 }
 
 const statuses = {
   checking: {
     type: 'info',
-    message: 'Checking ...'
+    message: 'Checking ...',
   },
   ok: {
     type: 'success',
-    message: 'Server OK'
+    message: 'Server OK',
   },
   error: {
     type: 'error',
-    message: 'Server Bad :('
+    message: 'Server Bad :(',
   },
   warning: {
     type: 'warning',
-    message: 'Unexpected response'
-  }
+    message: 'Unexpected response',
+  },
 }
 
 export default {
@@ -240,15 +198,15 @@ export default {
         text: 'URL',
         align: 'start',
         sortable: false,
-        value: 'url'
-      }
-    ]
+        value: 'url',
+      },
+    ],
   }),
 
   computed: {
     currentApiEndpoint() {
       return this.use2beensUrl ? apiEndpoints.twoBeens : apiEndpoints.serjt
-    }
+    },
   },
 
   mounted: function () {
@@ -260,8 +218,8 @@ export default {
     axios
       .get(vm.getApiEndpoint() + '/all', {
         headers: {
-          'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-        }
+          'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+        },
       })
       .then((response) => {
         if (response === null || response.data === null) {
@@ -320,7 +278,7 @@ export default {
 
     addUrl() {
       const requestBody = {
-        url: this.url
+        url: this.url,
       }
 
       if (this.customid !== '') {
@@ -332,8 +290,8 @@ export default {
         .post(vm.getApiEndpoint() + '/new', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           console.log(response)
@@ -353,7 +311,7 @@ export default {
             url: vm.url,
             id: newId,
             hits: 0,
-            timestampForHumans: vm.getTimestampString(new Date())
+            timestampForHumans: vm.getTimestampString(new Date()),
           })
         })
         .catch(function (error) {
@@ -376,8 +334,8 @@ export default {
       axios
         .delete(vm.getApiEndpoint() + '/delete?id=' + urlId, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -420,8 +378,8 @@ export default {
     },
     close() {
       console.log('Dialog closed')
-    }
-  }
+    },
+  },
 }
 </script>
 

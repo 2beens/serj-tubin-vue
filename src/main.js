@@ -9,32 +9,38 @@ Vue.config.productionTip = false
 
 Vue.mixin({
   methods: {
-    date2string (aDate) {
-      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(aDate)
+    date2string(aDate) {
+      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(
+        aDate
+      )
       const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(aDate)
       const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(aDate)
       return `${da}-${mo}-${ye}`
     },
-    getTimestampString (date) {
-      const hourInfo = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)
+    getTimestampString(date) {
+      const hourInfo =
+        ('0' + date.getHours()).slice(-2) +
+        ':' +
+        ('0' + date.getMinutes()).slice(-2)
 
       const y = date.getFullYear()
       const m = date.getMonth()
       const d = date.getDate()
-      const dateInfo = ('0' + d).slice(-2) + '/' + ('0' + (m + 1)).slice(-2) + '/' + y
+      const dateInfo =
+        ('0' + d).slice(-2) + '/' + ('0' + (m + 1)).slice(-2) + '/' + y
 
       return dateInfo + ' ' + hourInfo
     },
-    setCookie (name, value, days) {
+    setCookie(name, value, days) {
       var expires = ''
       if (days) {
         var date = new Date()
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000))
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
         expires = '; expires=' + date.toUTCString()
       }
       document.cookie = name + '=' + (value || '') + expires + '; path=/'
     },
-    getCookie (name) {
+    getCookie(name) {
       var nameEQ = name + '='
       var ca = document.cookie.split(';')
       for (var i = 0; i < ca.length; i++) {
@@ -44,17 +50,20 @@ Vue.mixin({
       }
       return null
     },
-    eraseCookie (name) {
-      document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
-    }
-  }
+    eraseCookie(name) {
+      document.cookie =
+        name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+    },
+  },
 })
 
 new Vue({
   router,
   vuetify,
   data: {
-    loggedIn: false
+    loggedIn: false,
   },
-  render: function (h) { return h(App) }
+  render: function (h) {
+    return h(App)
+  },
 }).$mount('#app')

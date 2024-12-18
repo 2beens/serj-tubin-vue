@@ -1,21 +1,11 @@
 <template>
-  <v-container
-    v-if="$root.loggedIn"
-    id="files-box-container"
-    class="mb-10"
-  >
+  <v-container v-if="$root.loggedIn" id="files-box-container" class="mb-10">
     <h2>Files Box</h2>
 
-    <v-card
-      class="mx-auto"
-      max-width="700"
-    >
+    <v-card class="mx-auto" max-width="700">
       <v-sheet class="pa-4 teal darken-3">
         <v-row class="ma-2 mt-0">
-          <v-col
-            cols="12"
-            class="pa-0 ma-0"
-          >
+          <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
               v-model="inputFiles"
               multiple
@@ -38,30 +28,26 @@
               :disabled="noItemsSelected"
               @click="deselectAll"
             >
-              <v-icon>mdi-close </v-icon>
+              <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-col>
-          <v-col
-            v-if="noItemsSelected"
-            cols="1"
-          >
-            <br>
+          <v-col v-if="noItemsSelected" cols="1">
+            <br />
           </v-col>
-          <v-col
-            v-else-if="oneItemSelected"
-            cols="10"
-            class="ma-0"
-          >
+          <v-col v-else-if="oneItemSelected" cols="10" class="ma-0">
             <span
               v-if="oneFileSelected"
               style="color: white; float: left; font-weight: bold"
-            >{{ selectedItems[0].name }}</span>
-            <span
-              v-else
-              style="color: white; float: left; font-weight: bold"
             >
-              <v-icon style="float: left; color: blue;">mdi-folder</v-icon>
-              {{ selectedItems[0].name }} [{{ selectedItems[0].children ? selectedItems[0].children.length : 0 }}]
+              {{ selectedItems[0].name }}
+            </span>
+            <span v-else style="color: white; float: left; font-weight: bold">
+              <v-icon style="float: left; color: blue">mdi-folder</v-icon>
+              {{ selectedItems[0].name }} [{{
+                selectedItems[0].children
+                  ? selectedItems[0].children.length
+                  : 0
+              }}]
             </span>
           </v-col>
           <v-col
@@ -75,10 +61,7 @@
         </v-row>
 
         <v-row class="ma-2">
-          <v-col
-            cols="4"
-            class="pa-0 ma-0"
-          >
+          <v-col cols="4" class="pa-0 ma-0">
             <v-checkbox
               v-model="caseSensitive"
               class="ma-0"
@@ -87,14 +70,8 @@
               label="Case sensitive"
             />
           </v-col>
-          <v-col
-            class="pa-0 ma-0"
-            cols="2"
-          />
-          <v-col
-            class="pa-0 ma-0"
-            cols="6"
-          >
+          <v-col class="pa-0 ma-0" cols="2" />
+          <v-col class="pa-0 ma-0" cols="6">
             <v-btn
               fab
               small
@@ -167,9 +144,7 @@
                   :disabled="!oneFileSelected"
                   v-on="on"
                 >
-                  <v-icon dark>
-                    mdi-wrench
-                  </v-icon>
+                  <v-icon dark>mdi-wrench</v-icon>
                 </v-btn>
               </template>
               <update-file-info-dialog
@@ -209,38 +184,30 @@
           <template #label="{ item, open }">
             <v-icon
               v-if="item.is_file && item.is_private"
-              style="float: left; color: #930007;"
+              style="float: left; color: #930007"
             >
               mdi-lock
             </v-icon>
-            <v-icon
-              v-if="!item.file"
-              style="float: left; color: #3147c0;"
-            >
+            <v-icon v-if="!item.file" style="float: left; color: #3147c0">
               {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
             </v-icon>
-            <v-icon
-              v-else
-              style="float: left; color: #3150f9;"
-            >
+            <v-icon v-else style="float: left; color: #3150f9">
               {{ fileTypes[item.file] }}
             </v-icon>
             <v-hover v-slot="{ hover }">
-              <div
-                :id="`file-${item.id}`"
-                style="cursor: pointer;"
-              >
+              <div :id="`file-${item.id}`" style="cursor: pointer">
                 <span
                   v-if="item.is_file"
                   style="float: left; font-weight: bold"
-                >{{ item.name }}</span>
-                <span
-                  v-else
-                  style="float: left; font-weight: bold"
-                >{{ item.name }} [{{ item.children ? item.children.length : 0 }}]</span>
-                <v-icon v-if="hover">
-                  mdi-file
-                </v-icon>
+                >
+                  {{ item.name }}
+                </span>
+                <span v-else style="float: left; font-weight: bold">
+                  {{ item.name }} [{{
+                    item.children ? item.children.length : 0
+                  }}]
+                </span>
+                <v-icon v-if="hover">mdi-file</v-icon>
               </div>
             </v-hover>
           </template>
@@ -305,40 +272,48 @@ export default {
   }),
 
   computed: {
-    filter () {
+    filter() {
       return this.caseSensitive
         ? (item, search, textKey) => item[textKey].indexOf(search) > -1
         : undefined
     },
-    someItemsSelected () {
+    someItemsSelected() {
       return this.selectedItems && this.selectedItems.length > 0
     },
-    noItemsSelected () {
+    noItemsSelected() {
       return !this.selectedItems || this.selectedItems.length === 0
     },
-    oneItemSelected () {
+    oneItemSelected() {
       return this.selectedItems && this.selectedItems.length === 1
     },
-    oneFolderSelected () {
-      return this.selectedItems && this.selectedItems.length === 1 && !this.selectedItems[0].is_file
+    oneFolderSelected() {
+      return (
+        this.selectedItems &&
+        this.selectedItems.length === 1 &&
+        !this.selectedItems[0].is_file
+      )
     },
-    oneFileSelected () {
-      return this.selectedItems && this.selectedItems.length === 1 && this.selectedItems[0].is_file
+    oneFileSelected() {
+      return (
+        this.selectedItems &&
+        this.selectedItems.length === 1 &&
+        this.selectedItems[0].is_file
+      )
     },
-    filesForUploadSelected () {
+    filesForUploadSelected() {
       return this.inputFiles !== null
     },
   },
 
-  mounted () {
+  mounted() {
     this.refreshFilesTreeAndDeselectItems()
 
     // deselect all files/folders on ESC
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.selectedItems = []
       }
-    });
+    })
   },
 
   methods: {
@@ -370,22 +345,23 @@ export default {
       // and later get it from there, in a page for the selected file
       window.open(fileUrl, 'file', 'noopener')
     },
-    onUpdateFileConfirmClicked (fileInfo) {
+    onUpdateFileConfirmClicked(fileInfo) {
       this.showDialog = false
 
       const requestBody = {
         name: fileInfo.name,
-        is_private: fileInfo.is_private
+        is_private: fileInfo.is_private,
       }
 
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
-          requestBody, {
+          requestBody,
+          {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           }
         )
         .then((response) => {
@@ -407,13 +383,13 @@ export default {
     },
     onDownloadClick() {
       if (this.selectedItems.length === 0) {
-        return;
+        return
       }
 
       const item = this.selectedItems[0]
 
-      let path;
-      let downloadName;
+      let path
+      let downloadName
       if (item.is_file) {
         path = `/f/download/file/${item.id}`
         downloadName = `${item.name}`
@@ -425,12 +401,14 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
-          responseType: 'blob'
+          responseType: 'blob',
         })
         .then((response) => {
-          const downloadUrl = window.URL.createObjectURL(new Blob([response.data]))
+          const downloadUrl = window.URL.createObjectURL(
+            new Blob([response.data])
+          )
           const link = document.createElement('a')
           link.href = downloadUrl
           link.setAttribute('download', downloadName)
@@ -444,7 +422,7 @@ export default {
     },
     onNewFolderClick() {
       if (this.selectedItems.length > 0 && this.selectedItems[0].is_file) {
-        return;
+        return
       }
 
       let folderName = prompt('New folder name', '')
@@ -464,11 +442,12 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
-          requestBody, {
+          requestBody,
+          {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           }
         )
         .then((response) => {
@@ -497,25 +476,30 @@ export default {
         folderId = this.selectedItems[0].id
         folderName = this.selectedItems[0].name
       }
-      console.log(`uploading ${this.inputFiles.length} files to folder ${folderId} ${folderName}`)
+      console.log(
+        `uploading ${this.inputFiles.length} files to folder ${folderId} ${folderName}`
+      )
 
       let formData = new FormData()
       for (let i = 0; i < this.inputFiles.length; i++) {
-        formData.append("files", this.inputFiles[i], this.inputFiles[i].name)
+        formData.append('files', this.inputFiles[i], this.inputFiles[i].name)
       }
 
       this.uploadingFile = true
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
-          formData, {
+          formData,
+          {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             },
-            onUploadProgress: function( progressEvent ) {
-              const percentage = Math.round((progressEvent.loaded / progressEvent.total) * 100)
+            onUploadProgress: function (progressEvent) {
+              const percentage = Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              )
               this.uploadPercentage = parseInt(percentage)
-            }.bind(this)
+            }.bind(this),
           }
         )
         .then((response) => {
@@ -529,7 +513,9 @@ export default {
           try {
             const filesIds = response.data.split(':')[1]
             console.log('files added', filesIds)
-          } catch(e) { /*nop*/ }
+          } catch (e) {
+            /*nop*/
+          }
 
           this.refreshFilesTree(false)
         })
@@ -544,7 +530,11 @@ export default {
         return
       }
 
-      if (!confirm(`Are you sure you want to remove ${this.selectedItems.length} items?`)) {
+      if (
+        !confirm(
+          `Are you sure you want to remove ${this.selectedItems.length} items?`
+        )
+      ) {
         return
       }
 
@@ -556,12 +546,14 @@ export default {
       axios
         .post(
           process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
-          { ids: selectedIds.join(',') }, {
+          { ids: selectedIds.join(',') },
+          {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-              'Content-Type': 'application/json'
-            }
-        })
+              'Content-Type': 'application/json',
+            },
+          }
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('save file - received null response / data')
@@ -597,8 +589,8 @@ export default {
       axios
         .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -625,7 +617,7 @@ export default {
       this.snackbarText = message
       this.snackbarColor = 'red'
       this.showSnackbar = true
-    }
+    },
   },
 }
 </script>

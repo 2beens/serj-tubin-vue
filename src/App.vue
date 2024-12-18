@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar v-if="$vuetify.breakpoint.smAndDown" id="main-menu-bar-sm" app color="black">
+    <v-app-bar
+      v-if="$vuetify.breakpoint.smAndDown"
+      id="main-menu-bar-sm"
+      app
+      color="black"
+    >
       <v-btn icon @click="drawer = !drawer">
         <v-icon color="teal lighten-1">mdi-menu</v-icon>
       </v-btn>
@@ -10,7 +15,12 @@
 
     <!-- Navigation drawer for small screens -->
     <!------------------------------------------>
-    <v-navigation-drawer v-model="drawer" app v-if="$vuetify.breakpoint.smAndDown" color="black">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      v-if="$vuetify.breakpoint.smAndDown"
+      color="black"
+    >
       <v-btn icon @click="drawer = false">
         <v-icon color="teal lighten-1">mdi-close</v-icon>
       </v-btn>
@@ -50,17 +60,27 @@
     <!------------------------------------------>
     <v-app-bar id="main-menu-bar" app color="black" v-else>
       <v-spacer />
-      <v-btn color="#4b9ff2" text rounded to="/"> Home </v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/about"> About </v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/board"> Visitor Board </v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/util"> Util </v-btn>
-      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/gymstats"> GymStats 🏋️‍♀️ </v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/netlog"> Netlog 🕸 </v-btn>
-      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/url-shortener">
+      <v-btn color="#4b9ff2" text rounded to="/">Home</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/about">About</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/board">Visitor Board</v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/util">Util</v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/gymstats">
+        GymStats 🏋️‍♀️
+      </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/netlog">Netlog 🕸</v-btn>
+      <v-btn
+        v-if="$root.loggedIn"
+        color="#4b9ff2"
+        text
+        rounded
+        to="/url-shortener"
+      >
         URLs 🌏
       </v-btn>
-      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/notes"> Notes 📝 </v-btn>
-      <v-btn color="#4b9ff2" text rounded to="/sumup"> 🤑SumUp🤑 </v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/notes">
+        Notes 📝
+      </v-btn>
+      <v-btn color="#4b9ff2" text rounded to="/sumup">🤑SumUp🤑</v-btn>
       <v-spacer />
       <LoginLogoutButton />
     </v-app-bar>
@@ -75,12 +95,12 @@
           <div style="color: white">
             <p>Hey, over here 👋</p>
             <p>
-              This site uses cookies to analyze website traffic and optimize your website
-              experience.
+              This site uses cookies to analyze website traffic and optimize
+              your website experience.
             </p>
             <p>
-              Cookies are used only for analytics purposes. By using this site, you consent to the
-              use of these cookies.
+              Cookies are used only for analytics purposes. By using this site,
+              you consent to the use of these cookies.
             </p>
             <p>🍪🍪🍪 ❓</p>
           </div>
@@ -112,18 +132,18 @@ export default {
   components: {
     SiteFooter,
     LoginLogoutButton,
-    CookieConsent
+    CookieConsent,
   },
   data: function () {
     return {
       showConsent: true,
-      drawer: false
+      drawer: false,
     }
   },
   watch: {
     $route(to, from) {
       console.log(`app: route change from ${from.path} to ${to.path}`)
-    }
+    },
   },
   mounted: function () {
     this.showConsent = !this.getCookie('cookieconsent_status')
@@ -137,7 +157,7 @@ export default {
     }
 
     this.$root.loggedIn = true
-  }
+  },
 }
 </script>
 

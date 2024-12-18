@@ -11,12 +11,7 @@
       <v-icon>mdi-logout</v-icon>
     </v-btn>
 
-    <v-dialog
-      v-else
-      v-model="showLoginDialog"
-      persistent
-      max-width="400px"
-    >
+    <v-dialog v-else v-model="showLoginDialog" persistent max-width="400px">
       <template #activator="{ on, attrs }">
         <v-btn
           id="login-button"
@@ -63,11 +58,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="showLoginDialog = false"
-          >
+          <v-btn color="blue darken-1" text @click="showLoginDialog = false">
             Abort
           </v-btn>
           <v-btn
@@ -87,12 +78,7 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
             Close
           </v-btn>
         </template>
@@ -111,7 +97,7 @@ export default {
       user: {},
       showLoginDialog: false,
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
   methods: {
@@ -132,15 +118,15 @@ export default {
 
       const requestBody = {
         username: this.user.name,
-        password: this.user.password
+        password: this.user.password,
       }
 
       const vm = this
       axios
         .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody, {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
         .then(function (response) {
           if (response.data === null) {
@@ -169,8 +155,8 @@ export default {
       axios
         .get(process.env.VUE_APP_API_ENDPOINT + '/a/logout', {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -201,7 +187,7 @@ export default {
             vm.user = {}
           }
         })
-    }
-  }
+    },
+  },
 }
 </script>

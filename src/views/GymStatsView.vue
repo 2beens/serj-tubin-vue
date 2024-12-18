@@ -15,7 +15,13 @@
     </div>
 
     <div class="mt-12">
-      <v-bottom-navigation v-model="currentTab" dark shift fixed background-color="black">
+      <v-bottom-navigation
+        v-model="currentTab"
+        dark
+        shift
+        fixed
+        background-color="black"
+      >
         <v-btn value="log" @click="onTabChange('log')">
           <span>Log</span>
           <v-icon color="teal lighten-1">mdi-timeline-text</v-icon>
@@ -55,12 +61,12 @@ export default {
   components: {
     ExercisesList,
     ExercisesLog,
-    ExerciseStats
+    ExerciseStats,
   },
 
   data() {
     return {
-      currentTab: 'log'
+      currentTab: 'log',
     }
   },
 
@@ -74,6 +80,6 @@ export default {
       // save currentTab to local storage
       localStorage.setItem('currentTab', tab)
     },
-  }
+  },
 }
 </script>

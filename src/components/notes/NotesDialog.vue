@@ -2,23 +2,13 @@
   <v-container>
     <v-card color="#26c6da">
       <v-card-title>
-        <span
-          v-if="editMode"
-          class="text-h5"
-        >Edit Note</span>
-        <span
-          v-else
-          class="text-h5"
-        >Add Note</span>
+        <span v-if="editMode" class="text-h5">Edit Note</span>
+        <span v-else class="text-h5">Add Note</span>
       </v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <v-text-field
-              v-model="selectedNote.title"
-              label="Title"
-              required
-            />
+            <v-text-field v-model="selectedNote.title" label="Title" required />
           </v-col>
           <v-col cols="12">
             <v-textarea
@@ -60,13 +50,13 @@ export default {
   props: {
     editMode: Boolean,
     selectedNote: Object,
-    editedNote: Object
+    editedNote: Object,
   },
 
   computed: {
-    confirmDisabled () {
+    confirmDisabled() {
       return !this.selectedNote.content || this.selectedNote.content === ''
-    }
-  }
+    },
+  },
 }
 </script>

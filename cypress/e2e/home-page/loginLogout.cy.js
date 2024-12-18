@@ -37,8 +37,16 @@ describe('Ability to log in from the home page', () => {
     const sessionToken = '1234567890'
     const loginResponse = `{"token": "${sessionToken}"}`
     const logoutResponse = 'logged-out'
-    cy.intercept('POST', `${Cypress.config('apiEndpoint')}/a/login`, loginResponse).as('loginApiCall')
-    cy.intercept('GET', `${Cypress.config('apiEndpoint')}/a/logout`, logoutResponse).as('logoutApiCall')
+    cy.intercept(
+      'POST',
+      `${Cypress.config('apiEndpoint')}/a/login`,
+      loginResponse
+    ).as('loginApiCall')
+    cy.intercept(
+      'GET',
+      `${Cypress.config('apiEndpoint')}/a/logout`,
+      logoutResponse
+    ).as('logoutApiCall')
 
     cy.getCookie('sessionkolacic').should('not.exist')
 
