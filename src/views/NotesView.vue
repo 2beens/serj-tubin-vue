@@ -2,23 +2,10 @@
   <v-container>
     <h2>📝 Notes 📝</h2>
 
-    <v-dialog
-      v-model="showDialog"
-      persistent
-      max-width="800px"
-      @keydown.esc="onAbortEditNote"
-    >
+    <v-dialog v-model="showDialog" persistent max-width="800px" @keydown.esc="onAbortEditNote">
       <template #activator="{ on, attrs }">
-        <v-btn
-          color="teal lighten-1"
-          large
-          icon
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon dark>
-            mdi-plus
-          </v-icon>
+        <v-btn color="teal lighten-1" large icon v-bind="attrs" v-on="on">
+          <v-icon dark> mdi-plus </v-icon>
         </v-btn>
       </template>
       <notes-dialog
@@ -41,14 +28,7 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
-            Close
-          </v-btn>
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false"> Close </v-btn>
         </template>
       </v-snackbar>
     </div>
