@@ -1,0 +1,9 @@
+semi: false # No semicolons
+singleQuote: true # Use single quotes
+useTabs: false # Use spaces instead of tabs
+trailingComma: 'es5' # Easier diffs and modern compatibility
+printWidth: 80 # Standard line width
+bracketSpacing: true # Add spaces inside object literals
+arrowParens: 'always' # Always include parentheses in arrow functions
+endOfLine: 'lf' # Use LF line endings
+htmlWhitespaceSensitivity: 'ignore' # Avoid unnecessary breaks in HTML templates

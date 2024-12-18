@@ -1,9 +1,5 @@
 <template>
-  <v-btn-toggle
-    v-model="searchSource"
-    rounded
-    @change="sourceChanged"
-  >
+  <v-btn-toggle v-model="searchSource" rounded @change="sourceChanged">
     <v-btn>
       <v-icon>mdi-google-chrome</v-icon>
     </v-btn>
@@ -30,13 +26,13 @@ export default {
   name: 'SearchFilterGroup',
   data: function () {
     return {
-      searchSource: 5
+      searchSource: 5,
     }
   },
   methods: {
-    sourceChanged () {
+    sourceChanged() {
       this.$emit('source-changed', this.searchSource)
-    }
-  }
+    },
+  },
 }
 </script>

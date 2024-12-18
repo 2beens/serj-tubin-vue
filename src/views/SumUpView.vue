@@ -2,18 +2,13 @@
   <v-container id="main">
     <h2>📝 SumUp Testing / Experimenting / Learning 📝</h2>
     <h4>
-      Use this page to log in to your <a href="https://sumup.com/">SumUp account</a> via OAuth2 and get your personal details, transactions,
-      etc.
+      Use this page to log in to your
+      <a href="https://sumup.com/">SumUp account</a>
+      via OAuth2 and get your personal details, transactions, etc.
     </h4>
 
-    <v-row
-      justify="center"
-      style="margin-top: 20px"
-    >
-      <v-col
-        v-if="user"
-        cols="auto"
-      >
+    <v-row justify="center" style="margin-top: 20px">
+      <v-col v-if="user" cols="auto">
         <v-btn
           color="warning"
           height="72"
@@ -24,10 +19,7 @@
           <v-icon>mdi-logout</v-icon>
         </v-btn>
       </v-col>
-      <v-col
-        v-else
-        cols="auto"
-      >
+      <v-col v-else cols="auto">
         <v-btn
           color="success"
           height="72"
@@ -39,7 +31,7 @@
         </v-btn>
         <v-combobox
           v-model="environment"
-          style="cursor: pointer; margin-top: 20px;"
+          style="cursor: pointer; margin-top: 20px"
           :items="['local', 'theta', 'staging', 'live']"
           label="Environment"
           chips
@@ -58,10 +50,7 @@
       </v-row>
 
       <v-row justify="center">
-        <v-divider
-          :thickness="6"
-          color="white"
-        />
+        <v-divider :thickness="6" color="white" />
       </v-row>
       <v-row>
         <v-col cols="auto">
@@ -94,10 +83,7 @@
       </v-row>
 
       <v-row justify="center">
-        <v-divider
-          :thickness="6"
-          color="white"
-        />
+        <v-divider :thickness="6" color="white" />
       </v-row>
       <h3>Transactions</h3>
       <v-row>
@@ -114,20 +100,16 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col
-          v-if="transactions"
-          cols="10"
-        >
-          <div
-            v-for="tr in transactions"
-            :key="tr.id"
-          >
+        <v-col v-if="transactions" cols="10">
+          <div v-for="tr in transactions" :key="tr.id">
             <p
               v-if="tr.status === 'SUCCESSFUL'"
               style="background-color: green; border-radius: 5px"
             >
               ** {{ tr.timestamp }} ->
-              <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
+              <span style="font-weight: bold; background-color: black">
+                {{ tr.amount }}
+              </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
             <p
@@ -135,27 +117,29 @@
               style="background-color: red; border-radius: 5px"
             >
               ** {{ tr.timestamp }} ->
-              <span style="font-weight: bold; background-color: black">{{ tr.amount }}</span>
+              <span style="font-weight: bold; background-color: black">
+                {{ tr.amount }}
+              </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
-            <p
-              v-else
-              style="background-color: gray"
-            >
+            <p v-else style="background-color: gray">
               ** {{ tr.timestamp }} ->
-              <span style="font-weight: bold; background-color: black; border-radius: 5px">{{
-                tr.amount
-              }}</span>
+              <span
+                style="
+                  font-weight: bold;
+                  background-color: black;
+                  border-radius: 5px;
+                "
+              >
+                {{ tr.amount }}
+              </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
           </div>
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-divider
-          :thickness="6"
-          color="white"
-        />
+        <v-divider :thickness="6" color="white" />
       </v-row>
     </div>
 
@@ -164,12 +148,7 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="showSnackbar = false"
-          >
+          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
             Close
           </v-btn>
         </template>
@@ -179,11 +158,17 @@
     <v-row>
       <h3>Notes:</h3>
     </v-row>
-    <v-row style="text-align: left;">
+    <v-row style="text-align: left">
       <v-col>
         <ul>
-          <li>How can we see the list of oauth apps we gave permissions to in the SumUp Dashboard?</li>
-          <li>Scopes do not seem to work properly; can login only if we omit the "scope" parameter.</li>
+          <li>
+            How can we see the list of oauth apps we gave permissions to in the
+            SumUp Dashboard?
+          </li>
+          <li>
+            Scopes do not seem to work properly; can login only if we omit the
+            "scope" parameter.
+          </li>
           <li>
             An error message gets written only in the URL:
             Requested+scope+is+invalid+or+not+available+to+this+client.
@@ -199,7 +184,7 @@ import axios from 'axios'
 import {
   createCodeVerifierAndChallenge,
   buildAuthorizationUrl,
-  exchangeCodeForAccessToken
+  exchangeCodeForAccessToken,
 } from '../oauth'
 
 const redirectUri = process.env.VUE_APP_SUMUP_REDIRECT_URI
@@ -215,7 +200,7 @@ export default {
       transactions: null,
       environment: 'live',
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
     }
   },
 
@@ -266,7 +251,12 @@ export default {
     }
 
     const vm = this
-    exchangeCodeForAccessToken(code, redirectUri, foundVerifier, this.environment)
+    exchangeCodeForAccessToken(
+      code,
+      redirectUri,
+      foundVerifier,
+      this.environment
+    )
       .then((respData) => {
         console.log('received token response data', respData)
         if (respData.error) {
@@ -282,7 +272,10 @@ export default {
 
         // remove the search part from the URL
         const newUrl =
-          window.location.protocol + '//' + window.location.host + window.location.pathname
+          window.location.protocol +
+          '//' +
+          window.location.host +
+          window.location.pathname
         // replace the displayed URL in the address bar
         window.history.replaceState({}, document.title, newUrl)
         window.location.reload()
@@ -294,13 +287,20 @@ export default {
 
   methods: {
     async onLoginClick() {
-      const {verifier, challenge} = await createCodeVerifierAndChallenge()
+      const { verifier, challenge } = await createCodeVerifierAndChallenge()
       this.setCookie('verifier', verifier, 1)
 
       // TODO: scope is ignored atm
       const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
-      const scope = 'payments user.app-settings transactions.history user.profile_readonly'
-      const authUrlInfo = buildAuthorizationUrl(clientId, redirectUri, challenge, scope, this.environment)
+      const scope =
+        'payments user.app-settings transactions.history user.profile_readonly'
+      const authUrlInfo = buildAuthorizationUrl(
+        clientId,
+        redirectUri,
+        challenge,
+        scope,
+        this.environment
+      )
 
       const state = authUrlInfo.state
       this.setCookie('state', state, 1)
@@ -335,20 +335,24 @@ export default {
       }
 
       const response = await axios.get(url, {
-        headers: {Authorization: `Bearer ${accessToken}`}
+        headers: { Authorization: `Bearer ${accessToken}` },
       })
       return response.data
     },
     async getUserData() {
-      return await this.makeApiRequest('https://api.sumup.com/v0.1/me/personal-profile')
+      return await this.makeApiRequest(
+        'https://api.sumup.com/v0.1/me/personal-profile'
+      )
     },
     async listTransactions() {
-      return await this.makeApiRequest('https://api.sumup.com/v0.1/me/transactions/history')
+      return await this.makeApiRequest(
+        'https://api.sumup.com/v0.1/me/transactions/history'
+      )
     },
     async getMoreUserDetails() {
       return await this.makeApiRequest('https://api.sumup.com/v0.1/me')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -3,7 +3,12 @@
     <v-divider :thickness="3" color="#54ab80"></v-divider>
     <v-row>
       <v-col>
-        <Bar v-if="loaded" id="avg-set-duration-chart" :options="chartOptions" :data="chartData" />
+        <Bar
+          v-if="loaded"
+          id="avg-set-duration-chart"
+          :options="chartOptions"
+          :data="chartData"
+        />
       </v-col>
     </v-row>
     <v-divider :thickness="3" color="#54ab80"></v-divider>
@@ -20,7 +25,7 @@ import {
   Legend,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
 } from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
@@ -34,8 +39,8 @@ export default {
       loaded: false,
       chartData: null,
       chartOptions: {
-        responsive: true
-      }
+        responsive: true,
+      },
     }
   },
 
@@ -52,8 +57,8 @@ export default {
             `/gymstats/sets/avgduration?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -70,14 +75,16 @@ export default {
           const backgroundColors = []
           Object.keys(response.data.durationPerDay).forEach((key) => {
             const dayOnly = key.split('T')[0]
-            const durationInMinutes = response.data.durationPerDay[key] / 1000000000 / 60
+            const durationInMinutes =
+              response.data.durationPerDay[key] / 1000000000 / 60
             durationPerDayMinutes.push(durationInMinutes)
             dayLabels.push(dayOnly)
 
             // Calculate color based on duration
             const hue =
               180 *
-              (1 - Math.min(Math.max((durationInMinutes - 1.5) / (3 - 1.8), 0), 1))
+              (1 -
+                Math.min(Math.max((durationInMinutes - 1.5) / (3 - 1.8), 0), 1))
             backgroundColors.push(['hsl(', hue, ',100%,50%)'].join(''))
           })
 
@@ -85,17 +92,19 @@ export default {
             labels: dayLabels,
             datasets: [
               {
-                label: `Duration [avg total ${response.data.duration / 1000000000 / 60} min]`,
+                label: `Duration [avg total ${
+                  response.data.duration / 1000000000 / 60
+                } min]`,
                 backgroundColor: backgroundColors,
-                data: durationPerDayMinutes
-              }
-            ]
+                data: durationPerDayMinutes,
+              },
+            ],
           }
         })
         .catch((err) => {
           console.error(err)
         })
-    }
-  }
+    },
+  },
 }
 </script>

@@ -2,25 +2,14 @@
   <v-container>
     <h2>🕸 Personal Netlog 🕸</h2>
 
-    <hr>
+    <hr />
 
-    <h4 v-if="!theRoot.loggedIn">
-      Can't show you this one, sorry 🤷‍♂️
-    </h4>
-    <div
-      v-else
-      class="ma-5"
-    >
+    <h4 v-if="!theRoot.loggedIn">Can't show you this one, sorry 🤷‍♂️</h4>
+    <div v-else class="ma-5">
       <v-row>
         <v-col cols="1" />
         <v-col cols="10">
-          <v-card
-            class="ma-xs-10"
-            color="#26A69A"
-            elevation="2"
-            rounded
-            dark
-          >
+          <v-card class="ma-xs-10" color="#26A69A" elevation="2" rounded dark>
             <v-card-text>
               <v-form @submit.prevent>
                 <v-text-field
@@ -38,27 +27,19 @@
               </v-form>
 
               <v-row>
-                <v-col class="justify align"
-                  cols="12"
-                >
+                <v-col class="justify align" cols="12">
                   <!-- SEARCH MODES HERE - SOURCE -->
                   <SourceFilterGroup @source-changed="onSourceFilterChanged" />
 
                   <!-- SEARCH MODES HERE - FIELD -->
-                  <v-btn-toggle
-                    v-model="searchField"
-                    class="ml-3"
-                    rounded
-                  >
+                  <v-btn-toggle v-model="searchField" class="ml-3" rounded>
                     <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
                     <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
                   </v-btn-toggle>
 
                   <v-chip class="ml-5">
                     {{ totalVisits }}
-                    <v-icon right>
-                      mdi-star
-                    </v-icon>
+                    <v-icon right>mdi-star</v-icon>
                   </v-chip>
                 </v-col>
               </v-row>
@@ -70,10 +51,7 @@
 
       <v-row>
         <v-col>
-          <div
-            v-for="visit in visits"
-            :key="visit.id"
-          >
+          <div v-for="visit in visits" :key="visit.id">
             <div :id="'visit-' + visit.id">
               <v-row class="url-title-row">
                 <SourceIcon :source="visit.source" />
@@ -82,19 +60,10 @@
                 </p>
               </v-row>
               <v-row class="url-endpoint-row">
-                <v-col
-                  cols="10"
-                  class="text-left pa-md-0"
-                >
-                  <a
-                    :href="visit.url"
-                    target="_blank"
-                  >{{ visit.url }}</a>
+                <v-col cols="10" class="text-left pa-md-0">
+                  <a :href="visit.url" target="_blank">{{ visit.url }}</a>
                 </v-col>
-                <v-col
-                  cols="2"
-                  class="pa-md-0"
-                >
+                <v-col cols="2" class="pa-md-0">
                   <p class="visit-timestamp">
                     {{ getTimestampString(new Date(visit.timestamp)) }}
                   </p>
@@ -132,7 +101,7 @@ export default {
   name: 'NetlogView',
   components: {
     SourceFilterGroup,
-    SourceIcon
+    SourceIcon,
   },
   data: function () {
     return {
@@ -146,7 +115,7 @@ export default {
       searchField: 0,
       searchSource: 5,
       iconIndex: 0,
-      searchMode: false
+      searchMode: false,
     }
   },
   mounted: function () {
@@ -200,8 +169,8 @@ export default {
             `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -210,7 +179,10 @@ export default {
             return
           }
           if (response.data.visits === null) {
-            console.error('filter visits - received null visits', `response.data: ${JSON.stringify(response.data)}`)
+            console.error(
+              'filter visits - received null visits',
+              `response.data: ${JSON.stringify(response.data)}`
+            )
             vm.visits = []
             vm.totalVisits = 0
             vm.visitsPageLength = 0
@@ -218,7 +190,9 @@ export default {
           }
           vm.visits = response.data.visits
           vm.totalVisits = response.data.total
-          vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
+          vm.visitsPageLength = Math.ceil(
+            response.data.total / vm.maxVisitsPerPage
+          )
         })
         .catch((error) => {
           console.log(error)
@@ -241,8 +215,8 @@ export default {
             `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -252,7 +226,9 @@ export default {
           }
           vm.visits = response.data.visits
           vm.totalVisits = response.data.total
-          vm.visitsPageLength = Math.ceil(response.data.total / vm.maxVisitsPerPage)
+          vm.visitsPageLength = Math.ceil(
+            response.data.total / vm.maxVisitsPerPage
+          )
         })
         .catch((error) => {
           console.log(error)
@@ -264,8 +240,8 @@ export default {
       } else {
         this.getVisits()
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

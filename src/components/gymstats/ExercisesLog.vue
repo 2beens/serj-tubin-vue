@@ -34,7 +34,10 @@
         />
       </v-col>
       <v-col cols="2">
-        <AddExercise @exercise-added="getExercises" style="margin-top: 30px; margin-right: 40px" />
+        <AddExercise
+          @exercise-added="getExercises"
+          style="margin-top: 30px; margin-right: 40px"
+        />
       </v-col>
     </v-row>
 
@@ -78,7 +81,10 @@
     </v-row>
     <v-row v-if="$vuetify.breakpoint.smAndDown">
       <v-col>
-        <AddExercise @exercise-added="getExercises" style="margin-bottom: 10px" />
+        <AddExercise
+          @exercise-added="getExercises"
+          style="margin-bottom: 10px"
+        />
       </v-col>
     </v-row>
     <!------------------------------------------------->
@@ -103,10 +109,17 @@
         >
           <!-- EXERCISE ID -->
           <template v-slot:item.exerciseId="{ item }">
-            <v-edit-dialog :return-value.sync="item.exerciseId" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.exerciseId"
+              @save="saveExercise(item)"
+            >
               {{ item.exerciseId }}
               <template v-slot:input>
-                <v-text-field v-model="item.exerciseId" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.exerciseId"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
@@ -116,50 +129,85 @@
           </template>
           <!-- MUSCLE GROUP -->
           <template v-slot:item.muscleGroup="{ item }">
-            <v-edit-dialog :return-value.sync="item.muscleGroup" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.muscleGroup"
+              @save="saveExercise(item)"
+            >
               <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
                 {{ item.muscleGroup }}
               </v-chip>
               <template v-slot:input>
-                <v-text-field v-model="item.muscleGroup" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.muscleGroup"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
           <!-- KILOS -->
           <template v-slot:item.kilos="{ item }">
-            <v-edit-dialog :return-value.sync="item.kilos" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.kilos"
+              @save="saveExercise(item)"
+            >
               <v-chip :color="getKilosColor(item.kilos)" dark>
                 {{ item.kilos }}
               </v-chip>
               <template v-slot:input>
-                <v-text-field v-model="item.kilos" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.kilos"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
           <!-- REPS -->
           <template v-slot:item.reps="{ item }">
-            <v-edit-dialog :return-value.sync="item.reps" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.reps"
+              @save="saveExercise(item)"
+            >
               {{ item.reps }}
               <template v-slot:input>
-                <v-text-field v-model="item.reps" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.reps"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
           <!-- CREATED AT -->
           <template v-slot:item.createdAt="{ item }">
-            <v-edit-dialog :return-value.sync="item.createdAt" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.createdAt"
+              @save="saveExercise(item)"
+            >
               {{ item.createdAt }}
               <template v-slot:input>
-                <v-text-field v-model="item.createdAt" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.createdAt"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
           <!-- METADATA -->
           <template v-slot:item.metadataJson="{ item }">
-            <v-edit-dialog :return-value.sync="item.metadataJson" @save="saveExercise(item)">
+            <v-edit-dialog
+              :return-value.sync="item.metadataJson"
+              @save="saveExercise(item)"
+            >
               {{ item.metadataJson }}
               <template v-slot:input>
-                <v-text-field v-model="item.metadataJson" label="Edit" single-line></v-text-field>
+                <v-text-field
+                  v-model="item.metadataJson"
+                  label="Edit"
+                  single-line
+                ></v-text-field>
               </template>
             </v-edit-dialog>
           </template>
@@ -169,8 +217,10 @@
             </v-chip>
           </template>
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="editExercise(item)"> mdi-pencil </v-icon>
-            <v-icon small @click="deleteExercise(item)"> mdi-delete </v-icon>
+            <v-icon small class="mr-2" @click="editExercise(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteExercise(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </template>
@@ -185,7 +235,9 @@
             <v-list-item-icon>
               <v-chip
                 :color="getColorFromName(exercise.exerciseName)"
-                :style="{ color: getTextColor(getColorFromName(exercise.exerciseName)) }"
+                :style="{
+                  color: getTextColor(getColorFromName(exercise.exerciseName)),
+                }"
                 small
                 class="mt-2"
               >
@@ -201,7 +253,9 @@
               </v-list-item-subtitle>
               <v-list-item-subtitle>
                 {{ muscleGroupToText[exercise.muscleGroup] }}
-                <v-chip small color="teal lighten-1"> {{ exercise.kilos }} kg </v-chip>
+                <v-chip small color="teal lighten-1">
+                  {{ exercise.kilos }} kg
+                </v-chip>
                 <v-chip small color="teal lighten-4" text-color="black">
                   {{ exercise.reps }} reps
                 </v-chip>
@@ -215,7 +269,9 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </v-container>
@@ -237,7 +293,7 @@ import axios from 'axios'
 export default {
   name: 'ExercisesLog',
   components: {
-    AddExercise
+    AddExercise,
   },
 
   data() {
@@ -253,7 +309,7 @@ export default {
           text: 'DB ID',
           align: 'start',
           sortable: true,
-          value: 'id'
+          value: 'id',
         },
         { text: 'ID', value: 'exerciseId' },
         { text: 'Name', value: 'exerciseName' },
@@ -263,12 +319,12 @@ export default {
         { text: 'At', value: 'createdAt' },
         { text: 'Metadata', value: 'metadataJson' },
         { text: 'IsTesting', value: 'isTesting' },
-        { text: 'Actions', value: 'actions', sortable: false }
+        { text: 'Actions', value: 'actions', sortable: false },
       ],
       snackbarText: '',
       showSnackbar: false,
       showTable: true,
-      muscleGroupToText: GymStatsData.muscleGroupToText
+      muscleGroupToText: GymStatsData.muscleGroupToText,
     }
   },
 
@@ -305,8 +361,8 @@ export default {
             `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -339,15 +395,15 @@ export default {
         kilos: Number(exercise.kilos),
         reps: Number(exercise.reps),
         createdAt: exercise.createdAt,
-        metadata: JSON.parse(exercise.metadataJson)
+        metadata: JSON.parse(exercise.metadataJson),
       }
 
       const vm = this
       axios
         .put(process.env.VUE_APP_API_ENDPOINT + `/gymstats`, requestBody, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -378,8 +434,8 @@ export default {
       axios
         .delete(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, {
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (response === null || response.data === null) {
@@ -407,11 +463,12 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
+          process.env.VUE_APP_API_ENDPOINT +
+            `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -430,7 +487,8 @@ export default {
       this.stats = response.data.exercises
       for (let i = 0; i < this.stats.length; i++) {
         this.stats[i].metadataJson = JSON.stringify(this.stats[i].metadata)
-        this.stats[i].isTesting = this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
+        this.stats[i].isTesting =
+          this.stats[i].metadata.testing === 'true' ? 'yes' : 'no'
       }
       this.paginationLen = Math.ceil(response.data.total / this.itemsPerPage)
     },
@@ -505,7 +563,7 @@ export default {
         default:
           return 'black'
       }
-    }
-  }
+    },
+  },
 }
 </script>

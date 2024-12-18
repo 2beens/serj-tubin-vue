@@ -11,9 +11,7 @@ describe('Home Page Tests', () => {
   })
 
   it('contains 4 blog posts', () => {
-    cy.get('#blogs-list').
-      children().
-      should('have.length', 5) // 4 blogs + 1 footer
+    cy.get('#blogs-list').children().should('have.length', 5) // 4 blogs + 1 footer
   })
 
   it('displays main photo', () => {
@@ -34,17 +32,17 @@ describe('Home Page Tests', () => {
   })
 
   it('displays version', () => {
-    cy.get('#version-info').
-      should('exist').
-      and('be.visible').
-      and('contain', 'v1')
+    cy.get('#version-info')
+      .should('exist')
+      .and('be.visible')
+      .and('contain', 'v1')
   })
 
   it('display quote', () => {
-    cy.get('#quote-text').
-      should('exist').
-      and('be.visible').
-      and('contain', fixRandomQuote.text)
+    cy.get('#quote-text')
+      .should('exist')
+      .and('be.visible')
+      .and('contain', fixRandomQuote.text)
   })
 
   it('display weather', () => {

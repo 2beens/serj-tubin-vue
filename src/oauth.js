@@ -4,18 +4,19 @@ const tokenExchangeEndpoints = {
   local: 'http://localhost:10122/exchange_token',
   theta: 'https://sumup-token-exchange.serj-tubin.com/exchange_token',
   staging: 'https://sumup-token-exchange.serj-tubin.com/exchange_token',
-  live: 'https://sumup-token-exchange.serj-tubin.com/exchange_token'
+  live: 'https://sumup-token-exchange.serj-tubin.com/exchange_token',
 }
 
 const authUrlEndpoints = {
   local: 'http://localhost:10122/authorize',
   theta: 'https://api-theta.sam-app.ro/authorize',
   staging: 'https://api.sam-app.ro/authorize',
-  live: 'https://api.sumup.com/authorize'
+  live: 'https://api.sumup.com/authorize',
 }
 
 function generateRandomString(length) {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~'
+  const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~'
   let randomString = ''
 
   for (let i = 0; i < length; i++) {
@@ -40,7 +41,13 @@ async function createCodeVerifierAndChallenge() {
   return { verifier, challenge }
 }
 
-function buildAuthorizationUrl(clientId, redirectUri, challenge, scope, environment) {
+function buildAuthorizationUrl(
+  clientId,
+  redirectUri,
+  challenge,
+  scope,
+  environment
+) {
   const state = generateRandomString(20)
   const authUrl = new URL(authUrlEndpoints[environment])
   authUrl.searchParams.set('client_id', clientId)
@@ -57,13 +64,18 @@ function buildAuthorizationUrl(clientId, redirectUri, challenge, scope, environm
   return { url: authUrl, state: state }
 }
 
-async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier, environment) {
+async function exchangeCodeForAccessToken(
+  code,
+  redirectUri,
+  codeVerifier,
+  environment
+) {
   try {
     const response = await axios.post(tokenExchangeEndpoints[environment], {
       code: code,
       redirect_uri: redirectUri,
       code_verifier: codeVerifier,
-      env: environment
+      env: environment,
     })
     return response.data
   } catch (error) {
@@ -71,4 +83,8 @@ async function exchangeCodeForAccessToken(code, redirectUri, codeVerifier, envir
   }
 }
 
-export { createCodeVerifierAndChallenge, buildAuthorizationUrl, exchangeCodeForAccessToken }
+export {
+  createCodeVerifierAndChallenge,
+  buildAuthorizationUrl,
+  exchangeCodeForAccessToken,
+}

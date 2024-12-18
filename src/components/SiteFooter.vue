@@ -6,20 +6,22 @@
 
         <v-spacer />
 
-        <div id="version-info">{{ new Date().getFullYear() }} — {{ versionInfo }}</div>
+        <div id="version-info">
+          {{ new Date().getFullYear() }} — {{ versionInfo }}
+        </div>
 
         <v-spacer />
 
         <v-btn class="mx-4" dark icon @click="goTo('gh')">
-          <v-icon size="35px"> mdi-github </v-icon>
+          <v-icon size="35px">mdi-github</v-icon>
         </v-btn>
 
         <v-btn class="mx-4" dark icon @click="goTo('insta')">
-          <v-icon size="35px"> mdi-instagram </v-icon>
+          <v-icon size="35px">mdi-instagram</v-icon>
         </v-btn>
 
         <v-btn class="mx-4" dark icon @click="goTo('fb')">
-          <v-icon size="35px"> mdi-facebook </v-icon>
+          <v-icon size="35px">mdi-facebook</v-icon>
         </v-btn>
       </v-card-title>
     </v-card>
@@ -33,7 +35,7 @@ export default {
   name: 'SiteFooter',
   data: function () {
     return {
-      versionInfo: '...'
+      versionInfo: '...',
     }
   },
   mounted: function () {
@@ -54,13 +56,19 @@ export default {
   methods: {
     goTo: function (target) {
       if (target === 'gh') {
-        window.open('https://github.com/2beens', '2beens GitHub', 'noopener').focus()
+        window
+          .open('https://github.com/2beens', '2beens GitHub', 'noopener')
+          .focus()
       } else if (target === 'insta') {
-        window.open('https://www.instagram.com/2beens', '2beens Insta', 'noopener').focus()
+        window
+          .open('https://www.instagram.com/2beens', '2beens Insta', 'noopener')
+          .focus()
       } else if (target === 'fb') {
-        window.open('https://www.facebook.com/srdjantubin', 'Serj FB', 'noopener').focus()
+        window
+          .open('https://www.facebook.com/srdjantubin', 'Serj FB', 'noopener')
+          .focus()
       }
-    }
-  }
+    },
+  },
 }
 </script>

@@ -12,7 +12,12 @@
         </v-col>
 
         <v-col cols="4">
-          <v-text-field outlined v-model="exerciseType.name" label="Name" required></v-text-field>
+          <v-text-field
+            outlined
+            v-model="exerciseType.name"
+            label="Name"
+            required
+          ></v-text-field>
         </v-col>
 
         <v-col cols="4">
@@ -29,7 +34,11 @@
       </v-row>
       <v-row>
         <v-col cols="6">
-          <v-textarea outlined v-model="exerciseType.description" label="Description"></v-textarea>
+          <v-textarea
+            outlined
+            v-model="exerciseType.description"
+            label="Description"
+          ></v-textarea>
         </v-col>
         <v-col cols="6">
           <v-row>
@@ -52,7 +61,9 @@
         </v-col>
         <!-- add images button bellow: -->
         <v-col class="ma-0 pa-0 d-flex justify-end" cols="6">
-          <v-btn color="primary" @click="showAddImageDialog = true">Add Image</v-btn>
+          <v-btn color="primary" @click="showAddImageDialog = true">
+            Add Image
+          </v-btn>
         </v-col>
       </v-row>
       <v-row class="ma-0">
@@ -84,8 +95,9 @@
                 style="position: absolute; top: 5%; left: 5%"
                 color="red"
                 @click="deleteImage(image.id)"
-                >mdi-delete</v-icon
               >
+                mdi-delete
+              </v-icon>
             </v-col>
           </v-row>
         </v-col>
@@ -101,7 +113,11 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-file-input v-model="image" label="Image" accept="image/*"></v-file-input>
+                  <v-file-input
+                    v-model="image"
+                    label="Image"
+                    accept="image/*"
+                  ></v-file-input>
                 </v-col>
               </v-row>
             </v-container>
@@ -109,7 +125,9 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" @click="showAddImageDialog = false">Close</v-btn>
+            <v-btn color="error" @click="showAddImageDialog = false">
+              Close
+            </v-btn>
             <v-btn color="success" @click="uploadImage">Upload</v-btn>
           </v-card-actions>
         </v-card>
@@ -118,7 +136,9 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </v-row>
@@ -133,12 +153,12 @@ export default {
   props: {
     muscleGroup: {
       type: String,
-      required: true
+      required: true,
     },
     exerciseId: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
@@ -149,7 +169,7 @@ export default {
       showAddImageDialog: false,
       image: null, // for image upload dialog
       showSnackbar: false,
-      snackbarText: ''
+      snackbarText: '',
     }
   },
 
@@ -159,7 +179,7 @@ export default {
     },
     exerciseId() {
       this.refresh()
-    }
+    },
   },
 
   mounted() {
@@ -173,15 +193,17 @@ export default {
         .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
           params: {
             muscleGroup: this.muscleGroup,
-            exerciseId: this.exerciseId
+            exerciseId: this.exerciseId,
           },
           headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-          }
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
         })
         .then((response) => {
           if (!response.data || response.data.length === 0) {
-            console.error(`no exercise type found for ${this.muscleGroup}/${this.exerciseId}`)
+            console.error(
+              `no exercise type found for ${this.muscleGroup}/${this.exerciseId}`
+            )
             vm.showSnackbar = true
             vm.snackbarText = `Unexpected response, no exercise type found for ${this.muscleGroup}/${this.exerciseId}`
             return
@@ -190,7 +212,10 @@ export default {
           vm.exerciseTypeLoaded = true
         })
         .catch((error) => {
-          console.error(`error loading exercise type ${this.muscleGroup}/${this.exerciseId}`, error)
+          console.error(
+            `error loading exercise type ${this.muscleGroup}/${this.exerciseId}`,
+            error
+          )
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
@@ -212,8 +237,8 @@ export default {
           {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -236,11 +261,14 @@ export default {
       }
       const vm = this
       axios
-        .delete(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .delete(
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
-        })
+        )
         .then((response) => {
           console.log('image deleted', response)
           vm.refresh()
@@ -257,16 +285,20 @@ export default {
         exerciseId: this.exerciseType.exerciseId,
         name: this.exerciseType.name,
         muscleGroup: this.exerciseType.muscleGroup,
-        description: this.exerciseType.description
+        description: this.exerciseType.description,
       }
 
       const vm = this
       axios
-        .put(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, requestBody, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
+        .put(
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`,
+          requestBody,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
-        })
+        )
         .then((response) => {
           console.log('exercise type updated', response)
           vm.showSnackbar = true
@@ -290,8 +322,8 @@ export default {
           `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
           {
             headers: {
-              'X-SERJ-TOKEN': this.getCookie('sessionkolacic')
-            }
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
           }
         )
         .then((response) => {
@@ -303,7 +335,7 @@ export default {
           vm.showSnackbar = true
           vm.snackbarText = `${error}: ${error.response.data}`
         })
-    }
-  }
+    },
+  },
 }
 </script>

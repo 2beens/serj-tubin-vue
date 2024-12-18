@@ -11,24 +11,30 @@
         <v-row no-gutters>
           <v-col>
             <v-chip color="green lighten-1" label>
-              <v-icon left> mdi-weight-lifter </v-icon>
+              <v-icon left>mdi-weight-lifter</v-icon>
               Avg. Kilos
             </v-chip>
-            <v-chip class="ml-2 value-chip" color="primary" outlined>{{ stats.avgKilos }}</v-chip>
+            <v-chip class="ml-2 value-chip" color="primary" outlined>
+              {{ stats.avgKilos }}
+            </v-chip>
           </v-col>
           <v-col>
             <v-chip color="blue lighten-1" label>
-              <v-icon left> mdi-dumbbell </v-icon>
+              <v-icon left>mdi-dumbbell</v-icon>
               Avg. Reps
             </v-chip>
-            <v-chip class="ml-2 value-chip" color="primary" outlined>{{ stats.avgReps }}</v-chip>
+            <v-chip class="ml-2 value-chip" color="primary" outlined>
+              {{ stats.avgReps }}
+            </v-chip>
           </v-col>
           <v-col>
             <v-chip color="orange lighten-1" label>
-              <v-icon left> mdi-clock-time-four-outline </v-icon>
+              <v-icon left>mdi-clock-time-four-outline</v-icon>
               Sets
             </v-chip>
-            <v-chip class="ml-2 value-chip" color="primary" outlined>{{ stats.sets }}</v-chip>
+            <v-chip class="ml-2 value-chip" color="primary" outlined>
+              {{ stats.sets }}
+            </v-chip>
           </v-col>
         </v-row>
       </v-card-text>
@@ -42,9 +48,9 @@ export default {
   props: {
     loadedExerciseStats: {
       type: Object,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
 

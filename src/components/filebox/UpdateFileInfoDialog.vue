@@ -7,11 +7,7 @@
       <v-card-text v-if="fileInfo">
         <v-row>
           <v-col cols="12">
-            <v-text-field
-              v-model="fileInfo.name"
-              label="File Name"
-              required
-            />
+            <v-text-field v-model="fileInfo.name" label="File Name" required />
           </v-col>
         </v-row>
         <v-row>
@@ -54,13 +50,13 @@ export default {
   },
 
   computed: {
-    confirmDisabled () {
+    confirmDisabled() {
       return !this.fileInfo || !this.fileInfo.name || this.fileInfo.name === ''
-    }
+    },
   },
 
-  mounted () {
+  mounted() {
     console.log('dialog file info', this.fileInfo)
-  }
+  },
 }
 </script>
