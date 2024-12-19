@@ -68,6 +68,13 @@ const routes = [
     },
   },
   {
+    path: '/spotify',
+    name: 'Spotify Tracker',
+    component: function () {
+      return import('../views/SpotifyTrackerView.vue')
+    },
+  },
+  {
     path: '/sumup',
     name: 'SumUp Experimentation',
     component: function () {

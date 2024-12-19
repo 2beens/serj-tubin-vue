@@ -50,6 +50,9 @@
         <v-list-item v-if="$root.loggedIn" to="/notes">
           <v-list-item-title>Notes 📝</v-list-item-title>
         </v-list-item>
+        <v-list-item v-if="$root.loggedIn" to="/spotify">
+          <v-list-item-title>SpotifyTracker</v-list-item-title>
+        </v-list-item>
         <v-list-item to="/sumup">
           <v-list-item-title>🤑SumUp🤑</v-list-item-title>
         </v-list-item>
@@ -79,6 +82,9 @@
       </v-btn>
       <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/notes">
         Notes 📝
+      </v-btn>
+      <v-btn v-if="$root.loggedIn" color="#4b9ff2" text rounded to="/spotify">
+        Spotify Tracker 🎸
       </v-btn>
       <v-btn color="#4b9ff2" text rounded to="/sumup">🤑SumUp🤑</v-btn>
       <v-spacer />
