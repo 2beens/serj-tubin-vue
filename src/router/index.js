@@ -72,7 +72,7 @@ const routes = [
     name: 'Spotify Tracker',
     component: function () {
       return import('../views/SpotifyTrackerView.vue')
-    }
+    },
   },
   {
     path: '/sumup',
