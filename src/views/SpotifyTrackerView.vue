@@ -50,7 +50,7 @@
         </v-form>
 
         <v-divider></v-divider>
-        <v-row style="margin-bottom: 100px">
+        <v-row>
           <v-col>
             <v-card id="table-row-card">
               <v-card-title>
@@ -68,15 +68,27 @@
                 :headers="headers"
                 :items="trackRecords"
                 :search="searchString"
+                :loading="loadingTableData"
+                loading-text="Loading... Please wait"
+                :items-per-page="Number(size)"
               >
                 <template #item.played_at="props">
-                  {{ props.item.played_at }}
+                  <v-chip color="primary">
+                    {{ new Date(props.item.played_at).toLocaleString() }}
+                  </v-chip>
                 </template>
                 <template #item.artists="props">
-                  {{ props.item.artists }}
+                  <!-- decompose artists array into a comma separated string -->
+                  <v-chip
+                    v-for="(artist, index) in props.item.artists"
+                    :key="index"
+                    color="green"
+                  >
+                    {{ artist }}
+                  </v-chip>
                 </template>
                 <template #item.name="props">
-                  {{ props.item.name }}
+                  <strong>{{ props.item.name }}</strong>
                 </template>
                 <template #item.id="props">
                   {{ props.item.id }}
@@ -84,8 +96,11 @@
                 <template #item.album="props">
                   {{ props.item.album }}
                 </template>
-                <template #item.duration="props">
-                  {{ props.item.duration }}
+                <template #item.duration_ms="props">
+                  <!-- turn duration_ms into minutes: -->
+                  {{ Math.floor(props.item.duration_ms / 60000) }}:{{
+                    ((props.item.duration_ms % 60000) / 1000).toFixed(0)
+                  }}
                 </template>
                 <template #item.explicit="props">
                   {{ props.item.explicit }}
@@ -128,16 +143,17 @@ export default {
       message: '',
       authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth?token=todo',
       page: 1,
-      size: 10,
+      size: 25,
       trackRecords: [],
       searchString: '',
+      loadingTableData: false,
       headers: [
         { text: 'Played At', value: 'played_at' },
         { text: 'Artists', value: 'artists' },
         { text: 'Name', value: 'name' },
         { text: 'ID', value: 'id' },
         { text: 'Album', value: 'album' },
-        { text: 'Duration', value: 'duration' },
+        { text: 'Duration', value: 'duration_ms' },
         { text: 'Explicit', value: 'explicit' },
         { text: 'External URLs', value: 'external_urls' },
         { text: 'Endpoint', value: 'endpoint' },
@@ -230,6 +246,7 @@ export default {
     },
 
     getPageFromDB() {
+      this.loadingTableData = true
       const vm = this
       axios
         .get(
@@ -256,6 +273,9 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+        })
+        .finally(() => {
+          this.loadingTableData = false
         })
     },
   },
@@ -284,6 +304,8 @@ h5 {
   background: #26c6da;
   border-radius: 10px;
   margin-bottom: 60px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 #data-table {
