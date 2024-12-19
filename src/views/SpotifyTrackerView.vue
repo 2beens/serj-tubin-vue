@@ -52,42 +52,61 @@
         <v-divider></v-divider>
         <v-row style="margin-bottom: 100px">
           <v-col>
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Played At</th>
-                    <th class="text-left">Artists</th>
-                    <th class="text-left">Name</th>
-                    <th class="text-left">ID</th>
-                    <th class="text-left">Album</th>
-                    <th class="text-left">Duration</th>
-                    <th class="text-left">Explicit</th>
-                    <th class="text-left">External URLs</th>
-                    <th class="text-left">Endpoint</th>
-                    <th class="text-left">Spotify ID</th>
-                    <th class="text-left">URI</th>
-                    <th class="text-left">Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="trackRecord in trackRecords" :key="trackRecord.id">
-                    <td>{{ trackRecord.played_at }}</td>
-                    <td>{{ trackRecord.artists }}</td>
-                    <td>{{ trackRecord.name }}</td>
-                    <td>{{ trackRecord.id }}</td>
-                    <td>{{ trackRecord.album }}</td>
-                    <td>{{ trackRecord.duration }}</td>
-                    <td>{{ trackRecord.explicit }}</td>
-                    <td>{{ trackRecord.external_urls }}</td>
-                    <td>{{ trackRecord.endpoint }}</td>
-                    <td>{{ trackRecord.spotify_id }}</td>
-                    <td>{{ trackRecord.uri }}</td>
-                    <td>{{ trackRecord.type }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
+            <v-card id="table-row-card">
+              <v-card-title>
+                <v-text-field
+                  v-model="searchString"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                />
+              </v-card-title>
+
+              <v-data-table
+                id="data-table"
+                :headers="headers"
+                :items="trackRecords"
+                :search="searchString"
+              >
+                <template #item.played_at="props">
+                  {{ props.item.played_at }}
+                </template>
+                <template #item.artists="props">
+                  {{ props.item.artists }}
+                </template>
+                <template #item.name="props">
+                  {{ props.item.name }}
+                </template>
+                <template #item.id="props">
+                  {{ props.item.id }}
+                </template>
+                <template #item.album="props">
+                  {{ props.item.album }}
+                </template>
+                <template #item.duration="props">
+                  {{ props.item.duration }}
+                </template>
+                <template #item.explicit="props">
+                  {{ props.item.explicit }}
+                </template>
+                <template #item.external_urls="props">
+                  {{ props.item.external_urls }}
+                </template>
+                <template #item.endpoint="props">
+                  {{ props.item.endpoint }}
+                </template>
+                <template #item.spotify_id="props">
+                  {{ props.item.spotify_id }}
+                </template>
+                <template #item.uri="props">
+                  {{ props.item.uri }}
+                </template>
+                <template #item.type="props">
+                  {{ props.item.type }}
+                </template>
+              </v-data-table>
+            </v-card>
           </v-col>
         </v-row>
       </v-col>
@@ -111,6 +130,21 @@ export default {
       page: 1,
       size: 10,
       trackRecords: [],
+      searchString: '',
+      headers: [
+        { text: 'Played At', value: 'played_at' },
+        { text: 'Artists', value: 'artists' },
+        { text: 'Name', value: 'name' },
+        { text: 'ID', value: 'id' },
+        { text: 'Album', value: 'album' },
+        { text: 'Duration', value: 'duration' },
+        { text: 'Explicit', value: 'explicit' },
+        { text: 'External URLs', value: 'external_urls' },
+        { text: 'Endpoint', value: 'endpoint' },
+        { text: 'Spotify ID', value: 'spotify_id' },
+        { text: 'URI', value: 'uri' },
+        { text: 'Type', value: 'type' },
+      ],
     }
   },
 
@@ -244,5 +278,16 @@ h5 {
   border-radius: 10px;
   margin-left: 10%;
   margin-right: 10%;
+}
+
+#table-row-card {
+  background: #26c6da;
+  border-radius: 10px;
+  margin-bottom: 60px;
+}
+
+#data-table {
+  padding: 20px;
+  background: #26c6da;
 }
 </style>
