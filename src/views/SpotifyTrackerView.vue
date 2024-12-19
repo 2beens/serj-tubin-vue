@@ -96,6 +96,22 @@
                 <template #item.album="props">
                   {{ props.item.album }}
                 </template>
+                <template #item.album_images="props">
+                  <v-img
+                    v-if="props.item.album_images.length > 0"
+                    :src="
+                      props.item.album_images[
+                        props.item.album_images.length - 1
+                      ].url
+                    "
+                    max-width="50"
+                    max-height="50"
+                    class="mr-2"
+                  />
+                </template>
+                <template #item.release_date="props">
+                  {{ new Date(props.item.release_date).toLocaleDateString() }}
+                </template>
                 <template #item.duration_ms="props">
                   <!-- turn duration_ms into minutes: -->
                   {{ Math.floor(props.item.duration_ms / 60000) }}:{{
@@ -153,6 +169,8 @@ export default {
         { text: 'Name', value: 'name' },
         { text: 'ID', value: 'id' },
         { text: 'Album', value: 'album' },
+        { text: 'Album Images', value: 'album_images' },
+        { text: 'Release Date', value: 'release_date' },
         { text: 'Duration', value: 'duration_ms' },
         { text: 'Explicit', value: 'explicit' },
         { text: 'External URLs', value: 'external_urls' },
@@ -166,6 +184,7 @@ export default {
 
   mounted: function () {
     this.getTrackerStatus()
+    this.getPageFromDB()
   },
 
   methods: {
