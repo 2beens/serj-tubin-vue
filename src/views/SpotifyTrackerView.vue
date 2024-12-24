@@ -46,6 +46,19 @@
             <v-col cols="2" sm="2">
               <v-btn color="error" @click="stopTracker">Stop Tracker</v-btn>
             </v-col>
+            <v-col cols="2" sm="2">
+              <v-btn color="warning" @click="runNow">Run now!</v-btn>
+            </v-col>
+            <v-col cols="1" sm="1">
+              <v-divider vertical></v-divider>
+            </v-col>
+            <v-col cols="2" sm="2">Periodic tracker check:</v-col>
+            <v-col cols="1" sm="1">
+              <v-btn color="success" @click="enablePeriodicCheck">Enable</v-btn>
+            </v-col>
+            <v-col cols="1" sm="1">
+              <v-btn color="error" @click="disablePeriodicCheck">Disable</v-btn>
+            </v-col>
           </v-row>
         </v-form>
 
@@ -259,6 +272,104 @@ export default {
         })
         .catch((error) => {
           vm.status = error.response.data.status
+          vm.message = error.response.data.message
+          console.log(error)
+        })
+    },
+
+    // runNow is a function that invokes /spotify/tracker/run to get recent songs from Spotify right now,
+    // in which case server will return no content 204 for success.
+    runNow() {
+      const vm = this
+      axios
+        .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/run', {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
+        })
+        .then((response) => {
+          if (response.status === 204) {
+            vm.status = 'running'
+            vm.message = 'Tracker ran successfully'
+            console.log('run now: Tracker ran successfully')
+          } else {
+            console.error('Unexpected response status:', response.status)
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.status === 400) {
+              vm.status = 'stopped'
+              vm.message = 'Tracker not running'
+              console.log('run now: Tracker not running')
+            } else if (error.response.status === 500) {
+              vm.status = 'error'
+              vm.message = `Failed to save recently played tracks: ${error.response.data}`
+              console.log(
+                `run now: Failed to save recently played tracks: ${error.response.data}`
+              )
+            } else {
+              vm.status = 'error'
+              vm.message = `Unexpected error: ${error.response.data}`
+              console.log(`run now: Unexpected error: ${error.response.data}`)
+            }
+          } else {
+            vm.status = 'error'
+            vm.message = 'Network error'
+            console.log('run now: Network error', error)
+          }
+        })
+    },
+
+    enablePeriodicCheck() {
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/check/enable',
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
+          }
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('all notes - received null response / data')
+            return
+          }
+          vm.message = response.data.message
+          console.log(
+            `enable periodic check: received ${vm.status} status and message: ${vm.message}`
+          )
+        })
+        .catch((error) => {
+          vm.message = error.response.data.message
+          console.log(error)
+        })
+    },
+
+    disablePeriodicCheck() {
+      const vm = this
+      axios
+        .get(
+          process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/check/disable',
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
+          }
+        )
+        .then((response) => {
+          if (response === null || response.data === null) {
+            console.error('all notes - received null response / data')
+            return
+          }
+          vm.message = response.data.message
+          console.log(
+            `disable periodic check: received ${vm.status} status and message: ${vm.message}`
+          )
+        })
+        .catch((error) => {
           vm.message = error.response.data.message
           console.log(error)
         })
