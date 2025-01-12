@@ -155,7 +155,24 @@
                   {{ props.item.explicit }}
                 </template>
                 <template #item.external_urls="props">
-                  {{ props.item.external_urls }}
+                  <!-- if props.item.external_urls has a key 'spotify' then show it, otherwise show the whole object -->
+                  <v-chip
+                    v-if="
+                      props.item.external_urls &&
+                      props.item.external_urls.spotify
+                    "
+                    color="blue"
+                    :href="props.item.external_urls.spotify"
+                    target="_blank"
+                  >
+                    link>
+                  </v-chip>
+                  <v-chip v-else color="blue">
+                    {{ props.item.external_urls }}
+                  </v-chip>
+                </template>
+                <template #item.source="props">
+                  {{ props.item.source }}
                 </template>
                 <template #item.endpoint="props">
                   {{ props.item.endpoint }}
@@ -210,6 +227,7 @@ export default {
         { text: 'Duration', value: 'duration_ms' },
         { text: 'Explicit', value: 'explicit' },
         { text: 'External URLs', value: 'external_urls' },
+        { text: 'Source', value: 'source' },
         { text: 'Endpoint', value: 'endpoint' },
         { text: 'Spotify ID', value: 'spotify_id' },
         { text: 'URI', value: 'uri' },
