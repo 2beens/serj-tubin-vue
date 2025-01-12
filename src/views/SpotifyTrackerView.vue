@@ -25,13 +25,33 @@
               <v-divider vertical></v-divider>
             </v-col>
 
-            <v-col cols="3" sm="3">
-              <v-text-field v-model="page" label="Page" outlined />
+            <v-col cols="1" sm="1">
+              <v-text-field
+                v-model="page"
+                label="Page"
+                outlined
+                @keyup.enter="getPageFromDB"
+              />
             </v-col>
 
-            <v-col cols="3" sm="3">
-              <v-text-field v-model="size" label="Size" outlined />
+            <v-col cols="1" sm="1">
+              <v-text-field
+                v-model="size"
+                label="Size"
+                outlined
+                @keyup.enter="getPageFromDB"
+              />
             </v-col>
+
+            <v-col cols="4" sm="4">
+              <v-text-field
+                v-model="keywords"
+                label="Search Keywords"
+                outlined
+                @keyup.enter="getPageFromDB"
+              />
+            </v-col>
+
             <v-col cols="1" sm="1">
               <!-- a call to: /spotify/page/{page}/size/{size} on backend -->
               <v-btn style="margin-top: 7px" @click="getPageFromDB">
@@ -173,6 +193,9 @@ export default {
       authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth?token=todo',
       page: 1,
       size: 25,
+      // keywords is a string that can be used to search for a track in the table
+      // by artist and track name; it is a space separated list of keywords
+      keywords: '',
       trackRecords: [],
       searchString: '',
       loadingTableData: false,
@@ -211,7 +234,7 @@ export default {
         })
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.error('received null response / data')
             return
           }
           vm.status = response.data.status
@@ -235,7 +258,7 @@ export default {
         })
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.error('received null response / data')
             return
           }
           vm.status = response.data.status
@@ -261,7 +284,7 @@ export default {
         })
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.error('received null response / data')
             return
           }
           vm.status = response.data.status
@@ -334,7 +357,7 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.error('received null response / data')
             return
           }
           vm.message = response.data.message
@@ -361,7 +384,7 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.error('received null response / data')
             return
           }
           vm.message = response.data.message
@@ -378,13 +401,13 @@ export default {
     getPageFromDB() {
       this.loadingTableData = true
       const vm = this
+
+      // Replace spaces with commas in the keywords string
+      const keywordsParam = this.keywords.replace(/\s+/g, ',')
+
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
-            '/spotify/page/' +
-            this.page +
-            '/size/' +
-            this.size,
+          `${process.env.VUE_APP_API_ENDPOINT}/spotify/page/${this.page}/size/${this.size}?keywords=${keywordsParam}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
@@ -393,7 +416,8 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('all notes - received null response / data')
+            console.warn('get page from db - received null response / data')
+            vm.trackRecords = []
             return
           }
           vm.trackRecords = response.data
