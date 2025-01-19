@@ -85,6 +85,22 @@
         <v-divider></v-divider>
         <v-row>
           <v-col>
+            <v-card
+              id="table-row-card"
+              v-if="trackRecords.length > 0"
+              class="mt-5"
+            >
+              <TrackerChart
+                :timestamps="trackRecordsTimestamps"
+                :height="150"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-divider></v-divider>
+        <v-row>
+          <v-col>
             <v-card id="table-row-card">
               <v-card-title>
                 <v-text-field
@@ -201,6 +217,10 @@ import axios from 'axios'
 export default {
   name: 'SpotifyTrackerView',
 
+  components: {
+    TrackerChart: () => import('@/components/spotify/TrackerChart.vue'),
+  },
+
   data: function () {
     return {
       // status can be 'running' or 'stopped'
@@ -214,6 +234,7 @@ export default {
       // by artist and track name; it is a space separated list of keywords
       keywords: '',
       trackRecords: [],
+      trackRecordsTimestamps: [],
       searchString: '',
       loadingTableData: false,
       headers: [
@@ -448,6 +469,11 @@ export default {
         })
         .finally(() => {
           this.loadingTableData = false
+
+          // calculate timestamps from the trackRecords
+          this.trackRecordsTimestamps = this.trackRecords.map(
+            (record) => record.played_at
+          )
         })
     },
   },
