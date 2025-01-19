@@ -126,9 +126,23 @@ export default {
 
   methods: {
     refresh() {
-      // here we iterate over the timestamps and create a dataset from them, based on the resolution
-      // any timestamp that is not in the range of the "fromTimestamp" and "toTimestamp" will be ignored
-      var chartLabels = []
+      const chartLabels = this.generateChartLabels()
+      const chartData = this.generateChartData(chartLabels)
+      const backgroundColors = this.getBarColors(chartData)
+      this.chart = {
+        labels: chartLabels,
+        datasets: [
+          {
+            label: `Timeline of the songs played`,
+            backgroundColor: backgroundColors,
+            data: chartData,
+          },
+        ],
+      }
+    },
+
+    generateChartLabels() {
+      let chartLabels = []
       if (this.resolution === 'year') {
         chartLabels = Array.from(
           {
@@ -164,9 +178,11 @@ export default {
           return date.toLocaleString('default', { day: 'numeric' })
         })
       }
+      return chartLabels
+    },
 
-      var chartData = new Array(chartLabels.length).fill(0)
-      const backgroundColors = []
+    generateChartData(chartLabels) {
+      const chartData = new Array(chartLabels.length).fill(0)
       this.timestamps.forEach((timestamp) => {
         const date = new Date(timestamp)
         if (this.resolution === 'year') {
@@ -195,24 +211,17 @@ export default {
           chartData[index]++
         }
       })
+      return chartData
+    },
 
-      // Calculate the background colors based on the values
+    getBarColors(chartData) {
+      const backgroundColors = []
       const maxDataValue = Math.max(...chartData)
       chartData.forEach((value) => {
         const hue = (value / maxDataValue) * 120 // 0 (red) to 120 (green)
         backgroundColors.push(`hsl(${hue}, 100%, 50%)`)
       })
-
-      this.chart = {
-        labels: chartLabels,
-        datasets: [
-          {
-            label: `Timeline of the songs played`,
-            backgroundColor: backgroundColors,
-            data: chartData,
-          },
-        ],
-      }
+      return backgroundColors
     },
   },
 }
