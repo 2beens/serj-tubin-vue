@@ -83,16 +83,20 @@
         </v-form>
 
         <v-divider></v-divider>
-        <v-row>
+        <v-row v-if="loadingTableData" id="loading-data-chart-skeleton">
           <v-col>
-            <v-card
-              id="table-row-card"
-              v-if="trackRecords.length > 0"
-              class="mt-5"
-            >
+            <v-skeleton-loader type="sentences"></v-skeleton-loader>
+            <v-skeleton-loader type="table-heading"></v-skeleton-loader>
+            <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
+            <v-skeleton-loader type="sentences"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col>
+            <v-card id="chart-card">
               <TrackerChart
                 :timestamps="trackRecordsTimestamps"
-                :height="150"
+                :height="120"
               />
             </v-card>
           </v-col>
@@ -502,6 +506,21 @@ h5 {
   background: #26c6da;
   border-radius: 10px;
   margin-bottom: 60px;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#chart-card {
+  background: #26c6da;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 0px;
+}
+
+#loading-data-chart-skeleton {
+  background: #26c6da;
+  border-radius: 10px;
   margin-left: 5%;
   margin-right: 5%;
 }

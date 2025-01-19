@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <v-divider :thickness="3" color="#54ab80"></v-divider>
     <v-row>
       <v-col>
         <Bar
@@ -16,7 +15,6 @@
         />
       </v-col>
     </v-row>
-    <v-divider :thickness="3" color="#54ab80"></v-divider>
     <v-row>
       <v-col>
         <v-text-field
@@ -128,12 +126,8 @@ export default {
 
   methods: {
     refresh() {
-      console.log('timestamps', this.timestamps)
       // here we iterate over the timestamps and create a dataset from them, based on the resolution
       // any timestamp that is not in the range of the "fromTimestamp" and "toTimestamp" will be ignored
-
-      // to create lables, we use the range of "fromTimestamp" to "toTimestamp", based on the resolution
-
       var chartLabels = []
       if (this.resolution === 'year') {
         chartLabels = Array.from(
@@ -171,11 +165,7 @@ export default {
         })
       }
 
-      console.log('chartLabels', chartLabels)
-
       var chartData = []
-      // now we iterate over the timestamps and create the chart data based on the resolution
-      // e.g. if the resolution is a year, we only check the year of the timestamp, and increase the value of that year
       this.timestamps.forEach((timestamp) => {
         const date = new Date(timestamp)
         if (this.resolution === 'year') {
@@ -217,17 +207,11 @@ export default {
         }
       })
 
-      // for each label (year, month, day), we create a bucket/value in the chartData array
-      // if the resolution is 'year', for each year of the timestamp, we increase the value of that bucket/value by 1
-      // if the resolution is 'month', for each month of the timestamp, we increase the value of that bucket/value by 1
-      // if the resolution is 'day', for each day of the timestamp, we increase the value of that bucket/value by 1
-      // we will show the whole timestamp on the x-axis, and the value on the y-axis, regardless of the timestamps
-
       this.chart = {
         labels: chartLabels,
         datasets: [
           {
-            label: `Songs played`,
+            label: `Timeline of the songs played`,
             // backgroundColor: 'hsl(180,100%,50%)',
             data: chartData,
           },
