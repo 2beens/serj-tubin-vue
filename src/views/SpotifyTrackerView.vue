@@ -83,6 +83,26 @@
         </v-form>
 
         <v-divider></v-divider>
+        <v-row v-if="loadingTableData" id="loading-data-chart-skeleton">
+          <v-col>
+            <v-skeleton-loader type="sentences"></v-skeleton-loader>
+            <v-skeleton-loader type="table-heading"></v-skeleton-loader>
+            <v-skeleton-loader type="table-tbody"></v-skeleton-loader>
+            <v-skeleton-loader type="sentences"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-else>
+          <v-col>
+            <v-card id="chart-card">
+              <TrackerChart
+                :timestamps="trackRecordsTimestamps"
+                :height="120"
+              />
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-divider></v-divider>
         <v-row>
           <v-col>
             <v-card id="table-row-card">
@@ -201,6 +221,10 @@ import axios from 'axios'
 export default {
   name: 'SpotifyTrackerView',
 
+  components: {
+    TrackerChart: () => import('@/components/spotify/TrackerChart.vue'),
+  },
+
   data: function () {
     return {
       // status can be 'running' or 'stopped'
@@ -214,6 +238,7 @@ export default {
       // by artist and track name; it is a space separated list of keywords
       keywords: '',
       trackRecords: [],
+      trackRecordsTimestamps: [],
       searchString: '',
       loadingTableData: false,
       headers: [
@@ -448,6 +473,11 @@ export default {
         })
         .finally(() => {
           this.loadingTableData = false
+
+          // calculate timestamps from the trackRecords
+          this.trackRecordsTimestamps = this.trackRecords.map(
+            (record) => record.played_at
+          )
         })
     },
   },
@@ -476,6 +506,21 @@ h5 {
   background: #26c6da;
   border-radius: 10px;
   margin-bottom: 60px;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#chart-card {
+  background: #26c6da;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 0px;
+}
+
+#loading-data-chart-skeleton {
+  background: #26c6da;
+  border-radius: 10px;
   margin-left: 5%;
   margin-right: 5%;
 }
