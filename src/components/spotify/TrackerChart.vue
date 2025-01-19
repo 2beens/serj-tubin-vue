@@ -165,7 +165,8 @@ export default {
         })
       }
 
-      var chartData = []
+      var chartData = new Array(chartLabels.length).fill(0)
+      const backgroundColors = []
       this.timestamps.forEach((timestamp) => {
         const date = new Date(timestamp)
         if (this.resolution === 'year') {
@@ -174,11 +175,7 @@ export default {
           if (index === -1) {
             return
           }
-          if (chartData[index] === undefined) {
-            chartData[index] = 1
-          } else {
-            chartData[index]++
-          }
+          chartData[index]++
         } else if (this.resolution === 'month') {
           const month = `${String(date.getMonth() + 1).padStart(
             2,
@@ -188,23 +185,22 @@ export default {
           if (index === -1) {
             return
           }
-          if (chartData[index] === undefined) {
-            chartData[index] = 1
-          } else {
-            chartData[index]++
-          }
+          chartData[index]++
         } else if (this.resolution === 'day') {
           const day = date.toLocaleString('default', { day: 'numeric' })
           const index = chartLabels.indexOf(day)
           if (index === -1) {
             return
           }
-          if (chartData[index] === undefined) {
-            chartData[index] = 1
-          } else {
-            chartData[index]++
-          }
+          chartData[index]++
         }
+      })
+
+      // Calculate the background colors based on the values
+      const maxDataValue = Math.max(...chartData)
+      chartData.forEach((value) => {
+        const hue = (value / maxDataValue) * 120 // 0 (red) to 120 (green)
+        backgroundColors.push(`hsl(${hue}, 100%, 50%)`)
       })
 
       this.chart = {
@@ -212,7 +208,7 @@ export default {
         datasets: [
           {
             label: `Timeline of the songs played`,
-            // backgroundColor: 'hsl(180,100%,50%)',
+            backgroundColor: backgroundColors,
             data: chartData,
           },
         ],
