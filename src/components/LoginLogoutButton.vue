@@ -136,7 +136,7 @@ export default {
 
           const token = response.data.token
           vm.$root.loggedIn = true
-          vm.setCookie('sessionkolacic', token, 7)
+          vm.setCookie('sessionkolacic', token, 90)
           vm.showSnackbar = true
           vm.snackbarText = 'logged in'
         })
