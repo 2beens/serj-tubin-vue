@@ -55,7 +55,7 @@
             :items="urls"
             :search="searchString"
           >
-            <template #item.url="props">
+            <template #[`item.url`]="props">
               <v-edit-dialog
                 :return-value.sync="props.item.url"
                 @save="save"
@@ -76,7 +76,7 @@
               </v-edit-dialog>
             </template>
 
-            <template #item.id="props">
+            <template #[`item.id`]="props">
               <a
                 :href="currentApiEndpoint + '/l/' + props.item.id"
                 target="_blank"
@@ -85,7 +85,7 @@
               </a>
             </template>
 
-            <template #item.copy="props">
+            <template #[`item.copy`]="props">
               <v-btn
                 class="mx-2"
                 fab
@@ -98,7 +98,7 @@
               </v-btn>
             </template>
 
-            <template #item.delete="props">
+            <template #[`item.delete`]="props">
               <v-btn
                 class="mx-2"
                 fab

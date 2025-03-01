@@ -2,59 +2,60 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h5>
-          Dear visitors, feel free to leave any junk messages here, and let's
-          see if this board can be hacked and screwed 🤔👀🤷‍♂️
-        </h5>
+        <div class="board-header">
+          <v-icon color="primary" class="mr-2">mdi-message-text-outline</v-icon>
+          <h2>Visitor Board</h2>
+        </div>
+        <h5 class="board-subtitle">Feel free to leave your message here 💌</h5>
+
         <div id="board" data-app="true">
-          <div id="board-messages">
+          <div id="board-messages" class="board-messages">
             <div
               v-for="message in messages"
               :key="message.id"
               class="board-message"
             >
-              <div :id="'message-' + message.id">
-                <p class="message-content">
-                  <v-btn
-                    v-if="theRoot.loggedIn"
-                    class="mx-1"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    @click="deleteMessage(message.id, message.message)"
-                  >
-                    <v-icon dark>mdi-minus</v-icon>
-                  </v-btn>
-                  <span class="message-date">
-                    {{ getTimestampString(new Date(message.created_at)) }}
-                  </span>
-                  : [{{ message.author }}]
-                  <strong>{{ message.message }}</strong>
-                </p>
-              </div>
+              <p class="message-content">
+                <v-btn
+                  v-if="theRoot.loggedIn"
+                  class="mx-1"
+                  fab
+                  dark
+                  x-small
+                  color="error"
+                  @click="deleteMessage(message.id, message.message)"
+                >
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+                <span class="message-date">
+                  {{ getTimestampString(new Date(message.created_at)) }}
+                </span>
+                <span class="message-author">[{{ message.author }}]</span>
+                <strong class="message-text">{{ message.message }}</strong>
+              </p>
             </div>
-          </div>
-          <div id="board-controls">
-            <input
-              id="author-input"
-              type="text"
-              placeholder="author: anonymous"
-              class="board-input"
-              autocomplete="off"
-            />
-            <input
-              id="message-input"
-              type="text"
-              placeholder="message ..."
-              class="board-input"
-              autocomplete="off"
-              @keyup="sendMessage"
-            />
           </div>
         </div>
       </v-col>
     </v-row>
+
+    <div id="board-controls" class="board-controls-sticky">
+      <input
+        v-model="authorInput"
+        type="text"
+        placeholder="author: anonymous"
+        class="board-input"
+        autocomplete="off"
+      />
+      <input
+        v-model="messageInput"
+        type="text"
+        placeholder="message ..."
+        class="board-input message-input"
+        autocomplete="off"
+        @keyup.enter="sendMessage"
+      />
+    </div>
   </v-container>
 </template>
 
@@ -63,11 +64,13 @@ import axios from 'axios'
 
 export default {
   name: 'VisitorBoardView',
-  data: function () {
+  data() {
     return {
       messages: [],
       theRoot: this.$root,
       loading: false,
+      authorInput: '',
+      messageInput: '',
     }
   },
   mounted: function () {
@@ -208,58 +211,117 @@ function updateMessagesScroll() {
 </script>
 
 <style scoped>
-#board-controls {
-  margin-top: 10px;
-  margin-bottom: 50px;
+.board-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: #26a69a;
 }
-#author-input {
-  margin-left: 10px;
-  margin-right: 20px;
+
+.board-subtitle {
+  color: #4fc3f7;
+  margin-bottom: 20px;
 }
-#message-input {
-  min-width: 200px;
-  width: 700px;
-}
-.board-input {
-  padding: 4px;
-  font-size: 18px;
-  border-width: 1px;
-  border-color: #f5f2f2;
-  background-color: #26a69a;
-  color: #000000;
-  border-style: groove;
-  border-radius: 4px;
-  box-shadow: 0px 0 6px rgba(66, 66, 66, 0.5);
-  text-shadow: 1px 0 5px rgba(66, 66, 66, 0.75);
-}
-.board-input:focus {
-  outline: none;
-}
-#board-messages {
-  background-color: #26a69a;
+
+.board-messages {
+  background-color: rgba(38, 166, 154, 0.1);
   text-align: left;
-
-  margin-left: 10%;
-  margin-right: 10%;
-
-  padding: 15px 5px 10px;
-
-  max-height: 700px;
-
-  border-radius: 5px;
+  margin: 0 10%;
+  padding: 20px;
+  max-height: calc(100vh - 300px);
+  border-radius: 8px;
   overflow: auto;
+  margin-bottom: 120px;
 }
+
 .board-message {
-  margin-left: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
 }
+
+.board-message:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
 .message-content {
-  padding: 0;
+  padding: 8px;
   margin: 0;
 }
+
 .message-date {
-  background-color: #000000;
-  padding: 3px;
-  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  color: #4fc3f7;
+}
+
+.message-author {
+  color: #26a69a;
+  margin: 0 8px;
+}
+
+.message-text {
+  margin-left: 4px;
+}
+
+.board-controls-sticky {
+  position: fixed;
+  bottom: 52px;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid rgba(79, 195, 247, 0.3);
+  z-index: 99;
+}
+
+.board-input {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid rgba(79, 195, 247, 0.5);
+  background-color: rgba(38, 166, 154, 0.15);
+  color: #ffffff;
+  border-radius: 4px;
+  margin: 0 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 0 1px rgba(79, 195, 247, 0.1);
+}
+
+.board-input:focus {
+  outline: none;
+  border-color: #4fc3f7;
+  background-color: rgba(38, 166, 154, 0.25);
+  box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+}
+
+.board-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.message-input {
+  min-width: 300px;
+  width: 50%;
+}
+
+/* Custom scrollbar */
+#board-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#board-messages::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#board-messages::-webkit-scrollbar-thumb {
+  background: rgba(38, 166, 154, 0.3);
+  border-radius: 4px;
+}
+
+#board-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(38, 166, 154, 0.5);
 }
 </style>

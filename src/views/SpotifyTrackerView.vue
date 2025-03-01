@@ -125,13 +125,12 @@
                 loading-text="Loading... Please wait"
                 :items-per-page="Number(size)"
               >
-                <template #item.played_at="props">
+                <template #[`item.played_at`]="props">
                   <v-chip color="primary">
                     {{ new Date(props.item.played_at).toLocaleString() }}
                   </v-chip>
                 </template>
-                <template #item.artists="props">
-                  <!-- decompose artists array into a comma separated string -->
+                <template #[`item.artists`]="props">
                   <v-chip
                     v-for="(artist, index) in props.item.artists"
                     :key="index"
@@ -140,16 +139,16 @@
                     {{ artist }}
                   </v-chip>
                 </template>
-                <template #item.name="props">
+                <template #[`item.name`]="props">
                   <strong>{{ props.item.name }}</strong>
                 </template>
-                <template #item.id="props">
+                <template #[`item.id`]="props">
                   {{ props.item.id }}
                 </template>
-                <template #item.album="props">
+                <template #[`item.album`]="props">
                   {{ props.item.album }}
                 </template>
-                <template #item.album_images="props">
+                <template #[`item.album_images`]="props">
                   <v-img
                     v-if="props.item.album_images.length > 0"
                     :src="
@@ -162,20 +161,18 @@
                     class="mr-2"
                   />
                 </template>
-                <template #item.release_date="props">
+                <template #[`item.release_date`]="props">
                   {{ new Date(props.item.release_date).toLocaleDateString() }}
                 </template>
-                <template #item.duration_ms="props">
-                  <!-- turn duration_ms into minutes: -->
+                <template #[`item.duration_ms`]="props">
                   {{ Math.floor(props.item.duration_ms / 60000) }}:{{
                     ((props.item.duration_ms % 60000) / 1000).toFixed(0)
                   }}
                 </template>
-                <template #item.explicit="props">
+                <template #[`item.explicit`]="props">
                   {{ props.item.explicit }}
                 </template>
-                <template #item.external_urls="props">
-                  <!-- if props.item.external_urls has a key 'spotify' then show it, otherwise show the whole object -->
+                <template #[`item.external_urls`]="props">
                   <v-chip
                     v-if="
                       props.item.external_urls &&
@@ -191,19 +188,19 @@
                     {{ props.item.external_urls }}
                   </v-chip>
                 </template>
-                <template #item.source="props">
+                <template #[`item.source`]="props">
                   {{ props.item.source }}
                 </template>
-                <template #item.endpoint="props">
+                <template #[`item.endpoint`]="props">
                   {{ props.item.endpoint }}
                 </template>
-                <template #item.spotify_id="props">
+                <template #[`item.spotify_id`]="props">
                   {{ props.item.spotify_id }}
                 </template>
-                <template #item.uri="props">
+                <template #[`item.uri`]="props">
                   {{ props.item.uri }}
                 </template>
-                <template #item.type="props">
+                <template #[`item.type`]="props">
                   {{ props.item.type }}
                 </template>
               </v-data-table>

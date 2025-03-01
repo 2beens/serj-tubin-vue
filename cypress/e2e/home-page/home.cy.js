@@ -27,7 +27,7 @@ describe('Home Page Tests', () => {
       expect(el).to.contain('Visitor Board')
       expect(el).to.contain('Util')
       expect(el).to.contain('Netlog 🕸')
-      expect(el).to.contain('🤑SumUp🤑')
+      expect(el).to.contain('SumUp')
     })
   })
 
@@ -39,19 +39,25 @@ describe('Home Page Tests', () => {
   })
 
   it('display quote', () => {
-    cy.get('#quote-text')
+    cy.get('.quote-text', { timeout: 10000 })
       .should('exist')
       .and('be.visible')
       .and('contain', fixRandomQuote.text)
   })
 
   it('display weather', () => {
-    cy.get('#geo-city').then((el) => {
-      expect(el).to.contain(fixWhereAmI.city)
-      expect(el).to.contain(fixWhereAmI.country)
-    })
-    cy.get('#weather-now').should('contain', fixWeatherCurrent[0].description)
-    cy.get('#weather-tomorrow').should('not.be.empty')
+    cy.get('.location-value', { timeout: 10000 })
+      .should('exist')
+      .then((el) => {
+        expect(el.text()).to.contain(fixWhereAmI.city)
+        expect(el.text()).to.contain(fixWhereAmI.country)
+      })
+
+    cy.get('.weather-value', { timeout: 10000 })
+      .should('exist')
+      .and('contain', fixWeatherCurrent[0].description)
+
+    cy.get('.weather-icons').should('exist').and('not.be.empty')
   })
 
   it('home page consent banner', () => {
