@@ -1,19 +1,23 @@
 <template>
   <v-container>
-    <v-card color="#26c6da">
+    <v-card color="teal lighten-1">
       <v-card-title>
         <span class="text-h5">Edit File Info</span>
       </v-card-title>
-      <v-card-text v-if="fileInfo">
+      <v-card-text v-if="localFileInfo">
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="fileInfo.name" label="File Name" required />
+            <v-text-field
+              v-model="localFileInfo.name"
+              label="File Name"
+              required
+            />
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
             <v-checkbox
-              v-model="fileInfo.is_private"
+              v-model="localFileInfo.is_private"
               class="ma-0"
               hide-details
               label="Is Private?"
@@ -31,7 +35,7 @@
           outlined
           color="green"
           :disabled="confirmDisabled"
-          @click="$emit('confirm-clicked', fileInfo)"
+          @click="onConfirmClick"
         >
           <v-icon>mdi-check</v-icon>
         </v-btn>
@@ -43,20 +47,45 @@
 
 <script>
 export default {
-  name: 'NotesDialog',
+  name: 'UpdateFileInfoDialog',
 
   props: {
-    fileInfo: Object,
+    fileInfo: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      localFileInfo: null,
+    }
   },
 
   computed: {
     confirmDisabled() {
-      return !this.fileInfo || !this.fileInfo.name || this.fileInfo.name === ''
+      return (
+        !this.localFileInfo ||
+        !this.localFileInfo.name ||
+        this.localFileInfo.name === ''
+      )
     },
   },
 
-  mounted() {
-    console.log('dialog file info', this.fileInfo)
+  watch: {
+    fileInfo: {
+      immediate: true,
+      handler(newVal) {
+        // Create a deep copy of the prop to avoid mutation
+        this.localFileInfo = newVal ? JSON.parse(JSON.stringify(newVal)) : null
+      },
+    },
+  },
+
+  methods: {
+    onConfirmClick() {
+      this.$emit('confirm-clicked', this.localFileInfo)
+    },
   },
 }
 </script>
