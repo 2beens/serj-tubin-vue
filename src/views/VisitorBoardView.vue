@@ -90,58 +90,41 @@ export default {
       .finally(() => updateMessagesScroll())
   },
   methods: {
-    sendMessage() {
-      if (event.keyCode !== 13) {
+    async sendMessage(event) {
+      if (event.keyCode !== 13 || !this.messageInput) {
         return
       }
 
-      const msgInput = document.getElementById('message-input')
-      const msgContent = msgInput.value
-      if (!msgContent) {
-        return
-      }
-
-      const requestBody = {
-        author: document.getElementById('author-input').value,
-        message: msgContent,
-      }
-
-      const vm = this
-      axios
-        .post(
-          process.env.VUE_APP_API_ENDPOINT + '/board/messages/new',
-          requestBody,
+      try {
+        const response = await axios.post(
+          `${process.env.VUE_APP_API_ENDPOINT}/board/messages/new`,
+          {
+            author: this.authorInput || 'anonymous',
+            message: this.messageInput,
+          },
           {
             headers: {
               'Content-Type': 'application/json',
             },
           }
         )
-        .then(function (response) {
-          if (response.data === null || !response.data.startsWith('added:')) {
-            console.warn(response)
-            // TODO: show error
-            return
-          }
 
-          msgInput.value = ''
-          let msgCreator = 'anon'
-          if (requestBody.author) {
-            msgCreator = requestBody.author
-          }
-
+        if (response.data?.startsWith('added:')) {
           const newMessageId = response.data.split(':')[1]
-          vm.messages.push({
+          this.messages.push({
             id: newMessageId,
             created_at: Date.now(),
-            message: msgContent,
-            author: msgCreator,
+            message: this.messageInput,
+            author: this.authorInput || 'anonymous',
           })
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-        .finally(() => updateMessagesScroll())
+          this.messageInput = '' // Clear the message input after sending
+          this.updateMessagesScroll()
+        } else {
+          console.warn('Invalid response:', response)
+        }
+      } catch (error) {
+        console.error('Error sending message:', error)
+      }
     },
     deleteMessage: function (id, message) {
       if (
