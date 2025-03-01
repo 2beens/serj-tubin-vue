@@ -1,54 +1,100 @@
 <template>
   <v-container class="mb-10">
-    <div v-for="(n, index) in notes" :key="index">
-      <v-card class="mb-2" color="#26c6da">
-        <v-card-title>
-          <v-icon large left>mdi-note</v-icon>
-          <span class="text-h6 font-weight-light">
-            {{ n.id }}: {{ n.title }}
-          </span>
-        </v-card-title>
+    <v-row>
+      <v-col cols="12">
+        <v-card
+          v-for="note in notes"
+          :key="note.id"
+          class="mb-4"
+          color="#26c6da"
+          elevation="2"
+          hover
+        >
+          <v-card-title class="d-flex align-center">
+            <v-icon large left>mdi-note</v-icon>
+            <span class="text-h6 font-weight-light">{{ note.title }}</span>
+            <v-spacer></v-spacer>
+            <span class="text-caption">#{{ note.id }}</span>
+          </v-card-title>
 
-        <v-card-text class="mb-0 pb-0">
-          <v-textarea v-model="n.content" name="input-7-1" filled auto-grow />
-        </v-card-text>
+          <v-card-text class="mb-0 pb-0">
+            <v-textarea
+              v-model="note.content"
+              auto-grow
+              outlined
+              dense
+              hide-details
+              rows="3"
+              @change="onContentChanged(note)"
+            />
+          </v-card-text>
 
-        <v-card-actions class="mt-0 pt-0">
-          <v-list-item class="grow">
-            <v-row align="center" justify="end">
-              <v-icon
-                class="mr-1"
-                color="#fadf73"
-                @click="onUpdateNoteInPlace(n)"
-              >
-                mdi-wrench
-              </v-icon>
-              <v-icon class="mr-1" color="#2e73d1" @click="onEditNote(n)">
-                mdi-toolbox
-              </v-icon>
-              <v-icon class="mr-1" color="red" @click="onDeleteNote(n)">
-                mdi-delete
-              </v-icon>
-            </v-row>
-          </v-list-item>
-        </v-card-actions>
-      </v-card>
-    </div>
+          <v-card-actions>
+            <v-spacer />
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="onUpdateNoteInPlace(note)"
+                >
+                  <v-icon color="#fadf73">mdi-content-save</v-icon>
+                </v-btn>
+              </template>
+              <span>Quick Save</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on" @click="onEditNote(note)">
+                  <v-icon color="#2e73d1">mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+              <span>Edit</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="onDeleteNote(note)"
+                >
+                  <v-icon color="red">mdi-delete</v-icon>
+                </v-btn>
+              </template>
+              <span>Delete</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
   name: 'NotesList',
-
   props: {
-    notes: Array,
+    notes: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
   },
-
+  data() {
+    return {
+      contentChanged: {},
+    }
+  },
   methods: {
-    onUpdateNoteInPlace: function (note) {
-      console.warn(note.content)
+    onContentChanged(note) {
+      this.contentChanged[note.id] = true
+    },
+    onUpdateNoteInPlace(note) {
+      if (!this.contentChanged[note.id]) return
       this.$emit('update-note-in-place', note)
+      this.contentChanged[note.id] = false
     },
     onEditNote: function (note) {
       this.$emit('edit-note', note)

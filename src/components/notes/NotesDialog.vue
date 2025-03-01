@@ -2,42 +2,47 @@
   <v-container>
     <v-card color="#26c6da">
       <v-card-title>
-        <span v-if="editMode" class="text-h5">Edit Note</span>
-        <span v-else class="text-h5">Add Note</span>
+        <v-icon large left>
+          {{ editMode ? 'mdi-note-edit' : 'mdi-note-plus' }}
+        </v-icon>
+        <span class="text-h5">{{ editMode ? 'Edit Note' : 'Add Note' }}</span>
       </v-card-title>
       <v-card-text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="selectedNote.title" label="Title" required />
+            <v-text-field
+              v-model="selectedNote.title"
+              label="Title"
+              required
+              :rules="[(v) => !!v || 'Title is required']"
+              placeholder="Enter note title"
+              outlined
+            />
           </v-col>
           <v-col cols="12">
             <v-textarea
               v-model="selectedNote.content"
               required
-              name="input-7-1"
-              filled
               label="Content"
               auto-grow
-              value=""
+              outlined
+              :rules="[(v) => !!v || 'Content is required']"
+              placeholder="Enter note content"
+              rows="5"
             />
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
+        <v-btn color="error" text @click="onCancel">Cancel</v-btn>
         <v-btn
-          elevation="2"
-          fab
-          icon
-          large
-          outlined
-          color="green"
+          color="success"
           :disabled="confirmDisabled"
           @click="$emit('confirm-clicked', selectedNote)"
         >
-          <v-icon>mdi-check</v-icon>
+          {{ editMode ? 'Save' : 'Add' }}
         </v-btn>
-        <v-spacer />
       </v-card-actions>
     </v-card>
   </v-container>
@@ -51,6 +56,12 @@ export default {
     editMode: Boolean,
     selectedNote: Object,
     editedNote: Object,
+  },
+
+  methods: {
+    onCancel() {
+      this.$emit('cancel-clicked')
+    },
   },
 
   computed: {

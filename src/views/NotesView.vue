@@ -18,6 +18,7 @@
         :selected-note="selectedNote"
         :edited-note="editedNote"
         @confirm-clicked="onConfirmClicked($event)"
+        @cancel-clicked="onAbortEditNote"
       />
     </v-dialog>
 
