@@ -281,8 +281,11 @@ export default {
           }
         )
         .then((response) => {
-          if (response === null || response.data === null) {
+          if (!response?.data?.visits) {
             console.error('visits page - received null response / data')
+            vm.visits = []
+            vm.totalVisits = 0
+            vm.visitsPageLength = 0
             return
           }
           vm.visits = response.data.visits
@@ -292,7 +295,10 @@ export default {
           )
         })
         .catch((error) => {
-          console.log(error)
+          console.error('Error fetching visits:', error)
+          vm.visits = []
+          vm.totalVisits = 0
+          vm.visitsPageLength = 0
         })
         .finally(() => {
           vm.loading = false
