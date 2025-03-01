@@ -2,10 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h5>
-          Dear visitors, feel free to leave any junk messages here, and let's
-          see if this board can be hacked and screwed 🤔👀🤷‍♂️
-        </h5>
+        <h5>Helloooo visitors, feel free to leave any junk messages here 💌</h5>
         <div id="board" data-app="true">
           <div id="board-messages">
             <div
