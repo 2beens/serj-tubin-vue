@@ -47,6 +47,7 @@
 import NotesDialog from '../components/notes/NotesDialog.vue'
 import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
+import Vue from 'vue'
 
 export default {
   name: 'NotesView',
@@ -119,7 +120,7 @@ export default {
     },
     onUpdateNote(note) {
       if (note.content === undefined || note.content === '') {
-        console.error('emtpy content')
+        console.error('empty content')
         return
       }
 
@@ -145,10 +146,15 @@ export default {
             return
           }
 
-          const noteId = response.data.split(':')[1]
-          vm.snackbarText = `Note ${noteId} ${requestBody.title} updated!`
+          const noteId = parseInt(response.data.split(':')[1])
+          // Update the note in the notes array immediately
+          const index = vm.notes.findIndex((n) => n.id === noteId)
+          if (index !== -1) {
+            Vue.set(vm.notes, index, { ...vm.notes[index], ...note })
+          }
+
+          vm.snackbarText = `Note ${note.title} updated!`
           vm.showSnackbar = true
-          vm.selectedNote = {}
         })
         .catch(function (error) {
           vm.snackbarText = error
@@ -156,8 +162,9 @@ export default {
           console.log(error)
         })
         .finally(() => {
-          this.editMode = false
-          this.showDialog = false
+          vm.editMode = false
+          vm.showDialog = false
+          vm.selectedNote = {}
         })
     },
     deleteNote(id, title) {

@@ -11,7 +11,7 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              v-model="selectedNote.title"
+              v-model="localNote.title"
               label="Title"
               required
               :rules="[(v) => !!v || 'Title is required']"
@@ -21,7 +21,7 @@
           </v-col>
           <v-col cols="12">
             <v-textarea
-              v-model="selectedNote.content"
+              v-model="localNote.content"
               required
               label="Content"
               auto-grow
@@ -39,7 +39,7 @@
         <v-btn
           color="success"
           :disabled="confirmDisabled"
-          @click="$emit('confirm-clicked', selectedNote)"
+          @click="$emit('confirm-clicked', localNote)"
         >
           {{ editMode ? 'Save' : 'Add' }}
         </v-btn>
@@ -58,6 +58,21 @@ export default {
     editedNote: Object,
   },
 
+  data() {
+    return {
+      localNote: { ...this.selectedNote },
+    }
+  },
+
+  watch: {
+    selectedNote: {
+      handler(newVal) {
+        this.localNote = { ...newVal }
+      },
+      deep: true,
+    },
+  },
+
   methods: {
     onCancel() {
       this.$emit('cancel-clicked')
@@ -66,7 +81,7 @@ export default {
 
   computed: {
     confirmDisabled() {
-      return !this.selectedNote.content || this.selectedNote.content === ''
+      return !this.localNote.content || this.localNote.content === ''
     },
   },
 }
