@@ -4,7 +4,7 @@
       <v-col>
         <v-row>
           <v-col cols="3" class="pa-0">
-            <SideBar />
+            <LeftSideBar />
           </v-col>
           <v-col cols="6" class="pa-0">
             <h2>Work in constant progress 👨🏼‍💻🛠</h2>
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-import SideBar from '@/components/SideBar.vue'
+import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import BlogsList from '@/components/BlogsList.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    SideBar,
+    LeftSideBar,
     RightSideBar,
     BlogsList,
   },
