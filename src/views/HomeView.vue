@@ -16,7 +16,9 @@
             <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
             <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
           </v-col>
-          <v-col cols="3"></v-col>
+          <v-col cols="3" class="pa-0">
+            <RightSideBar />
+          </v-col>
         </v-row>
 
         <BlogsList title="Recent Posts" />
@@ -27,12 +29,14 @@
 
 <script>
 import SideBar from '@/components/SideBar.vue'
+import RightSideBar from '@/components/RightSideBar.vue'
 import BlogsList from '@/components/BlogsList.vue'
 
 export default {
   name: 'HomeView',
   components: {
     SideBar,
+    RightSideBar,
     BlogsList,
   },
 }
