@@ -1,93 +1,144 @@
 <template>
   <v-container>
-    <h2>🕸 Personal Netlog 🕸</h2>
+    <v-row align="center" justify="center" class="mb-4">
+      <v-col cols="12" class="text-center">
+        <h1 class="text-h4 font-weight-light">
+          <v-icon large color="teal">mdi-web</v-icon>
+          Personal Netlog
+          <v-icon large color="teal">mdi-web</v-icon>
+        </h1>
+      </v-col>
+    </v-row>
 
-    <hr />
+    <h4 v-if="!theRoot.loggedIn" class="text-center error--text">
+      <v-icon color="error">mdi-lock</v-icon>
+      Authentication required to view this content
+    </h4>
 
-    <h4 v-if="!theRoot.loggedIn">Can't show you this one, sorry 🤷‍♂️</h4>
-    <div v-else class="ma-5">
-      <v-row>
-        <v-col cols="1" />
-        <v-col cols="10">
-          <v-card class="ma-xs-10" color="#26A69A" elevation="2" rounded dark>
-            <v-card-text>
-              <v-form @submit.prevent>
-                <v-text-field
-                  v-model="filterInput"
-                  label="Filter Input"
-                  prepend-icon="mdi-cloud-search-outline"
-                  clear-icon="mdi-close-circle"
-                  filled
-                  clearable
-                  hint="Separate keywords with comma, without spaces. Use minus in front of the keyword to exclude it."
-                  @keyup.enter="filterVisits"
-                  @click:append-outer="filterVisits"
-                  @click:clear="clearFilterInput"
-                />
-              </v-form>
-
-              <v-row>
-                <v-col class="justify align" cols="12">
-                  <!-- SEARCH MODES HERE - SOURCE -->
-                  <SourceFilterGroup @source-changed="onSourceFilterChanged" />
-
-                  <!-- SEARCH MODES HERE - FIELD -->
-                  <v-btn-toggle v-model="searchField" class="ml-3" rounded>
-                    <v-btn><v-icon>mdi-alpha-u-circle</v-icon></v-btn>
-                    <v-btn><v-icon>mdi-alpha-t-circle</v-icon></v-btn>
-                  </v-btn-toggle>
-
-                  <v-chip class="ml-5">
-                    {{ totalVisits }}
-                    <v-icon right>mdi-star</v-icon>
-                  </v-chip>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="1" />
-      </v-row>
-
-      <v-row>
-        <v-col>
-          <div v-for="visit in visits" :key="visit.id">
-            <div :id="'visit-' + visit.id">
-              <v-row class="url-title-row">
-                <SourceIcon :source="visit.source" />
-                <p class="url-title-p">
-                  {{ visit.title }}
-                </p>
-              </v-row>
-              <v-row class="url-endpoint-row">
-                <v-col cols="10" class="text-left pa-md-0">
-                  <a :href="visit.url" target="_blank">{{ visit.url }}</a>
-                </v-col>
-                <v-col cols="2" class="pa-md-0">
-                  <p class="visit-timestamp">
-                    {{ getTimestampString(new Date(visit.timestamp)) }}
-                  </p>
-                </v-col>
-              </v-row>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-
-      <!-- PAGNIATION HERE -->
-      <v-row style="margin-bottom: 95px">
-        <v-col>
-          <div class="text-center">
-            <v-pagination
-              v-if="visits.length > 0"
-              v-model="visitsPage"
-              :length="visitsPageLength"
-              :total-visible="10"
-              @input="onVisitsPageChange"
+    <div v-else>
+      <v-card class="mb-6" color="teal" dark elevation="3" rounded>
+        <v-card-text>
+          <v-form @submit.prevent>
+            <v-text-field
+              v-model="filterInput"
+              label="Search visits"
+              prepend-icon="mdi-magnify"
+              clear-icon="mdi-close-circle"
+              filled
+              clearable
+              hint="Separate keywords with comma (no spaces). Use minus (-) to exclude terms"
+              persistent-hint
+              @keyup.enter="filterVisits"
+              @click:append-outer="filterVisits"
+              @click:clear="clearFilterInput"
             />
+          </v-form>
+
+          <v-row align="center" class="mt-2">
+            <v-col cols="12" sm="auto">
+              <SourceFilterGroup @source-changed="onSourceFilterChanged" />
+            </v-col>
+
+            <v-col cols="auto">
+              <v-btn-toggle v-model="searchField" rounded dense>
+                <v-btn small>
+                  <v-icon>mdi-link</v-icon>
+                  <span class="ml-1">URL</span>
+                </v-btn>
+                <v-btn small>
+                  <v-icon>mdi-text</v-icon>
+                  <span class="ml-1">Title</span>
+                </v-btn>
+              </v-btn-toggle>
+            </v-col>
+
+            <v-col cols="auto">
+              <v-chip color="teal lighten-4" class="ml-2">
+                <v-icon left small>mdi-counter</v-icon>
+                {{ totalVisits }} visits
+              </v-chip>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+
+      <v-card class="mb-6" elevation="2" color="teal lighten-5">
+        <v-card-text class="pa-0">
+          <v-overlay :value="loading" absolute>
+            <v-progress-circular
+              indeterminate
+              color="teal"
+              size="64"
+              class="mt-12"
+            ></v-progress-circular>
+          </v-overlay>
+          <div
+            v-for="visit in visits"
+            :key="visit.id"
+            class="visit-item py-2 px-3"
+          >
+            <v-row no-gutters align="center">
+              <v-col cols="auto" class="mr-2">
+                <SourceIcon :source="visit.source" />
+              </v-col>
+              <v-col>
+                <div class="title-text">{{ visit.title }}</div>
+                <div class="url-text">
+                  <a
+                    :href="visit.url"
+                    target="_blank"
+                    class="text-decoration-none"
+                  >
+                    {{ visit.url }}
+                  </a>
+                </div>
+              </v-col>
+              <v-col cols="auto" class="ml-2">
+                <v-chip
+                  x-small
+                  color="teal"
+                  text-color="white"
+                  class="timestamp-chip"
+                >
+                  {{ getTimestampString(new Date(visit.timestamp)) }}
+                </v-chip>
+              </v-col>
+            </v-row>
           </div>
+        </v-card-text>
+      </v-card>
+
+      <v-row justify="center" class="mb-12">
+        <v-col cols="12" class="text-center">
+          <v-pagination
+            v-if="visits.length > 0"
+            v-model="visitsPage"
+            :length="visitsPageLength"
+            :total-visible="10"
+            @input="onVisitsPageChange"
+          />
         </v-col>
       </v-row>
+
+      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+        {{ snackText }}
+        <template #action="{ attrs }">
+          <v-btn v-bind="attrs" color="red" text @click="snack = false">
+            Close
+          </v-btn>
+          <v-btn
+            v-bind="attrs"
+            color="primary"
+            text
+            @click="
+              copyLinkToClipboard(lastAddedId)
+              snack = false
+            "
+          >
+            Copy
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </v-container>
 </template>
@@ -105,6 +156,7 @@ export default {
   },
   data: function () {
     return {
+      loading: false,
       theRoot: this.$root,
       visits: [],
       totalVisits: 0,
@@ -116,6 +168,10 @@ export default {
       searchSource: 5,
       iconIndex: 0,
       searchMode: false,
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      lastAddedId: null,
     }
   },
   mounted: function () {
@@ -162,6 +218,7 @@ export default {
       const source = this.getSeachSourceType()
       const field = this.getSearchFieldType()
 
+      this.loading = true
       const vm = this
       axios
         .get(
@@ -197,6 +254,9 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+        .finally(() => {
+          vm.loading = false
+        })
     },
     clearFilterInput() {
       this.searchMode = false
@@ -205,6 +265,7 @@ export default {
       this.getVisits()
     },
     getVisits() {
+      this.loading = true
       const source = this.getSeachSourceType()
       const field = this.getSearchFieldType()
 
@@ -233,6 +294,9 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+        .finally(() => {
+          vm.loading = false
+        })
     },
     onVisitsPageChange() {
       if (this.searchMode) {
@@ -241,20 +305,70 @@ export default {
         this.getVisits()
       }
     },
+    async copyLinkToClipboard(id) {
+      try {
+        const linkUrl = `${window.location.origin}/l/${id}`
+        await navigator.clipboard.writeText(linkUrl)
+        this.snackText = `Copied to clipboard: ${linkUrl}`
+        this.snackColor = 'success'
+      } catch (err) {
+        console.error('Failed to copy:', err)
+        this.snackText = 'Failed to copy link'
+        this.snackColor = 'error'
+      }
+      this.snack = true
+    },
   },
 }
 </script>
 
 <style scoped>
-.url-title-row {
-  margin: 0;
+.visit-item {
+  border-bottom: 1px solid rgba(0, 150, 136, 0.2);
+  transition: all 0.2s ease;
 }
-.url-title-p {
-  margin: 0;
-  color: #26a69a;
+
+.visit-item:hover {
+  background-color: rgba(0, 150, 136, 0.1);
 }
-.url-endpoint-row {
-  margin: 0;
-  border-bottom: 2px solid #26a69a;
+
+.title-text {
+  color: #00796b;
+  font-weight: 500;
+  font-size: 0.95em;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.url-text {
+  color: #607d8b;
+  font-size: 0.85em;
+  word-break: break-all;
+  line-height: 1.2;
+}
+
+.url-text a {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.url-text a:hover {
+  color: #00796b;
+}
+
+.timestamp-chip {
+  font-size: 0.75em;
+}
+
+.v-skeleton-loader {
+  background-color: transparent !important;
+}
+
+.v-skeleton-loader >>> .v-skeleton-loader__list-item-avatar {
+  background: rgba(0, 150, 136, 0.1);
+}
+
+.v-skeleton-loader >>> .v-skeleton-loader__list-item-three-line {
+  background: rgba(0, 150, 136, 0.1);
 }
 </style>
