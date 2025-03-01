@@ -56,6 +56,26 @@
             <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
           </div>
         </v-fade-transition>
+
+        <!-- Quote Section -->
+        <v-fade-transition>
+          <div class="info-section" v-if="!isLoading">
+            <div class="quote-header">
+              <v-icon color="primary" small class="mr-2">
+                mdi-format-quote-close
+              </v-icon>
+              <span class="info-label">Random quote:</span>
+            </div>
+            <div v-if="quote.text" class="quote-content">
+              <p class="quote-text">{{ quote.text }}</p>
+              <p class="quote-author">— {{ quote.author || 'Unknown' }}</p>
+            </div>
+            <p v-else class="info-value">Loading quote...</p>
+          </div>
+          <div v-else class="info-section">
+            <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
+          </div>
+        </v-fade-transition>
       </div>
     </v-col>
   </v-row>
@@ -73,6 +93,7 @@ export default {
       weatherInfo: '',
       forecastIcons: [],
       isLoading: true,
+      quote: {},
     }
   },
 
@@ -130,6 +151,19 @@ export default {
         console.error('Error fetching forecast:', error)
       }
     },
+
+    async fetchQuote() {
+      try {
+        const response = await axios.get(
+          `${process.env.VUE_APP_API_ENDPOINT}/quote/random`
+        )
+        if (response?.data) {
+          this.quote = response.data
+        }
+      } catch (error) {
+        console.error('Error fetching quote:', error)
+      }
+    },
   },
 
   async mounted() {
@@ -138,6 +172,7 @@ export default {
         this.fetchLocationInfo(),
         this.fetchWeatherInfo(),
         this.fetchForecast(),
+        this.fetchQuote(),
       ])
     } catch (error) {
       console.error('Error loading data:', error)
@@ -234,5 +269,30 @@ export default {
   .weather-icons {
     justify-content: center;
   }
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.quote-content {
+  padding-left: 26px;
+}
+
+.quote-text {
+  color: #26a69a;
+  font-size: 1.1em;
+  line-height: 1.4;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.quote-author {
+  color: #4fc3f7;
+  font-size: 0.9em;
+  text-align: right;
+  opacity: 0.9;
 }
 </style>
