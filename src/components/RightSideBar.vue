@@ -4,7 +4,7 @@
       <div class="info-container">
         <!-- Quote Section -->
         <v-fade-transition>
-          <div class="info-section" v-if="!isLoading">
+          <div class="info-section" v-if="!isLoading && !error">
             <div class="quote-header">
               <v-icon color="primary" small class="mr-2">
                 mdi-format-quote-close
@@ -17,8 +17,17 @@
             </div>
             <p v-else class="info-value">Loading quote...</p>
           </div>
-          <div v-else class="info-section">
-            <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
+          <div v-else-if="error" class="error-state">
+            <v-icon color="error">mdi-alert-circle</v-icon>
+            <p>{{ error }}</p>
+            <v-btn small color="primary" @click="fetchQuote">Retry</v-btn>
+          </div>
+          <div v-else class="loading-state">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              size="24"
+            ></v-progress-circular>
           </div>
         </v-fade-transition>
       </div>
@@ -36,11 +45,14 @@ export default {
     return {
       isLoading: true,
       quote: {},
+      error: null,
     }
   },
 
   methods: {
     async fetchQuote() {
+      this.error = null
+      this.isLoading = true
       try {
         const response = await axios.get(
           `${process.env.VUE_APP_API_ENDPOINT}/quote/random`
@@ -49,7 +61,10 @@ export default {
           this.quote = response.data
         }
       } catch (error) {
-        console.error('Error fetching quote:', error)
+        this.error = 'Failed to load quote. Please try again.'
+        console.error('Error:', error)
+      } finally {
+        this.isLoading = false
       }
     },
   },
@@ -59,8 +74,6 @@ export default {
       await this.fetchQuote()
     } catch (error) {
       console.error('Error loading data:', error)
-    } finally {
-      this.isLoading = false
     }
   },
 }
@@ -117,6 +130,20 @@ export default {
   font-size: 0.9em;
   text-align: right;
   opacity: 0.9;
+}
+
+.error-state {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 600px) {

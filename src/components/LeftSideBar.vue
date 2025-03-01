@@ -214,15 +214,39 @@ export default {
 
 .weather-icon-img {
   filter: brightness(0.95);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 8px;
   padding: 4px;
   background: rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .weather-icon-img:hover {
-  transform: scale(1.15);
+  transform: scale(1.15) translateY(-2px);
   filter: brightness(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Add tooltip on hover */
+.weather-icon-img::after {
+  content: attr(alt);
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.weather-icon-img:hover::after {
+  opacity: 1;
 }
 
 @media (max-width: 600px) {
