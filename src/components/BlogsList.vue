@@ -20,21 +20,31 @@
       v-for="post in posts"
       :key="post.id"
       dark
-      color="black"
+      color="rgba(13, 71, 71, 0.6)"
       class="blog-post mb-6"
-      elevation="4"
+      elevation="0"
     >
       <!-- Post Header -->
       <div class="post-header">
         <v-card-title class="d-flex align-center justify-space-between">
           <span class="text-h5">{{ post.title }}</span>
-          <div v-if="theRoot.loggedIn" class="d-flex">
-            <v-btn icon small class="mr-2" @click="openEditPostDialog(post)">
-              <v-icon color="teal lighten-1">mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn icon small @click="deletePost(post.id, post.title)">
-              <v-icon color="red lighten-1">mdi-delete</v-icon>
-            </v-btn>
+          <div class="d-flex align-center">
+            <div class="action-buttons">
+              <v-btn icon small @click="clap(post)" class="mr-1">
+                <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
+              </v-btn>
+              <span class="text-caption teal--text text--lighten-1 clap-count">
+                {{ post.claps || 0 }}
+              </span>
+            </div>
+            <div v-if="theRoot.loggedIn" class="d-flex ml-4">
+              <v-btn icon small class="mr-2" @click="openEditPostDialog(post)">
+                <v-icon color="teal lighten-1">mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn icon small @click="deletePost(post.id, post.title)">
+                <v-icon color="red lighten-1">mdi-delete</v-icon>
+              </v-btn>
+            </div>
           </div>
         </v-card-title>
         <v-divider class="mx-4 teal--text text--lighten-1"></v-divider>
@@ -53,21 +63,6 @@
           v-html="post.embedded"
         ></div>
       </v-card-text>
-
-      <!-- Post Footer -->
-      <v-divider class="mx-4 teal--text text--lighten-1"></v-divider>
-      <v-card-actions class="py-2">
-        <v-btn icon @click="clap(post)" class="mr-2">
-          <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
-        </v-btn>
-        <span class="text-caption teal--text text--lighten-1">
-          {{ post.claps || 0 }}
-        </span>
-        <v-spacer></v-spacer>
-        <span class="text-caption teal--text text--lighten-1">
-          {{ post.date }}
-        </span>
-      </v-card-actions>
     </v-card>
 
     <!-- Add/Edit Dialog -->
@@ -450,40 +445,53 @@ export default {
 }
 
 .blog-post {
-  border: 1px solid rgba(38, 166, 154, 0.2);
+  border: none;
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 2rem;
-  background: linear-gradient(
-    to bottom,
-    rgba(38, 166, 154, 0.1),
-    rgba(0, 0, 0, 0.3)
-  ) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(13, 71, 71, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
   overflow: hidden;
+  position: relative;
 }
 
 .blog-post:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(38, 166, 154, 0.2) !important;
-  border: 1px solid rgba(38, 166, 154, 0.3);
+  background: rgba(19, 106, 106, 0.75) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
 .post-header {
-  background: rgba(38, 166, 154, 0.05);
+  background: rgba(38, 166, 154, 0.1);
   padding-top: 8px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.post-header .v-card-title {
+  padding-bottom: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.clap-count {
+  min-width: 24px;
+  text-align: right;
 }
 
 /* Content styles */
 .blog-content {
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
 .blog-content ::v-deep(*) {
   color: #fff;
   font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
 }
 
 .blog-content ::v-deep(a) {
@@ -500,37 +508,42 @@ export default {
 .embedded-content {
   width: 100%;
   margin: 1rem 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 1rem;
+  border: none;
 }
 
 .embedded-content ::v-deep(iframe) {
   width: 100%;
   border: none;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Dividers */
 ::v-deep .v-divider {
-  border-color: rgba(38, 166, 154, 0.2) !important;
+  opacity: 0.2;
+  border-color: #26a69a !important;
 }
 
 /* Button styles */
 .v-btn.v-btn--icon {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  opacity: 0.85;
 }
 
 .v-btn.v-btn--icon:hover {
-  transform: scale(1.1);
-  background: rgba(38, 166, 154, 0.1);
+  transform: scale(1.15);
+  background: rgba(38, 166, 154, 0.15);
+  opacity: 1;
 }
 
 /* Responsive adjustments */
 @media (min-width: 601px) {
   .blog-post {
     padding: 0;
+    margin-bottom: 2.5rem;
   }
 
   .post-header {
@@ -543,20 +556,20 @@ export default {
 
   .v-card-actions {
     padding: 8px 16px;
-  }
-
-  .embedded-content {
-    min-height: 166px;
+    background: rgba(38, 166, 154, 0.03);
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
   }
 }
 
 @media (max-width: 600px) {
   .blog-post {
     margin: 0 8px 24px;
+    border-width: 2px;
   }
 
   .post-header {
-    padding: 4px 12px 0;
+    padding: 6px 12px 0;
   }
 
   .v-card-text {
@@ -564,27 +577,29 @@ export default {
   }
 
   .v-card-actions {
-    padding: 4px 12px;
-  }
-
-  .embedded-content {
-    min-height: 120px;
-    padding: 8px;
+    padding: 6px 12px;
+    background: rgba(38, 166, 154, 0.03);
   }
 }
 
 /* Dialog styles */
 ::v-deep .v-dialog {
-  border-radius: 12px;
+  border-radius: 24px;
   overflow: hidden;
 }
 
 ::v-deep .v-dialog .v-card {
-  border: 1px solid rgba(38, 166, 154, 0.2);
+  border: 2px solid rgba(38, 166, 154, 0.3);
   background: linear-gradient(
-    to bottom,
-    rgba(38, 166, 154, 0.1),
-    rgba(0, 0, 0, 0.3)
+    165deg,
+    rgba(38, 166, 154, 0.15),
+    rgba(0, 0, 0, 0.4)
   ) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(38, 166, 154, 0.1) !important;
+}
+
+/* Update card actions background */
+.v-card-actions {
+  background: rgba(38, 166, 154, 0.03);
 }
 </style>
