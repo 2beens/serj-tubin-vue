@@ -66,7 +66,9 @@
     <v-row v-else>
       <!-- Increased sidebar width back to 3 columns -->
       <v-col cols="3" class="pa-0">
-        <LeftSideBar />
+        <div class="side-panel-container">
+          <LeftSideBar />
+        </div>
       </v-col>
 
       <!-- Main content takes 6 columns -->
@@ -96,7 +98,9 @@
       </v-col>
 
       <v-col cols="3" class="pa-0">
-        <RightSideBar />
+        <div class="side-panel-container">
+          <RightSideBar />
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -186,6 +190,10 @@ export default {
 
 /* Desktop styles */
 @media (min-width: 601px) {
+  .side-panel-container {
+    margin-top: 100px;
+  }
+
   #my-image {
     border-radius: 50%;
     border: 4px solid #26a69a;
