@@ -584,22 +584,99 @@ export default {
 
 /* Dialog styles */
 ::v-deep .v-dialog {
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
+  margin: 24px;
 }
 
 ::v-deep .v-dialog .v-card {
-  border: 2px solid rgba(38, 166, 154, 0.3);
-  background: linear-gradient(
-    165deg,
-    rgba(38, 166, 154, 0.15),
-    rgba(0, 0, 0, 0.4)
-  ) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(38, 166, 154, 0.1) !important;
+  background: rgb(18, 38, 38) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  border: none;
+  position: relative;
 }
 
-/* Update card actions background */
-.v-card-actions {
-  background: rgba(38, 166, 154, 0.03);
+::v-deep .v-dialog .v-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(45deg, #26a69a, #00695c);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+::v-deep .v-dialog .v-card-title {
+  background: rgb(13, 71, 71) !important;
+  padding: 20px 24px;
+  font-size: 1.5rem !important;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(38, 166, 154, 0.2);
+}
+
+::v-deep .v-dialog .v-card-text {
+  padding: 24px;
+  background: rgb(18, 38, 38) !important;
+}
+
+::v-deep .v-dialog .v-text-field {
+  margin-top: 8px;
+}
+
+::v-deep .v-dialog .v-text-field > .v-input__control > .v-input__slot {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(38, 166, 154, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+::v-deep .v-dialog .v-text-field > .v-input__control > .v-input__slot:hover,
+::v-deep
+  .v-dialog
+  .v-text-field
+  > .v-input__control
+  > .v-input__slot:focus-within {
+  border-color: rgba(38, 166, 154, 0.5);
+}
+
+::v-deep
+  .v-dialog
+  .v-text-field.v-text-field--outlined
+  > .v-input__control
+  > .v-input__slot {
+  min-height: 48px;
+}
+
+::v-deep .v-dialog .v-card-actions {
+  background: rgb(13, 71, 71) !important;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(38, 166, 154, 0.2);
+}
+
+::v-deep .v-dialog .v-btn {
+  min-width: 90px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+::v-deep .v-dialog .v-btn.v-btn--text {
+  padding: 0 16px;
+}
+
+::v-deep .v-dialog .v-btn.v-btn--text.teal--text {
+  color: #4db6ac !important;
+}
+
+::v-deep .v-dialog .v-btn.v-btn--text.teal--text:hover {
+  color: #80cbc4 !important;
+}
+
+/* Container styles */
+::v-deep .v-dialog .v-container {
+  padding: 12px 0;
 }
 </style>
