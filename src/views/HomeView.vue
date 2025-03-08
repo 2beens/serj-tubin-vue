@@ -54,26 +54,8 @@
           </v-card-text>
         </v-card>
 
-        <!-- Quote Card -->
-        <v-card dark color="black" class="mb-4">
-          <v-card-text>
-            <div class="text-subtitle-1 blue--text mb-2">
-              <v-icon small color="blue" class="mr-1">
-                mdi-format-quote-close
-              </v-icon>
-              Random quote:
-            </div>
-            <v-skeleton-loader
-              v-if="loading"
-              type="text@3"
-              class="mt-4"
-            ></v-skeleton-loader>
-            <div v-else class="teal--text text--lighten-1">
-              {{ quote.text }}
-              <div class="text-right mt-2">— {{ quote.author }}</div>
-            </div>
-          </v-card-text>
-        </v-card>
+        <!-- Quote is now handled by RightSideBar component -->
+        <RightSideBar />
 
         <!-- Blog Posts -->
         <BlogsList title="Recent Posts" class="mt-4" />
@@ -124,7 +106,6 @@
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import BlogsList from '@/components/BlogsList.vue'
-import axios from 'axios'
 
 export default {
   name: 'HomeView',
@@ -133,43 +114,6 @@ export default {
     LeftSideBar,
     RightSideBar,
     BlogsList,
-  },
-
-  data() {
-    return {
-      loading: true,
-      quote: {
-        text: '',
-        author: '',
-      },
-    }
-  },
-
-  mounted() {
-    this.fetchQuote()
-  },
-
-  methods: {
-    async fetchQuote() {
-      try {
-        const response = await axios.get(
-          process.env.VUE_APP_API_ENDPOINT + '/quote/random'
-        )
-        if (response.data) {
-          setTimeout(() => {
-            this.loading = false
-            this.quote = response.data
-          }, 1000)
-        }
-      } catch (error) {
-        console.error('Failed to fetch quote:', error)
-        this.loading = false
-        this.quote = {
-          text: 'Failed to load quote',
-          author: 'System',
-        }
-      }
-    },
   },
 }
 </script>

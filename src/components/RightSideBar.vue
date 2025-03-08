@@ -1,8 +1,8 @@
 <template>
   <v-row>
     <v-col>
-      <div class="info-container">
-        <!-- Quote Section -->
+      <!-- Desktop Layout -->
+      <div v-if="!$vuetify.breakpoint.smAndDown" class="info-container">
         <v-fade-transition>
           <div class="info-section" v-if="!isLoading && !error">
             <div class="quote-header">
@@ -31,6 +31,32 @@
           </div>
         </v-fade-transition>
       </div>
+
+      <!-- Mobile Layout -->
+      <v-card v-else dark color="black" class="mobile-quote-card">
+        <v-card-text>
+          <div class="text-subtitle-1 blue--text mb-2">
+            <v-icon small color="blue" class="mr-1">
+              mdi-format-quote-close
+            </v-icon>
+            Random quote:
+          </div>
+          <v-skeleton-loader
+            v-if="isLoading"
+            type="text@3"
+            class="mt-4"
+          ></v-skeleton-loader>
+          <div v-else-if="error" class="error-state">
+            <v-icon color="error">mdi-alert-circle</v-icon>
+            <p>{{ error }}</p>
+            <v-btn small color="primary" @click="fetchQuote">Retry</v-btn>
+          </div>
+          <div v-else class="teal--text text--lighten-1">
+            {{ quote.text }}
+            <div class="text-right mt-2">— {{ quote.author || 'Unknown' }}</div>
+          </div>
+        </v-card-text>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -146,10 +172,25 @@ export default {
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* Add mobile-specific styles */
+.mobile-quote-card {
+  border: 1px solid rgba(38, 166, 154, 0.1);
+  border-radius: 8px;
+  margin: 0 8px 16px;
+}
+
 @media (max-width: 600px) {
   .info-container {
     padding: 12px;
     margin: 8px;
+  }
+
+  .error-state {
+    padding: 12px;
+  }
+
+  .loading-state {
+    padding: 12px;
   }
 }
 </style>
