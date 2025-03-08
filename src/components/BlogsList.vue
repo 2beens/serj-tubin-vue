@@ -1,163 +1,139 @@
 <template>
-  <v-row>
-    <v-col>
-      <h3>{{ title }}</h3>
+  <div class="blogs-container">
+    <div class="d-flex align-center justify-space-between mb-4">
+      <h2 class="text-h4 teal--text text--lighten-1">{{ title }}</h2>
 
-      <v-dialog
+      <!-- Add new blog post button -->
+      <v-btn
         v-if="theRoot.loggedIn"
-        v-model="dialog"
-        persistent
-        max-width="600px"
+        color="teal lighten-1"
+        dark
+        @click="dialog = true"
+        class="ml-4"
       >
-        <template #activator="{ on, attrs }">
-          <v-btn color="teal lighten-1" dark v-bind="attrs" v-on="on">
-            <v-icon dark>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span v-if="editBlogMode" class="text-h5">Edit Blog Post</span>
-            <span v-else class="text-h5">Add Blog Post</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="selectedPost.title"
-                    label="Title"
-                    required
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="selectedPost.content"
-                    required
-                    name="input-7-1"
-                    filled
-                    label="Content"
-                    auto-grow
-                    value=""
-                  />
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="blue darken-1" text @click="abortEditPost">
-              Abort
-            </v-btn>
-            <v-btn
-              v-if="editBlogMode"
-              color="blue darken-1"
-              text
-              @click="updateBlogPost"
-            >
-              Update!
-            </v-btn>
-            <v-btn v-else color="blue darken-1" text @click="addBlogPost">
-              Post!
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+        <v-icon left>mdi-plus</v-icon>
+        Add Post
+      </v-btn>
+    </div>
 
-      <div id="blogs-list">
-        <div v-for="post in posts" :key="post.id">
-          <div
-            :id="'blog-' + post.id"
-            :class="{
-              'blog-post': !isSmallScreen,
-              'blog-post-small': isSmallScreen,
-            }"
-          >
-            <v-row>
-              <v-col cols="2" />
-              <v-col cols="8">
-                <h4 class="blog-post-title">
-                  {{ post.title }}
-                </h4>
-              </v-col>
-              <v-col cols="2">
-                <p class="blog-post-date">
-                  {{ date2string(Date.parse(post.created_at)) }}
-                </p>
-              </v-col>
-            </v-row>
-
-            <v-row style="padding-left: 10px; padding-right: 10px">
-              <v-col cols="12">
-                <span v-html="post.content" />
-              </v-col>
-            </v-row>
-            <v-row style="margin: 0px">
-              <v-col v-if="theRoot.loggedIn" style="padding: 0px" cols="2">
-                <v-btn
-                  class="mx-1"
-                  fab
-                  dark
-                  x-small
-                  color="cyan"
-                  @click="openEditPostDialog(post)"
-                >
-                  <v-icon dark>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn
-                  class="mx-1"
-                  fab
-                  dark
-                  x-small
-                  color="error"
-                  @click="deletePost(post.id, post.title)"
-                >
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
-              </v-col>
-              <v-col v-else cols="2" style="padding: 0px" />
-              <v-col cols="8" style="padding: 0px" />
-              <v-col cols="2" style="padding: 0px">
-                <v-btn icon @click="clap(post)">
-                  <!-- TODO: not showing in production -->
-                  <!-- <v-icon>mdi-hand-clap</v-icon> -->
-                  <v-icon>👏</v-icon>
-                  <!-- <v-icon>mdi-thumb-up</v-icon> -->
-                </v-btn>
-                {{ post.claps }}
-              </v-col>
-            </v-row>
+    <v-card
+      v-for="post in posts"
+      :key="post.id"
+      dark
+      color="black"
+      class="blog-post mb-6"
+      elevation="4"
+    >
+      <!-- Post Header -->
+      <div class="post-header">
+        <v-card-title class="d-flex align-center justify-space-between">
+          <span class="text-h5">{{ post.title }}</span>
+          <div v-if="theRoot.loggedIn" class="d-flex">
+            <v-btn icon small class="mr-2" @click="openEditPostDialog(post)">
+              <v-icon color="teal lighten-1">mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn icon small @click="deletePost(post.id, post.title)">
+              <v-icon color="red lighten-1">mdi-delete</v-icon>
+            </v-btn>
           </div>
-        </div>
-
-        <!-- PAGINATION HERE -->
-        <div class="text-center">
-          <v-pagination
-            v-if="posts && posts.length > 0"
-            v-model="blogPage"
-            :length="blogPageLength"
-            :total-visible="7"
-            @input="onBlogPageChange"
-          />
-        </div>
+        </v-card-title>
+        <v-divider class="mx-4 teal--text text--lighten-1"></v-divider>
       </div>
 
-      <div id="snackbar-div">
-        <v-snackbar v-model="showSnackbar">
-          {{ snackbarText }}
-          <template #action="{ attrs }">
-            <v-btn
-              color="pink"
-              text
-              v-bind="attrs"
-              @click="showSnackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
-      </div>
-    </v-col>
-  </v-row>
+      <v-card-text class="pt-4">
+        <div
+          class="blog-content"
+          v-if="post.content"
+          v-html="post.content"
+        ></div>
+
+        <div
+          class="embedded-content mt-4"
+          v-if="post.embedded"
+          v-html="post.embedded"
+        ></div>
+      </v-card-text>
+
+      <!-- Post Footer -->
+      <v-divider class="mx-4 teal--text text--lighten-1"></v-divider>
+      <v-card-actions class="py-2">
+        <v-btn icon @click="clap(post)" class="mr-2">
+          <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
+        </v-btn>
+        <span class="text-caption teal--text text--lighten-1">
+          {{ post.claps || 0 }}
+        </span>
+        <v-spacer></v-spacer>
+        <span class="text-caption teal--text text--lighten-1">
+          {{ post.date }}
+        </span>
+      </v-card-actions>
+    </v-card>
+
+    <!-- Add/Edit Dialog -->
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card dark>
+        <v-card-title>
+          <span class="text-h5">
+            {{ editBlogMode ? 'Edit Post' : 'New Post' }}
+          </span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="selectedPost.title"
+                  label="Title"
+                  required
+                  dark
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="selectedPost.content"
+                  label="Content"
+                  required
+                  dark
+                  rows="10"
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="grey darken-1"
+            text
+            @click="editBlogMode ? abortEditPost() : (dialog = false)"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="teal lighten-1"
+            text
+            @click="editBlogMode ? updateBlogPost() : addBlogPost()"
+          >
+            {{ editBlogMode ? 'Update' : 'Add' }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Snackbar for notifications -->
+    <v-snackbar
+      v-model="showSnackbar"
+      :timeout="3000"
+      color="teal lighten-1"
+      dark
+    >
+      {{ snackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
@@ -468,32 +444,147 @@ export default {
 </script>
 
 <style scoped>
-.blog-post {
-  margin: 15px 15% 15px 15%;
-  background-color: cadetblue;
-  border-left: 20px solid #26a69a;
-  border-radius: 5px;
-  padding: 10px;
-  position: relative;
-}
-.blog-post-small {
-  margin-bottom: 15%;
-  background-color: cadetblue;
-  border-left: 20px solid #26a69a;
-  border-radius: 5px;
-  padding: 10px;
-  position: relative;
-}
-.blog-post-title {
-  border-bottom: 10px solid #26a69a;
-  border-radius: 5px;
-}
-.blog-post-date {
-  background-color: #26a69a;
-  border-radius: 5px;
+.blogs-container {
+  width: 100%;
+  margin: 0 auto;
 }
 
-#snackbar-div {
-  margin-bottom: 200px;
+.blog-post {
+  border: 1px solid rgba(38, 166, 154, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(38, 166, 154, 0.1),
+    rgba(0, 0, 0, 0.3)
+  ) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden;
+}
+
+.blog-post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(38, 166, 154, 0.2) !important;
+  border: 1px solid rgba(38, 166, 154, 0.3);
+}
+
+.post-header {
+  background: rgba(38, 166, 154, 0.05);
+  padding-top: 8px;
+}
+
+/* Content styles */
+.blog-content {
+  padding: 1rem 0;
+}
+
+.blog-content ::v-deep(*) {
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.blog-content ::v-deep(a) {
+  color: #26a69a;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.blog-content ::v-deep(a:hover) {
+  color: #4db6ac;
+  text-decoration: underline;
+}
+
+.embedded-content {
+  width: 100%;
+  margin: 1rem 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.embedded-content ::v-deep(iframe) {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dividers */
+::v-deep .v-divider {
+  border-color: rgba(38, 166, 154, 0.2) !important;
+}
+
+/* Button styles */
+.v-btn.v-btn--icon {
+  transition: all 0.2s ease;
+}
+
+.v-btn.v-btn--icon:hover {
+  transform: scale(1.1);
+  background: rgba(38, 166, 154, 0.1);
+}
+
+/* Responsive adjustments */
+@media (min-width: 601px) {
+  .blog-post {
+    padding: 0;
+  }
+
+  .post-header {
+    padding: 8px 16px 0;
+  }
+
+  .v-card-text {
+    padding: 16px 24px;
+  }
+
+  .v-card-actions {
+    padding: 8px 16px;
+  }
+
+  .embedded-content {
+    min-height: 166px;
+  }
+}
+
+@media (max-width: 600px) {
+  .blog-post {
+    margin: 0 8px 24px;
+  }
+
+  .post-header {
+    padding: 4px 12px 0;
+  }
+
+  .v-card-text {
+    padding: 12px 16px;
+  }
+
+  .v-card-actions {
+    padding: 4px 12px;
+  }
+
+  .embedded-content {
+    min-height: 120px;
+    padding: 8px;
+  }
+}
+
+/* Dialog styles */
+::v-deep .v-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+::v-deep .v-dialog .v-card {
+  border: 1px solid rgba(38, 166, 154, 0.2);
+  background: linear-gradient(
+    to bottom,
+    rgba(38, 166, 154, 0.1),
+    rgba(0, 0, 0, 0.3)
+  ) !important;
 }
 </style>

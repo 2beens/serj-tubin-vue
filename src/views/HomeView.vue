@@ -80,19 +80,39 @@
       </v-col>
     </v-row>
 
-    <!-- Desktop Layout - Keep existing layout -->
+    <!-- Desktop/Laptop Layout -->
     <v-row v-else>
+      <!-- Increased sidebar width back to 3 columns -->
       <v-col cols="3" class="pa-0">
         <LeftSideBar />
       </v-col>
-      <v-col cols="6" class="pa-0">
-        <!-- Your existing desktop layout -->
-        <h2>Work in constant progress 👨🏼‍💻🛠</h2>
-        <img id="my-image" alt="serj-tubin" src="../assets/ja-2022-dec.jpg" />
-        <h3 style="margin: 40px 0 0">A personal tech sandbox</h3>
-        <h5>* not fully adapted to small screens yet 🤷‍♂️</h5>
-        <BlogsList title="Recent Posts" />
+
+      <!-- Main content takes 6 columns -->
+      <v-col cols="6" class="pa-4">
+        <v-card dark color="black" class="mb-6">
+          <v-card-text class="text-center">
+            <h2 class="text-h3 teal--text text--lighten-1 mb-4">
+              Work in constant progress 👨🏼‍💻🛠
+            </h2>
+
+            <v-avatar size="200" class="mb-4">
+              <v-img
+                id="my-image"
+                alt="serj-tubin"
+                src="../assets/ja-2022-dec.jpg"
+                class="rounded-circle"
+              />
+            </v-avatar>
+
+            <h3 class="text-h4 teal--text text--lighten-1">
+              A personal tech sandbox
+            </h3>
+          </v-card-text>
+        </v-card>
+
+        <BlogsList title="Recent Posts" class="mt-6" />
       </v-col>
+
       <v-col cols="3" class="pa-0">
         <RightSideBar />
       </v-col>
@@ -167,16 +187,44 @@ export default {
   }
 }
 
-/* Desktop styles remain unchanged */
+/* Desktop styles */
 @media (min-width: 601px) {
   #my-image {
     border-radius: 50%;
-    max-width: 35%;
-    height: auto;
+    border: 4px solid #26a69a;
+    transition: all 0.3s ease;
   }
 
   #my-image:hover {
-    box-shadow: 0 0 8px 2px rgba(0, 140, 186, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(38, 166, 154, 0.5);
+  }
+
+  /* New styles for blog list on desktop */
+  .blog-list-desktop {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .blog-list-desktop :deep(.v-card) {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Ensure content is properly centered */
+  .v-card-text {
+    padding: 2rem;
+  }
+
+  /* Larger text for desktop view */
+  .text-h3 {
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem;
+  }
+
+  .text-h4 {
+    font-size: 1.8rem !important;
+    margin-top: 2rem;
   }
 }
 </style>
