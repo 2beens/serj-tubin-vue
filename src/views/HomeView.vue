@@ -124,6 +124,7 @@
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import BlogsList from '@/components/BlogsList.vue'
+import axios from 'axios'
 
 export default {
   name: 'HomeView',
@@ -145,14 +146,30 @@ export default {
   },
 
   mounted() {
-    // Simulate quote loading
-    setTimeout(() => {
-      this.loading = false
-      this.quote = {
-        text: 'Next year, I hope there will be even more parties, lots of holidays and just having a good time, really. Plus wing-',
-        author: 'Random Quote',
+    this.fetchQuote()
+  },
+
+  methods: {
+    async fetchQuote() {
+      try {
+        const response = await axios.get(
+          process.env.VUE_APP_API_ENDPOINT + '/quote/random'
+        )
+        if (response.data) {
+          setTimeout(() => {
+            this.loading = false
+            this.quote = response.data
+          }, 1000)
+        }
+      } catch (error) {
+        console.error('Failed to fetch quote:', error)
+        this.loading = false
+        this.quote = {
+          text: 'Failed to load quote',
+          author: 'System',
+        }
       }
-    }, 1000)
+    },
   },
 }
 </script>
