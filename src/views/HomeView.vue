@@ -1,15 +1,15 @@
 <template>
   <v-container fluid class="pa-0">
     <!-- Mobile Layout -->
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
+    <v-row v-if="isMobile">
       <v-col cols="12" class="px-4 py-2">
         <v-card dark color="black" class="mb-4">
           <v-card-text class="text-center">
             <h2 class="text-h4 teal--text text--lighten-1 mb-4">
-              Work in constant progress 👨🏼‍💻🛠
+              {{ headerTitle }}
             </h2>
 
-            <v-avatar size="150" class="mb-4">
+            <v-avatar :size="avatarSize" class="mb-4">
               <v-img
                 id="my-image"
                 alt="serj-tubin"
@@ -19,7 +19,7 @@
             </v-avatar>
 
             <h3 class="text-h5 teal--text text--lighten-1 mb-2">
-              A personal tech sandbox
+              {{ subTitle }}
             </h3>
           </v-card-text>
         </v-card>
@@ -74,10 +74,10 @@
         <v-card dark color="black" class="mb-6">
           <v-card-text class="text-center">
             <h2 class="text-h3 teal--text text--lighten-1 mb-4">
-              Work in constant progress 👨🏼‍💻🛠
+              {{ headerTitle }}
             </h2>
 
-            <v-avatar size="200" class="mb-4">
+            <v-avatar :size="avatarSize" class="mb-4">
               <v-img
                 id="my-image"
                 alt="serj-tubin"
@@ -87,7 +87,7 @@
             </v-avatar>
 
             <h3 class="text-h4 teal--text text--lighten-1">
-              A personal tech sandbox
+              {{ subTitle }}
             </h3>
           </v-card-text>
         </v-card>
@@ -115,6 +115,24 @@ export default {
     RightSideBar,
     BlogsList,
   },
+
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.smAndDown
+    },
+
+    headerTitle() {
+      return 'Work in constant progress 👨🏼‍💻🛠'
+    },
+
+    subTitle() {
+      return 'A personal tech sandbox'
+    },
+
+    avatarSize() {
+      return this.isMobile ? 150 : 200
+    },
+  },
 }
 </script>
 
@@ -122,8 +140,18 @@ export default {
 /* Mobile-specific styles */
 @media (max-width: 600px) {
   .v-card {
-    border: 1px solid rgba(38, 166, 154, 0.1);
-    border-radius: 8px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(13, 71, 71, 0.6) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    margin: 0 8px 16px;
+  }
+
+  /* Only apply hover effect to interactive cards */
+  .blog-post:hover,
+  .mobile-quote-card:hover {
+    background: rgba(19, 106, 106, 0.75) !important;
+    transition: background 0.3s ease;
   }
 
   #my-image {
@@ -137,14 +165,22 @@ export default {
 
   .text-h4 {
     font-size: 1.75rem !important;
+    line-height: 1.3;
   }
 
   .text-h5 {
     font-size: 1.25rem !important;
+    line-height: 1.4;
   }
 
-  .v-card {
-    margin: 0 8px;
+  /* Improve spacing in cards */
+  .v-card-text {
+    padding: 16px !important;
+  }
+
+  /* Better icon alignment */
+  .v-icon.small {
+    margin-bottom: 2px;
   }
 }
 
