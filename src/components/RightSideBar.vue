@@ -1,8 +1,8 @@
 <template>
   <v-row>
     <v-col>
-      <div class="info-container">
-        <!-- Quote Section -->
+      <!-- Desktop Layout -->
+      <div v-if="!$vuetify.breakpoint.smAndDown" class="info-container">
         <v-fade-transition>
           <div class="info-section" v-if="!isLoading && !error">
             <div class="quote-header">
@@ -31,6 +31,32 @@
           </div>
         </v-fade-transition>
       </div>
+
+      <!-- Mobile Layout -->
+      <v-card v-else dark color="black" class="mobile-quote-card">
+        <v-card-text>
+          <div class="text-subtitle-1 blue--text mb-2">
+            <v-icon small color="blue" class="mr-1">
+              mdi-format-quote-close
+            </v-icon>
+            Random quote:
+          </div>
+          <v-skeleton-loader
+            v-if="isLoading"
+            type="text@3"
+            class="mt-4"
+          ></v-skeleton-loader>
+          <div v-else-if="error" class="error-state">
+            <v-icon color="error">mdi-alert-circle</v-icon>
+            <p>{{ error }}</p>
+            <v-btn small color="primary" @click="fetchQuote">Retry</v-btn>
+          </div>
+          <div v-else class="teal--text text--lighten-1">
+            {{ quote.text }}
+            <div class="text-right mt-2">— {{ quote.author || 'Unknown' }}</div>
+          </div>
+        </v-card-text>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -146,10 +172,61 @@ export default {
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* Add mobile-specific styles */
+.mobile-quote-card {
+  border: none;
+  border-radius: 12px;
+  background: rgba(13, 71, 71, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+  margin: 0 8px 16px;
+  transition: background 0.3s ease;
+}
+
+.mobile-quote-card:hover {
+  background: rgba(19, 106, 106, 0.75) !important;
+}
+
+.mobile-quote-card .v-card-text {
+  padding: 16px;
+}
+
+/* Improve mobile quote text styles */
+.mobile-quote-card .teal--text {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.mobile-quote-card .text-right {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: 12px;
+}
+
+/* Better error state for mobile */
+.mobile-quote-card .error-state {
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobile-quote-card .error-state .v-btn {
+  margin-top: 8px;
+}
+
+/* Improve skeleton loader appearance */
+.mobile-quote-card .v-skeleton-loader {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
 @media (max-width: 600px) {
-  .info-container {
-    padding: 12px;
-    margin: 8px;
+  .v-row {
+    margin: 0; /* Remove default row margins on mobile */
+  }
+
+  .v-col {
+    padding: 0; /* Remove default column padding on mobile */
   }
 }
 </style>
