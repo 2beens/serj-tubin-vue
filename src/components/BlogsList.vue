@@ -26,28 +26,45 @@
     >
       <!-- Post Header -->
       <div class="post-header">
-        <v-card-title class="d-flex align-center justify-space-between">
-          <span class="text-h5">{{ post.title }}</span>
-          <div class="d-flex align-center">
-            <div class="action-buttons">
-              <v-btn icon small @click="clap(post)" class="mr-1">
-                <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
-              </v-btn>
-              <span class="text-caption teal--text text--lighten-1 clap-count">
-                {{ post.claps || 0 }}
-              </span>
-            </div>
-            <div v-if="theRoot.loggedIn" class="d-flex ml-4">
-              <v-btn icon small class="mr-2" @click="openEditPostDialog(post)">
-                <v-icon color="teal lighten-1">mdi-pencil</v-icon>
-              </v-btn>
-              <v-btn icon small @click="deletePost(post.id, post.title)">
-                <v-icon color="red lighten-1">mdi-delete</v-icon>
-              </v-btn>
+        <v-card-title
+          class="d-flex flex-column align-start justify-space-between pa-4 pb-2"
+        >
+          <div class="d-flex justify-space-between align-center w-100">
+            <span class="text-h5">{{ post.title }}</span>
+            <div class="d-flex align-center">
+              <div class="action-buttons">
+                <v-btn icon small @click="clap(post)" class="mr-1">
+                  <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
+                </v-btn>
+                <span
+                  class="text-caption teal--text text--lighten-1 clap-count"
+                >
+                  {{ post.claps || 0 }}
+                </span>
+              </div>
+              <div v-if="theRoot.loggedIn" class="d-flex ml-4">
+                <v-btn
+                  icon
+                  small
+                  class="mr-2"
+                  @click="openEditPostDialog(post)"
+                >
+                  <v-icon color="teal lighten-1">mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon small @click="deletePost(post.id, post.title)">
+                  <v-icon color="red lighten-1">mdi-delete</v-icon>
+                </v-btn>
+              </div>
             </div>
           </div>
+          <span
+            v-if="post.created_at"
+            class="post-date text-subtitle-2 grey--text mt-1 mb-1"
+          >
+            {{ formatDate(post.created_at) }}
+          </span>
         </v-card-title>
-        <v-divider class="mx-4 teal--text text--lighten-1"></v-divider>
+        <v-divider class="mx-4 mb-2 teal--text text--lighten-1"></v-divider>
       </div>
 
       <v-card-text class="pt-4">
@@ -434,6 +451,15 @@ export default {
           this.dialog = false
         })
     },
+    formatDate(dateString) {
+      if (!dateString) return ''
+      const date = new Date(dateString)
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    },
   },
 }
 </script>
@@ -462,13 +488,23 @@ export default {
 
 .post-header {
   background: rgba(38, 166, 154, 0.1);
-  padding-top: 8px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
 
 .post-header .v-card-title {
-  padding-bottom: 8px;
+  padding-bottom: 0;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.post-date {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-style: italic;
 }
 
 .action-buttons {
