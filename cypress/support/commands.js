@@ -30,6 +30,7 @@ Cypress.Commands.add('apiMocksSetup', () => {
   const fixWeatherTomorrow = require('../fixtures/weather_tomorrow.json')
   const fixRandomQuote = require('../fixtures/random_quote.json')
   const fixBlogPosts = require('../fixtures/blog_posts.json')
+  const fixGitCommit = require('../fixtures/git_commit.json')
 
   cy.intercept('GET', `${Cypress.config('apiEndpoint')}/version`, 'v1').as(
     'getVersion'
@@ -59,6 +60,11 @@ Cypress.Commands.add('apiMocksSetup', () => {
     `${Cypress.config('apiEndpoint')}/blog/page/1/size/20`,
     fixBlogPosts
   ).as('blogPosts')
+  cy.intercept(
+    'GET',
+    `${Cypress.config('apiEndpoint')}/git/commit`,
+    fixGitCommit
+  ).as('gitCommit')
 })
 
 Cypress.Commands.add('fileBoxMockSetup', () => {
