@@ -18,7 +18,7 @@
     "@mdi/font": "^7.2.96",
     "axios": "^1.7.4",
     "chart.js": "^4.4.0",
-    "cypress": "12.14.0",
+    "cypress": "14.4.1",
     "roboto-fontface": "^0.10.0",
     "vue": "^2.7.14",
     "vue-chartjs": "^5.2.0",

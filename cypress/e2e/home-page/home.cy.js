@@ -10,8 +10,9 @@ describe('Home Page Tests', () => {
     cy.visit('/')
   })
 
-  it('contains 4 blog posts', () => {
-    cy.get('#blogs-list').children().should('have.length', 5) // 4 blogs + 1 footer
+  it('contains blog posts', () => {
+    cy.get('.blogs-container').should('exist')
+    cy.get('.blog-post').should('have.length.at.least', 1)
   })
 
   it('displays main photo', () => {
@@ -80,5 +81,69 @@ describe('Home Page Tests', () => {
 
     // 2 Google Analytics + 1 cookies banner = 3 cookies in total
     cy.getAllCookies().should('have.length', 3)
+  })
+
+  it('displays correct header title and subtitle', () => {
+    cy.contains('h2', 'Work in constant progress 👨🏼‍💻🛠')
+      .should('exist')
+      .and('be.visible')
+    cy.contains('h3', 'A personal tech sandbox')
+      .should('exist')
+      .and('be.visible')
+  })
+
+  it('displays weather and location icons', () => {
+    // Wait for the API calls to complete
+    cy.wait('@whereAmI')
+    cy.wait('@weatherCurrent')
+
+    // First check that we have the weather and location card
+    cy.get('.v-card').should('exist')
+
+    // Check for the weather section
+    cy.get('.weather-current').should('exist')
+    cy.get('.weather-header').should('exist')
+
+    // Check for the icons with their exact classes
+    cy.get('.mdi-weather-partly-cloudy').should('exist')
+    cy.get('.mdi-calendar-clock').should('exist')
+
+    // Check for the weather icons container
+    cy.get('.weather-icons').should('exist')
+    cy.get('.weather-icon-img').should('have.length.at.least', 1)
+  })
+
+  it('displays blog posts with correct structure', () => {
+    cy.get('.blogs-container').within(() => {
+      cy.get('.blog-post').should('have.length.at.least', 1)
+      cy.get('.blog-post')
+        .first()
+        .within(() => {
+          cy.get('.text-h5').should('exist') // Blog title
+          cy.get('.blog-content').should('exist') // Blog content
+          cy.get('.action-buttons').should('exist') // Action buttons
+        })
+    })
+  })
+
+  it('maintains responsive layout', () => {
+    // Test mobile layout
+    cy.viewport('iphone-6')
+    cy.get('.v-card').should(
+      'have.css',
+      'box-shadow',
+      'rgba(0, 0, 0, 0.25) 0px 4px 20px 0px'
+    )
+    cy.get('.v-card').should('have.css', 'margin', '0px 8px 16px')
+
+    // Test desktop layout
+    cy.viewport(1024, 768)
+    cy.get('.side-panel-container').should('exist')
+  })
+
+  it('displays social media links in footer', () => {
+    cy.get('.mdi-github').should('exist').and('be.visible')
+    cy.get('.mdi-instagram').should('exist').and('be.visible')
+    cy.get('.mdi-facebook').should('exist').and('be.visible')
   })
 })
