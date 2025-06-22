@@ -83,7 +83,7 @@
       <v-col>
         <AddExercise
           @exercise-added="getExercises"
-          style="margin-bottom: 10px"
+          style="margin-bottom: 0px"
         />
       </v-col>
     </v-row>
@@ -94,7 +94,7 @@
         <v-card
           dark
           color="teal darken-2"
-          class="mx-2 mb-3"
+          class="mx-2 mb-3 mt-0"
           style="border-radius: 8px"
         >
           <v-card-text class="text-center py-2">
