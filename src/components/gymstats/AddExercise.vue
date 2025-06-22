@@ -16,9 +16,6 @@
         </v-btn>
       </template>
       <v-card>
-        <v-card-title class="justify-center">
-          <span class="text-h5">Add Exercise</span>
-        </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
@@ -77,7 +74,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6">
+              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp">
                 <v-text-field
                   v-model="exercise.metadataJson"
                   label="Metadata"
@@ -137,7 +134,7 @@ export default {
         kilos: '',
         reps: '',
         createdAt: '',
-        metadataJson: `{"env": "prod", "testing": "true"}`,
+        metadataJson: `{"env": "prod", "testing": "false"}`,
       },
       snackbarText: '',
       showSnackbar: false,
@@ -174,6 +171,14 @@ export default {
           },
         ]
       return exercises
+    },
+
+    effectiveMetadataJson() {
+      // On mobile, always use production metadata regardless of input
+      if (this.$vuetify.breakpoint.smAndDown) {
+        return '{"env": "prod", "testing": "false"}'
+      }
+      return this.exercise.metadataJson
     },
   },
 
@@ -291,7 +296,7 @@ export default {
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
-        metadata: JSON.parse(this.exercise.metadataJson),
+        metadata: JSON.parse(this.effectiveMetadataJson),
       }
 
       if (this.exercise.createdAt) {

@@ -83,8 +83,27 @@
       <v-col>
         <AddExercise
           @exercise-added="getExercises"
-          style="margin-bottom: 10px"
+          style="margin-bottom: 0px"
         />
+      </v-col>
+    </v-row>
+
+    <!-- Time elapsed since last exercise - Mobile only -->
+    <v-row v-if="$vuetify.breakpoint.smAndDown && lastExerciseTime">
+      <v-col>
+        <v-card
+          dark
+          color="teal darken-2"
+          class="mx-2 mb-3 mt-0"
+          style="border-radius: 8px"
+        >
+          <v-card-text class="text-center py-2">
+            <v-icon small class="mr-2">mdi-clock-outline</v-icon>
+            <span class="text-body-2">
+              {{ timeElapsedText }}
+            </span>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
     <!------------------------------------------------->
@@ -304,6 +323,8 @@ export default {
       itemsPerPageInput: String,
       itemsPerPage: 50,
       stats: [],
+      currentTime: new Date(),
+      timeUpdateInterval: null,
       headers: [
         {
           text: 'DB ID',
@@ -328,15 +349,75 @@ export default {
     }
   },
 
+  computed: {
+    lastExerciseTime() {
+      if (!this.stats || this.stats.length === 0) {
+        return null
+      }
+      // Get the most recent exercise (first one since they're sorted by creation date desc)
+      return new Date(this.stats[0].createdAt)
+    },
+
+    timeElapsedText() {
+      if (!this.lastExerciseTime) {
+        return 'No exercises recorded yet'
+      }
+
+      const diffMs = this.currentTime - this.lastExerciseTime
+      const totalSeconds = Math.floor(diffMs / 1000)
+      const totalMinutes = Math.floor(totalSeconds / 60)
+      const totalHours = Math.floor(totalMinutes / 60)
+      const totalDays = Math.floor(totalHours / 24)
+
+      const days = totalDays
+      const hours = totalHours % 24
+      const minutes = totalMinutes % 60
+      const seconds = totalSeconds % 60
+
+      let timeText = 'Last exercise: '
+
+      if (days > 0) {
+        timeText += `${days}d ${hours}h ${minutes}m ${seconds}s ago`
+      } else if (hours > 0) {
+        timeText += `${hours}h ${minutes}m ${seconds}s ago`
+      } else if (minutes > 0) {
+        timeText += `${minutes}m ${seconds}s ago`
+      } else {
+        timeText += `${seconds}s ago`
+      }
+
+      return timeText
+    },
+  },
+
   mounted: function () {
     const storedShowTable = localStorage.getItem('showExercisesLogTable')
     if (storedShowTable) {
       this.showTable = storedShowTable === 'true'
     }
     this.getExercises()
+    this.startTimeUpdater()
+  },
+
+  beforeDestroy() {
+    this.stopTimeUpdater()
   },
 
   methods: {
+    startTimeUpdater() {
+      // Update time every second
+      this.timeUpdateInterval = setInterval(() => {
+        this.currentTime = new Date()
+      }, 1000)
+    },
+
+    stopTimeUpdater() {
+      if (this.timeUpdateInterval) {
+        clearInterval(this.timeUpdateInterval)
+        this.timeUpdateInterval = null
+      }
+    },
+
     onShowTableChange() {
       localStorage.setItem('showExercisesLogTable', this.showTable)
     },
