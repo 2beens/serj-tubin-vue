@@ -99,7 +99,7 @@ export default {
       if (this.editMode) {
         this.onUpdateNote(note)
       } else {
-        this.addNote()
+        this.addNote(note)
       }
     },
     onAbortEditNote() {
@@ -216,20 +216,17 @@ export default {
           console.log(error)
         })
     },
-    addNote() {
+    addNote(note) {
       this.editMode = false
 
-      if (
-        this.selectedNote.content === undefined ||
-        this.selectedNote.content === ''
-      ) {
-        console.error('emtpy content')
+      if (note.content === undefined || note.content === '') {
+        console.error('empty content')
         return
       }
 
       const requestBody = {
-        title: this.selectedNote.title,
-        content: this.selectedNote.content,
+        title: note.title,
+        content: note.content,
       }
 
       const vm = this

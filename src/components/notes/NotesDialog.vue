@@ -60,16 +60,17 @@ export default {
 
   data() {
     return {
-      localNote: { ...this.selectedNote },
+      localNote: { title: '', content: '', ...this.selectedNote },
     }
   },
 
   watch: {
     selectedNote: {
       handler(newVal) {
-        this.localNote = { ...newVal }
+        this.localNote = { title: '', content: '', ...newVal }
       },
       deep: true,
+      immediate: true,
     },
   },
 
