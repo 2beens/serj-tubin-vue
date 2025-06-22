@@ -323,6 +323,8 @@ export default {
       itemsPerPageInput: String,
       itemsPerPage: 50,
       stats: [],
+      currentTime: new Date(),
+      timeUpdateInterval: null,
       headers: [
         {
           text: 'DB ID',
@@ -361,26 +363,30 @@ export default {
         return 'No exercises recorded yet'
       }
 
-      const now = new Date()
-      const diffMs = now - this.lastExerciseTime
-      const diffSeconds = Math.floor(diffMs / 1000)
-      const diffMinutes = Math.floor(diffSeconds / 60)
-      const diffHours = Math.floor(diffMinutes / 60)
-      const diffDays = Math.floor(diffHours / 24)
+      const diffMs = this.currentTime - this.lastExerciseTime
+      const totalSeconds = Math.floor(diffMs / 1000)
+      const totalMinutes = Math.floor(totalSeconds / 60)
+      const totalHours = Math.floor(totalMinutes / 60)
+      const totalDays = Math.floor(totalHours / 24)
 
-      if (diffDays > 0) {
-        return `Last exercise: ${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-      } else if (diffHours > 0) {
-        return `Last exercise: ${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-      } else if (diffMinutes > 0) {
-        return `Last exercise: ${diffMinutes} minute${
-          diffMinutes > 1 ? 's' : ''
-        } ago`
+      const days = totalDays
+      const hours = totalHours % 24
+      const minutes = totalMinutes % 60
+      const seconds = totalSeconds % 60
+
+      let timeText = 'Last exercise: '
+
+      if (days > 0) {
+        timeText += `${days}d ${hours}h ${minutes}m ${seconds}s ago`
+      } else if (hours > 0) {
+        timeText += `${hours}h ${minutes}m ${seconds}s ago`
+      } else if (minutes > 0) {
+        timeText += `${minutes}m ${seconds}s ago`
       } else {
-        return `Last exercise: ${diffSeconds} second${
-          diffSeconds > 1 ? 's' : ''
-        } ago`
+        timeText += `${seconds}s ago`
       }
+
+      return timeText
     },
   },
 
@@ -390,9 +396,28 @@ export default {
       this.showTable = storedShowTable === 'true'
     }
     this.getExercises()
+    this.startTimeUpdater()
+  },
+
+  beforeDestroy() {
+    this.stopTimeUpdater()
   },
 
   methods: {
+    startTimeUpdater() {
+      // Update time every second
+      this.timeUpdateInterval = setInterval(() => {
+        this.currentTime = new Date()
+      }, 1000)
+    },
+
+    stopTimeUpdater() {
+      if (this.timeUpdateInterval) {
+        clearInterval(this.timeUpdateInterval)
+        this.timeUpdateInterval = null
+      }
+    },
+
     onShowTableChange() {
       localStorage.setItem('showExercisesLogTable', this.showTable)
     },
