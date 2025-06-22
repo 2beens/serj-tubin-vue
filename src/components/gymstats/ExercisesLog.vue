@@ -87,6 +87,25 @@
         />
       </v-col>
     </v-row>
+
+    <!-- Time elapsed since last exercise - Mobile only -->
+    <v-row v-if="$vuetify.breakpoint.smAndDown && lastExerciseTime">
+      <v-col>
+        <v-card
+          dark
+          color="teal darken-2"
+          class="mx-2 mb-3"
+          style="border-radius: 8px"
+        >
+          <v-card-text class="text-center py-2">
+            <v-icon small class="mr-2">mdi-clock-outline</v-icon>
+            <span class="text-body-2">
+              {{ timeElapsedText }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <!------------------------------------------------->
 
     <v-row v-if="loadingData">
@@ -326,6 +345,43 @@ export default {
       showTable: true,
       muscleGroupToText: GymStatsData.muscleGroupToText,
     }
+  },
+
+  computed: {
+    lastExerciseTime() {
+      if (!this.stats || this.stats.length === 0) {
+        return null
+      }
+      // Get the most recent exercise (first one since they're sorted by creation date desc)
+      return new Date(this.stats[0].createdAt)
+    },
+
+    timeElapsedText() {
+      if (!this.lastExerciseTime) {
+        return 'No exercises recorded yet'
+      }
+
+      const now = new Date()
+      const diffMs = now - this.lastExerciseTime
+      const diffSeconds = Math.floor(diffMs / 1000)
+      const diffMinutes = Math.floor(diffSeconds / 60)
+      const diffHours = Math.floor(diffMinutes / 60)
+      const diffDays = Math.floor(diffHours / 24)
+
+      if (diffDays > 0) {
+        return `Last exercise: ${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+      } else if (diffHours > 0) {
+        return `Last exercise: ${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+      } else if (diffMinutes > 0) {
+        return `Last exercise: ${diffMinutes} minute${
+          diffMinutes > 1 ? 's' : ''
+        } ago`
+      } else {
+        return `Last exercise: ${diffSeconds} second${
+          diffSeconds > 1 ? 's' : ''
+        } ago`
+      }
+    },
   },
 
   mounted: function () {
