@@ -473,7 +473,9 @@ export default {
 .blog-post {
   border: none;
   border-radius: 12px;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
   margin-bottom: 2rem;
   background: rgba(13, 71, 71, 0.6) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
@@ -639,8 +641,12 @@ export default {
   border-radius: 16px;
   padding: 2px;
   background: linear-gradient(45deg, #26a69a, #00695c);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
