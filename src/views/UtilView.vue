@@ -1,23 +1,26 @@
 <template>
-  <v-container class="mt-5">
+  <v-container
+    class="mt-5"
+    :class="$vuetify.theme.dark ? 'theme--dark' : 'theme--light'"
+  >
     <div class="util-info-box">
       <h5 class="util-info-box-title">Your User Agent</h5>
-      <h4 id="user-agent-value" />
+      <h4 id="user-agent-value" class="util-info-value" />
     </div>
     <div class="util-info-box">
       <h5 class="util-info-box-title">Your IP Info</h5>
-      <h4 id="ip-addr-value">👀</h4>
+      <h4 id="ip-addr-value" class="util-info-value">👀</h4>
     </div>
     <div v-if="theRoot.loggedIn" class="util-info-box">
       <h5 class="util-info-box-title">n8n</h5>
-      <button
+      <v-btn
         id="n8n-link"
-        style="margin-bottom: 10px"
-        class="btn btn-success"
+        color="success"
+        class="mb-3"
         @click="openN8NInNewTab"
       >
         Open >> n8n.serj-tubin.com
-      </button>
+      </v-btn>
     </div>
 
     <file-box />
@@ -63,13 +66,70 @@ export default {
 </script>
 
 <style scoped>
-.util-info-box-title {
-  color: black;
-}
 .util-info-box {
-  background-color: #26a69a;
-  margin-left: 10%;
-  margin-right: 10%;
-  border-radius: 5px;
+  margin: 20px 10%;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme styles */
+.theme--dark .util-info-box {
+  background-color: #2a3441;
+  border-color: rgba(64, 169, 255, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme--dark .util-info-box-title {
+  color: #40a9ff;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.theme--dark .util-info-value {
+  color: #e6f3ff;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Light theme styles */
+.theme--light .util-info-box {
+  background-color: #f0f8ff;
+  border-color: rgba(0, 122, 204, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.theme--light .util-info-box-title {
+  color: #007acc;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.theme--light .util-info-value {
+  color: #0056b3;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Hover effects */
+.util-info-box:hover {
+  transform: translateY(-2px);
+}
+
+.theme--dark .util-info-box:hover {
+  background-color: rgba(64, 169, 255, 0.25);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.theme--light .util-info-box:hover {
+  background-color: #e6f3ff;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Button styling */
+#n8n-link {
+  margin-top: 8px;
 }
 </style>

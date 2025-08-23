@@ -1,62 +1,63 @@
 <template>
   <v-row>
     <v-col>
-      <div class="info-container">
-        <!-- Location Info -->
-        <v-fade-transition>
-          <div class="info-section" v-if="!isLoading">
-            <div class="location-wrapper">
-              <v-icon color="primary" small class="mr-2">mdi-map-marker</v-icon>
-              <span class="info-label">Request from:</span>
-            </div>
-            <p class="info-value location-value">
-              {{ locationInfo || 'Unknown location' }}
-            </p>
-          </div>
-          <div v-else class="info-section">
-            <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
-          </div>
-        </v-fade-transition>
-
-        <!-- Weather Info -->
-        <v-fade-transition>
-          <div class="info-section" v-if="!isLoading">
-            <div class="weather-current">
-              <div class="weather-header">
+      <!-- Location and Weather Info in one row -->
+      <v-fade-transition>
+        <div
+          class="info-section weather-info-container"
+          :class="$vuetify.theme.dark ? 'theme--dark' : 'theme--light'"
+          v-if="!isLoading"
+        >
+          <v-row no-gutters class="info-row">
+            <v-col cols="6" class="location-col">
+              <div class="location-wrapper">
                 <v-icon color="primary" small class="mr-2">
-                  mdi-weather-partly-cloudy
+                  mdi-map-marker
                 </v-icon>
-                <span class="info-label">Local weather:</span>
+                <span class="info-label">Request from:</span>
               </div>
-              <p class="info-value weather-value">
-                {{ weatherInfo || 'Weather data unavailable' }}
+              <p class="info-value location-value">
+                {{ locationInfo || 'Unknown location' }}
               </p>
-            </div>
+            </v-col>
+            <v-col cols="6" class="weather-col">
+              <div class="weather-current">
+                <div class="weather-header">
+                  <v-icon color="primary" small class="mr-2">
+                    mdi-weather-partly-cloudy
+                  </v-icon>
+                  <span class="info-label">Local weather:</span>
+                </div>
+                <p class="info-value weather-value">
+                  {{ weatherInfo || 'Weather data unavailable' }}
+                </p>
+              </div>
+            </v-col>
+          </v-row>
 
-            <div v-if="showForecast" class="weather-forecast">
-              <div class="weather-header">
-                <v-icon color="primary" small class="mr-2">
-                  mdi-calendar-clock
-                </v-icon>
-                <span class="info-label">Tomorrow's forecast:</span>
-              </div>
-              <div class="weather-icons">
-                <v-img
-                  v-for="(icon, index) in forecastIcons"
-                  :key="index"
-                  :src="getWeatherIconUrl(icon)"
-                  :alt="'Weather icon ' + (index + 1)"
-                  width="30"
-                  class="weather-icon-img"
-                />
-              </div>
+          <div v-if="showForecast" class="weather-forecast">
+            <div class="weather-header">
+              <v-icon color="primary" small class="mr-2">
+                mdi-calendar-clock
+              </v-icon>
+              <span class="info-label">Tomorrow's forecast:</span>
+            </div>
+            <div class="weather-icons">
+              <v-img
+                v-for="(icon, index) in forecastIcons"
+                :key="index"
+                :src="getWeatherIconUrl(icon)"
+                :alt="'Weather icon ' + (index + 1)"
+                width="30"
+                class="weather-icon-img"
+              />
             </div>
           </div>
-          <div v-else class="info-section">
-            <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
-          </div>
-        </v-fade-transition>
-      </div>
+        </div>
+        <div v-else class="info-section weather-info-container">
+          <v-skeleton-loader type="text" class="mt-2"></v-skeleton-loader>
+        </div>
+      </v-fade-transition>
     </v-col>
   </v-row>
 </template>
@@ -149,82 +150,175 @@ export default {
 </script>
 
 <style scoped>
-.info-container {
-  padding: 20px;
-  background: rgba(38, 166, 154, 0.05);
-  border-radius: 12px;
+.weather-info-container {
+  padding: 18px;
+  margin: 0 12px; /* Balanced margins since column now has left padding */
+  border-radius: 8px;
   backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+/* Dark theme weather info container */
+.theme--dark .weather-info-container {
+  background: rgba(64, 169, 255, 0.12);
+  border-color: rgba(0, 122, 204, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Light theme weather info container */
+.theme--light .weather-info-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(25, 118, 210, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .info-section {
-  margin-bottom: 28px;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   display: block;
+  border: 1px solid transparent;
 }
 
-.info-section:hover {
-  background: rgba(255, 255, 255, 0.08);
+/* Dark theme info sections */
+.theme--dark .info-section {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme--dark .info-section:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 122, 204, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Light theme info sections */
+.theme--light .info-section {
+  background: rgba(25, 118, 210, 0.04);
+  border-color: rgba(25, 118, 210, 0.15);
+}
+
+.theme--light .info-section:hover {
+  background: rgba(25, 118, 210, 0.08);
+  border-color: rgba(25, 118, 210, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.15);
 }
 
 .location-wrapper,
 .weather-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+}
+
+/* Dark theme headers */
+.theme--dark .location-wrapper,
+.theme--dark .weather-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Light theme headers */
+.theme--light .location-wrapper,
+.theme--light .weather-header {
+  border-bottom-color: rgba(25, 118, 210, 0.15);
 }
 
 .info-label {
-  font-size: 0.9em;
-  color: #4fc3f7;
+  font-size: 0.8em;
   opacity: 0.9;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dark theme labels */
+.theme--dark .info-label {
+  color: #4fc3f7;
+}
+
+/* Light theme labels */
+.theme--light .info-label {
+  color: #1976d2;
 }
 
 .info-value {
-  color: #26a69a;
-  margin: 8px 0;
-  font-size: 1.1em;
+  margin: 6px 0;
+  font-size: 0.95em;
   font-weight: 500;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+}
+
+/* Dark theme values */
+.theme--dark .info-value {
+  color: #007acc;
+}
+
+/* Light theme values */
+.theme--light .info-value {
+  color: #1565c0;
+}
+
+.info-row {
+  margin: 0;
+}
+
+.location-col,
+.weather-col {
+  padding: 0 8px;
+}
+
+.location-col {
+  padding-left: 0;
+}
+
+.weather-col {
+  padding-right: 0;
 }
 
 .location-value {
-  padding-left: 26px; /* Aligns with the icon above */
+  text-align: center;
+  padding-left: 0;
 }
 
 .weather-current,
 .weather-forecast {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .weather-value {
-  padding-left: 26px;
+  text-align: center;
+  padding-left: 0;
 }
 
 .weather-icons {
   display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  padding-left: 26px;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 0;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
 .weather-icon-img {
   filter: brightness(0.95);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 8px;
-  padding: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
   position: relative;
+  width: 24px;
+  height: 24px;
 }
 
 .weather-icon-img:hover {
-  transform: scale(1.15) translateY(-2px);
+  transform: scale(1.1) translateY(-1px);
   filter: brightness(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Add tooltip on hover */
@@ -250,18 +344,51 @@ export default {
 }
 
 @media (max-width: 600px) {
-  .info-container {
-    padding: 12px;
-    margin: 8px;
+  .weather-info-container {
+    padding: 14px;
+    margin: 6px;
+  }
+
+  .info-section {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .info-row {
+    flex-direction: column;
+  }
+
+  .location-col,
+  .weather-col {
+    padding: 0;
+    margin-bottom: 12px;
+  }
+
+  .weather-col {
+    margin-bottom: 0;
   }
 
   .weather-icons {
     justify-content: center;
+    padding-left: 0;
+    gap: 4px;
+  }
+
+  .location-value,
+  .weather-value {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .location-wrapper,
+  .weather-header {
+    justify-content: center;
+    margin-bottom: 6px;
   }
 }
 
 .weather-current {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .weather-header {

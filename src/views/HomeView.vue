@@ -3,9 +3,19 @@
     <!-- Mobile Layout -->
     <v-row v-if="isMobile">
       <v-col cols="12" class="px-4 py-2">
-        <v-card dark color="black" class="mb-4">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-4 custom-card"
+        >
           <v-card-text class="text-center">
-            <h2 class="text-h4 teal--text text--lighten-1 mb-4">
+            <h2
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h4 blue--text text--lighten-1 mb-4'
+                  : 'text-h4 blue--text text--darken-2 mb-4'
+              "
+            >
               {{ headerTitle }}
             </h2>
 
@@ -18,14 +28,24 @@
               />
             </v-avatar>
 
-            <h3 class="text-h5 teal--text text--lighten-1 mb-2">
+            <h3
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h5 blue--text text--lighten-1 mb-2'
+                  : 'text-h5 blue--text text--darken-1 mb-2'
+              "
+            >
               {{ subTitle }}
             </h3>
           </v-card-text>
         </v-card>
 
         <!-- Weather and Location Card -->
-        <v-card dark color="black" class="mb-4">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-4 custom-card"
+        >
           <v-card-text>
             <v-row dense>
               <v-col cols="6">
@@ -35,7 +55,7 @@
                   </v-icon>
                   Request from:
                 </div>
-                <div class="text-body-1 teal--text text--lighten-1">
+                <div class="text-body-1 blue--text text--lighten-1">
                   Berlin, DE
                 </div>
               </v-col>
@@ -46,7 +66,7 @@
                   </v-icon>
                   Local weather:
                 </div>
-                <div class="text-body-1 teal--text text--lighten-1">
+                <div class="text-body-1 blue--text text--lighten-1">
                   scattered clouds
                 </div>
               </v-col>
@@ -65,7 +85,7 @@
     <!-- Desktop/Laptop Layout -->
     <v-row v-else>
       <!-- Increased sidebar width back to 3 columns -->
-      <v-col cols="3" class="pa-0">
+      <v-col cols="3" class="pa-0 pl-3">
         <div class="side-panel-container">
           <LeftSideBar />
         </div>
@@ -73,9 +93,19 @@
 
       <!-- Main content takes 6 columns -->
       <v-col cols="6" class="pa-4">
-        <v-card dark color="black" class="mb-6">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-6 custom-card"
+        >
           <v-card-text class="text-center">
-            <h2 class="text-h3 teal--text text--lighten-1 mb-4">
+            <h2
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h3 blue--text text--lighten-1 mb-4'
+                  : 'text-h3 blue--text text--darken-2 mb-4'
+              "
+            >
               {{ headerTitle }}
             </h2>
 
@@ -88,7 +118,13 @@
               />
             </v-avatar>
 
-            <h3 class="text-h4 teal--text text--lighten-1">
+            <h3
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h4 blue--text text--lighten-1'
+                  : 'text-h4 blue--text text--darken-1'
+              "
+            >
               {{ subTitle }}
             </h3>
           </v-card-text>
@@ -146,7 +182,7 @@ export default {
   .v-card {
     border: none;
     border-radius: 12px;
-    background: rgba(13, 71, 71, 0.6) !important;
+    background: rgba(42, 52, 65, 0.9) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
     margin: 0 8px 16px;
   }
@@ -154,12 +190,12 @@ export default {
   /* Only apply hover effect to interactive cards */
   .blog-post:hover,
   .mobile-quote-card:hover {
-    background: rgba(19, 106, 106, 0.75) !important;
+    background: rgba(64, 169, 255, 0.25) !important;
     transition: background 0.3s ease;
   }
 
   #my-image {
-    border: 3px solid #26a69a;
+    border: 3px solid #40a9ff;
     transition: transform 0.3s ease;
   }
 
@@ -196,13 +232,13 @@ export default {
 
   #my-image {
     border-radius: 50%;
-    border: 4px solid #26a69a;
+    border: 4px solid #40a9ff;
     transition: all 0.3s ease;
   }
 
   #my-image:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(38, 166, 154, 0.5);
+    box-shadow: 0 0 15px rgba(64, 169, 255, 0.6);
   }
 
   /* New styles for blog list on desktop */

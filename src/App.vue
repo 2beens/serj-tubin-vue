@@ -4,12 +4,13 @@
       v-if="$vuetify.breakpoint.smAndDown"
       id="main-menu-bar-sm"
       app
-      color="black"
+      :color="$vuetify.theme.dark ? 'black' : 'white'"
     >
       <v-btn icon @click="drawer = !drawer">
-        <v-icon color="teal lighten-1">mdi-menu</v-icon>
+        <v-icon color="blue lighten-1">mdi-menu</v-icon>
       </v-btn>
       <v-spacer />
+      <ThemeToggle class="mr-2" />
       <LoginLogoutButton />
     </v-app-bar>
 
@@ -19,10 +20,10 @@
       v-model="drawer"
       app
       v-if="$vuetify.breakpoint.smAndDown"
-      color="black"
+      :color="$vuetify.theme.dark ? 'black' : 'white'"
     >
       <v-btn icon @click="drawer = false">
-        <v-icon color="teal lighten-1">mdi-close</v-icon>
+        <v-icon color="blue lighten-1">mdi-close</v-icon>
       </v-btn>
       <v-list>
         <v-list-item
@@ -39,12 +40,17 @@
 
     <!-- Navigation bar for large screens -->
     <!------------------------------------------>
-    <v-app-bar id="main-menu-bar" app color="black" v-else>
+    <v-app-bar
+      id="main-menu-bar"
+      app
+      :color="$vuetify.theme.dark ? 'black' : 'white'"
+      v-else
+    >
       <v-spacer />
       <v-btn
         v-for="route in filteredRoutes"
         :key="route.path"
-        color="#4b9ff2"
+        :color="$vuetify.theme.dark ? '#4b9ff2' : '#1976D2'"
         text
         rounded
         :to="route.path"
@@ -52,6 +58,7 @@
         {{ route.name }} {{ route.icon }}
       </v-btn>
       <v-spacer />
+      <ThemeToggle class="mr-2" />
       <LoginLogoutButton />
     </v-app-bar>
 
@@ -95,6 +102,7 @@
 <script>
 import SiteFooter from '@/components/SiteFooter.vue'
 import LoginLogoutButton from '@/components/LoginLogoutButton.vue'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 import CookieConsent from 'vue-cookieconsent-component'
 
 export default {
@@ -102,6 +110,7 @@ export default {
   components: {
     SiteFooter,
     LoginLogoutButton,
+    ThemeToggle,
     CookieConsent,
   },
   data: function () {
@@ -181,7 +190,7 @@ export default {
 <style scoped>
 #consent-div {
   max-width: min(300px, 90vw);
-  background-color: #26a69a;
+  background-color: #007acc;
   border-radius: 8px;
   position: fixed;
   top: 130px;

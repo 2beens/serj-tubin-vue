@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card color="teal lighten-1">
+    <v-card color="blue lighten-1">
       <v-card-title>
         <span class="text-h5">Edit File Info</span>
       </v-card-title>

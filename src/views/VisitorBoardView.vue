@@ -197,17 +197,33 @@ function updateMessagesScroll() {
 .board-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 8px;
-  color: #26a69a;
+  color: #007acc;
+}
+
+/* Theme-aware header colors */
+.theme--light .board-header {
+  color: #1976d2;
+}
+
+.theme--light .board-header h2 {
+  color: #1976d2;
 }
 
 .board-subtitle {
   color: #4fc3f7;
   margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Theme-aware subtitle color */
+.theme--light .board-subtitle {
+  color: #1976d2;
 }
 
 .board-messages {
-  background-color: rgba(38, 166, 154, 0.1);
+  background-color: rgba(0, 122, 204, 0.1);
   text-align: left;
   margin: 0 10%;
   padding: 20px;
@@ -217,13 +233,25 @@ function updateMessagesScroll() {
   margin-bottom: 120px;
 }
 
+/* Theme-aware board messages */
+.theme--light .board-messages {
+  background-color: rgba(25, 118, 210, 0.05);
+  border: 1px solid rgba(25, 118, 210, 0.1);
+}
+
 .board-message {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   transition: all 0.2s ease;
 }
 
 .board-message:hover {
   background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Theme-aware hover effects */
+.theme--light .board-message:hover {
+  background: rgba(25, 118, 210, 0.08);
   border-radius: 4px;
 }
 
@@ -240,13 +268,30 @@ function updateMessagesScroll() {
   color: #4fc3f7;
 }
 
+/* Theme-aware message date */
+.theme--light .message-date {
+  background-color: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+}
+
 .message-author {
-  color: #26a69a;
+  color: #007acc;
   margin: 0 8px;
+}
+
+/* Theme-aware message author */
+.theme--light .message-author {
+  color: #1976d2;
 }
 
 .message-text {
   margin-left: 4px;
+}
+
+/* Theme-aware message text */
+.theme--light .message-text {
+  color: #212121;
 }
 
 .board-controls-sticky {
@@ -262,11 +307,17 @@ function updateMessagesScroll() {
   z-index: 99;
 }
 
+/* Theme-aware controls */
+.theme--light .board-controls-sticky {
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(25, 118, 210, 0.3);
+}
+
 .board-input {
   padding: 8px 12px;
   font-size: 16px;
   border: 1px solid rgba(79, 195, 247, 0.5);
-  background-color: rgba(38, 166, 154, 0.15);
+  background-color: rgba(0, 122, 204, 0.15);
   color: #ffffff;
   border-radius: 4px;
   margin: 0 8px;
@@ -277,12 +328,30 @@ function updateMessagesScroll() {
 .board-input:focus {
   outline: none;
   border-color: #4fc3f7;
-  background-color: rgba(38, 166, 154, 0.25);
+  background-color: rgba(0, 122, 204, 0.25);
   box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
 }
 
 .board-input::placeholder {
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Theme-aware input fields */
+.theme--light .board-input {
+  border: 1px solid rgba(25, 118, 210, 0.5);
+  background-color: rgba(25, 118, 210, 0.05);
+  color: #212121;
+  box-shadow: 0 0 0 1px rgba(25, 118, 210, 0.1);
+}
+
+.theme--light .board-input:focus {
+  border-color: #1976d2;
+  background-color: rgba(25, 118, 210, 0.1);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.theme--light .board-input::placeholder {
+  color: rgba(33, 33, 33, 0.6);
 }
 
 .message-input {
@@ -300,11 +369,11 @@ function updateMessagesScroll() {
 }
 
 #board-messages::-webkit-scrollbar-thumb {
-  background: rgba(38, 166, 154, 0.3);
+  background: rgba(0, 122, 204, 0.3);
   border-radius: 4px;
 }
 
 #board-messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(38, 166, 154, 0.5);
+  background: rgba(0, 122, 204, 0.5);
 }
 </style>

@@ -1,9 +1,17 @@
 <template>
-  <v-container v-if="$root.loggedIn" id="files-box-container" class="mb-10">
+  <v-container
+    v-if="$root.loggedIn"
+    id="files-box-container"
+    class="mb-10"
+    :class="$vuetify.theme.dark ? 'theme--dark' : 'theme--light'"
+  >
     <h2>Files Box</h2>
 
-    <v-card class="mx-auto" max-width="700">
-      <v-sheet class="pa-4 teal darken-3">
+    <v-card class="mx-auto" max-width="700" :dark="$vuetify.theme.dark">
+      <v-sheet
+        class="pa-4"
+        :class="$vuetify.theme.dark ? 'blue darken-3' : 'blue lighten-4'"
+      >
         <v-row class="ma-2 mt-0">
           <v-col cols="12" class="pa-0 ma-0">
             <v-file-input
@@ -15,7 +23,7 @@
           </v-col>
           <v-progress-linear
             v-show="uploadingFile"
-            color="teal"
+            color="blue"
             :value="uploadPercentage"
           />
         </v-row>
@@ -37,11 +45,22 @@
           <v-col v-else-if="oneItemSelected" cols="10" class="ma-0">
             <span
               v-if="oneFileSelected"
-              style="color: white; float: left; font-weight: bold"
+              :style="
+                $vuetify.theme.dark
+                  ? 'color: white; float: left; font-weight: bold'
+                  : 'color: #003d82; float: left; font-weight: bold'
+              "
             >
               {{ selectedItems[0].name }}
             </span>
-            <span v-else style="color: white; float: left; font-weight: bold">
+            <span
+              v-else
+              :style="
+                $vuetify.theme.dark
+                  ? 'color: white; float: left; font-weight: bold'
+                  : 'color: #003d82; float: left; font-weight: bold'
+              "
+            >
               <v-icon style="float: left; color: blue">mdi-folder</v-icon>
               {{ selectedItems[0].name }} [{{
                 selectedItems[0].children

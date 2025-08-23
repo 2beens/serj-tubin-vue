@@ -57,6 +57,8 @@ Vue.mixin({
   },
 })
 
+// Theme will be initialized by ThemeToggle component
+
 new Vue({
   router,
   vuetify,

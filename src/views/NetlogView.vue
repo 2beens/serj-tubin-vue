@@ -3,9 +3,9 @@
     <v-row align="center" justify="center" class="mb-4">
       <v-col cols="12" class="text-center">
         <h1 class="text-h4 font-weight-light">
-          <v-icon large color="teal">mdi-web</v-icon>
+          <v-icon large color="blue">mdi-web</v-icon>
           Personal Netlog
-          <v-icon large color="teal">mdi-web</v-icon>
+          <v-icon large color="blue">mdi-web</v-icon>
         </h1>
       </v-col>
     </v-row>
@@ -16,7 +16,7 @@
     </h4>
 
     <div v-else>
-      <v-card class="mb-6" color="teal" dark elevation="3" rounded>
+      <v-card class="mb-6" color="blue" dark elevation="3" rounded>
         <v-card-text>
           <v-form @submit.prevent>
             <v-text-field
@@ -53,7 +53,7 @@
             </v-col>
 
             <v-col cols="auto">
-              <v-chip color="teal lighten-4" class="ml-2">
+              <v-chip color="blue lighten-4" class="ml-2">
                 <v-icon left small>mdi-counter</v-icon>
                 {{ totalVisits }} visits
               </v-chip>
@@ -62,12 +62,12 @@
         </v-card-text>
       </v-card>
 
-      <v-card class="mb-6" elevation="2" color="teal lighten-5">
+      <v-card class="mb-6" elevation="2" color="blue lighten-5">
         <v-card-text class="pa-0">
           <v-overlay :value="loading" absolute>
             <v-progress-circular
               indeterminate
-              color="teal"
+              color="blue"
               size="64"
               class="mt-12"
             ></v-progress-circular>
@@ -96,7 +96,7 @@
               <v-col cols="auto" class="ml-2">
                 <v-chip
                   x-small
-                  color="teal"
+                  color="blue"
                   text-color="white"
                   class="timestamp-chip"
                 >
@@ -335,7 +335,7 @@ export default {
 }
 
 .visit-item:hover {
-  background-color: rgba(0, 150, 136, 0.1);
+  background-color: rgba(0, 122, 204, 0.1);
 }
 
 .title-text {
@@ -371,10 +371,10 @@ export default {
 }
 
 .v-skeleton-loader >>> .v-skeleton-loader__list-item-avatar {
-  background: rgba(0, 150, 136, 0.1);
+  background: rgba(0, 122, 204, 0.1);
 }
 
 .v-skeleton-loader >>> .v-skeleton-loader__list-item-three-line {
-  background: rgba(0, 150, 136, 0.1);
+  background: rgba(0, 122, 204, 0.1);
 }
 </style>
