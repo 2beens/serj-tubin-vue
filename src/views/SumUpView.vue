@@ -1,5 +1,8 @@
 <template>
-  <v-container id="main">
+  <v-container
+    id="main"
+    :class="$vuetify.theme.dark ? 'theme--dark' : 'theme--light'"
+  >
     <h2>📝 SumUp Testing / Experimenting / Learning 📝</h2>
     <h4>
       Use this page to log in to your
@@ -36,6 +39,7 @@
           label="Environment"
           chips
           outlined
+          :dark="$vuetify.theme.dark"
         />
       </v-col>
     </v-row>
@@ -50,7 +54,10 @@
       </v-row>
 
       <v-row justify="center">
-        <v-divider :thickness="6" color="white" />
+        <v-divider
+          :thickness="6"
+          :color="$vuetify.theme.dark ? 'white' : 'grey darken-2'"
+        />
       </v-row>
       <v-row>
         <v-col cols="auto">
@@ -65,7 +72,7 @@
           </v-btn>
         </v-col>
         <v-col>
-          <h3 style="color: aquamarine">
+          <h3 class="merchant-code">
             {{ merchantCode }}
           </h3>
         </v-col>
@@ -76,14 +83,20 @@
             v-model="userDetailsJson"
             rows="20"
             row-height="15"
-            bg-color="light-blue"
-            color="black"
+            :bg-color="
+              $vuetify.theme.dark ? 'grey darken-3' : 'light-blue lighten-4'
+            "
+            :color="$vuetify.theme.dark ? 'white' : 'black'"
+            :dark="$vuetify.theme.dark"
           />
         </v-col>
       </v-row>
 
       <v-row justify="center">
-        <v-divider :thickness="6" color="white" />
+        <v-divider
+          :thickness="6"
+          :color="$vuetify.theme.dark ? 'white' : 'grey darken-2'"
+        />
       </v-row>
       <h3>Transactions</h3>
       <v-row>
@@ -104,33 +117,33 @@
           <div v-for="tr in transactions" :key="tr.id">
             <p
               v-if="tr.status === 'SUCCESSFUL'"
-              style="background-color: green; border-radius: 5px"
+              class="transaction-successful"
+              style="border-radius: 5px; padding: 8px; margin: 4px 0"
             >
               ** {{ tr.timestamp }} ->
-              <span style="font-weight: bold; background-color: black">
+              <span class="transaction-amount">
                 {{ tr.amount }}
               </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
             <p
               v-else-if="tr.status === 'FAILED'"
-              style="background-color: red; border-radius: 5px"
+              class="transaction-failed"
+              style="border-radius: 5px; padding: 8px; margin: 4px 0"
             >
               ** {{ tr.timestamp }} ->
-              <span style="font-weight: bold; background-color: black">
+              <span class="transaction-amount">
                 {{ tr.amount }}
               </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
             </p>
-            <p v-else style="background-color: gray">
+            <p
+              v-else
+              class="transaction-other"
+              style="border-radius: 5px; padding: 8px; margin: 4px 0"
+            >
               ** {{ tr.timestamp }} ->
-              <span
-                style="
-                  font-weight: bold;
-                  background-color: black;
-                  border-radius: 5px;
-                "
-              >
+              <span class="transaction-amount">
                 {{ tr.amount }}
               </span>
               {{ tr.currency }}: {{ tr.status }}, {{ tr.payout_plan }}
@@ -139,12 +152,15 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-divider :thickness="6" color="white" />
+        <v-divider
+          :thickness="6"
+          :color="$vuetify.theme.dark ? 'white' : 'grey darken-2'"
+        />
       </v-row>
     </div>
 
     <div id="snackbar-div">
-      <v-snackbar v-model="showSnackbar">
+      <v-snackbar v-model="showSnackbar" :dark="$vuetify.theme.dark">
         {{ snackbarText }}
 
         <template #action="{ attrs }">
@@ -360,8 +376,80 @@ export default {
 #main {
   margin-top: 30px;
   border-radius: 10px;
-  color: white;
   padding: 50px;
-  background-color: cadetblue;
+  transition: all 0.3s ease;
+}
+
+/* Dark theme styles */
+.theme--dark #main {
+  color: white;
+  background-color: #5f9ea0; /* cadetblue */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Light theme styles */
+.theme--light #main {
+  color: #2c3e50;
+  background-color: #e8f4f8;
+  border: 1px solid rgba(95, 158, 160, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Theme-aware transaction styles */
+.theme--dark .transaction-successful {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+.theme--light .transaction-successful {
+  background-color: #c8e6c9 !important;
+  color: #2e7d32;
+}
+
+.theme--dark .transaction-failed {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.theme--light .transaction-failed {
+  background-color: #ffcdd2 !important;
+  color: #c62828;
+}
+
+.theme--dark .transaction-other {
+  background-color: #9e9e9e !important;
+  color: white;
+}
+
+.theme--light .transaction-other {
+  background-color: #f5f5f5 !important;
+  color: #424242;
+}
+
+.transaction-amount {
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 4px;
+}
+
+.theme--dark .transaction-amount {
+  background-color: #000000;
+  color: white;
+}
+
+.theme--light .transaction-amount {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ddd;
+}
+
+/* Theme-aware merchant code styling */
+.theme--dark .merchant-code {
+  color: #4dd0e1 !important;
+}
+
+.theme--light .merchant-code {
+  color: #0277bd !important;
 }
 </style>
