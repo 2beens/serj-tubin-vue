@@ -199,7 +199,7 @@ function updateMessagesScroll() {
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
-  color: #26a69a;
+  color: #007acc;
 }
 
 /* Theme-aware header colors */
@@ -223,7 +223,7 @@ function updateMessagesScroll() {
 }
 
 .board-messages {
-  background-color: rgba(38, 166, 154, 0.1);
+  background-color: rgba(0, 122, 204, 0.1);
   text-align: left;
   margin: 0 10%;
   padding: 20px;
@@ -276,7 +276,7 @@ function updateMessagesScroll() {
 }
 
 .message-author {
-  color: #26a69a;
+  color: #007acc;
   margin: 0 8px;
 }
 
@@ -317,7 +317,7 @@ function updateMessagesScroll() {
   padding: 8px 12px;
   font-size: 16px;
   border: 1px solid rgba(79, 195, 247, 0.5);
-  background-color: rgba(38, 166, 154, 0.15);
+  background-color: rgba(0, 122, 204, 0.15);
   color: #ffffff;
   border-radius: 4px;
   margin: 0 8px;
@@ -328,7 +328,7 @@ function updateMessagesScroll() {
 .board-input:focus {
   outline: none;
   border-color: #4fc3f7;
-  background-color: rgba(38, 166, 154, 0.25);
+  background-color: rgba(0, 122, 204, 0.25);
   box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
 }
 
@@ -369,11 +369,11 @@ function updateMessagesScroll() {
 }
 
 #board-messages::-webkit-scrollbar-thumb {
-  background: rgba(38, 166, 154, 0.3);
+  background: rgba(0, 122, 204, 0.3);
   border-radius: 4px;
 }
 
 #board-messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(38, 166, 154, 0.5);
+  background: rgba(0, 122, 204, 0.5);
 }
 </style>

@@ -4,7 +4,7 @@
       <h2
         :class="
           $vuetify.theme.dark
-            ? 'text-h4 teal--text text--lighten-1'
+            ? 'text-h4 blue--text text--lighten-1'
             : 'text-h4 blue--text text--darken-2'
         "
       >
@@ -14,7 +14,7 @@
       <!-- Add new blog post button -->
       <v-btn
         v-if="theRoot.loggedIn"
-        color="teal lighten-1"
+        color="blue lighten-1"
         dark
         @click="dialog = true"
         class="ml-4"
@@ -30,7 +30,7 @@
       :dark="$vuetify.theme.dark"
       :color="
         $vuetify.theme.dark
-          ? 'rgba(13, 71, 71, 0.6)'
+          ? 'rgba(26, 31, 46, 0.8)'
           : 'rgba(255, 255, 255, 0.9)'
       "
       class="blog-post mb-6 custom-card"
@@ -46,10 +46,10 @@
             <div class="d-flex align-center">
               <div class="action-buttons">
                 <v-btn icon small @click="clap(post)" class="mr-1">
-                  <v-icon color="teal lighten-1">mdi-hand-clap</v-icon>
+                  <v-icon color="blue lighten-1">mdi-hand-clap</v-icon>
                 </v-btn>
                 <span
-                  class="text-caption teal--text text--lighten-1 clap-count"
+                  class="text-caption blue--text text--lighten-1 clap-count"
                 >
                   {{ post.claps || 0 }}
                 </span>
@@ -61,7 +61,7 @@
                   class="mr-2"
                   @click="openEditPostDialog(post)"
                 >
-                  <v-icon color="teal lighten-1">mdi-pencil</v-icon>
+                  <v-icon color="blue lighten-1">mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn icon small @click="deletePost(post.id, post.title)">
                   <v-icon color="red lighten-1">mdi-delete</v-icon>
@@ -76,7 +76,7 @@
             {{ formatDate(post.created_at) }}
           </span>
         </v-card-title>
-        <v-divider class="mx-4 mb-2 teal--text text--lighten-1"></v-divider>
+        <v-divider class="mx-4 mb-2 blue--text text--lighten-1"></v-divider>
       </div>
 
       <v-card-text class="pt-4">
@@ -135,7 +135,7 @@
             Cancel
           </v-btn>
           <v-btn
-            color="teal lighten-1"
+            color="blue lighten-1"
             text
             @click="editBlogMode ? updateBlogPost() : addBlogPost()"
           >
@@ -149,7 +149,7 @@
     <v-snackbar
       v-model="showSnackbar"
       :timeout="3000"
-      color="teal lighten-1"
+      color="blue lighten-1"
       :dark="$vuetify.theme.dark"
     >
       {{ snackbarText }}
@@ -493,12 +493,12 @@ export default {
 
 /* Dark theme styles */
 .theme--dark .blog-post {
-  background: rgba(13, 71, 71, 0.6) !important;
+  background: rgba(42, 52, 65, 0.9) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 .theme--dark .blog-post:hover {
-  background: rgba(19, 106, 106, 0.75) !important;
+  background: rgba(64, 169, 255, 0.25) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -516,7 +516,7 @@ export default {
 }
 
 .post-header {
-  background: rgba(38, 166, 154, 0.1);
+  background: rgba(64, 169, 255, 0.15);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -578,13 +578,13 @@ export default {
 }
 
 .blog-content ::v-deep(a) {
-  color: #26a69a;
+  color: #007acc;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .blog-content ::v-deep(a:hover) {
-  color: #4db6ac;
+  color: #40a9ff;
   text-decoration: underline;
 }
 
@@ -616,7 +616,7 @@ export default {
 /* Dividers */
 ::v-deep .v-divider {
   opacity: 0.2;
-  border-color: #26a69a !important;
+  border-color: #007acc !important;
 }
 
 /* Button styles */
@@ -627,7 +627,7 @@ export default {
 
 .v-btn.v-btn--icon:hover {
   transform: scale(1.15);
-  background: rgba(38, 166, 154, 0.15);
+  background: rgba(64, 169, 255, 0.18);
   opacity: 1;
 }
 
@@ -648,7 +648,7 @@ export default {
 
   .v-card-actions {
     padding: 8px 16px;
-    background: rgba(38, 166, 154, 0.03);
+    background: rgba(64, 169, 255, 0.05);
     border-bottom-left-radius: 22px;
     border-bottom-right-radius: 22px;
   }
@@ -670,7 +670,7 @@ export default {
 
   .v-card-actions {
     padding: 6px 12px;
-    background: rgba(38, 166, 154, 0.03);
+    background: rgba(64, 169, 255, 0.05);
   }
 }
 
@@ -694,7 +694,7 @@ export default {
   inset: 0;
   border-radius: 16px;
   padding: 2px;
-  background: linear-gradient(45deg, #26a69a, #00695c);
+  background: linear-gradient(45deg, #007acc, #0056b3);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -706,7 +706,7 @@ export default {
   padding: 20px 24px;
   font-size: 1.5rem !important;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid rgba(38, 166, 154, 0.2);
+  border-bottom: 1px solid rgba(64, 169, 255, 0.3);
 }
 
 ::v-deep .v-dialog .v-card-text {
@@ -720,7 +720,7 @@ export default {
 
 ::v-deep .v-dialog .v-text-field > .v-input__control > .v-input__slot {
   background: rgba(0, 0, 0, 0.2) !important;
-  border: 1px solid rgba(38, 166, 154, 0.2);
+  border: 1px solid rgba(64, 169, 255, 0.3);
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -731,7 +731,7 @@ export default {
   .v-text-field
   > .v-input__control
   > .v-input__slot:focus-within {
-  border-color: rgba(38, 166, 154, 0.5);
+  border-color: rgba(64, 169, 255, 0.6);
 }
 
 ::v-deep
@@ -745,7 +745,7 @@ export default {
 ::v-deep .v-dialog .v-card-actions {
   background: rgb(13, 71, 71) !important;
   padding: 16px 24px;
-  border-top: 1px solid rgba(38, 166, 154, 0.2);
+  border-top: 1px solid rgba(64, 169, 255, 0.3);
 }
 
 ::v-deep .v-dialog .v-btn {
@@ -759,11 +759,11 @@ export default {
   padding: 0 16px;
 }
 
-::v-deep .v-dialog .v-btn.v-btn--text.teal--text {
+::v-deep .v-dialog .v-btn.v-btn--text.blue--text {
   color: #4db6ac !important;
 }
 
-::v-deep .v-dialog .v-btn.v-btn--text.teal--text:hover {
+::v-deep .v-dialog .v-btn.v-btn--text.blue--text:hover {
   color: #80cbc4 !important;
 }
 

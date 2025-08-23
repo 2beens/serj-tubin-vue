@@ -161,8 +161,8 @@ export default {
 
 /* Dark theme weather info container */
 .theme--dark .weather-info-container {
-  background: rgba(38, 166, 154, 0.08);
-  border-color: rgba(38, 166, 154, 0.2);
+  background: rgba(64, 169, 255, 0.12);
+  border-color: rgba(0, 122, 204, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -190,7 +190,7 @@ export default {
 
 .theme--dark .info-section:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(38, 166, 154, 0.3);
+  border-color: rgba(0, 122, 204, 0.3);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
@@ -258,7 +258,7 @@ export default {
 
 /* Dark theme values */
 .theme--dark .info-value {
-  color: #26a69a;
+  color: #007acc;
 }
 
 /* Light theme values */

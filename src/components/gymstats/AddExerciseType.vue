@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-card @click="showDialog = true" class="teal lighten-4">
+      <v-card @click="showDialog = true" class="blue lighten-4">
         <v-img
           src="../../assets/gymstats/plus-sign.jpg"
           height="80"

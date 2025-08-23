@@ -24,17 +24,17 @@
       >
         <v-btn value="log" @click="onTabChange('log')">
           <span>Log</span>
-          <v-icon color="teal lighten-1">mdi-timeline-text</v-icon>
+          <v-icon color="blue lighten-1">mdi-timeline-text</v-icon>
         </v-btn>
 
         <v-btn value="stats" @click="onTabChange('stats')">
           <span>Stats</span>
-          <v-icon color="teal lighten-1">mdi-chart-bar</v-icon>
+          <v-icon color="blue lighten-1">mdi-chart-bar</v-icon>
         </v-btn>
 
         <v-btn value="list" @click="onTabChange('list')">
           <span>List</span>
-          <v-icon color="teal lighten-1">mdi-format-list-bulleted</v-icon>
+          <v-icon color="blue lighten-1">mdi-format-list-bulleted</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </div>

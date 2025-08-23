@@ -93,7 +93,7 @@
       <v-col>
         <v-card
           dark
-          color="teal darken-2"
+          color="blue darken-2"
           class="mx-2 mb-3 mt-0"
           style="border-radius: 8px"
         >
@@ -267,15 +267,15 @@
               <v-list-item-title>
                 {{ exercise.exerciseName }}
               </v-list-item-title>
-              <v-list-item-subtitle style="font-size: 0.8em; color: teal">
+              <v-list-item-subtitle style="font-size: 0.8em; color: blue">
                 {{ new Date(exercise.createdAt).toLocaleString() }}
               </v-list-item-subtitle>
               <v-list-item-subtitle>
                 {{ muscleGroupToText[exercise.muscleGroup] }}
-                <v-chip small color="teal lighten-1">
+                <v-chip small color="blue lighten-1">
                   {{ exercise.kilos }} kg
                 </v-chip>
-                <v-chip small color="teal lighten-4" text-color="black">
+                <v-chip small color="blue lighten-4" text-color="black">
                   {{ exercise.reps }} reps
                 </v-chip>
               </v-list-item-subtitle>

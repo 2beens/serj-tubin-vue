@@ -56,7 +56,7 @@
             <p>{{ error }}</p>
             <v-btn small color="primary" @click="fetchQuote">Retry</v-btn>
           </div>
-          <div v-else class="teal--text text--lighten-1">
+          <div v-else class="blue--text text--lighten-1">
             {{ quote.text }}
             <div class="text-right mt-2">— {{ quote.author || 'Unknown' }}</div>
           </div>
@@ -114,7 +114,7 @@ export default {
 .info-container {
   padding: 20px;
   margin: 0 12px;
-  background: rgba(38, 166, 154, 0.05);
+  background: rgba(64, 169, 255, 0.08);
   border-radius: 12px;
   backdrop-filter: blur(8px);
 }
@@ -150,7 +150,7 @@ export default {
 }
 
 .quote-text {
-  color: #26a69a;
+  color: #007acc;
   font-size: 1.1em;
   line-height: 1.4;
   font-style: italic;
@@ -182,14 +182,14 @@ export default {
 .mobile-quote-card {
   border: none;
   border-radius: 12px;
-  background: rgba(13, 71, 71, 0.6) !important;
+  background: rgba(42, 52, 65, 0.9) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
   margin: 0 8px 16px;
   transition: background 0.3s ease;
 }
 
 .mobile-quote-card:hover {
-  background: rgba(19, 106, 106, 0.75) !important;
+  background: rgba(64, 169, 255, 0.25) !important;
 }
 
 .mobile-quote-card .v-card-text {
@@ -197,7 +197,7 @@ export default {
 }
 
 /* Improve mobile quote text styles */
-.mobile-quote-card .teal--text {
+.mobile-quote-card .blue--text {
   font-size: 1.1rem;
   line-height: 1.5;
   font-style: italic;

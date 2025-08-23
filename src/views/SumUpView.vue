@@ -83,9 +83,7 @@
             v-model="userDetailsJson"
             rows="20"
             row-height="15"
-            :bg-color="
-              $vuetify.theme.dark ? 'grey darken-3' : 'light-blue lighten-4'
-            "
+            :bg-color="$vuetify.theme.dark ? 'grey darken-3' : 'blue lighten-4'"
             :color="$vuetify.theme.dark ? 'white' : 'black'"
             :dark="$vuetify.theme.dark"
           />
@@ -382,16 +380,16 @@ export default {
 
 /* Dark theme styles */
 .theme--dark #main {
-  color: white;
-  background-color: #5f9ea0; /* cadetblue */
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e6f3ff;
+  background-color: #2a3441; /* brighter azure background */
+  border: 1px solid rgba(64, 169, 255, 0.4);
 }
 
 /* Light theme styles */
 .theme--light #main {
   color: #2c3e50;
-  background-color: #e8f4f8;
-  border: 1px solid rgba(95, 158, 160, 0.3);
+  background-color: #f0f8ff;
+  border: 1px solid rgba(0, 122, 204, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -434,8 +432,8 @@ export default {
 }
 
 .theme--dark .transaction-amount {
-  background-color: #000000;
-  color: white;
+  background-color: #1a1f2e;
+  color: #87ceeb;
 }
 
 .theme--light .transaction-amount {
@@ -446,10 +444,10 @@ export default {
 
 /* Theme-aware merchant code styling */
 .theme--dark .merchant-code {
-  color: #4dd0e1 !important;
+  color: #40a9ff !important;
 }
 
 .theme--light .merchant-code {
-  color: #0277bd !important;
+  color: #007acc !important;
 }
 </style>

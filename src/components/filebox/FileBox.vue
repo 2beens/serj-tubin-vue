@@ -10,7 +10,7 @@
     <v-card class="mx-auto" max-width="700" :dark="$vuetify.theme.dark">
       <v-sheet
         class="pa-4"
-        :class="$vuetify.theme.dark ? 'teal darken-3' : 'teal lighten-4'"
+        :class="$vuetify.theme.dark ? 'blue darken-3' : 'blue lighten-4'"
       >
         <v-row class="ma-2 mt-0">
           <v-col cols="12" class="pa-0 ma-0">
@@ -23,7 +23,7 @@
           </v-col>
           <v-progress-linear
             v-show="uploadingFile"
-            color="teal"
+            color="blue"
             :value="uploadPercentage"
           />
         </v-row>
@@ -48,7 +48,7 @@
               :style="
                 $vuetify.theme.dark
                   ? 'color: white; float: left; font-weight: bold'
-                  : 'color: #004d40; float: left; font-weight: bold'
+                  : 'color: #003d82; float: left; font-weight: bold'
               "
             >
               {{ selectedItems[0].name }}
@@ -58,7 +58,7 @@
               :style="
                 $vuetify.theme.dark
                   ? 'color: white; float: left; font-weight: bold'
-                  : 'color: #004d40; float: left; font-weight: bold'
+                  : 'color: #003d82; float: left; font-weight: bold'
               "
             >
               <v-icon style="float: left; color: blue">mdi-folder</v-icon>

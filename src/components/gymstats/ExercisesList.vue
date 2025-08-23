@@ -7,7 +7,7 @@
             selectedMuscleGroup = muscleGroups[0]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/biceps.png"
@@ -24,7 +24,7 @@
             selectedMuscleGroup = muscleGroups[1]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/triceps.png"
@@ -41,7 +41,7 @@
             selectedMuscleGroup = muscleGroups[2]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/legs.png"
@@ -58,7 +58,7 @@
             selectedMuscleGroup = muscleGroups[3]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/shoulders.png"
@@ -75,7 +75,7 @@
             selectedMuscleGroup = muscleGroups[4]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/chest.png"
@@ -92,7 +92,7 @@
             selectedMuscleGroup = muscleGroups[5]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/back_2.png"
@@ -109,7 +109,7 @@
             selectedMuscleGroup = muscleGroups[6]
             onMuscleGroupChange()
           "
-          class="teal lighten-4"
+          class="blue lighten-4"
         >
           <v-img
             src="../../assets/gymstats/core.png"
@@ -131,7 +131,7 @@
       ref="loadedExerciseDistributions"
     >
       <v-col>
-        <v-list color="teal lighten-4" style="border-radius: 5px">
+        <v-list color="blue lighten-4" style="border-radius: 5px">
           <v-list-item-group color="primary" active-class="pink--text">
             <v-list-item
               v-for="(
@@ -151,7 +151,7 @@
                   {{ percentageInfo.exerciseName }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                  <v-chip color="teal lighten-1">
+                  <v-chip color="blue lighten-1">
                     {{ percentageInfo.percentage }}%
                   </v-chip>
                 </v-list-item-subtitle>
@@ -167,7 +167,7 @@
         class="mt-4"
         v-model="tab"
         style="border-top-left-radius: 5px; border-top-right-radius: 5px"
-        background-color="teal lighten-4"
+        background-color="blue lighten-4"
         centered
         icons-and-text
       >

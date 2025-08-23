@@ -77,38 +77,38 @@ export default {
 
 /* Dark theme styles */
 .theme--dark .util-info-box {
-  background-color: #26a69a;
-  border-color: rgba(255, 255, 255, 0.2);
+  background-color: #2a3441;
+  border-color: rgba(64, 169, 255, 0.5);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .theme--dark .util-info-box-title {
-  color: #000000;
+  color: #40a9ff;
   font-weight: 600;
   margin-bottom: 12px;
 }
 
 .theme--dark .util-info-value {
-  color: #ffffff;
+  color: #e6f3ff;
   word-break: break-all;
   line-height: 1.4;
 }
 
 /* Light theme styles */
 .theme--light .util-info-box {
-  background-color: #e0f2f1;
-  border-color: rgba(38, 166, 154, 0.3);
+  background-color: #f0f8ff;
+  border-color: rgba(0, 122, 204, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .theme--light .util-info-box-title {
-  color: #00695c;
+  color: #007acc;
   font-weight: 600;
   margin-bottom: 12px;
 }
 
 .theme--light .util-info-value {
-  color: #004d40;
+  color: #0056b3;
   word-break: break-all;
   line-height: 1.4;
 }
@@ -119,12 +119,12 @@ export default {
 }
 
 .theme--dark .util-info-box:hover {
-  background-color: #2bbbad;
+  background-color: rgba(64, 169, 255, 0.25);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
 }
 
 .theme--light .util-info-box:hover {
-  background-color: #b2dfdb;
+  background-color: #e6f3ff;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
 }
 

@@ -7,26 +7,26 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark theme styles (default) */
+/* Dark theme styles (brighter azure theme) */
 .theme--dark #app {
-  color: #2f72b5;
-  background-color: #000000;
+  color: #87ceeb;
+  background-color: #1a1f2e;
 }
 
 .theme--dark a:link {
-  color: #14c4ff !important;
+  color: #40a9ff !important;
 }
 
 .theme--dark a:visited {
-  color: #0585af !important;
+  color: #1890ff !important;
 }
 
 .theme--dark a:hover {
-  color: #07ea9e !important;
+  color: #69c0ff !important;
 }
 
 .theme--dark a:active {
-  color: #0598af !important;
+  color: #007acc !important;
 }
 
 /* Light theme styles */
@@ -59,8 +59,8 @@
 
 /* Custom theme-aware classes */
 .theme--dark .custom-card {
-  background-color: rgba(13, 71, 71, 0.6) !important;
-  border: 1px solid rgba(38, 166, 154, 0.3);
+  background-color: rgba(42, 52, 65, 0.9) !important;
+  border: 1px solid rgba(64, 169, 255, 0.4);
 }
 
 .theme--light .custom-card {
@@ -70,7 +70,7 @@
 }
 
 .theme--dark .info-container {
-  background: rgba(38, 166, 154, 0.05);
+  background: rgba(64, 169, 255, 0.12);
   backdrop-filter: blur(8px);
 }
 
@@ -136,7 +136,7 @@
 }
 
 .theme--dark .post-header {
-  background: rgba(38, 166, 154, 0.1);
+  background: rgba(64, 169, 255, 0.15);
 }
 
 /* Additional text visibility fixes for light theme */

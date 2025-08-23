@@ -12,7 +12,7 @@
             <h2
               :class="
                 $vuetify.theme.dark
-                  ? 'text-h4 teal--text text--lighten-1 mb-4'
+                  ? 'text-h4 blue--text text--lighten-1 mb-4'
                   : 'text-h4 blue--text text--darken-2 mb-4'
               "
             >
@@ -31,7 +31,7 @@
             <h3
               :class="
                 $vuetify.theme.dark
-                  ? 'text-h5 teal--text text--lighten-1 mb-2'
+                  ? 'text-h5 blue--text text--lighten-1 mb-2'
                   : 'text-h5 blue--text text--darken-1 mb-2'
               "
             >
@@ -55,7 +55,7 @@
                   </v-icon>
                   Request from:
                 </div>
-                <div class="text-body-1 teal--text text--lighten-1">
+                <div class="text-body-1 blue--text text--lighten-1">
                   Berlin, DE
                 </div>
               </v-col>
@@ -66,7 +66,7 @@
                   </v-icon>
                   Local weather:
                 </div>
-                <div class="text-body-1 teal--text text--lighten-1">
+                <div class="text-body-1 blue--text text--lighten-1">
                   scattered clouds
                 </div>
               </v-col>
@@ -102,7 +102,7 @@
             <h2
               :class="
                 $vuetify.theme.dark
-                  ? 'text-h3 teal--text text--lighten-1 mb-4'
+                  ? 'text-h3 blue--text text--lighten-1 mb-4'
                   : 'text-h3 blue--text text--darken-2 mb-4'
               "
             >
@@ -121,7 +121,7 @@
             <h3
               :class="
                 $vuetify.theme.dark
-                  ? 'text-h4 teal--text text--lighten-1'
+                  ? 'text-h4 blue--text text--lighten-1'
                   : 'text-h4 blue--text text--darken-1'
               "
             >
@@ -182,7 +182,7 @@ export default {
   .v-card {
     border: none;
     border-radius: 12px;
-    background: rgba(13, 71, 71, 0.6) !important;
+    background: rgba(42, 52, 65, 0.9) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
     margin: 0 8px 16px;
   }
@@ -190,12 +190,12 @@ export default {
   /* Only apply hover effect to interactive cards */
   .blog-post:hover,
   .mobile-quote-card:hover {
-    background: rgba(19, 106, 106, 0.75) !important;
+    background: rgba(64, 169, 255, 0.25) !important;
     transition: background 0.3s ease;
   }
 
   #my-image {
-    border: 3px solid #26a69a;
+    border: 3px solid #40a9ff;
     transition: transform 0.3s ease;
   }
 
@@ -232,13 +232,13 @@ export default {
 
   #my-image {
     border-radius: 50%;
-    border: 4px solid #26a69a;
+    border: 4px solid #40a9ff;
     transition: all 0.3s ease;
   }
 
   #my-image:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(38, 166, 154, 0.5);
+    box-shadow: 0 0 15px rgba(64, 169, 255, 0.6);
   }
 
   /* New styles for blog list on desktop */

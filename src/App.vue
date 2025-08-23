@@ -7,7 +7,7 @@
       :color="$vuetify.theme.dark ? 'black' : 'white'"
     >
       <v-btn icon @click="drawer = !drawer">
-        <v-icon color="teal lighten-1">mdi-menu</v-icon>
+        <v-icon color="blue lighten-1">mdi-menu</v-icon>
       </v-btn>
       <v-spacer />
       <ThemeToggle class="mr-2" />
@@ -23,7 +23,7 @@
       :color="$vuetify.theme.dark ? 'black' : 'white'"
     >
       <v-btn icon @click="drawer = false">
-        <v-icon color="teal lighten-1">mdi-close</v-icon>
+        <v-icon color="blue lighten-1">mdi-close</v-icon>
       </v-btn>
       <v-list>
         <v-list-item
@@ -190,7 +190,7 @@ export default {
 <style scoped>
 #consent-div {
   max-width: min(300px, 90vw);
-  background-color: #26a69a;
+  background-color: #007acc;
   border-radius: 8px;
   position: fixed;
   top: 130px;

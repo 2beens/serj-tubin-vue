@@ -9,7 +9,7 @@
       @keydown.esc="onAbortEditNote"
     >
       <template #activator="{ on, attrs }">
-        <v-btn color="teal lighten-1" large icon v-bind="attrs" v-on="on">
+        <v-btn color="blue lighten-1" large icon v-bind="attrs" v-on="on">
           <v-icon dark>mdi-plus</v-icon>
         </v-btn>
       </template>

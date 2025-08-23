@@ -5,7 +5,7 @@
       id="logout-button"
       class="mt-1"
       icon
-      color="teal lighten-1"
+      color="blue lighten-1"
       @click="onLogoutClick"
     >
       <v-icon>mdi-logout</v-icon>
@@ -18,7 +18,7 @@
           class="ma-1"
           icon
           v-bind="attrs"
-          color="teal lighten-1"
+          color="blue lighten-1"
           v-on="on"
         >
           <v-icon>mdi-login</v-icon>

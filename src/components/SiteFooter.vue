@@ -2,7 +2,7 @@
   <v-footer max-height="52" :dark="$vuetify.theme.dark" padless fixed>
     <v-card class="flex" flat tile :dark="$vuetify.theme.dark">
       <v-card-title
-        :class="$vuetify.theme.dark ? 'teal lighten-1' : 'blue-grey lighten-2'"
+        :class="$vuetify.theme.dark ? 'blue darken-4' : 'blue-grey lighten-2'"
       >
         <strong class="subheading">Serj, Berlin 2024</strong>
 
