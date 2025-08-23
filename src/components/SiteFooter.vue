@@ -1,7 +1,9 @@
 <template>
-  <v-footer max-height="52" dark padless fixed>
-    <v-card class="flex" flat tile>
-      <v-card-title class="teal lighten-1">
+  <v-footer max-height="52" :dark="$vuetify.theme.dark" padless fixed>
+    <v-card class="flex" flat tile :dark="$vuetify.theme.dark">
+      <v-card-title
+        :class="$vuetify.theme.dark ? 'teal lighten-1' : 'blue-grey lighten-2'"
+      >
         <strong class="subheading">Serj, Berlin 2024</strong>
 
         <v-spacer />
@@ -12,15 +14,30 @@
 
         <v-spacer />
 
-        <v-btn class="mx-4" dark icon @click="goTo('gh')">
+        <v-btn
+          class="mx-4"
+          :dark="$vuetify.theme.dark"
+          icon
+          @click="goTo('gh')"
+        >
           <v-icon size="35px">mdi-github</v-icon>
         </v-btn>
 
-        <v-btn class="mx-4" dark icon @click="goTo('insta')">
+        <v-btn
+          class="mx-4"
+          :dark="$vuetify.theme.dark"
+          icon
+          @click="goTo('insta')"
+        >
           <v-icon size="35px">mdi-instagram</v-icon>
         </v-btn>
 
-        <v-btn class="mx-4" dark icon @click="goTo('fb')">
+        <v-btn
+          class="mx-4"
+          :dark="$vuetify.theme.dark"
+          icon
+          @click="goTo('fb')"
+        >
           <v-icon size="35px">mdi-facebook</v-icon>
         </v-btn>
       </v-card-title>

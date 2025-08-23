@@ -197,13 +197,29 @@ function updateMessagesScroll() {
 .board-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 8px;
   color: #26a69a;
+}
+
+/* Theme-aware header colors */
+.theme--light .board-header {
+  color: #1976d2;
+}
+
+.theme--light .board-header h2 {
+  color: #1976d2;
 }
 
 .board-subtitle {
   color: #4fc3f7;
   margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Theme-aware subtitle color */
+.theme--light .board-subtitle {
+  color: #1976d2;
 }
 
 .board-messages {
@@ -217,13 +233,25 @@ function updateMessagesScroll() {
   margin-bottom: 120px;
 }
 
+/* Theme-aware board messages */
+.theme--light .board-messages {
+  background-color: rgba(25, 118, 210, 0.05);
+  border: 1px solid rgba(25, 118, 210, 0.1);
+}
+
 .board-message {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   transition: all 0.2s ease;
 }
 
 .board-message:hover {
   background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+/* Theme-aware hover effects */
+.theme--light .board-message:hover {
+  background: rgba(25, 118, 210, 0.08);
   border-radius: 4px;
 }
 
@@ -240,13 +268,30 @@ function updateMessagesScroll() {
   color: #4fc3f7;
 }
 
+/* Theme-aware message date */
+.theme--light .message-date {
+  background-color: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+}
+
 .message-author {
   color: #26a69a;
   margin: 0 8px;
 }
 
+/* Theme-aware message author */
+.theme--light .message-author {
+  color: #1976d2;
+}
+
 .message-text {
   margin-left: 4px;
+}
+
+/* Theme-aware message text */
+.theme--light .message-text {
+  color: #212121;
 }
 
 .board-controls-sticky {
@@ -260,6 +305,12 @@ function updateMessagesScroll() {
   text-align: center;
   border-top: 1px solid rgba(79, 195, 247, 0.3);
   z-index: 99;
+}
+
+/* Theme-aware controls */
+.theme--light .board-controls-sticky {
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(25, 118, 210, 0.3);
 }
 
 .board-input {
@@ -283,6 +334,24 @@ function updateMessagesScroll() {
 
 .board-input::placeholder {
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Theme-aware input fields */
+.theme--light .board-input {
+  border: 1px solid rgba(25, 118, 210, 0.5);
+  background-color: rgba(25, 118, 210, 0.05);
+  color: #212121;
+  box-shadow: 0 0 0 1px rgba(25, 118, 210, 0.1);
+}
+
+.theme--light .board-input:focus {
+  border-color: #1976d2;
+  background-color: rgba(25, 118, 210, 0.1);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.theme--light .board-input::placeholder {
+  color: rgba(33, 33, 33, 0.6);
 }
 
 .message-input {

@@ -1,7 +1,15 @@
 <template>
   <div class="blogs-container">
     <div class="d-flex align-center justify-space-between mb-4">
-      <h2 class="text-h4 teal--text text--lighten-1">{{ title }}</h2>
+      <h2
+        :class="
+          $vuetify.theme.dark
+            ? 'text-h4 teal--text text--lighten-1'
+            : 'text-h4 blue--text text--darken-2'
+        "
+      >
+        {{ title }}
+      </h2>
 
       <!-- Add new blog post button -->
       <v-btn
@@ -19,9 +27,13 @@
     <v-card
       v-for="post in posts"
       :key="post.id"
-      dark
-      color="rgba(13, 71, 71, 0.6)"
-      class="blog-post mb-6"
+      :dark="$vuetify.theme.dark"
+      :color="
+        $vuetify.theme.dark
+          ? 'rgba(13, 71, 71, 0.6)'
+          : 'rgba(255, 255, 255, 0.9)'
+      "
+      class="blog-post mb-6 custom-card"
       elevation="0"
     >
       <!-- Post Header -->
@@ -84,7 +96,7 @@
 
     <!-- Add/Edit Dialog -->
     <v-dialog v-model="dialog" max-width="600px">
-      <v-card dark>
+      <v-card :dark="$vuetify.theme.dark">
         <v-card-title>
           <span class="text-h5">
             {{ editBlogMode ? 'Edit Post' : 'New Post' }}
@@ -98,7 +110,7 @@
                   v-model="selectedPost.title"
                   label="Title"
                   required
-                  dark
+                  :dark="$vuetify.theme.dark"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -106,7 +118,7 @@
                   v-model="selectedPost.content"
                   label="Content"
                   required
-                  dark
+                  :dark="$vuetify.theme.dark"
                   rows="10"
                 ></v-textarea>
               </v-col>
@@ -138,7 +150,7 @@
       v-model="showSnackbar"
       :timeout="3000"
       color="teal lighten-1"
-      dark
+      :dark="$vuetify.theme.dark"
     >
       {{ snackbarText }}
       <template v-slot:action="{ attrs }">
@@ -475,15 +487,32 @@ export default {
   border-radius: 12px;
   transition: background 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 2rem;
-  background: rgba(13, 71, 71, 0.6) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
   overflow: hidden;
   position: relative;
 }
 
-.blog-post:hover {
+/* Dark theme styles */
+.theme--dark .blog-post {
+  background: rgba(13, 71, 71, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+.theme--dark .blog-post:hover {
   background: rgba(19, 106, 106, 0.75) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Light theme styles */
+.theme--light .blog-post {
+  background: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+}
+
+.theme--light .blog-post:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(25, 118, 210, 0.3);
 }
 
 .post-header {
@@ -507,6 +536,15 @@ export default {
   font-style: italic;
 }
 
+/* Theme-aware post title and date colors */
+.theme--light .post-date {
+  color: #666666 !important;
+}
+
+.theme--light .v-card-title {
+  color: #212121 !important;
+}
+
 .action-buttons {
   display: flex;
   align-items: center;
@@ -523,8 +561,17 @@ export default {
   padding: 0.5rem 0;
 }
 
-.blog-content ::v-deep(*) {
+/* Dark theme blog content */
+.theme--dark .blog-content ::v-deep(*) {
   color: #fff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* Light theme blog content */
+.theme--light .blog-content ::v-deep(*) {
+  color: #212121 !important;
   font-size: 1.1rem;
   line-height: 1.5;
   margin-bottom: 0.75rem;
@@ -544,10 +591,19 @@ export default {
 .embedded-content {
   width: 100%;
   margin: 1rem 0;
-  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 1rem;
   border: none;
+}
+
+/* Theme-aware embedded content */
+.theme--dark .embedded-content {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.theme--light .embedded-content {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .embedded-content ::v-deep(iframe) {

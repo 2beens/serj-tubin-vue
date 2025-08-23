@@ -3,9 +3,19 @@
     <!-- Mobile Layout -->
     <v-row v-if="isMobile">
       <v-col cols="12" class="px-4 py-2">
-        <v-card dark color="black" class="mb-4">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-4 custom-card"
+        >
           <v-card-text class="text-center">
-            <h2 class="text-h4 teal--text text--lighten-1 mb-4">
+            <h2
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h4 teal--text text--lighten-1 mb-4'
+                  : 'text-h4 blue--text text--darken-2 mb-4'
+              "
+            >
               {{ headerTitle }}
             </h2>
 
@@ -18,14 +28,24 @@
               />
             </v-avatar>
 
-            <h3 class="text-h5 teal--text text--lighten-1 mb-2">
+            <h3
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h5 teal--text text--lighten-1 mb-2'
+                  : 'text-h5 blue--text text--darken-1 mb-2'
+              "
+            >
               {{ subTitle }}
             </h3>
           </v-card-text>
         </v-card>
 
         <!-- Weather and Location Card -->
-        <v-card dark color="black" class="mb-4">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-4 custom-card"
+        >
           <v-card-text>
             <v-row dense>
               <v-col cols="6">
@@ -65,7 +85,7 @@
     <!-- Desktop/Laptop Layout -->
     <v-row v-else>
       <!-- Increased sidebar width back to 3 columns -->
-      <v-col cols="3" class="pa-0">
+      <v-col cols="3" class="pa-0 pl-3">
         <div class="side-panel-container">
           <LeftSideBar />
         </div>
@@ -73,9 +93,19 @@
 
       <!-- Main content takes 6 columns -->
       <v-col cols="6" class="pa-4">
-        <v-card dark color="black" class="mb-6">
+        <v-card
+          :dark="$vuetify.theme.dark"
+          :color="$vuetify.theme.dark ? 'black' : 'white'"
+          class="mb-6 custom-card"
+        >
           <v-card-text class="text-center">
-            <h2 class="text-h3 teal--text text--lighten-1 mb-4">
+            <h2
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h3 teal--text text--lighten-1 mb-4'
+                  : 'text-h3 blue--text text--darken-2 mb-4'
+              "
+            >
               {{ headerTitle }}
             </h2>
 
@@ -88,7 +118,13 @@
               />
             </v-avatar>
 
-            <h3 class="text-h4 teal--text text--lighten-1">
+            <h3
+              :class="
+                $vuetify.theme.dark
+                  ? 'text-h4 teal--text text--lighten-1'
+                  : 'text-h4 blue--text text--darken-1'
+              "
+            >
               {{ subTitle }}
             </h3>
           </v-card-text>

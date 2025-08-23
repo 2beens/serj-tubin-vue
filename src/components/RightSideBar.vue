@@ -33,7 +33,12 @@
       </div>
 
       <!-- Mobile Layout -->
-      <v-card v-else dark color="black" class="mobile-quote-card">
+      <v-card
+        v-else
+        :dark="$vuetify.theme.dark"
+        :color="$vuetify.theme.dark ? 'black' : 'white'"
+        class="mobile-quote-card custom-card"
+      >
         <v-card-text>
           <div class="text-subtitle-1 blue--text mb-2">
             <v-icon small color="blue" class="mr-1">
@@ -108,6 +113,7 @@ export default {
 <style scoped>
 .info-container {
   padding: 20px;
+  margin: 0 12px;
   background: rgba(38, 166, 154, 0.05);
   border-radius: 12px;
   backdrop-filter: blur(8px);
@@ -221,6 +227,10 @@ export default {
 }
 
 @media (max-width: 600px) {
+  .info-container {
+    margin: 6px;
+  }
+
   .v-row {
     margin: 0; /* Remove default row margins on mobile */
   }
