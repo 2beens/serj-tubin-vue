@@ -62,7 +62,7 @@
       <LoginLogoutButton />
     </v-app-bar>
 
-    <v-main>
+    <v-main class="main-content">
       <router-view />
     </v-main>
 
@@ -188,6 +188,10 @@ export default {
 </script>
 
 <style scoped>
+.main-content {
+  padding-bottom: 80px !important; /* Add space for fixed footer */
+}
+
 #consent-div {
   max-width: min(300px, 90vw);
   background-color: #007acc;

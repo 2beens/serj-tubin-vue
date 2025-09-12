@@ -94,6 +94,17 @@
       </v-card-text>
     </v-card>
 
+    <!-- Pagination -->
+    <v-pagination
+      v-if="blogPageLength > 1"
+      v-model="blogPage"
+      :length="blogPageLength"
+      :total-visible="$vuetify.breakpoint.smAndDown ? 5 : 7"
+      color="blue lighten-1"
+      class="mt-6 mb-4"
+      @input="onBlogPageChange"
+    ></v-pagination>
+
     <!-- Add/Edit Dialog -->
     <v-dialog v-model="dialog" max-width="600px">
       <v-card :dark="$vuetify.theme.dark">
@@ -222,6 +233,7 @@ export default {
       this.screenWidth = window.innerWidth
     },
     onBlogPageChange(page) {
+      this.blogPage = page
       const vm = this
       axios
         .get(
@@ -237,6 +249,8 @@ export default {
           vm.blogPageLength = Math.ceil(
             response.data.total / vm.maxPostsPerPage
           )
+          // Scroll to top of blog list when page changes
+          window.scrollTo({ top: 0, behavior: 'smooth' })
         })
         .catch((error) => {
           console.log(error)
