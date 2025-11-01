@@ -33,7 +33,7 @@ describe('About Page Tests', () => {
   })
 
   it('displays location information', () => {
-    cy.contains('h3', 'Frontend is served from 🇫🇮')
+    cy.contains('h3', 'Frontend is served from 🇩🇪')
       .should('exist')
       .and('be.visible')
     cy.contains('h3', 'Backend lives in 🇫🇮 and 🇩🇪')

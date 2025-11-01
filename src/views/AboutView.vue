@@ -37,13 +37,16 @@
           </a>
         </h4>
 
-        <h3>Frontend is served from 🇫🇮</h3>
+        <h3>Frontend is served from 🇩🇪</h3>
         <h3>Backend lives in 🇫🇮 and 🇩🇪</h3>
 
-        <h5>
+        <h5 style="text-decoration: line-through;">
           My other silly project:
           <a href="https://iconfess.me/">iConfess</a>
         </h5>
+        <h6>
+          (in the end, I killed it sometime at the beginning of 2025)
+        </h6>
         <h4>
           This one is reachable both via
           <a href="https://www.serj-tubin.com/">www.serj-tubin.com</a>
