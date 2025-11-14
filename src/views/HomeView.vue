@@ -4,7 +4,12 @@
     <v-row v-if="isMobile">
       <v-col cols="12" class="px-4 py-2">
         <v-card
-          :class="['mb-4', 'custom-card', 'main-content-card', $vuetify.theme.dark ? '' : 'bg-white']"
+          :class="[
+            'mb-4',
+            'custom-card',
+            'main-content-card',
+            $vuetify.theme.dark ? '' : 'bg-white',
+          ]"
         >
           <v-card-text class="text-center">
             <h2
@@ -40,7 +45,11 @@
 
         <!-- Weather and Location Card -->
         <v-card
-          :class="['mb-4', 'custom-card', $vuetify.theme.dark ? '' : 'bg-white']"
+          :class="[
+            'mb-4',
+            'custom-card',
+            $vuetify.theme.dark ? '' : 'bg-white',
+          ]"
         >
           <v-card-text>
             <v-row dense>
@@ -90,7 +99,12 @@
       <!-- Main content takes 6 columns -->
       <v-col cols="6" class="pa-4">
         <v-card
-          :class="['mb-6', 'custom-card', 'main-content-card', $vuetify.theme.dark ? '' : 'bg-white']"
+          :class="[
+            'mb-6',
+            'custom-card',
+            'main-content-card',
+            $vuetify.theme.dark ? '' : 'bg-white',
+          ]"
         >
           <v-card-text class="text-center">
             <h2
@@ -185,12 +199,12 @@ export default {
     border-radius: 12px;
     margin: 0 8px 16px;
   }
-  
+
   .theme--dark .v-card.custom-card {
     background: rgba(42, 52, 65, 0.9) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
   }
-  
+
   .theme--light .v-card.custom-card {
     background: rgba(255, 255, 255, 0.9) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;

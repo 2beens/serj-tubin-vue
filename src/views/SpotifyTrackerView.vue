@@ -447,7 +447,9 @@ export default {
 
       axios
         .get(
-          `${import.meta.env.VITE_API_ENDPOINT}/spotify/page/${this.page}/size/${this.size}?keywords=${keywordsParam}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/spotify/page/${
+            this.page
+          }/size/${this.size}?keywords=${keywordsParam}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),

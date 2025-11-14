@@ -54,7 +54,10 @@ export default {
       }
       // Fallback to theme.global.name
       if (this.$vuetify.theme.global && this.$vuetify.theme.global.name) {
-        if (typeof this.$vuetify.theme.global.name === 'object' && 'value' in this.$vuetify.theme.global.name) {
+        if (
+          typeof this.$vuetify.theme.global.name === 'object' &&
+          'value' in this.$vuetify.theme.global.name
+        ) {
           this.$vuetify.theme.global.name.value = themeName
         } else {
           this.$vuetify.theme.global.name = themeName

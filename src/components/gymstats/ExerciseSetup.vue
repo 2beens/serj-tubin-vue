@@ -136,7 +136,12 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" variant="text" v-bind="attrs" @click="showSnackbar = false">
+        <v-btn
+          color="pink"
+          variant="text"
+          v-bind="attrs"
+          @click="showSnackbar = false"
+        >
           Close
         </v-btn>
       </template>
@@ -232,7 +237,9 @@ export default {
       const vm = this
       axios
         .post(
-          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.muscleGroup}/image`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${
+            this.exerciseType.exerciseId
+          }/mg/${this.muscleGroup}/image`,
           formData,
           {
             headers: {
@@ -319,7 +326,9 @@ export default {
       const vm = this
       axios
         .delete(
-          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${
+            this.exerciseType.exerciseId
+          }/mg/${this.exerciseType.muscleGroup}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),

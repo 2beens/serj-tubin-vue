@@ -150,9 +150,7 @@ export default {
     filteredRoutes() {
       // Access loggedIn via globalProperties to avoid warnings
       const loggedIn = this.$root?.loggedIn ?? false
-      return this.routes.filter(
-        (route) => !route.requiresAuth || loggedIn
-      )
+      return this.routes.filter((route) => !route.requiresAuth || loggedIn)
     },
   },
   watch: {

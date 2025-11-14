@@ -288,7 +288,12 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" variant="text" v-bind="attrs" @click="showSnackbar = false">
+        <v-btn
+          color="pink"
+          variant="text"
+          v-bind="attrs"
+          @click="showSnackbar = false"
+        >
           Close
         </v-btn>
       </template>
@@ -513,11 +518,14 @@ export default {
 
       const vm = this
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + `/gymstats/${exercise.id}`, {
-          headers: {
-            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
-          },
-        })
+        .delete(
+          import.meta.env.VITE_API_ENDPOINT + `/gymstats/${exercise.id}`,
+          {
+            headers: {
+              'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+            },
+          }
+        )
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('delete exercise - received null response / data')

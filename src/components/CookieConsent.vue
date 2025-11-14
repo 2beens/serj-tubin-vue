@@ -2,14 +2,12 @@
   <div class="cookie-consent">
     <slot name="message">
       <div class="cookie-consent-message">
-        This site uses cookies to analyze website traffic and optimize your website experience.
+        This site uses cookies to analyze website traffic and optimize your
+        website experience.
       </div>
     </slot>
     <slot name="button" :acceptCookies="acceptCookies">
-      <button
-        class="cookie-consent-button"
-        @click="acceptCookies"
-      >
+      <button class="cookie-consent-button" @click="acceptCookies">
         Accept
       </button>
     </slot>
@@ -26,10 +24,10 @@ export default {
       date.setTime(date.getTime() + 365 * 24 * 60 * 60 * 1000)
       const expires = '; expires=' + date.toUTCString()
       document.cookie = 'cookieconsent_status=allow' + expires + '; path=/'
-      
+
       // Emit event for parent component
       this.$emit('accept')
-      
+
       // Reload page to apply cookie consent
       window.location.reload()
     },
@@ -63,4 +61,3 @@ export default {
   transform: translateY(-1px);
 }
 </style>
-

@@ -10,9 +10,7 @@
         >
           Add Exercise ➕
         </v-btn>
-        <v-btn color="primary" dark v-bind="props" v-else>
-          Add ➕
-        </v-btn>
+        <v-btn color="primary" dark v-bind="props" v-else>Add ➕</v-btn>
       </template>
       <v-card>
         <v-card-text>
@@ -108,7 +106,12 @@
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
       <template #action="{ attrs }">
-        <v-btn color="pink" variant="text" v-bind="attrs" @click="showSnackbar = false">
+        <v-btn
+          color="pink"
+          variant="text"
+          v-bind="attrs"
+          @click="showSnackbar = false"
+        >
           Close
         </v-btn>
       </template>

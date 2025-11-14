@@ -95,9 +95,7 @@ export default {
           this.locationInfo = 'Unknown location'
           return
         }
-        const response = await axios.get(
-          `${apiEndpoint}/whereami`
-        )
+        const response = await axios.get(`${apiEndpoint}/whereami`)
         if (response?.data && typeof response.data === 'object') {
           const { city, country } = response.data
           if (city && country) {
@@ -121,15 +119,16 @@ export default {
           this.weatherInfo = 'API not configured'
           return
         }
-        const response = await axios.get(
-          `${apiEndpoint}/weather/current`
-        )
+        const response = await axios.get(`${apiEndpoint}/weather/current`)
         if (response?.data && Array.isArray(response.data)) {
           this.weatherInfo = response.data
             .map((item) => item.description)
             .join(', ')
         } else {
-          console.warn('Weather API returned unexpected format:', typeof response?.data)
+          console.warn(
+            'Weather API returned unexpected format:',
+            typeof response?.data
+          )
           this.weatherInfo = 'Weather data unavailable'
         }
       } catch (error) {
@@ -144,15 +143,16 @@ export default {
         if (!apiEndpoint) {
           return
         }
-        const response = await axios.get(
-          `${apiEndpoint}/weather/tomorrow`
-        )
+        const response = await axios.get(`${apiEndpoint}/weather/tomorrow`)
         if (response?.data && Array.isArray(response.data)) {
-          this.forecastIcons = response.data.flatMap((item) =>
-            item.descriptions?.map((desc) => desc.icon) || []
+          this.forecastIcons = response.data.flatMap(
+            (item) => item.descriptions?.map((desc) => desc.icon) || []
           )
         } else {
-          console.warn('Forecast API returned unexpected format:', typeof response?.data)
+          console.warn(
+            'Forecast API returned unexpected format:',
+            typeof response?.data
+          )
         }
       } catch (error) {
         console.error('Error fetching forecast:', error)

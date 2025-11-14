@@ -33,11 +33,7 @@
             <v-spacer />
             <v-tooltip bottom>
               <template #activator="{ props }">
-                <v-btn
-                  icon
-                  v-bind="props"
-                  @click="onUpdateNoteInPlace(note)"
-                >
+                <v-btn icon v-bind="props" @click="onUpdateNoteInPlace(note)">
                   <v-icon color="#fadf73">mdi-content-save</v-icon>
                 </v-btn>
               </template>
@@ -53,11 +49,7 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template #activator="{ props }">
-                <v-btn
-                  icon
-                  v-bind="props"
-                  @click="onDeleteNote(note)"
-                >
+                <v-btn icon v-bind="props" @click="onDeleteNote(note)">
                   <v-icon color="red">mdi-delete</v-icon>
                 </v-btn>
               </template>
