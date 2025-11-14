@@ -57,16 +57,50 @@
     border-color 0.3s ease;
 }
 
-/* Custom theme-aware classes */
-.theme--dark .custom-card {
-  background-color: rgba(42, 52, 65, 0.9) !important;
-  border: 1px solid rgba(64, 169, 255, 0.4);
+/* Custom theme-aware classes - force dark backgrounds in dark theme, override inline styles */
+.v-application.theme--dark .custom-card,
+.v-application.theme--dark .custom-card.bg-white,
+.v-application.theme--dark .custom-card[style*="background"],
+.v-application.theme--dark .custom-card[style*="background-color"],
+.theme--dark .custom-card,
+.theme--dark .custom-card.bg-white,
+.theme--dark .custom-card[style*="background"],
+.theme--dark .custom-card[style*="background-color"] {
+  background-color: rgba(26, 31, 46, 0.95) !important;
+  border: 1px solid rgba(64, 169, 255, 0.4) !important;
 }
 
+.v-application.theme--light .custom-card,
+.v-application.theme--light .custom-card.bg-white,
 .theme--light .custom-card {
   background-color: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(25, 118, 210, 0.3);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(25, 118, 210, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Override Vuetify's color prop in dark theme - override inline styles and bg-white class */
+.v-application.theme--dark .v-card.bg-white,
+.v-application.theme--dark .v-card[class*="bg-white"],
+.v-application.theme--dark .v-card[style*="background-color"],
+.v-application.theme--dark .v-card.bg-white[style*="background-color"],
+.v-application.theme--dark .main-content-card,
+.v-application.theme--dark .main-content-card[style*="background-color"],
+.v-application.theme--dark .main-content-card.bg-white,
+.v-application.theme--dark .custom-card.bg-white {
+  background-color: rgba(26, 31, 46, 0.95) !important;
+}
+
+/* Also override Vuetify's default white background for cards in dark theme */
+.v-application.theme--dark .v-card:not(.blog-post),
+.v-application.theme--dark .v-card.bg-white:not(.blog-post) {
+  background-color: rgba(26, 31, 46, 0.95) !important;
+}
+
+/* Force override bg-white class in dark theme with maximum specificity */
+.v-application.v-theme--dark .v-card.bg-white.custom-card,
+.v-application.v-theme--dark .v-card.bg-white.main-content-card {
+  background-color: rgba(26, 31, 46, 0.95) !important;
+  background: rgba(26, 31, 46, 0.95) !important;
 }
 
 .theme--dark .info-container {
@@ -162,38 +196,40 @@
   color: #212121 !important;
 }
 
-/* Force blog post text colors - blog posts always have light background, so always use dark text */
-/* Override Vuetify's v-theme--dark class which forces white text */
-.blog-post.v-theme--dark .v-card-text,
-.blog-post .v-card-text {
+/* Blog post backgrounds - force dark in dark theme, override inline styles */
+.v-application.theme--dark .blog-post,
+.theme--dark .blog-post,
+.v-application.theme--dark .blog-post[style*="background-color"],
+.theme--dark .blog-post[style*="background-color"] {
+  background-color: rgba(26, 31, 46, 0.95) !important;
+  border: 1px solid rgba(64, 169, 255, 0.4) !important;
+}
+
+.v-application.theme--light .blog-post,
+.theme--light .blog-post {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(25, 118, 210, 0.2) !important;
+}
+
+/* Blog post text colors - theme-aware */
+/* In light theme: dark text on light background */
+.v-application.theme--light .blog-post .v-card-text,
+.theme--light .blog-post .v-card-text {
   color: #212121 !important;
 }
 
-.blog-post.v-theme--dark .v-card-text *,
-.blog-post .v-card-text *,
-.blog-post.v-theme--dark .v-card-text p,
-.blog-post .v-card-text p,
-.blog-post.v-theme--dark .v-card-text div,
-.blog-post .v-card-text div,
-.blog-post.v-theme--dark .v-card-text span,
-.blog-post .v-card-text span,
-.blog-post.v-theme--dark .v-card-text h1,
-.blog-post .v-card-text h1,
-.blog-post.v-theme--dark .v-card-text h2,
-.blog-post .v-card-text h2,
-.blog-post.v-theme--dark .v-card-text h3,
-.blog-post .v-card-text h3,
-.blog-post.v-theme--dark .v-card-text h4,
-.blog-post .v-card-text h4,
-.blog-post.v-theme--dark .v-card-text h5,
-.blog-post .v-card-text h5,
-.blog-post.v-theme--dark .v-card-text h6,
-.blog-post .v-card-text h6 {
+.v-application.theme--light .blog-post .v-card-text *,
+.theme--light .blog-post .v-card-text * {
   color: #212121 !important;
 }
 
-/* But respect dark theme when blog post actually has dark background */
-.v-application.theme--dark .blog-post[style*="rgba(26, 31, 46"] .v-card-text,
-.v-application.theme--dark .blog-post[style*="rgba(42, 52, 65"] .v-card-text {
+/* In dark theme: light text on dark background */
+.v-application.theme--dark .blog-post .v-card-text,
+.theme--dark .blog-post .v-card-text {
+  color: #fff !important;
+}
+
+.v-application.theme--dark .blog-post .v-card-text *,
+.theme--dark .blog-post .v-card-text * {
   color: #fff !important;
 }

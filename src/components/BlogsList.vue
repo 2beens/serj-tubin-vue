@@ -27,11 +27,6 @@
     <v-card
       v-for="post in posts"
       :key="post.id"
-      :color="
-        $vuetify.theme.dark
-          ? 'rgba(26, 31, 46, 0.8)'
-          : 'rgba(255, 255, 255, 0.9)'
-      "
       class="blog-post mb-6 custom-card"
       elevation="0"
     >

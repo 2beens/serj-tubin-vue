@@ -4,9 +4,7 @@
     <v-row v-if="isMobile">
       <v-col cols="12" class="px-4 py-2">
         <v-card
-          :dark="$vuetify.theme.dark"
-          :color="$vuetify.theme.dark ? 'black' : 'white'"
-          class="mb-4 custom-card"
+          :class="['mb-4', 'custom-card', 'main-content-card', $vuetify.theme.dark ? '' : 'bg-white']"
         >
           <v-card-text class="text-center">
             <h2
@@ -42,8 +40,7 @@
 
         <!-- Weather and Location Card -->
         <v-card
-          :color="$vuetify.theme.dark ? 'black' : 'white'"
-          class="mb-4 custom-card"
+          :class="['mb-4', 'custom-card', $vuetify.theme.dark ? '' : 'bg-white']"
         >
           <v-card-text>
             <v-row dense>
@@ -93,8 +90,7 @@
       <!-- Main content takes 6 columns -->
       <v-col cols="6" class="pa-4">
         <v-card
-          :color="$vuetify.theme.dark ? 'black' : 'white'"
-          class="mb-6 custom-card main-content-card"
+          :class="['mb-6', 'custom-card', 'main-content-card', $vuetify.theme.dark ? '' : 'bg-white']"
         >
           <v-card-text class="text-center">
             <h2
