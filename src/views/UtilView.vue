@@ -45,7 +45,7 @@ export default {
     document.getElementById('user-agent-value').innerHTML = navigator.userAgent
 
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/myip')
+      .get(import.meta.env.VITE_API_ENDPOINT + '/myip')
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')

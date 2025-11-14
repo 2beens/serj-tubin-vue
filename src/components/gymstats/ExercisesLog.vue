@@ -438,7 +438,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/gymstats/list/page/${vm.page}/size/${vm.itemsPerPage}`,
           {
             headers: {
@@ -481,7 +481,7 @@ export default {
 
       const vm = this
       axios
-        .put(process.env.VUE_APP_API_ENDPOINT + `/gymstats`, requestBody, {
+        .put(import.meta.env.VITE_API_ENDPOINT + `/gymstats`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -513,7 +513,7 @@ export default {
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_API_ENDPOINT + `/gymstats/${exercise.id}`, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + `/gymstats/${exercise.id}`, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -544,7 +544,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/gymstats/list/page/${page}/size/${vm.itemsPerPage}`,
           {
             headers: {

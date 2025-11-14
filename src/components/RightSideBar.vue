@@ -86,7 +86,7 @@ export default {
       this.isLoading = true
       try {
         const response = await axios.get(
-          `${process.env.VUE_APP_API_ENDPOINT}/quote/random`
+          `${import.meta.env.VITE_API_ENDPOINT}/quote/random`
         )
         if (response?.data) {
           this.quote = response.data

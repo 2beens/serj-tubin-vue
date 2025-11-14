@@ -201,7 +201,7 @@ export default {
     const vm = this
     axios
       .get(
-        process.env.VUE_APP_API_ENDPOINT +
+        import.meta.env.VITE_API_ENDPOINT +
           `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
       )
       .then((response) => {
@@ -237,7 +237,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/blog/page/${page}/size/${vm.maxPostsPerPage}`
         )
         .then((response) => {
@@ -263,7 +263,7 @@ export default {
 
       const vm = this
       axios
-        .patch(process.env.VUE_APP_API_ENDPOINT + '/blog/clap', requestBody, {
+        .patch(import.meta.env.VITE_API_ENDPOINT + '/blog/clap', requestBody, {
           headers: {
             // TODO: cookies are sent with each request, no need to place them in headers
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
@@ -303,7 +303,7 @@ export default {
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_API_ENDPOINT + '/blog/delete/' + id, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + '/blog/delete/' + id, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -368,7 +368,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/new', requestBody, {
+        .post(import.meta.env.VITE_API_ENDPOINT + '/blog/new', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json',
@@ -448,7 +448,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/blog/update', requestBody, {
+        .post(import.meta.env.VITE_API_ENDPOINT + '/blog/update', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json',

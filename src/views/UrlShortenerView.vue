@@ -142,8 +142,8 @@
 import axios from 'axios'
 
 const apiEndpoints = {
-  twoBeens: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_2BEENS,
-  serjt: process.env.VUE_APP_URL_SHORTENER_ENDPOINT_SERJT,
+  twoBeens: import.meta.env.VITE_URL_SHORTENER_ENDPOINT_2BEENS,
+  serjt: import.meta.env.VITE_URL_SHORTENER_ENDPOINT_SERJT,
 }
 
 const statuses = {

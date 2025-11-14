@@ -76,7 +76,7 @@ export default {
 
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/notes', {
+      .get(import.meta.env.VITE_API_ENDPOINT + '/notes', {
         headers: {
           'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
         },
@@ -132,7 +132,7 @@ export default {
 
       const vm = this
       axios
-        .put(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
+        .put(import.meta.env.VITE_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export default {
 
       const vm = this
       axios
-        .delete(process.env.VUE_APP_API_ENDPOINT + `/notes/${id}`, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + `/notes/${id}`, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -231,7 +231,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/notes', requestBody, {
+        .post(import.meta.env.VITE_API_ENDPOINT + '/notes', requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json',

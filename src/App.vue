@@ -182,7 +182,7 @@ export default {
   mounted() {
     this.checkCookieConsent()
     this.checkAuthentication()
-    console.log('Environment:', process.env.VUE_APP_ENV)
+    console.log('Environment:', import.meta.env.VITE_ENV)
   },
 }
 </script>

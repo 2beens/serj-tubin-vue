@@ -53,7 +53,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/gymstats/sets/avgduration?only_prod=true&exclude_testing_data=true`,
           {
             headers: {

@@ -200,7 +200,7 @@ export default {
     refreshExerciseTypes() {
       const vm = this
       axios
-        .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
+        .get(`${import.meta.env.VITE_API_ENDPOINT}/gymstats/types`, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -276,7 +276,7 @@ export default {
 
     getExerciseDistributions(muscleGroup) {
       return axios.get(
-        process.env.VUE_APP_API_ENDPOINT +
+        import.meta.env.VITE_API_ENDPOINT +
           `/gymstats/group/${muscleGroup}/percentages?only_prod=true&exclude_testing_data=true`,
         {
           headers: {
@@ -306,7 +306,7 @@ export default {
 
       const vm = this
       axios
-        .post(`${process.env.VUE_APP_API_ENDPOINT}/gymstats`, requestBody, {
+        .post(`${import.meta.env.VITE_API_ENDPOINT}/gymstats`, requestBody, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
             'Content-Type': 'application/json',

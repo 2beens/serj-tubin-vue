@@ -228,7 +228,7 @@ export default {
       status: 'loading...',
       // message is at the moment returned only if the tracker is stopped with an error/reason
       message: '',
-      authUrl: process.env.VUE_APP_API_ENDPOINT + '/spotify/auth?token=todo',
+      authUrl: import.meta.env.VITE_API_ENDPOINT + '/spotify/auth?token=todo',
       page: 1,
       size: 25,
       // keywords is a string that can be used to search for a track in the table
@@ -267,7 +267,7 @@ export default {
     getTrackerStatus() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/status', {
+        .get(import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/status', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -291,7 +291,7 @@ export default {
     startTracker() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/start', {
+        .get(import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/start', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -317,7 +317,7 @@ export default {
     stopTracker() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/stop', {
+        .get(import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/stop', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -345,7 +345,7 @@ export default {
     runNow() {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/run', {
+        .get(import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/run', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -388,7 +388,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/check/enable',
+          import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/check/enable',
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
@@ -415,7 +415,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT + '/spotify/tracker/check/disable',
+          import.meta.env.VITE_API_ENDPOINT + '/spotify/tracker/check/disable',
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
@@ -447,7 +447,7 @@ export default {
 
       axios
         .get(
-          `${process.env.VUE_APP_API_ENDPOINT}/spotify/page/${this.page}/size/${this.size}?keywords=${keywordsParam}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/spotify/page/${this.page}/size/${this.size}?keywords=${keywordsParam}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),

@@ -58,7 +58,7 @@ export default {
   mounted: function () {
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/version')
+      .get(import.meta.env.VITE_API_ENDPOINT + '/version')
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('get version info: received null response / data')

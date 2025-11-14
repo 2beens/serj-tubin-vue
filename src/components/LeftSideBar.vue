@@ -91,7 +91,7 @@ export default {
     async fetchLocationInfo() {
       try {
         const response = await axios.get(
-          `${process.env.VUE_APP_API_ENDPOINT}/whereami`
+          `${import.meta.env.VITE_API_ENDPOINT}/whereami`
         )
         if (response?.data) {
           const { city, country } = response.data
@@ -105,7 +105,7 @@ export default {
     async fetchWeatherInfo() {
       try {
         const response = await axios.get(
-          `${process.env.VUE_APP_API_ENDPOINT}/weather/current`
+          `${import.meta.env.VITE_API_ENDPOINT}/weather/current`
         )
         if (response?.data) {
           this.weatherInfo = response.data
@@ -120,7 +120,7 @@ export default {
     async fetchForecast() {
       try {
         const response = await axios.get(
-          `${process.env.VUE_APP_API_ENDPOINT}/weather/tomorrow`
+          `${import.meta.env.VITE_API_ENDPOINT}/weather/tomorrow`
         )
         if (response?.data) {
           this.forecastIcons = response.data.flatMap((item) =>

@@ -281,7 +281,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/gymstats/exercise/${exerciseId}/group/${group.id}/history?only_prod=true&exclude_testing_data=true`,
           {
             headers: {
@@ -339,7 +339,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/gymstats/group/${this.selectedMuscleGroup.id}/percentages?only_prod=true&exclude_testing_data=true`,
           {
             headers: {

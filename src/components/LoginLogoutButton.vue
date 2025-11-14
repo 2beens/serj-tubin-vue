@@ -122,7 +122,7 @@ export default {
 
       const vm = this
       axios
-        .post(process.env.VUE_APP_API_ENDPOINT + '/a/login', requestBody, {
+        .post(import.meta.env.VITE_API_ENDPOINT + '/a/login', requestBody, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -152,7 +152,7 @@ export default {
     onLogoutClick: function () {
       const vm = this
       axios
-        .get(process.env.VUE_APP_API_ENDPOINT + '/a/logout', {
+        .get(import.meta.env.VITE_API_ENDPOINT + '/a/logout', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },

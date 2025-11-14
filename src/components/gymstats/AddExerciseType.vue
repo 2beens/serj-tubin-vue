@@ -136,7 +136,7 @@ export default {
       const vm = this
       axios
         .post(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types`,
           requestBody,
           {
             headers: {

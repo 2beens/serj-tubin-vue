@@ -346,7 +346,7 @@ export default {
         console.error(id, 'not a file')
         return
       }
-      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
+      const fileUrl = import.meta.env.VITE_FILE_BOX_ENDPOINT + `/link/${id}`
       navigator.clipboard.writeText(fileUrl)
       this.show(`File link [${fileUrl}] copied!`)
     },
@@ -358,7 +358,7 @@ export default {
         console.error(id, 'not a file')
         return
       }
-      const fileUrl = process.env.VUE_APP_FILE_BOX_ENDPOINT + `/link/${id}`
+      const fileUrl = import.meta.env.VITE_FILE_BOX_ENDPOINT + `/link/${id}`
       // TODO: in order to open private links, i need to store cookie in local storage,
       // and later get it from there, in a page for the selected file
       window.open(fileUrl, 'file', 'noopener')
@@ -373,7 +373,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
+          import.meta.env.VITE_FILE_BOX_ENDPOINT + `/f/update/${fileInfo.id}`,
           requestBody,
           {
             headers: {
@@ -417,7 +417,7 @@ export default {
       }
 
       axios
-        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + path, {
+        .get(import.meta.env.VITE_FILE_BOX_ENDPOINT + path, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
@@ -459,7 +459,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
+          import.meta.env.VITE_FILE_BOX_ENDPOINT + `/f/${folderId}/new`,
           requestBody,
           {
             headers: {
@@ -506,7 +506,7 @@ export default {
       this.uploadingFile = true
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
+          import.meta.env.VITE_FILE_BOX_ENDPOINT + `/f/upload/${folderId}`,
           formData,
           {
             headers: {
@@ -563,7 +563,7 @@ export default {
 
       axios
         .post(
-          process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/del',
+          import.meta.env.VITE_FILE_BOX_ENDPOINT + '/f/del',
           { ids: selectedIds.join(',') },
           {
             headers: {
@@ -605,7 +605,7 @@ export default {
     refreshFilesTree(deselectItems) {
       const vm = this
       axios
-        .get(process.env.VUE_APP_FILE_BOX_ENDPOINT + '/f/root', {
+        .get(import.meta.env.VITE_FILE_BOX_ENDPOINT + '/f/root', {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },

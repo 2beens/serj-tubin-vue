@@ -201,7 +201,7 @@ import {
   exchangeCodeForAccessToken,
 } from '../oauth'
 
-const redirectUri = process.env.VUE_APP_SUMUP_REDIRECT_URI
+const redirectUri = import.meta.env.VITE_SUMUP_REDIRECT_URI
 
 export default {
   name: 'SumUp',
@@ -305,7 +305,7 @@ export default {
       this.setCookie('verifier', verifier, 1)
 
       // TODO: scope is ignored atm
-      const clientId = process.env.VUE_APP_SUMUP_CLIENT_ID
+      const clientId = import.meta.env.VITE_SUMUP_CLIENT_ID
       const scope =
         'payments user.app-settings transactions.history user.profile_readonly'
       const authUrlInfo = buildAuthorizationUrl(

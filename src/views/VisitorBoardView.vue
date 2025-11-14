@@ -76,7 +76,7 @@ export default {
   mounted: function () {
     const vm = this
     axios
-      .get(process.env.VUE_APP_API_ENDPOINT + '/board/messages/last/140')
+      .get(import.meta.env.VITE_API_ENDPOINT + '/board/messages/last/140')
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('received null response / data messages')
@@ -97,7 +97,7 @@ export default {
 
       try {
         const response = await axios.post(
-          `${process.env.VUE_APP_API_ENDPOINT}/board/messages/new`,
+          `${import.meta.env.VITE_API_ENDPOINT}/board/messages/new`,
           {
             author: this.authorInput || 'anonymous',
             message: this.messageInput,
@@ -142,7 +142,7 @@ export default {
       const vm = this
       axios
         .delete(
-          process.env.VUE_APP_API_ENDPOINT + '/board/messages/delete/' + id,
+          import.meta.env.VITE_API_ENDPOINT + '/board/messages/delete/' + id,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),

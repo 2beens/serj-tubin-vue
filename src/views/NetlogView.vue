@@ -222,7 +222,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/netlog/s/${source}/f/${field}/search/${this.filterInput}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {
@@ -272,7 +272,7 @@ export default {
       const vm = this
       axios
         .get(
-          process.env.VUE_APP_API_ENDPOINT +
+          import.meta.env.VITE_API_ENDPOINT +
             `/netlog/s/${source}/f/${field}/page/${vm.visitsPage}/size/${vm.maxVisitsPerPage}`,
           {
             headers: {

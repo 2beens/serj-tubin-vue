@@ -190,7 +190,7 @@ export default {
     refresh() {
       const vm = this
       axios
-        .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
+        .get(`${import.meta.env.VITE_API_ENDPOINT}/gymstats/types`, {
           params: {
             muscleGroup: this.muscleGroup,
             exerciseId: this.exerciseId,
@@ -222,7 +222,7 @@ export default {
     },
 
     getImageUrl(imageId) {
-      return `${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`
+      return `${import.meta.env.VITE_API_ENDPOINT}/gymstats/image/${imageId}`
     },
 
     uploadImage() {
@@ -232,7 +232,7 @@ export default {
       const vm = this
       axios
         .post(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.muscleGroup}/image`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.muscleGroup}/image`,
           formData,
           {
             headers: {
@@ -262,7 +262,7 @@ export default {
       const vm = this
       axios
         .delete(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/image/${imageId}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/image/${imageId}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
@@ -291,7 +291,7 @@ export default {
       const vm = this
       axios
         .put(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types`,
           requestBody,
           {
             headers: {
@@ -319,7 +319,7 @@ export default {
       const vm = this
       axios
         .delete(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
+          `${import.meta.env.VITE_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
