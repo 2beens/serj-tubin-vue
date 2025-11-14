@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     loginOnEnter: function (e) {
-      if (e.keyCode === 13) {
+      if (e.key === 'Enter') {
         this.onLoginClick()
       }
     },

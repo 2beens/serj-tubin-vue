@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     async sendMessage(event) {
-      if (event.keyCode !== 13 || !this.messageInput) {
+      if (event.key !== 'Enter' || !this.messageInput) {
         return
       }
 
