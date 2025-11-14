@@ -32,11 +32,10 @@
           <v-card-actions>
             <v-spacer />
             <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
+              <template #activator="{ props }">
                 <v-btn
                   icon
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
                   @click="onUpdateNoteInPlace(note)"
                 >
                   <v-icon color="#fadf73">mdi-content-save</v-icon>
