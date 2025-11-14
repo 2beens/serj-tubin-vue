@@ -603,12 +603,18 @@ git commit -m "refactor: update Vuetify activator slots to v3 syntax
 
 **Files to Modify:**
 - `src/App.vue` (uses `$vuetify.breakpoint.smAndDown`)
+- `src/views/HomeView.vue`
+- `src/components/RightSideBar.vue`
+- `src/components/BlogsList.vue`
+- `src/components/gymstats/AddExercise.vue`
+- `src/components/gymstats/ExercisesLog.vue`
 
 **Changes:**
-1. Check if `smAndDown` still works (it should in Vuetify 3)
-2. If not, replace with `display.smAndDown` or use composable
+1. Replace `$vuetify.breakpoint` with `$vuetify.display`
+2. In templates: Use `$vuetify.display.smAndDown` (Vuetify 3 auto-unwraps refs)
+3. In script/computed: Use `$vuetify.display.smAndDown.value` (access ref value)
 
-**Note**: Vuetify 3 maintains similar breakpoint API, but verify usage.
+**Note**: Vuetify 3 changed breakpoint API from `breakpoint` to `display`, and it returns refs.
 
 **Search Pattern:**
 ```bash
@@ -617,14 +623,18 @@ grep -r "\$vuetify.breakpoint" src/ --include="*.vue"
 
 **Verification:**
 ```bash
-# Check breakpoint usage
-grep -r "\$vuetify.breakpoint" src/ --include="*.vue"
+# Verify all breakpoint references updated
+grep -r "\$vuetify.breakpoint" src/ --include="*.vue" || echo "✓ All updated"
+grep -r "\$vuetify.display" src/ --include="*.vue"
 ```
 
-**Commit (if changes needed):**
+**Commit:**
 ```bash
 git add -A
-git commit -m "refactor: update Vuetify breakpoint API for v3"
+git commit -m "refactor: update Vuetify breakpoint API for v3
+
+- Replace \$vuetify.breakpoint with \$vuetify.display
+- Update all breakpoint references across components"
 ```
 
 ---
@@ -633,27 +643,23 @@ git commit -m "refactor: update Vuetify breakpoint API for v3"
 
 **Objective**: Ensure vue-chartjs Bar component is properly registered
 
-**Files to Modify:**
-- `src/plugins/vuetify.js` (remove Bar registration if present)
-- `src/main.js` (add Bar registration if needed)
+**Files to Check:**
+- `src/components/spotify/TrackerChart.vue`
+- `src/components/gymstats/ExerciseStats.vue`
 
-**Changes:**
-1. Check if Bar needs to be registered globally
-2. If yes, add to main.js: `app.component('Bar', Bar)`
-
-**Note**: vue-chartjs v5 should work with Vue 3, but may need component registration.
+**Result:**
+- Bar component is imported directly in components that use it
+- No global registration needed
+- vue-chartjs v5 works with Vue 3 without additional setup
 
 **Verification:**
 ```bash
 # Check if Bar is used anywhere
-grep -r "<Bar" src/ --include="*.vue"
+grep -r "<Bar\|import.*Bar" src/ --include="*.vue"
+# Result: Components import Bar directly - no changes needed
 ```
 
-**Commit (if changes needed):**
-```bash
-git add src/main.js
-git commit -m "fix: register vue-chartjs Bar component for Vue 3"
-```
+**Status**: ✅ No changes required - components import Bar directly
 
 ---
 
@@ -663,6 +669,8 @@ git commit -m "fix: register vue-chartjs Bar component for Vue 3"
 
 **Command:**
 ```bash
+yarn dev
+# or
 yarn serve
 ```
 
@@ -672,12 +680,17 @@ yarn serve
 - Document any errors found
 
 **Verification Checklist:**
-- [ ] Application compiles without build errors
-- [ ] Application starts on http://localhost:8080
-- [ ] No critical console errors (warnings are OK)
-- [ ] Home page renders (even if broken)
+- [x] Application compiles without build errors ✅
+- [x] Application starts on http://localhost:8080 ✅
+- [x] Home page renders ✅
+- [ ] No critical console errors (some warnings remain but app works)
 
-**Note**: If application doesn't start, document errors and continue to fix in next steps.
+**Issues Found and Fixed:**
+1. Router catch-all route: Fixed `path: '*'` → `path: '/:pathMatch(.*)*'` for Vue Router 4
+2. Breakpoint API: Fixed `$vuetify.breakpoint` → `$vuetify.display`
+3. Cookie consent: Created custom component (vue-cookieconsent-component doesn't support Vue 3)
+
+**Note**: Application is now running successfully. Some warnings remain (e.g., `$root.loggedIn` access) but don't block functionality.
 
 **No commit needed** - this is a verification step.
 
@@ -722,31 +735,36 @@ git commit -m "fix: update SomeComponent for Vuetify 3
 
 **Files to Modify:**
 - `src/App.vue` (uses CookieConsent component)
+- Created: `src/components/CookieConsent.vue`
 
-**Options:**
-1. Check if vue-cookieconsent-component has Vue 3 support
-2. If not, find alternative or create custom component
-3. Update component usage
+**Solution:**
+- `vue-cookieconsent-component` does not support Vue 3
+- Created custom `CookieConsent.vue` component that:
+  - Maintains same slot structure (`#message` and `#button`)
+  - Sets cookie when accepted
+  - Reloads page to apply consent
+  - Compatible with Vue 3
 
-**Search:**
-```bash
-npm view vue-cookieconsent-component versions --json
-# Check latest version supports Vue 3
-```
-
-**If replacement needed:**
-- Consider: `vue-cookieconsent` or custom implementation
+**Changes:**
+1. Created `src/components/CookieConsent.vue` with Vue 3 compatible code
+2. Updated `src/App.vue` import: `vue-cookieconsent-component` → `@/components/CookieConsent.vue`
+3. Removed `vue-cookieconsent-component` from package.json
 
 **Verification:**
 ```bash
 # Test cookie consent appears and works
 # Check browser console for errors
+# Verify cookie is set when accepted
 ```
 
 **Commit:**
 ```bash
-git add -A
-git commit -m "fix: update cookie consent for Vue 3 compatibility"
+git add src/components/CookieConsent.vue src/App.vue package.json
+git commit -m "fix: replace vue-cookieconsent-component with custom Vue 3 component
+
+- Create custom CookieConsent component
+- Remove vue-cookieconsent-component (Vue 2 only)
+- Maintain same functionality and slot structure"
 ```
 
 ---
@@ -974,11 +992,11 @@ Use this to track which steps are complete:
 - [x] Step 9: Update button variants ✅ COMPLETED
 - [x] Step 10: Update activator slots ✅ COMPLETED
 - [x] Vite Migration ✅ COMPLETED
-- [ ] Step 11: Update breakpoints
-- [ ] Step 12: Fix vue-chartjs
-- [ ] Step 13: Test startup
-- [ ] Step 14: Fix Vuetify issues
-- [ ] Step 15: Fix cookie consent
+- [x] Step 11: Update breakpoints ✅ COMPLETED (Updated $vuetify.breakpoint → $vuetify.display)
+- [x] Step 12: Fix vue-chartjs ✅ COMPLETED (No changes needed - imported directly in components)
+- [x] Step 13: Test startup ✅ COMPLETED (App runs successfully on http://localhost:8080)
+- [x] Step 14: Fix Vuetify issues ✅ COMPLETED (Fixed router catch-all route, breakpoint API)
+- [x] Step 15: Fix cookie consent ✅ COMPLETED (Created custom CookieConsent component)
 - [ ] Step 16: Run linter
 - [ ] Step 17: Manual testing
 - [ ] Step 18: Fix remaining issues
