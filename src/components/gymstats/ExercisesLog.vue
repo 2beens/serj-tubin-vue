@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row v-if="$vuetify.breakpoint.mdAndUp">
+    <v-row v-if="$vuetify.display.mdAndUp">
       <v-col cols="2">
         <v-text-field
           dark
@@ -29,7 +29,7 @@
           v-if="stats && stats.length > 0"
           v-model="page"
           :length="paginationLen"
-          :total-visible="$vuetify.breakpoint.mdAndUp ? '8' : '3'"
+          :total-visible="$vuetify.display.mdAndUp ? '8' : '3'"
           @input="onPageChange"
         />
       </v-col>
@@ -43,7 +43,7 @@
 
     <!-- v-else - next three rows for small devices -->
     <!------------------------------------------------->
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
+    <v-row v-if="$vuetify.display.smAndDown">
       <v-col cols="7" style="padding: 0%">
         <v-text-field
           dark
@@ -67,7 +67,7 @@
         ></v-checkbox>
       </v-col>
     </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
+    <v-row v-if="$vuetify.display.smAndDown">
       <v-col>
         <v-pagination
           v-if="stats && stats.length > 0"
@@ -79,7 +79,7 @@
         />
       </v-col>
     </v-row>
-    <v-row v-if="$vuetify.breakpoint.smAndDown">
+    <v-row v-if="$vuetify.display.smAndDown">
       <v-col>
         <AddExercise
           @exercise-added="getExercises"
@@ -89,7 +89,7 @@
     </v-row>
 
     <!-- Time elapsed since last exercise - Mobile only -->
-    <v-row v-if="$vuetify.breakpoint.smAndDown && lastExerciseTime">
+    <v-row v-if="$vuetify.display.smAndDown && lastExerciseTime">
       <v-col>
         <v-card
           dark

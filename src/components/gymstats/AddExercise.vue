@@ -6,7 +6,7 @@
           color="primary"
           dark
           v-bind="props"
-          v-if="$vuetify.breakpoint.mdAndUp"
+          v-if="$vuetify.display.mdAndUp"
         >
           Add Exercise ➕
         </v-btn>
@@ -64,7 +64,7 @@
               <v-col
                 cols="12"
                 sm="6"
-                v-if="$vuetify.breakpoint.mdAndUp"
+                v-if="$vuetify.display.mdAndUp"
                 class="ma-0 pa-0"
               >
                 <v-text-field
@@ -73,7 +73,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" sm="6" v-if="$vuetify.breakpoint.mdAndUp">
+              <v-col cols="12" sm="6" v-if="$vuetify.display.mdAndUp">
                 <v-text-field
                   v-model="exercise.metadataJson"
                   label="Metadata"
@@ -174,7 +174,7 @@ export default {
 
     effectiveMetadataJson() {
       // On mobile, always use production metadata regardless of input
-      if (this.$vuetify.breakpoint.smAndDown) {
+      if (this.$vuetify.display.smAndDown) {
         return '{"env": "prod", "testing": "false"}'
       }
       return this.exercise.metadataJson

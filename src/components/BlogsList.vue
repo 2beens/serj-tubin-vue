@@ -99,7 +99,7 @@
       v-if="blogPageLength > 1"
       v-model="blogPage"
       :length="blogPageLength"
-      :total-visible="$vuetify.breakpoint.smAndDown ? 5 : 7"
+      :total-visible="$vuetify.display.smAndDown ? 5 : 7"
       color="blue lighten-1"
       class="mt-6 mb-4"
       @input="onBlogPageChange"

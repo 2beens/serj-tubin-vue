@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <!-- Desktop Layout -->
-      <div v-if="!$vuetify.breakpoint.smAndDown" class="info-container">
+      <div v-if="!$vuetify.display.smAndDown" class="info-container">
         <v-fade-transition>
           <div class="info-section" v-if="!isLoading && !error">
             <div class="quote-header">

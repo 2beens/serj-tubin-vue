@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
-      v-if="$vuetify.breakpoint.smAndDown"
+      v-if="$vuetify.display.smAndDown"
       id="main-menu-bar-sm"
       app
       :color="$vuetify.theme.dark ? 'black' : 'white'"
@@ -19,7 +19,7 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      v-if="$vuetify.breakpoint.smAndDown"
+      v-if="$vuetify.display.smAndDown"
       :color="$vuetify.theme.dark ? 'black' : 'white'"
     >
       <v-btn icon @click="drawer = false">

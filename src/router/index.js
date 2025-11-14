@@ -79,7 +79,7 @@ const routes = [
     },
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     component: () =>
       import(/* webpackChunkName: '404' */ '../components/404.vue'),
   },
