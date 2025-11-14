@@ -161,3 +161,39 @@
 .theme--light .text-body-2 {
   color: #212121 !important;
 }
+
+/* Force blog post text colors - blog posts always have light background, so always use dark text */
+/* Override Vuetify's v-theme--dark class which forces white text */
+.blog-post.v-theme--dark .v-card-text,
+.blog-post .v-card-text {
+  color: #212121 !important;
+}
+
+.blog-post.v-theme--dark .v-card-text *,
+.blog-post .v-card-text *,
+.blog-post.v-theme--dark .v-card-text p,
+.blog-post .v-card-text p,
+.blog-post.v-theme--dark .v-card-text div,
+.blog-post .v-card-text div,
+.blog-post.v-theme--dark .v-card-text span,
+.blog-post .v-card-text span,
+.blog-post.v-theme--dark .v-card-text h1,
+.blog-post .v-card-text h1,
+.blog-post.v-theme--dark .v-card-text h2,
+.blog-post .v-card-text h2,
+.blog-post.v-theme--dark .v-card-text h3,
+.blog-post .v-card-text h3,
+.blog-post.v-theme--dark .v-card-text h4,
+.blog-post .v-card-text h4,
+.blog-post.v-theme--dark .v-card-text h5,
+.blog-post .v-card-text h5,
+.blog-post.v-theme--dark .v-card-text h6,
+.blog-post .v-card-text h6 {
+  color: #212121 !important;
+}
+
+/* But respect dark theme when blog post actually has dark background */
+.v-application.theme--dark .blog-post[style*="rgba(26, 31, 46"] .v-card-text,
+.v-application.theme--dark .blog-post[style*="rgba(42, 52, 65"] .v-card-text {
+  color: #fff !important;
+}

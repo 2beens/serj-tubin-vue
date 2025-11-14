@@ -23,7 +23,7 @@
               <v-img
                 id="my-image"
                 alt="serj-tubin"
-                src="@/assets/ja-2022-dec.jpg"
+                :src="myImageSrc"
                 class="rounded-circle"
               />
             </v-avatar>
@@ -42,7 +42,6 @@
 
         <!-- Weather and Location Card -->
         <v-card
-          :dark="$vuetify.theme.dark"
           :color="$vuetify.theme.dark ? 'black' : 'white'"
           class="mb-4 custom-card"
         >
@@ -94,9 +93,8 @@
       <!-- Main content takes 6 columns -->
       <v-col cols="6" class="pa-4">
         <v-card
-          :dark="$vuetify.theme.dark"
           :color="$vuetify.theme.dark ? 'black' : 'white'"
-          class="mb-6 custom-card"
+          class="mb-6 custom-card main-content-card"
         >
           <v-card-text class="text-center">
             <h2
@@ -113,7 +111,7 @@
               <v-img
                 id="my-image"
                 alt="serj-tubin"
-                src="@/assets/ja-2022-dec.jpg"
+                :src="myImageSrc"
                 class="rounded-circle"
               />
             </v-avatar>
@@ -146,6 +144,7 @@
 import LeftSideBar from '@/components/LeftSideBar.vue'
 import RightSideBar from '@/components/RightSideBar.vue'
 import BlogsList from '@/components/BlogsList.vue'
+import myImage from '@/assets/ja-2022-dec.jpg'
 
 export default {
   name: 'HomeView',
@@ -154,6 +153,12 @@ export default {
     LeftSideBar,
     RightSideBar,
     BlogsList,
+  },
+
+  data() {
+    return {
+      myImageSrc: myImage,
+    }
   },
 
   computed: {
@@ -179,12 +184,20 @@ export default {
 <style scoped>
 /* Mobile-specific styles */
 @media (max-width: 600px) {
-  .v-card {
+  .v-card.custom-card {
     border: none;
     border-radius: 12px;
+    margin: 0 8px 16px;
+  }
+  
+  .theme--dark .v-card.custom-card {
     background: rgba(42, 52, 65, 0.9) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
-    margin: 0 8px 16px;
+  }
+  
+  .theme--light .v-card.custom-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   }
 
   /* Only apply hover effect to interactive cards */
@@ -267,5 +280,19 @@ export default {
     font-size: 1.8rem !important;
     margin-top: 2rem;
   }
+}
+
+/* Override Vuetify's dark theme classes for light theme */
+.theme--light .main-content-card.v-theme--dark {
+  color: #212121 !important;
+}
+
+.theme--light .main-content-card.v-theme--dark .v-card-text {
+  color: #212121 !important;
+}
+
+.theme--light .main-content-card.v-theme--dark h2,
+.theme--light .main-content-card.v-theme--dark h3 {
+  color: inherit !important;
 }
 </style>

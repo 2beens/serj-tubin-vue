@@ -1,12 +1,12 @@
 <template>
   <v-footer :dark="$vuetify.theme.dark" padless fixed>
     <v-card class="footer-card" flat tile :dark="$vuetify.theme.dark">
-      <v-card-title class="blue darken-4 py-4 px-4 footer-card-title">
+      <v-card-title class="blue darken-4 py-3 px-4 footer-card-title">
         <div class="footer-left">
           <strong class="subheading">Serj, Berlin 2024</strong>
         </div>
 
-        <div id="version-info" class="text-body-2 footer-center">
+        <div id="version-info" class="footer-center">
           {{ new Date().getFullYear() }} — {{ versionInfo }}
         </div>
 
@@ -133,8 +133,8 @@ export default {
 .footer-card-title {
   width: 100% !important;
   background-color: rgb(13, 71, 161) !important; /* blue darken-4 */
-  padding: 16px !important;
-  min-height: 68px !important;
+  padding: 12px 16px !important;
+  min-height: 56px !important;
   display: grid !important;
   grid-template-columns: 1fr auto 1fr !important;
   align-items: center !important;
@@ -149,6 +149,8 @@ export default {
 .footer-center {
   justify-self: center;
   text-align: center;
+  font-size: 1.125rem !important; /* 18px - larger than body-1 */
+  font-weight: 500 !important;
 }
 
 .footer-right {

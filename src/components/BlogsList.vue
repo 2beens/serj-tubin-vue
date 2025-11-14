@@ -27,7 +27,6 @@
     <v-card
       v-for="post in posts"
       :key="post.id"
-      :dark="$vuetify.theme.dark"
       :color="
         $vuetify.theme.dark
           ? 'rgba(26, 31, 46, 0.8)'
@@ -587,6 +586,48 @@ export default {
   padding: 0.5rem 0;
 }
 
+/* Force theme-aware colors for all blog content elements */
+.theme--dark .blog-content ::v-deep(p),
+.theme--dark .blog-content ::v-deep(div),
+.theme--dark .blog-content ::v-deep(span),
+.theme--dark .blog-content ::v-deep(li),
+.theme--dark .blog-content ::v-deep(ul),
+.theme--dark .blog-content ::v-deep(ol) {
+  color: #fff !important;
+}
+
+.theme--light .blog-content ::v-deep(p),
+.theme--light .blog-content ::v-deep(div),
+.theme--light .blog-content ::v-deep(span),
+.theme--light .blog-content ::v-deep(li),
+.theme--light .blog-content ::v-deep(ul),
+.theme--light .blog-content ::v-deep(ol) {
+  color: #212121 !important;
+}
+
+/* Theme-aware v-card-text colors - override Vuetify's theme classes with maximum specificity */
+.theme--light .blog-post.v-theme--dark .v-card-text,
+.theme--light .blog-post .v-card-text {
+  color: #212121 !important;
+}
+
+.theme--dark .blog-post.v-theme--dark .v-card-text,
+.theme--dark .blog-post .v-card-text {
+  color: #fff !important;
+}
+
+/* Override Vuetify's dark theme text color for light theme - use deep selectors */
+.theme--light .blog-post.v-theme--dark ::v-deep(.v-card-text),
+.theme--light .blog-post.v-theme--dark ::v-deep(.v-card-text *) {
+  color: #212121 !important;
+}
+
+.theme--light .blog-post.v-theme--dark ::v-deep(p),
+.theme--light .blog-post.v-theme--dark ::v-deep(div),
+.theme--light .blog-post.v-theme--dark ::v-deep(span) {
+  color: #212121 !important;
+}
+
 /* Dark theme blog content */
 .theme--dark .blog-content ::v-deep(*) {
   color: #fff;
@@ -603,14 +644,26 @@ export default {
   margin-bottom: 0.75rem;
 }
 
-.blog-content ::v-deep(a) {
-  color: #007acc;
+/* Theme-aware links */
+.theme--dark .blog-content ::v-deep(a) {
+  color: #40a9ff !important;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
-.blog-content ::v-deep(a:hover) {
-  color: #40a9ff;
+.theme--dark .blog-content ::v-deep(a:hover) {
+  color: #69c0ff !important;
+  text-decoration: underline;
+}
+
+.theme--light .blog-content ::v-deep(a) {
+  color: #1976d2 !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.theme--light .blog-content ::v-deep(a:hover) {
+  color: #1565c0 !important;
   text-decoration: underline;
 }
 
