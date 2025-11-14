@@ -35,7 +35,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn color="error" text @click="onCancel">Cancel</v-btn>
+        <v-btn color="error" variant="text" @click="onCancel">Cancel</v-btn>
         <v-btn
           color="success"
           :disabled="confirmDisabled"

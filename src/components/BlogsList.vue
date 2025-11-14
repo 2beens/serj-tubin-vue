@@ -165,7 +165,7 @@
     >
       {{ snackbarText }}
       <template v-slot:action="{ attrs }">
-        <v-btn text v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn variant="text" v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
       </template>
     </v-snackbar>
   </div>

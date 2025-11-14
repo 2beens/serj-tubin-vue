@@ -119,7 +119,7 @@
       {{ snackText }}
 
       <template #action="{ attrs }">
-        <v-btn v-bind="attrs" color="red" text @click="snack = false">
+        <v-btn v-bind="attrs" color="red" variant="text" @click="snack = false">
           Close
         </v-btn>
         <v-btn

@@ -34,7 +34,7 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          <v-btn color="pink" variant="text" v-bind="attrs" @click="showSnackbar = false">
             Close
           </v-btn>
         </template>

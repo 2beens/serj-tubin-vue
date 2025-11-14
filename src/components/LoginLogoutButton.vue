@@ -58,7 +58,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="blue darken-1" text @click="showLoginDialog = false">
+          <v-btn color="blue darken-1" variant="text" @click="showLoginDialog = false">
             Abort
           </v-btn>
           <v-btn
@@ -78,7 +78,7 @@
         {{ snackbarText }}
 
         <template #action="{ attrs }">
-          <v-btn color="pink" text v-bind="attrs" @click="showSnackbar = false">
+          <v-btn color="pink" variant="text" v-bind="attrs" @click="showSnackbar = false">
             Close
           </v-btn>
         </template>
