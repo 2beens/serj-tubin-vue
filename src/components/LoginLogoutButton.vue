@@ -12,14 +12,13 @@
     </v-btn>
 
     <v-dialog v-else v-model="showLoginDialog" persistent max-width="400px">
-      <template #activator="{ on, attrs }">
+      <template #activator="{ props }">
         <v-btn
           id="login-button"
           class="ma-1"
           icon
-          v-bind="attrs"
+          v-bind="props"
           color="blue lighten-1"
-          v-on="on"
         >
           <v-icon>mdi-login</v-icon>
         </v-btn>

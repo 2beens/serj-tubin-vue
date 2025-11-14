@@ -1,17 +1,16 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="showDialog" persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
+      <template v-slot:activator="{ props }">
         <v-btn
           color="primary"
           dark
-          v-bind="attrs"
-          v-on="on"
+          v-bind="props"
           v-if="$vuetify.breakpoint.mdAndUp"
         >
           Add Exercise ➕
         </v-btn>
-        <v-btn color="primary" dark v-bind="attrs" v-on="on" v-else>
+        <v-btn color="primary" dark v-bind="props" v-else>
           Add ➕
         </v-btn>
       </template>

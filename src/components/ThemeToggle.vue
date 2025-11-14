@@ -1,11 +1,10 @@
 <template>
   <v-tooltip bottom>
-    <template v-slot:activator="{ on, attrs }">
+    <template v-slot:activator="{ props }">
       <v-btn
         icon
         @click="toggleTheme"
-        v-bind="attrs"
-        v-on="on"
+        v-bind="props"
         :color="isDark ? 'yellow darken-2' : 'blue-grey darken-2'"
         class="theme-toggle-btn"
       >

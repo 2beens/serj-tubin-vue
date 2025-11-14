@@ -45,19 +45,18 @@
               <span>Quick Save</span>
             </v-tooltip>
             <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on" @click="onEditNote(note)">
+              <template #activator="{ props }">
+                <v-btn icon v-bind="props" @click="onEditNote(note)">
                   <v-icon color="#2e73d1">mdi-pencil</v-icon>
                 </v-btn>
               </template>
               <span>Edit</span>
             </v-tooltip>
             <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
+              <template #activator="{ props }">
                 <v-btn
                   icon
-                  v-bind="attrs"
-                  v-on="on"
+                  v-bind="props"
                   @click="onDeleteNote(note)"
                 >
                   <v-icon color="red">mdi-delete</v-icon>

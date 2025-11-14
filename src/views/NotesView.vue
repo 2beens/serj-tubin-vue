@@ -8,8 +8,8 @@
       max-width="800px"
       @keydown.esc="onAbortEditNote"
     >
-      <template #activator="{ on, attrs }">
-        <v-btn color="blue lighten-1" large icon v-bind="attrs" v-on="on">
+      <template #activator="{ props }">
+        <v-btn color="blue lighten-1" large icon v-bind="props">
           <v-icon dark>mdi-plus</v-icon>
         </v-btn>
       </template>

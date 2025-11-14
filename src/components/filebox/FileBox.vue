@@ -154,14 +154,13 @@
               max-width="800px"
               @keydown.esc="showDialog = false"
             >
-              <template #activator="{ on, attrs }">
+              <template #activator="{ props }">
                 <v-btn
                   color="yellow"
                   large
                   icon
-                  v-bind="attrs"
+                  v-bind="props"
                   :disabled="!oneFileSelected"
-                  v-on="on"
                 >
                   <v-icon dark>mdi-wrench</v-icon>
                 </v-btn>
