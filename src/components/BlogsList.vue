@@ -165,7 +165,9 @@
     >
       {{ snackbarText }}
       <template v-slot:action="{ attrs }">
-        <v-btn variant="text" v-bind="attrs" @click="showSnackbar = false">Close</v-btn>
+        <v-btn variant="text" v-bind="attrs" @click="showSnackbar = false">
+          Close
+        </v-btn>
       </template>
     </v-snackbar>
   </div>
@@ -199,22 +201,30 @@ export default {
     window.addEventListener('resize', this.handleResize)
 
     const vm = this
+    const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+    if (!apiEndpoint) {
+      console.warn('VITE_API_ENDPOINT not configured, cannot fetch blogs')
+      vm.posts = []
+      vm.blogPageLength = 0
+      return
+    }
     axios
-      .get(
-        import.meta.env.VITE_API_ENDPOINT +
-          `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`
-      )
+      .get(apiEndpoint + `/blog/page/${vm.blogPage}/size/${vm.maxPostsPerPage}`)
       .then((response) => {
         if (!response || !response.data) {
           console.error('all blogs - received null response / data')
           vm.posts = []
           return
         }
-        vm.posts = response.data.posts
-        vm.blogPageLength = Math.ceil(response.data.total / vm.maxPostsPerPage)
+        vm.posts = response.data.posts || []
+        vm.blogPageLength = Math.ceil(
+          (response.data.total || 0) / vm.maxPostsPerPage
+        )
       })
       .catch((error) => {
-        console.log(error)
+        console.error('Error fetching blogs:', error)
+        vm.posts = []
+        vm.blogPageLength = 0
       })
   },
 
@@ -235,25 +245,27 @@ export default {
     onBlogPageChange(page) {
       this.blogPage = page
       const vm = this
+      const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+      if (!apiEndpoint) {
+        console.warn('VITE_API_ENDPOINT not configured, cannot fetch blogs')
+        return
+      }
       axios
-        .get(
-          import.meta.env.VITE_API_ENDPOINT +
-            `/blog/page/${page}/size/${vm.maxPostsPerPage}`
-        )
+        .get(apiEndpoint + `/blog/page/${page}/size/${vm.maxPostsPerPage}`)
         .then((response) => {
           if (response === null || response.data === null) {
             console.error('all blogs - received null response / data')
             return
           }
-          vm.posts = response.data.posts
+          vm.posts = response.data.posts || []
           vm.blogPageLength = Math.ceil(
-            response.data.total / vm.maxPostsPerPage
+            (response.data.total || 0) / vm.maxPostsPerPage
           )
           // Scroll to top of blog list when page changes
           window.scrollTo({ top: 0, behavior: 'smooth' })
         })
         .catch((error) => {
-          console.log(error)
+          console.error('Error fetching blogs:', error)
         })
     },
     clap: function (post) {
