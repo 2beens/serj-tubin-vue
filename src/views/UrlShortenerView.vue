@@ -57,7 +57,7 @@
           >
             <template #[`item.url`]="props">
               <v-edit-dialog
-                :return-value.sync="props.item.url"
+                v-model:return-value="props.item.url"
                 @save="save"
                 @cancel="cancel"
                 @open="open"

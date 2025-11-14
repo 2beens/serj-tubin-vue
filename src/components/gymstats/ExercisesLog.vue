@@ -129,7 +129,7 @@
           <!-- EXERCISE ID -->
           <template #[`item.exerciseId`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.exerciseId"
+              v-model:return-value="item.exerciseId"
               @save="saveExercise(item)"
             >
               {{ item.exerciseId }}
@@ -149,7 +149,7 @@
           <!-- MUSCLE GROUP -->
           <template #[`item.muscleGroup`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.muscleGroup"
+              v-model:return-value="item.muscleGroup"
               @save="saveExercise(item)"
             >
               <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
@@ -167,7 +167,7 @@
           <!-- KILOS -->
           <template #[`item.kilos`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.kilos"
+              v-model:return-value="item.kilos"
               @save="saveExercise(item)"
             >
               <v-chip :color="getKilosColor(item.kilos)" dark>
@@ -185,7 +185,7 @@
           <!-- REPS -->
           <template #[`item.reps`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.reps"
+              v-model:return-value="item.reps"
               @save="saveExercise(item)"
             >
               {{ item.reps }}
@@ -201,7 +201,7 @@
           <!-- CREATED AT -->
           <template #[`item.createdAt`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.createdAt"
+              v-model:return-value="item.createdAt"
               @save="saveExercise(item)"
             >
               {{ item.createdAt }}
@@ -217,7 +217,7 @@
           <!-- METADATA -->
           <template #[`item.metadataJson`]="{ item }">
             <v-edit-dialog
-              :return-value.sync="item.metadataJson"
+              v-model:return-value="item.metadataJson"
               @save="saveExercise(item)"
             >
               {{ item.metadataJson }}

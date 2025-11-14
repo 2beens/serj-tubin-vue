@@ -190,7 +190,7 @@
       </v-sheet>
       <v-card-text>
         <v-treeview
-          :active.sync="selectedItems"
+          v-model:active="selectedItems"
           :items="items"
           activatable
           multiple-active
