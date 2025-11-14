@@ -57,17 +57,30 @@ export default {
   },
   mounted: function () {
     const vm = this
+    const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+    if (!apiEndpoint) {
+      vm.versionInfo = 'dev'
+      return
+    }
     axios
-      .get(import.meta.env.VITE_API_ENDPOINT + '/version')
+      .get(apiEndpoint + '/version')
       .then((response) => {
         if (response === null || response.data === null) {
           console.error('get version info: received null response / data')
+          vm.versionInfo = 'unknown'
           return
         }
-        vm.versionInfo = response.data.trim()
+        // Check if response.data is a string (not HTML)
+        if (typeof response.data === 'string' && !response.data.includes('<!DOCTYPE')) {
+          vm.versionInfo = response.data.trim()
+        } else {
+          console.warn('Version endpoint returned unexpected format:', typeof response.data)
+          vm.versionInfo = 'dev'
+        }
       })
       .catch((error) => {
-        console.log(error)
+        console.log('Error fetching version:', error)
+        vm.versionInfo = 'dev'
       })
   },
   methods: {

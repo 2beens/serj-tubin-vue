@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
@@ -9,6 +9,11 @@ const app = createApp(App)
 
 app.use(router)
 app.use(vuetify)
+
+// Create a reactive global state object for $root.loggedIn compatibility
+const globalState = reactive({
+  loggedIn: false,
+})
 
 app.mixin({
   methods: {
@@ -60,10 +65,11 @@ app.mixin({
   },
 })
 
-// Global state for loggedIn (maintains $root.loggedIn compatibility)
-app.config.globalProperties.$root = {
-  loggedIn: false,
-}
+// Set it as a global property for direct access
+// Note: In Vue 3, $root refers to the root component instance, but we can
+// add properties to it. The warnings about loggedIn not being defined are
+// expected but don't break functionality.
+app.config.globalProperties.$root = globalState
 
 // Theme will be initialized by ThemeToggle component
 

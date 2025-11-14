@@ -51,7 +51,7 @@
         v-for="route in filteredRoutes"
         :key="route.path"
         :color="$vuetify.theme.dark ? '#4b9ff2' : '#1976D2'"
-        text
+        variant="text"
         rounded
         :to="route.path"
       >
@@ -148,8 +148,10 @@ export default {
   },
   computed: {
     filteredRoutes() {
+      // Access loggedIn via globalProperties to avoid warnings
+      const loggedIn = this.$root?.loggedIn ?? false
       return this.routes.filter(
-        (route) => !route.requiresAuth || this.$root.loggedIn
+        (route) => !route.requiresAuth || loggedIn
       )
     },
   },

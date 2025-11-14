@@ -13,6 +13,7 @@
 - [ ] Git status is clean
 
 **Verification Command:**
+
 ```bash
 git status
 git branch
@@ -25,9 +26,11 @@ git branch
 **Objective**: Update all Vue 3 related dependencies in package.json
 
 **Files to Modify:**
+
 - `package.json`
 
 **Changes:**
+
 1. Update `vue`: `^2.7.14` → `^3.4.21`
 2. Update `vue-router`: `^3.6.5` → `^4.2.5`
 3. Update `vuetify`: `^2.6.15` → `^3.5.13`
@@ -36,6 +39,7 @@ git branch
 6. Keep `vue-cookieconsent-component` at `^1.2.0` (check compatibility later)
 
 **Expected Result:**
+
 ```json
 "dependencies": {
   "vue": "^3.4.21",
@@ -50,6 +54,7 @@ git branch
 ```
 
 **Verification:**
+
 ```bash
 # Check package.json was updated correctly
 grep -A 2 '"vue"' package.json
@@ -60,6 +65,7 @@ grep "vue-template-compiler" package.json || echo "✓ Removed"
 ```
 
 **Commit:**
+
 ```bash
 git add package.json
 git commit -m "chore: update dependencies for Vue 3 migration
@@ -77,11 +83,13 @@ git commit -m "chore: update dependencies for Vue 3 migration
 **Objective**: Install all updated dependencies
 
 **Command:**
+
 ```bash
 yarn install
 ```
 
 **Verification:**
+
 ```bash
 # Check that Vue 3 is installed
 yarn list vue | grep vue@3
@@ -92,6 +100,7 @@ yarn list vuetify | grep vuetify@3
 ```
 
 **Expected Output:**
+
 - Should see vue@3.x.x
 - Should see vue-router@4.x.x
 - Should see vuetify@3.x.x
@@ -99,6 +108,7 @@ yarn list vuetify | grep vuetify@3
 **Note**: This step may produce warnings/errors. Document them but continue.
 
 **Commit:**
+
 ```bash
 git add yarn.lock package.json
 git commit -m "chore: install Vue 3 dependencies"
@@ -111,9 +121,11 @@ git commit -m "chore: install Vue 3 dependencies"
 **Objective**: Convert Vue 2 global API to Vue 3 createApp API
 
 **Files to Modify:**
+
 - `src/main.js`
 
 **Changes:**
+
 1. Replace `import Vue from 'vue'` with `import { createApp } from 'vue'`
 2. Remove `Vue.config.productionTip = false`
 3. Replace `Vue.mixin()` with `app.mixin()`
@@ -121,6 +133,7 @@ git commit -m "chore: install Vue 3 dependencies"
 5. Handle `$root.loggedIn` via `app.config.globalProperties.$root`
 
 **Before:**
+
 ```javascript
 import Vue from 'vue'
 import App from './App.vue'
@@ -154,6 +167,7 @@ new Vue({
 ```
 
 **After:**
+
 ```javascript
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -186,6 +200,7 @@ app.mount('#app')
 ```
 
 **Verification:**
+
 ```bash
 # Check that createApp is imported
 grep "createApp" src/main.js
@@ -196,6 +211,7 @@ grep "app.mount" src/main.js
 ```
 
 **Commit:**
+
 ```bash
 git add src/main.js
 git commit -m "refactor: migrate main.js to Vue 3 createApp API
@@ -213,15 +229,18 @@ git commit -m "refactor: migrate main.js to Vue 3 createApp API
 **Objective**: Convert Vue Router 3 to Vue Router 4 API
 
 **Files to Modify:**
+
 - `src/router/index.js`
 
 **Changes:**
+
 1. Replace `import VueRouter from 'vue-router'` with `import { createRouter, createWebHistory } from 'vue-router'`
 2. Remove `Vue.use(VueRouter)`
 3. Replace `new VueRouter({ mode: 'history', ... })` with `createRouter({ history: createWebHistory(...), ... })`
 4. Keep async component imports as-is (arrow functions work in Vue 3)
 
 **Before:**
+
 ```javascript
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -241,6 +260,7 @@ export default router
 ```
 
 **After:**
+
 ```javascript
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/HomeView.vue'
@@ -256,6 +276,7 @@ export default router
 ```
 
 **Verification:**
+
 ```bash
 # Check that createRouter is imported
 grep "createRouter" src/router/index.js
@@ -266,6 +287,7 @@ grep "createWebHistory" src/router/index.js
 ```
 
 **Commit:**
+
 ```bash
 git add src/router/index.js
 git commit -m "refactor: migrate router to Vue Router 4
@@ -282,9 +304,11 @@ git commit -m "refactor: migrate router to Vue Router 4
 **Objective**: Convert Vuetify 2 plugin setup to Vuetify 3
 
 **Files to Modify:**
+
 - `src/plugins/vuetify.js`
 
 **Changes:**
+
 1. Replace `import Vuetify from 'vuetify'` with `import { createVuetify } from 'vuetify'`
 2. Replace `import 'vuetify/dist/vuetify.min.css'` with Vuetify 3 CSS imports
 3. Remove `Vue.use(Vuetify)` and `Vue.use(Bar)`
@@ -292,6 +316,7 @@ git commit -m "refactor: migrate router to Vue Router 4
 5. Update theme configuration for Vuetify 3 API
 
 **Before:**
+
 ```javascript
 import Vue from 'vue'
 import Vuetify from 'vuetify'
@@ -317,6 +342,7 @@ export default new Vuetify({
 ```
 
 **After:**
+
 ```javascript
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -343,6 +369,7 @@ export default createVuetify({
 **Note**: Vuetify 3 requires explicit component/directive imports or auto-import. We'll use explicit imports for now.
 
 **Verification:**
+
 ```bash
 # Check that createVuetify is imported
 grep "createVuetify" src/plugins/vuetify.js
@@ -351,6 +378,7 @@ grep "^import Vue" src/plugins/vuetify.js || echo "✓ Vue import removed"
 ```
 
 **Commit:**
+
 ```bash
 git add src/plugins/vuetify.js
 git commit -m "refactor: migrate Vuetify plugin to V3
@@ -370,20 +398,24 @@ git commit -m "refactor: migrate Vuetify plugin to V3
 **Objective**: Rename `beforeDestroy` to `beforeUnmount`
 
 **Files to Modify:**
+
 - `src/components/gymstats/ExercisesLog.vue`
 - `src/components/BlogsList.vue`
 
 **Changes:**
+
 1. Find `beforeDestroy()` method
 2. Rename to `beforeUnmount()`
 
 **Search Pattern:**
+
 ```bash
 grep -n "beforeDestroy" src/components/gymstats/ExercisesLog.vue
 grep -n "beforeDestroy" src/components/BlogsList.vue
 ```
 
 **Verification:**
+
 ```bash
 # Verify beforeDestroy is removed
 grep "beforeDestroy" src/components/gymstats/ExercisesLog.vue || echo "✓ Fixed"
@@ -394,6 +426,7 @@ grep "beforeUnmount" src/components/BlogsList.vue
 ```
 
 **Commit:**
+
 ```bash
 git add src/components/gymstats/ExercisesLog.vue src/components/BlogsList.vue
 git commit -m "refactor: rename beforeDestroy to beforeUnmount
@@ -408,24 +441,29 @@ git commit -m "refactor: rename beforeDestroy to beforeUnmount
 **Objective**: Replace `event.keyCode` with `event.key`
 
 **Files to Modify:**
+
 - `src/views/VisitorBoardView.vue` (line ~94)
 - `src/components/LoginLogoutButton.vue` (line ~105)
 
 **Changes:**
+
 1. Replace `event.keyCode !== 13` with `event.key !== 'Enter'`
 2. Replace `e.keyCode === 13` with `e.key === 'Enter'`
 
 **Before:**
+
 ```javascript
 if (event.keyCode !== 13 || !this.messageInput) {
 ```
 
 **After:**
+
 ```javascript
 if (event.key !== 'Enter' || !this.messageInput) {
 ```
 
 **Verification:**
+
 ```bash
 # Verify keyCode is removed
 grep "keyCode" src/views/VisitorBoardView.vue || echo "✓ Fixed"
@@ -436,6 +474,7 @@ grep "e.key" src/components/LoginLogoutButton.vue
 ```
 
 **Commit:**
+
 ```bash
 git add src/views/VisitorBoardView.vue src/components/LoginLogoutButton.vue
 git commit -m "refactor: replace keyCode with event.key
@@ -451,25 +490,30 @@ git commit -m "refactor: replace keyCode with event.key
 **Objective**: Convert all `.sync` modifiers to `v-model` syntax
 
 **Files to Modify:**
+
 - `src/views/UrlShortenerView.vue` (line ~60)
 - `src/components/gymstats/ExercisesLog.vue` (lines ~132, 152, 170, 188, 204, 220)
 - `src/components/filebox/FileBox.vue` (line ~193)
 
 **Changes:**
+
 1. Find all `:prop-name.sync="value"`
 2. Replace with `v-model:prop-name="value"`
 
 **Before:**
+
 ```vue
 <v-edit-dialog :return-value.sync="item.exerciseId">
 ```
 
 **After:**
+
 ```vue
 <v-edit-dialog v-model:return-value="item.exerciseId">
 ```
 
 **Search Pattern:**
+
 ```bash
 grep -n "\.sync" src/views/UrlShortenerView.vue
 grep -n "\.sync" src/components/gymstats/ExercisesLog.vue
@@ -477,6 +521,7 @@ grep -n "\.sync" src/components/filebox/FileBox.vue
 ```
 
 **Verification:**
+
 ```bash
 # Verify .sync is removed
 grep "\.sync" src/views/UrlShortenerView.vue || echo "✓ Fixed"
@@ -489,6 +534,7 @@ grep "v-model:" src/components/filebox/FileBox.vue
 ```
 
 **Commit:**
+
 ```bash
 git add src/views/UrlShortenerView.vue src/components/gymstats/ExercisesLog.vue src/components/filebox/FileBox.vue
 git commit -m "refactor: replace .sync modifiers with v-model
@@ -504,38 +550,46 @@ git commit -m "refactor: replace .sync modifiers with v-model
 **Objective**: Update `text` prop to `variant="text"` on v-btn components
 
 **Files to Search:**
+
 - All `.vue` files using `<v-btn text>`
 
 **Changes:**
+
 1. Find all `<v-btn text>` or `<v-btn :text="...">`
 2. Replace with `<v-btn variant="text">` or `<v-btn :variant="...">`
 
 **Before:**
+
 ```vue
 <v-btn text>Button</v-btn>
 ```
 
 **After:**
+
 ```vue
 <v-btn variant="text">Button</v-btn>
 ```
 
 **Search Pattern:**
+
 ```bash
 grep -r "v-btn.*text" src/ --include="*.vue" | grep -v "variant"
 ```
 
 **Files Likely Affected:**
+
 - `src/App.vue`
 - Multiple component files
 
 **Verification:**
+
 ```bash
 # Check for remaining text props (should be minimal or none)
 grep -r 'v-btn.*\stext[^=]' src/ --include="*.vue" | grep -v "variant" || echo "✓ All updated"
 ```
 
 **Commit:**
+
 ```bash
 git add -A
 git commit -m "refactor: update v-btn text prop to variant
@@ -550,16 +604,19 @@ git commit -m "refactor: update v-btn text prop to variant
 **Objective**: Update activator slot syntax from Vuetify 2 to Vuetify 3
 
 **Files to Modify:**
+
 - `src/components/ThemeToggle.vue`
 - `src/components/LoginLogoutButton.vue`
 - Any other components using `v-slot:activator="{ on, attrs }"`
 
 **Changes:**
+
 1. Find `v-slot:activator="{ on, attrs }"`
 2. Replace with `v-slot:activator="{ props }"`
 3. Replace `v-bind="attrs" v-on="on"` with `v-bind="props"`
 
 **Before:**
+
 ```vue
 <template v-slot:activator="{ on, attrs }">
   <v-btn v-bind="attrs" v-on="on">Click</v-btn>
@@ -567,6 +624,7 @@ git commit -m "refactor: update v-btn text prop to variant
 ```
 
 **After:**
+
 ```vue
 <template v-slot:activator="{ props }">
   <v-btn v-bind="props">Click</v-btn>
@@ -574,11 +632,13 @@ git commit -m "refactor: update v-btn text prop to variant
 ```
 
 **Search Pattern:**
+
 ```bash
 grep -r "activator.*on.*attrs" src/ --include="*.vue"
 ```
 
 **Verification:**
+
 ```bash
 # Verify old syntax is removed
 grep -r 'activator.*on.*attrs' src/ --include="*.vue" || echo "✓ All updated"
@@ -587,6 +647,7 @@ grep -r 'activator.*props' src/ --include="*.vue"
 ```
 
 **Commit:**
+
 ```bash
 git add -A
 git commit -m "refactor: update Vuetify activator slots to v3 syntax
@@ -602,6 +663,7 @@ git commit -m "refactor: update Vuetify activator slots to v3 syntax
 **Objective**: Update breakpoint API usage for Vuetify 3
 
 **Files to Modify:**
+
 - `src/App.vue` (uses `$vuetify.breakpoint.smAndDown`)
 - `src/views/HomeView.vue`
 - `src/components/RightSideBar.vue`
@@ -610,6 +672,7 @@ git commit -m "refactor: update Vuetify activator slots to v3 syntax
 - `src/components/gymstats/ExercisesLog.vue`
 
 **Changes:**
+
 1. Replace `$vuetify.breakpoint` with `$vuetify.display`
 2. In templates: Use `$vuetify.display.smAndDown` (Vuetify 3 auto-unwraps refs)
 3. In script/computed: Use `$vuetify.display.smAndDown.value` (access ref value)
@@ -617,11 +680,13 @@ git commit -m "refactor: update Vuetify activator slots to v3 syntax
 **Note**: Vuetify 3 changed breakpoint API from `breakpoint` to `display`, and it returns refs.
 
 **Search Pattern:**
+
 ```bash
 grep -r "\$vuetify.breakpoint" src/ --include="*.vue"
 ```
 
 **Verification:**
+
 ```bash
 # Verify all breakpoint references updated
 grep -r "\$vuetify.breakpoint" src/ --include="*.vue" || echo "✓ All updated"
@@ -629,6 +694,7 @@ grep -r "\$vuetify.display" src/ --include="*.vue"
 ```
 
 **Commit:**
+
 ```bash
 git add -A
 git commit -m "refactor: update Vuetify breakpoint API for v3
@@ -644,15 +710,18 @@ git commit -m "refactor: update Vuetify breakpoint API for v3
 **Objective**: Ensure vue-chartjs Bar component is properly registered
 
 **Files to Check:**
+
 - `src/components/spotify/TrackerChart.vue`
 - `src/components/gymstats/ExerciseStats.vue`
 
 **Result:**
+
 - Bar component is imported directly in components that use it
 - No global registration needed
 - vue-chartjs v5 works with Vue 3 without additional setup
 
 **Verification:**
+
 ```bash
 # Check if Bar is used anywhere
 grep -r "<Bar\|import.*Bar" src/ --include="*.vue"
@@ -668,6 +737,7 @@ grep -r "<Bar\|import.*Bar" src/ --include="*.vue"
 **Objective**: Verify the application can start without errors
 
 **Command:**
+
 ```bash
 yarn dev
 # or
@@ -675,17 +745,20 @@ yarn serve
 ```
 
 **Expected Result:**
+
 - Application should start (may have runtime errors, but should compile)
 - Check browser console for errors
 - Document any errors found
 
 **Verification Checklist:**
+
 - [x] Application compiles without build errors ✅
 - [x] Application starts on http://localhost:8080 ✅
 - [x] Home page renders ✅
 - [ ] No critical console errors (some warnings remain but app works)
 
 **Issues Found and Fixed:**
+
 1. Router catch-all route: Fixed `path: '*'` → `path: '/:pathMatch(.*)*'` for Vue Router 4
 2. Breakpoint API: Fixed `$vuetify.breakpoint` → `$vuetify.display`
 3. Cookie consent: Created custom component (vue-cookieconsent-component doesn't support Vue 3)
@@ -703,12 +776,14 @@ yarn serve
 **Approach**: For each error found in Step 13, fix individually.
 
 **Common Issues to Fix:**
+
 1. Component prop name changes
 2. Slot syntax changes
 3. Event name changes
 4. CSS class changes
 
 **Process:**
+
 1. Identify error from console/logs
 2. Find the component causing the error
 3. Check Vuetify 3 migration guide for that component
@@ -717,6 +792,7 @@ yarn serve
 6. Commit
 
 **Example Commit:**
+
 ```bash
 git add src/components/SomeComponent.vue
 git commit -m "fix: update SomeComponent for Vuetify 3
@@ -734,10 +810,12 @@ git commit -m "fix: update SomeComponent for Vuetify 3
 **Objective**: Ensure cookie consent component works with Vue 3
 
 **Files to Modify:**
+
 - `src/App.vue` (uses CookieConsent component)
 - Created: `src/components/CookieConsent.vue`
 
 **Solution:**
+
 - `vue-cookieconsent-component` does not support Vue 3
 - Created custom `CookieConsent.vue` component that:
   - Maintains same slot structure (`#message` and `#button`)
@@ -746,11 +824,13 @@ git commit -m "fix: update SomeComponent for Vuetify 3
   - Compatible with Vue 3
 
 **Changes:**
+
 1. Created `src/components/CookieConsent.vue` with Vue 3 compatible code
 2. Updated `src/App.vue` import: `vue-cookieconsent-component` → `@/components/CookieConsent.vue`
 3. Removed `vue-cookieconsent-component` from package.json
 
 **Verification:**
+
 ```bash
 # Test cookie consent appears and works
 # Check browser console for errors
@@ -758,6 +838,7 @@ git commit -m "fix: update SomeComponent for Vuetify 3
 ```
 
 **Commit:**
+
 ```bash
 git add src/components/CookieConsent.vue src/App.vue package.json
 git commit -m "fix: replace vue-cookieconsent-component with custom Vue 3 component
@@ -774,22 +855,26 @@ git commit -m "fix: replace vue-cookieconsent-component with custom Vue 3 compon
 **Objective**: Fix all linting errors
 
 **Command:**
+
 ```bash
 yarn lint
 ```
 
 **Process:**
+
 1. Run linter
 2. Fix each error
 3. Re-run until clean
 
 **Verification:**
+
 ```bash
 yarn lint
 # Should exit with code 0
 ```
 
 **Commit:**
+
 ```bash
 git add -A
 git commit -m "style: fix linting errors for Vue 3"
@@ -802,6 +887,7 @@ git commit -m "style: fix linting errors for Vue 3"
 **Objective**: Manually test all core features
 
 **Testing Checklist:**
+
 - [ ] Home page loads
 - [ ] Navigation works (desktop)
 - [ ] Navigation works (mobile/drawer)
@@ -812,6 +898,7 @@ git commit -m "style: fix linting errors for Vue 3"
 - [ ] No console errors
 
 **Document Issues:**
+
 - Create list of any broken features
 - Prioritize fixes
 
@@ -824,6 +911,7 @@ git commit -m "style: fix linting errors for Vue 3"
 **Objective**: Fix all issues found in Step 17
 
 **Process:**
+
 1. For each broken feature:
    - Identify the issue
    - Fix the code
@@ -831,6 +919,7 @@ git commit -m "style: fix linting errors for Vue 3"
    - Commit
 
 **Example Commits:**
+
 ```bash
 git add src/components/SomeComponent.vue
 git commit -m "fix: resolve SomeFeature issue
@@ -848,22 +937,26 @@ git commit -m "fix: resolve SomeFeature issue
 **Objective**: Verify E2E tests pass
 
 **Command:**
+
 ```bash
 yarn test:e2e:run
 ```
 
 **Process:**
+
 1. Run tests
 2. Fix any failing tests
 3. Update test code if needed (Cypress selectors, etc.)
 
 **Verification:**
+
 ```bash
 yarn test:e2e:run
 # All tests should pass
 ```
 
 **Commit:**
+
 ```bash
 git add cypress/
 git commit -m "test: update E2E tests for Vue 3
@@ -879,6 +972,7 @@ git commit -m "test: update E2E tests for Vue 3
 **Objective**: Complete final checks before considering migration complete
 
 **Checklist:**
+
 - [ ] Application builds: `yarn build`
 - [ ] Application serves: `yarn serve`
 - [ ] All routes work
@@ -889,6 +983,7 @@ git commit -m "test: update E2E tests for Vue 3
 - [ ] No TypeScript errors (if applicable)
 
 **Command:**
+
 ```bash
 yarn build
 yarn serve
@@ -897,6 +992,7 @@ yarn test:e2e:run
 ```
 
 **Final Commit (if any remaining fixes):**
+
 ```bash
 git add -A
 git commit -m "chore: final Vue 3 migration fixes
@@ -912,10 +1008,12 @@ git commit -m "chore: final Vue 3 migration fixes
 **Objective**: Update project documentation
 
 **Files to Update:**
+
 - `README.md` (if it mentions Vue version)
 - Any other docs
 
 **Commit:**
+
 ```bash
 git add README.md
 git commit -m "docs: update documentation for Vue 3"
@@ -964,15 +1062,19 @@ git checkout master
 ## Common Issues and Solutions
 
 ### Issue: Application won't start after Step 5
+
 **Solution**: Vuetify 3 requires different setup. Check Step 5 was done correctly.
 
 ### Issue: Components not rendering
+
 **Solution**: Check Vuetify component imports in vuetify.js plugin.
 
 ### Issue: Router not working
+
 **Solution**: Verify Step 4 was completed correctly, check BASE_URL.
 
 ### Issue: $root.loggedIn not accessible
+
 **Solution**: Verify Step 3 globalProperties setup.
 
 ---
@@ -1007,4 +1109,3 @@ Use this to track which steps are complete:
 ---
 
 **End of Runbook**
-

@@ -63,7 +63,7 @@
           <v-btn
             id="login-form-login-button"
             color="blue darken-1"
-            text
+            variant="text"
             @click="onLoginClick"
           >
             Login!

@@ -90,42 +90,69 @@ export default {
 
     async fetchLocationInfo() {
       try {
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+        if (!apiEndpoint) {
+          this.locationInfo = 'Unknown location'
+          return
+        }
         const response = await axios.get(
-          `${import.meta.env.VITE_API_ENDPOINT}/whereami`
+          `${apiEndpoint}/whereami`
         )
-        if (response?.data) {
+        if (response?.data && typeof response.data === 'object') {
           const { city, country } = response.data
-          this.locationInfo = `${city}, ${country}`
+          if (city && country) {
+            this.locationInfo = `${city}, ${country}`
+          } else {
+            this.locationInfo = 'Unknown location'
+          }
+        } else {
+          this.locationInfo = 'Unknown location'
         }
       } catch (error) {
         console.error('Error fetching location:', error)
+        this.locationInfo = 'Unknown location'
       }
     },
 
     async fetchWeatherInfo() {
       try {
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+        if (!apiEndpoint) {
+          this.weatherInfo = 'API not configured'
+          return
+        }
         const response = await axios.get(
-          `${import.meta.env.VITE_API_ENDPOINT}/weather/current`
+          `${apiEndpoint}/weather/current`
         )
-        if (response?.data) {
+        if (response?.data && Array.isArray(response.data)) {
           this.weatherInfo = response.data
             .map((item) => item.description)
             .join(', ')
+        } else {
+          console.warn('Weather API returned unexpected format:', typeof response?.data)
+          this.weatherInfo = 'Weather data unavailable'
         }
       } catch (error) {
         console.error('Error fetching current weather:', error)
+        this.weatherInfo = 'Weather data unavailable'
       }
     },
 
     async fetchForecast() {
       try {
+        const apiEndpoint = import.meta.env.VITE_API_ENDPOINT
+        if (!apiEndpoint) {
+          return
+        }
         const response = await axios.get(
-          `${import.meta.env.VITE_API_ENDPOINT}/weather/tomorrow`
+          `${apiEndpoint}/weather/tomorrow`
         )
-        if (response?.data) {
+        if (response?.data && Array.isArray(response.data)) {
           this.forecastIcons = response.data.flatMap((item) =>
-            item.descriptions.map((desc) => desc.icon)
+            item.descriptions?.map((desc) => desc.icon) || []
           )
+        } else {
+          console.warn('Forecast API returned unexpected format:', typeof response?.data)
         }
       } catch (error) {
         console.error('Error fetching forecast:', error)
