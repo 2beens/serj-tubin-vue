@@ -103,7 +103,7 @@
 import SiteFooter from '@/components/SiteFooter.vue'
 import LoginLogoutButton from '@/components/LoginLogoutButton.vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
-import CookieConsent from 'vue-cookieconsent-component'
+import CookieConsent from '@/components/CookieConsent.vue'
 
 export default {
   name: 'App',

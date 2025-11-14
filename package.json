@@ -22,7 +22,6 @@
     "roboto-fontface": "^0.10.0",
     "vue": "^3.4.21",
     "vue-chartjs": "^5.2.0",
-    "vue-cookieconsent-component": "^1.2.0",
     "vue-router": "^4.2.5",
     "vuetify": "^3.5.13"
   },
