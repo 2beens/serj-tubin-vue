@@ -1,13 +1,16 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
-Vue.config.productionTip = false
+const app = createApp(App)
 
-Vue.mixin({
+app.use(router)
+app.use(vuetify)
+
+app.mixin({
   methods: {
     date2string(aDate) {
       const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(
@@ -57,15 +60,11 @@ Vue.mixin({
   },
 })
 
+// Global state for loggedIn (maintains $root.loggedIn compatibility)
+app.config.globalProperties.$root = {
+  loggedIn: false,
+}
+
 // Theme will be initialized by ThemeToggle component
 
-new Vue({
-  router,
-  vuetify,
-  data: {
-    loggedIn: false,
-  },
-  render: function (h) {
-    return h(App)
-  },
-}).$mount('#app')
+app.mount('#app')
