@@ -399,7 +399,7 @@ export default {
     this.startTimeUpdater()
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.stopTimeUpdater()
   },
 
