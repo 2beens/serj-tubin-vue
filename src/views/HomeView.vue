@@ -23,7 +23,7 @@
               <v-img
                 id="my-image"
                 alt="serj-tubin"
-                src="../assets/ja-2022-dec.jpg"
+                src="@/assets/ja-2022-dec.jpg"
                 class="rounded-circle"
               />
             </v-avatar>
@@ -113,7 +113,7 @@
               <v-img
                 id="my-image"
                 alt="serj-tubin"
-                src="../assets/ja-2022-dec.jpg"
+                src="@/assets/ja-2022-dec.jpg"
                 class="rounded-circle"
               />
             </v-avatar>

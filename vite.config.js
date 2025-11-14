@@ -6,20 +6,27 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   return {
-    plugins: [
-      vue(),
-      vuetify({ autoImport: true }),
-    ],
+    plugins: [vue(), vuetify({ autoImport: true })],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
-      extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+      extensions: [
+        '.mjs',
+        '.js',
+        '.mts',
+        '.ts',
+        '.jsx',
+        '.tsx',
+        '.json',
+        '.vue',
+      ],
     },
     server: {
       port: 8080,
+      strictPort: false, // If 8080 is in use, try next available port
       watch: {
         usePolling: true,
       },

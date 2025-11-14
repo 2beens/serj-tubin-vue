@@ -5,7 +5,7 @@
         This site uses cookies to analyze website traffic and optimize your website experience.
       </div>
     </slot>
-    <slot name="button">
+    <slot name="button" :acceptCookies="acceptCookies">
       <button
         class="cookie-consent-button"
         @click="acceptCookies"

@@ -3,7 +3,7 @@
     <template v-slot:activator="{ props }">
       <v-btn
         icon
-        @click="toggleTheme"
+        @click="handleToggle"
         v-bind="props"
         :color="isDark ? 'yellow darken-2' : 'blue-grey darken-2'"
         class="theme-toggle-btn"
@@ -23,9 +23,8 @@ import { useTheme } from '@/composables/useTheme'
 export default {
   name: 'ThemeToggle',
 
-  setup() {
+  data() {
     const { isDark, toggleTheme } = useTheme()
-
     return {
       isDark,
       toggleTheme,
@@ -35,10 +34,42 @@ export default {
   watch: {
     isDark: {
       handler(newValue) {
-        // Update Vuetify theme
-        this.$vuetify.theme.dark = newValue
+        // Update Vuetify theme when isDark changes
+        this.updateVuetifyTheme(newValue)
       },
       immediate: true,
+    },
+  },
+
+  methods: {
+    updateVuetifyTheme(dark) {
+      if (!this.$vuetify || !this.$vuetify.theme) return
+
+      const themeName = dark ? 'dark' : 'light'
+
+      // Use Vuetify 3 API - theme.change()
+      if (typeof this.$vuetify.theme.change === 'function') {
+        this.$vuetify.theme.change(themeName)
+        return
+      }
+      // Fallback to theme.global.name
+      if (this.$vuetify.theme.global && this.$vuetify.theme.global.name) {
+        if (typeof this.$vuetify.theme.global.name === 'object' && 'value' in this.$vuetify.theme.global.name) {
+          this.$vuetify.theme.global.name.value = themeName
+        } else {
+          this.$vuetify.theme.global.name = themeName
+        }
+        return
+      }
+      // Fallback to theme.dark
+      if (this.$vuetify.theme.dark !== undefined) {
+        this.$vuetify.theme.dark = dark
+      }
+    },
+
+    handleToggle() {
+      this.toggleTheme()
+      // The watch will handle updating Vuetify theme
     },
   },
 }

@@ -67,7 +67,7 @@
     </v-main>
 
     <div v-show="showConsent" id="consent-div">
-      <cookie-consent>
+      <cookie-consent @accept="handleCookieAccept">
         <template #message>
           <div style="color: white">
             <p>Hey, over here 👋</p>
@@ -82,12 +82,12 @@
             <p>🍪🍪🍪 ❓</p>
           </div>
         </template>
-        <template #button>
+        <template #button="{ acceptCookies }">
           <button
             id="cookies-ok-btn"
             style="background-color: black"
             class="btn btn-info"
-            onclick="location.reload()"
+            @click="acceptCookies"
           >
             Yeah, sure...
           </button>
@@ -179,6 +179,10 @@ export default {
         console.error('Error checking authentication:', error)
         this.$root.loggedIn = false
       }
+    },
+
+    handleCookieAccept() {
+      this.showConsent = false
     },
   },
   mounted() {

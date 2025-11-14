@@ -1,46 +1,50 @@
 <template>
-  <v-footer max-height="52" :dark="$vuetify.theme.dark" padless fixed>
+  <v-footer :dark="$vuetify.theme.dark" padless fixed>
     <v-card class="flex" flat tile :dark="$vuetify.theme.dark">
-      <v-card-title
+      <v-card-text
         :class="$vuetify.theme.dark ? 'blue darken-4' : 'blue-grey lighten-2'"
+        class="py-2 px-4 d-flex align-center"
       >
         <strong class="subheading">Serj, Berlin 2024</strong>
 
         <v-spacer />
 
-        <div id="version-info">
+        <div id="version-info" class="text-body-2">
           {{ new Date().getFullYear() }} — {{ versionInfo }}
         </div>
 
         <v-spacer />
 
         <v-btn
-          class="mx-4"
+          class="mx-2"
           :dark="$vuetify.theme.dark"
           icon
+          variant="text"
           @click="goTo('gh')"
         >
           <v-icon size="35px">mdi-github</v-icon>
         </v-btn>
 
         <v-btn
-          class="mx-4"
+          class="mx-2"
           :dark="$vuetify.theme.dark"
           icon
+          variant="text"
           @click="goTo('insta')"
         >
           <v-icon size="35px">mdi-instagram</v-icon>
         </v-btn>
 
         <v-btn
-          class="mx-4"
+          class="mx-2"
           :dark="$vuetify.theme.dark"
           icon
+          variant="text"
           @click="goTo('fb')"
         >
           <v-icon size="35px">mdi-facebook</v-icon>
         </v-btn>
-      </v-card-title>
+      </v-card-text>
     </v-card>
   </v-footer>
 </template>
