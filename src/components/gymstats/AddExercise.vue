@@ -18,23 +18,23 @@
                 <v-select
                   v-model="exercise.muscleGroup"
                   :items="muscleGroups"
-                  item-text="name"
+                  item-title="name"
                   item-value="id"
                   label="Muscle Group"
                   return-object
-                  solo
-                  dense
+                  variant="outlined"
+                  density="compact"
                 ></v-select>
               </v-col>
               <v-col cols="12" class="ma-0 pa-0">
                 <v-select
                   v-model="exercise.exerciseId"
                   :items="exercisesForSelectedMuscleGroup"
-                  item-text="name"
+                  item-title="name"
                   item-value="exerciseId"
                   label="Exercise"
-                  solo
-                  dense
+                  variant="outlined"
+                  density="compact"
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" class="ma-0 pa-0">
@@ -43,8 +43,8 @@
                   label="Kilos"
                   type="number"
                   required
-                  dense
-                  solo
+                  density="compact"
+                  variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" class="ma-0 pa-0">
@@ -53,8 +53,8 @@
                   label="Reps"
                   type="number"
                   required
-                  dense
-                  solo
+                  density="compact"
+                  variant="outlined"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -80,17 +80,16 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" dark large @click="refreshExerciseTypes">
+          <v-btn color="primary" size="large" @click="refreshExerciseTypes">
             Refresh
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="error" dark large @click="showDialog = false">
+          <v-btn color="error" size="large" @click="showDialog = false">
             Close
           </v-btn>
           <v-btn
             color="success"
-            dark
-            large
+            size="large"
             @click="addExercise"
             :disabled="addDisabled"
             style="margin-left: 50px"
@@ -122,6 +121,7 @@ import GymStatsData from '@/gymstats'
 
 export default {
   name: 'AddExercise',
+  emits: ['exercise-added'],
   data: function () {
     return {
       muscleGroups: GymStatsData.muscleGroups,
@@ -189,7 +189,12 @@ export default {
     // get exercise types from local storage
     const muscleGroupToExercises = localStorage.getItem('exerciseTypes')
     if (muscleGroupToExercises && muscleGroupToExercises.length > 0) {
-      this.muscleGroupToExercises = JSON.parse(muscleGroupToExercises)
+      try {
+        this.muscleGroupToExercises = JSON.parse(muscleGroupToExercises)
+      } catch (e) {
+        console.warn('Failed to parse exercise types from localStorage:', e)
+        this.refreshExerciseTypes()
+      }
     } else {
       console.log('no exercise types in local storage, will refresh')
       this.refreshExerciseTypes()
@@ -221,18 +226,28 @@ export default {
             if (!muscleGroupToExercises[exerciseType.muscleGroup]) {
               muscleGroupToExercises[exerciseType.muscleGroup] = []
             }
+            // Store original name before we potentially append percentages
+            if (!exerciseType.originalName) {
+              exerciseType.originalName = exerciseType.name
+            }
             muscleGroupToExercises[exerciseType.muscleGroup].push(exerciseType)
           })
 
           vm.muscleGroupToExercises = muscleGroupToExercises
 
+          // Store exercise types immediately (without percentages)
+          localStorage.setItem(
+            'exerciseTypes',
+            JSON.stringify(vm.muscleGroupToExercises)
+          )
+
           // now, for each muscle group, get exercise distributions
           // and add them to the exercise type name (name + (percentage%))
+          // This is optional - if it fails, exercises still work without percentages
           for (const muscleGroup in muscleGroupToExercises) {
             vm.getExerciseDistributions(muscleGroup)
               .then((response) => {
                 if (response === null || response.data === null) {
-                  console.error('response is null')
                   return
                 }
                 const exerciseDistributions = response.data
@@ -240,24 +255,26 @@ export default {
                   const exerciseDistribution =
                     exerciseDistributions[exerciseType.exerciseId]
                   if (exerciseDistribution) {
-                    exerciseType.name = `${
-                      exerciseType.name
-                    } (${exerciseDistribution.percentage.toFixed(2)}%)`
+                    // Use originalName if available, otherwise use current name
+                    const baseName = exerciseType.originalName || exerciseType.name
+                    exerciseType.name = `${baseName} (${exerciseDistribution.percentage.toFixed(2)}%)`
                     exerciseType.percentage = exerciseDistribution.percentage
                   }
                 })
-              })
-              .catch((err) => {
-                console.error(
-                  `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
-                )
-              })
-              .finally(() => {
-                // store exercise types in local storage
+                // Update localStorage with percentages
                 localStorage.setItem(
                   'exerciseTypes',
                   JSON.stringify(vm.muscleGroupToExercises)
                 )
+              })
+              .catch((err) => {
+                // Silently fail for network/CORS errors - percentages are optional
+                // Only log if it's not a network/CORS error
+                if (err.code !== 'ERR_NETWORK' && err.code !== 'ERR_CANCELED') {
+                  console.warn(
+                    `Could not fetch percentages for ${muscleGroup}: ${err.message || 'Network error'}`
+                  )
+                }
               })
           }
         })
@@ -282,6 +299,7 @@ export default {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
+          timeout: 3000, // 3 second timeout to avoid hanging
         }
       )
     },
