@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn
-      v-if="$root.loggedIn"
+      v-if="isLoggedIn"
       id="logout-button"
       class="mt-1"
       icon
@@ -97,6 +97,7 @@
 
 <script>
 import axios from 'axios'
+import { loggedIn, useAuth } from '@/composables/useAuth'
 
 export default {
   name: 'LoginLogoutButton',
@@ -107,6 +108,12 @@ export default {
       snackbarText: '',
       showSnackbar: false,
     }
+  },
+  computed: {
+    isLoggedIn() {
+      // Access the reactive ref from composable
+      return loggedIn.value
+    },
   },
   methods: {
     loginOnEnter: function (e) {
@@ -143,8 +150,14 @@ export default {
           }
 
           const token = response.data.token
-          vm.$root.loggedIn = true
           vm.setCookie('sessionkolacic', token, 90)
+          // Update auth state using composable
+          const { setLoggedIn } = useAuth()
+          setLoggedIn(true)
+          // Also update $root for backward compatibility
+          if (vm.$root) {
+            vm.$root.loggedIn = true
+          }
           vm.showSnackbar = true
           vm.snackbarText = 'logged in'
         })
@@ -177,7 +190,13 @@ export default {
           }
 
           vm.eraseCookie('sessionkolacic')
-          vm.$root.loggedIn = false
+          // Update auth state using composable
+          const { setLoggedIn } = useAuth()
+          setLoggedIn(false)
+          // Also update $root for backward compatibility
+          if (vm.$root) {
+            vm.$root.loggedIn = false
+          }
           vm.showLoginDialog = false
 
           vm.showSnackbar = true
@@ -187,7 +206,13 @@ export default {
         .catch((error) => {
           if (error.response && error.response.status === 401) {
             vm.eraseCookie('sessionkolacic')
-            vm.$root.loggedIn = false
+            // Update auth state using composable
+            const { setLoggedIn } = useAuth()
+            setLoggedIn(false)
+            // Also update $root for backward compatibility
+            if (vm.$root) {
+              vm.$root.loggedIn = false
+            }
             vm.showLoginDialog = false
 
             vm.showSnackbar = true

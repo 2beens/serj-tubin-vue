@@ -1,9 +1,10 @@
-import { createApp, reactive } from 'vue'
+import { createApp, reactive, watch } from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
+import { loggedIn } from '@/composables/useAuth'
 
 const app = createApp(App)
 
@@ -11,9 +12,29 @@ app.use(router)
 app.use(vuetify)
 
 // Create a reactive global state object for $root.loggedIn compatibility
+// This syncs with the composable's loggedIn ref
 const globalState = reactive({
-  loggedIn: false,
+  loggedIn: loggedIn.value, // Initialize with current value
 })
+
+// Watch the composable's loggedIn ref and sync to globalState
+watch(
+  loggedIn,
+  (newValue) => {
+    globalState.loggedIn = newValue
+  },
+  { immediate: true }
+)
+
+// Also watch globalState changes and sync back to composable (for backward compatibility)
+watch(
+  () => globalState.loggedIn,
+  (newValue) => {
+    if (loggedIn.value !== newValue) {
+      loggedIn.value = newValue
+    }
+  }
+)
 
 app.mixin({
   methods: {

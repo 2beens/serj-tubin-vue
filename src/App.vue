@@ -50,10 +50,11 @@
       <v-btn
         v-for="route in filteredRoutes"
         :key="route.path"
-        :color="$vuetify.theme.dark ? '#4b9ff2' : '#1976D2'"
+        :color="$vuetify.theme.dark ? '#40A9FF' : '#1976D2'"
         variant="text"
         rounded
         :to="route.path"
+        :class="$vuetify.theme.dark ? 'text-azure' : 'text-primary'"
       >
         {{ route.name }} {{ route.icon }}
       </v-btn>
@@ -104,6 +105,7 @@ import SiteFooter from '@/components/SiteFooter.vue'
 import LoginLogoutButton from '@/components/LoginLogoutButton.vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import CookieConsent from '@/components/CookieConsent.vue'
+import { loggedIn, useAuth } from '@/composables/useAuth'
 
 export default {
   name: 'App',
@@ -146,20 +148,12 @@ export default {
       ],
     }
   },
-  beforeCreate() {
-    // Ensure $root.loggedIn is initialized before render to avoid Vue warnings
-    if (!this.$root || this.$root.loggedIn === undefined) {
-      // This will be set by globalProperties, but we ensure it exists
-      if (this.$root) {
-        this.$root.loggedIn = false
-      }
-    }
-  },
   computed: {
     filteredRoutes() {
-      // Access loggedIn safely - ensure it's defined
-      const loggedIn = this.$root?.loggedIn ?? false
-      return this.routes.filter((route) => !route.requiresAuth || loggedIn)
+      // Access loggedIn from reactive $root - this will be reactive
+      // Since $root is a reactive object, accessing .loggedIn will track changes
+      const isLoggedIn = this.$root && this.$root.loggedIn ? this.$root.loggedIn : false
+      return this.routes.filter((route) => !route.requiresAuth || isLoggedIn)
     },
   },
   watch: {
@@ -179,12 +173,13 @@ export default {
     },
 
     checkAuthentication() {
-      try {
-        const token = this.getCookie('sessionkolacic')
-        this.$root.loggedIn = Boolean(token)
-      } catch (error) {
-        console.error('Error checking authentication:', error)
-        this.$root.loggedIn = false
+      // The useAuth composable checks the cookie on initialization
+      // This method ensures $root.loggedIn is synced with the composable state
+      const { checkAuth } = useAuth()
+      checkAuth()
+      // Sync with $root for backward compatibility
+      if (this.$root) {
+        this.$root.loggedIn = loggedIn.value
       }
     },
 
@@ -237,5 +232,37 @@ export default {
 #cookies-ok-btn:hover {
   background-color: #111;
   transform: translateY(-1px);
+}
+</style>
+
+<style>
+/* Theme-aware menu button styles */
+.theme--dark #main-menu-bar .v-btn {
+  color: #40A9FF !important;
+}
+
+.theme--dark #main-menu-bar .v-btn:hover {
+  color: #69C0FF !important;
+  background-color: rgba(64, 169, 255, 0.1) !important;
+}
+
+.theme--light #main-menu-bar .v-btn {
+  color: #1976D2 !important;
+}
+
+.theme--light #main-menu-bar .v-btn:hover {
+  color: #1565C0 !important;
+  background-color: rgba(25, 118, 210, 0.1) !important;
+}
+
+/* Active route styling */
+.theme--dark #main-menu-bar .v-btn.v-btn--active {
+  color: #69C0FF !important;
+  background-color: rgba(64, 169, 255, 0.15) !important;
+}
+
+.theme--light #main-menu-bar .v-btn.v-btn--active {
+  color: #1565C0 !important;
+  background-color: rgba(25, 118, 210, 0.15) !important;
 }
 </style>
