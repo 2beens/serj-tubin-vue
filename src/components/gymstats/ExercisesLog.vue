@@ -1,104 +1,96 @@
 <template>
   <v-container>
-    <v-row v-if="$vuetify.display.mdAndUp">
-      <v-col cols="2">
+    <v-row v-if="$vuetify.display.mdAndUp" align="center" class="mb-4" no-gutters>
+      <v-col cols="auto" class="mr-4">
         <v-text-field
-          dark
-          style="margin-top: 30px; margin-left: 15px"
           v-model="itemsPerPageInput"
           label="Items per page"
           type="number"
           min="1"
           step="5"
-          outlined
-          dense
+          variant="outlined"
+          density="compact"
+          hide-details
+          style="max-width: 150px"
           @change="onItemsPerPageChange"
         />
       </v-col>
-      <v-col cols="1">
+      <v-col cols="auto" class="mr-4">
         <v-checkbox
           v-model="showTable"
           label="Show table"
-          dark
+          hide-details
+          density="compact"
           @change="onShowTableChange"
         ></v-checkbox>
       </v-col>
-      <v-col cols="7">
-        <v-pagination
-          style="margin-top: 30px; margin-bottom: 15px"
-          v-if="stats && stats.length > 0"
-          v-model="page"
-          :length="paginationLen"
-          :total-visible="$vuetify.display.mdAndUp ? '8' : '3'"
-          @input="onPageChange"
-        />
+      <v-col cols="auto" class="flex-grow-1">
+        <div class="d-flex justify-center">
+          <v-pagination
+            v-if="stats && stats.length > 0"
+            v-model="page"
+            :length="paginationLen"
+            :total-visible="$vuetify.display.mdAndUp ? 8 : 3"
+            density="compact"
+            @update:model-value="onPageChange"
+          />
+        </div>
       </v-col>
-      <v-col cols="2">
-        <AddExercise
-          @exercise-added="getExercises"
-          style="margin-top: 30px; margin-right: 40px"
-        />
+      <v-col cols="auto" class="ml-4">
+        <AddExercise @exercise-added="getExercises" />
       </v-col>
     </v-row>
 
-    <!-- v-else - next three rows for small devices -->
+    <!-- Mobile layout -->
     <!------------------------------------------------->
-    <v-row v-if="$vuetify.display.smAndDown">
-      <v-col cols="7" style="padding: 0%">
+    <v-row v-if="$vuetify.display.smAndDown" align="center" class="mb-2">
+      <v-col cols="6">
         <v-text-field
-          dark
-          style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
           v-model="itemsPerPageInput"
           label="Items per page"
           type="number"
           min="1"
           step="5"
-          outlined
-          dense
+          variant="outlined"
+          density="compact"
           @change="onItemsPerPageChange"
         />
       </v-col>
-      <v-col cols="5" style="padding: 0%">
+      <v-col cols="6">
         <v-checkbox
           v-model="showTable"
           label="Show table"
-          dark
           @change="onShowTableChange"
         ></v-checkbox>
       </v-col>
     </v-row>
-    <v-row v-if="$vuetify.display.smAndDown">
+    <v-row v-if="$vuetify.display.smAndDown" class="mb-2">
       <v-col>
         <v-pagination
           v-if="stats && stats.length > 0"
-          style="margin-top: -20px"
           v-model="page"
           :length="paginationLen"
           :total-visible="6"
-          @input="onPageChange"
+          @update:model-value="onPageChange"
         />
       </v-col>
     </v-row>
-    <v-row v-if="$vuetify.display.smAndDown">
+    <v-row v-if="$vuetify.display.smAndDown" class="mb-4">
       <v-col>
-        <AddExercise
-          @exercise-added="getExercises"
-          style="margin-bottom: 0px"
-        />
+        <AddExercise @exercise-added="getExercises" />
       </v-col>
     </v-row>
 
     <!-- Time elapsed since last exercise - Mobile only -->
-    <v-row v-if="$vuetify.display.smAndDown && lastExerciseTime">
+    <v-row v-if="$vuetify.display.smAndDown && lastExerciseTime" class="mb-4">
       <v-col>
         <v-card
-          dark
           color="blue darken-2"
-          class="mx-2 mb-3 mt-0"
+          class="mx-2"
           style="border-radius: 8px"
         >
           <v-card-text class="text-center py-2">
-            <v-icon small class="mr-2">mdi-clock-outline</v-icon>
+            <v-icon size="small" class="mr-2">mdi-clock-outline</v-icon>
             <span class="text-body-2">
               {{ timeElapsedText }}
             </span>
@@ -116,31 +108,35 @@
       </v-col>
     </v-row>
     <div v-else-if="showTable">
-      <template>
-        <v-data-table
-          id="data-table"
-          :headers="headers"
-          :items="stats"
-          :items-per-page="itemsPerPage"
-          hide-default-footer
-          disable-pagination
-          class="elevation-1"
-        >
+      <v-data-table
+        id="data-table"
+        :headers="headers"
+        :items="stats"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
+        disable-pagination
+        class="elevation-1"
+      >
           <!-- EXERCISE ID -->
           <template #[`item.exerciseId`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.exerciseId"
-              @save="saveExercise(item)"
+            <span
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'exerciseId'"
+              @click="startEdit(item, 'exerciseId')"
+              style="cursor: pointer; text-decoration: underline"
             >
               {{ item.exerciseId }}
-              <template #input>
-                <v-text-field
-                  v-model="item.exerciseId"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+            </span>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'exerciseId')"
+              @keyup.enter="saveEdit(item, 'exerciseId')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              style="max-width: 150px"
+            ></v-text-field>
           </template>
           <!-- EXERCISE NAME (not editable) -->
           <template #[`item.exerciseName`]="{ item }">
@@ -148,140 +144,163 @@
           </template>
           <!-- MUSCLE GROUP -->
           <template #[`item.muscleGroup`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.muscleGroup"
-              @save="saveExercise(item)"
+            <v-chip
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'muscleGroup'"
+              :color="getMuscleGroupColor(item.muscleGroup)"
+              dark
+              @click="startEdit(item, 'muscleGroup')"
+              style="cursor: pointer"
             >
-              <v-chip :color="getMuscleGroupColor(item.muscleGroup)" dark>
-                {{ item.muscleGroup }}
-              </v-chip>
-              <template #input>
-                <v-text-field
-                  v-model="item.muscleGroup"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+              {{ item.muscleGroup }}
+            </v-chip>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'muscleGroup')"
+              @keyup.enter="saveEdit(item, 'muscleGroup')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              style="max-width: 150px"
+            ></v-text-field>
           </template>
           <!-- KILOS -->
           <template #[`item.kilos`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.kilos"
-              @save="saveExercise(item)"
+            <v-chip
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'kilos'"
+              :color="getKilosColor(item.kilos)"
+              dark
+              @click="startEdit(item, 'kilos')"
+              style="cursor: pointer"
             >
-              <v-chip :color="getKilosColor(item.kilos)" dark>
-                {{ item.kilos }}
-              </v-chip>
-              <template #input>
-                <v-text-field
-                  v-model="item.kilos"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+              {{ item.kilos }}
+            </v-chip>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'kilos')"
+              @keyup.enter="saveEdit(item, 'kilos')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              type="number"
+              style="max-width: 100px"
+            ></v-text-field>
           </template>
           <!-- REPS -->
           <template #[`item.reps`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.reps"
-              @save="saveExercise(item)"
+            <span
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'reps'"
+              @click="startEdit(item, 'reps')"
+              style="cursor: pointer; text-decoration: underline"
             >
               {{ item.reps }}
-              <template #input>
-                <v-text-field
-                  v-model="item.reps"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+            </span>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'reps')"
+              @keyup.enter="saveEdit(item, 'reps')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              type="number"
+              style="max-width: 100px"
+            ></v-text-field>
           </template>
           <!-- CREATED AT -->
           <template #[`item.createdAt`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.createdAt"
-              @save="saveExercise(item)"
+            <span
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'createdAt'"
+              @click="startEdit(item, 'createdAt')"
+              style="cursor: pointer; text-decoration: underline"
             >
               {{ item.createdAt }}
-              <template #input>
-                <v-text-field
-                  v-model="item.createdAt"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+            </span>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'createdAt')"
+              @keyup.enter="saveEdit(item, 'createdAt')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              style="max-width: 200px"
+            ></v-text-field>
           </template>
           <!-- METADATA -->
           <template #[`item.metadataJson`]="{ item }">
-            <v-edit-dialog
-              v-model:return-value="item.metadataJson"
-              @save="saveExercise(item)"
+            <span
+              v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'metadataJson'"
+              @click="startEdit(item, 'metadataJson')"
+              style="cursor: pointer; text-decoration: underline"
             >
               {{ item.metadataJson }}
-              <template #input>
-                <v-text-field
-                  v-model="item.metadataJson"
-                  label="Edit"
-                  single-line
-                ></v-text-field>
-              </template>
-            </v-edit-dialog>
+            </span>
+            <v-text-field
+              v-else
+              v-model="editValue"
+              @blur="saveEdit(item, 'metadataJson')"
+              @keyup.enter="saveEdit(item, 'metadataJson')"
+              @keyup.esc="cancelEdit"
+              autofocus
+              dense
+              hide-details
+              style="max-width: 200px"
+            ></v-text-field>
           </template>
           <template #[`item.isTesting`]="{ item }">
-            <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'" dark>
+            <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'">
               {{ item.isTesting }}
             </v-chip>
           </template>
           <template #[`item.actions`]="{ item }">
-            <v-icon small class="mr-2" @click="editExercise(item)">
+            <v-icon size="small" class="mr-2" @click="editExercise(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteExercise(item)">mdi-delete</v-icon>
+            <v-icon size="small" @click="deleteExercise(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
-      </template>
     </div>
     <div v-else style="text-align: left">
       <!-- used for small devices, ability to show exercises log in a simple list instead of a table -->
-      <v-list dark dense style="border-radius: 5px">
-        <v-list-item-group v-for="(exercise, index) in stats" :key="index">
-          <v-divider v-if="index > 0" dark class="ma-0"></v-divider>
-
-          <v-list-item :key="exercise.id">
-            <v-list-item-icon>
+      <v-list density="compact" style="border-radius: 5px">
+        <template v-for="(exercise, index) in stats" :key="exercise.id">
+          <v-divider v-if="index > 0" class="ma-0"></v-divider>
+          <v-list-item>
+            <template v-slot:prepend>
               <v-chip
                 :color="getColorFromName(exercise.exerciseName)"
                 :style="{
                   color: getTextColor(getColorFromName(exercise.exerciseName)),
                 }"
-                small
+                size="small"
                 class="mt-2"
               >
                 {{ index + 1 }}
               </v-chip>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ exercise.exerciseName }}
-              </v-list-item-title>
-              <v-list-item-subtitle style="font-size: 0.8em; color: blue">
-                {{ new Date(exercise.createdAt).toLocaleString() }}
-              </v-list-item-subtitle>
-              <v-list-item-subtitle>
-                {{ muscleGroupToText[exercise.muscleGroup] }}
-                <v-chip small color="blue lighten-1">
-                  {{ exercise.kilos }} kg
-                </v-chip>
-                <v-chip small color="blue lighten-4" text-color="black">
-                  {{ exercise.reps }} reps
-                </v-chip>
-              </v-list-item-subtitle>
-            </v-list-item-content>
+            </template>
+            <v-list-item-title>
+              {{ exercise.exerciseName }}
+            </v-list-item-title>
+            <v-list-item-subtitle style="font-size: 0.8em">
+              {{ new Date(exercise.createdAt).toLocaleString() }}
+            </v-list-item-subtitle>
+            <v-list-item-subtitle>
+              {{ muscleGroupToText[exercise.muscleGroup] }}
+              <v-chip size="small" color="blue lighten-1" class="ml-1">
+                {{ exercise.kilos }} kg
+              </v-chip>
+              <v-chip size="small" color="blue lighten-4" class="ml-1">
+                {{ exercise.reps }} reps
+              </v-chip>
+            </v-list-item-subtitle>
           </v-list-item>
-        </v-list-item-group>
+        </template>
       </v-list>
     </div>
 
@@ -306,13 +325,37 @@
   padding: 20px;
   margin-bottom: 100px;
   background: #26c6da;
+  border-radius: 4px;
+}
+
+/* Improve table row colors for better visibility */
+#data-table :deep(.v-data-table__tbody tr) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#data-table :deep(.v-data-table__tbody tr:hover) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Better text contrast in table */
+#data-table :deep(.v-data-table__tbody td) {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Header styling */
+#data-table :deep(.v-data-table__thead th) {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  font-weight: 600;
 }
 </style>
 
-<script scoped>
+<script>
 import AddExercise from '@/components/gymstats/AddExercise.vue'
 import GymStatsData from '@/gymstats'
 import axios from 'axios'
+import { loggedIn } from '@/composables/useAuth'
 
 export default {
   name: 'ExercisesLog',
@@ -351,6 +394,8 @@ export default {
       showSnackbar: false,
       showTable: true,
       muscleGroupToText: GymStatsData.muscleGroupToText,
+      editingCell: null, // Track which cell is being edited: {itemId, field}
+      editValue: '', // Temporary value while editing
     }
   },
 
@@ -428,6 +473,13 @@ export default {
     },
 
     getExercises() {
+      // Check if user is logged in using composable
+      if (!loggedIn.value) {
+        this.loadingData = false
+        this.stats = []
+        return
+      }
+
       this.loadingData = true
 
       const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
@@ -436,9 +488,6 @@ export default {
       }
 
       this.itemsPerPageInput = String(this.itemsPerPage)
-      if (!this.$root.loggedIn) {
-        return
-      }
 
       const vm = this
       axios
@@ -453,23 +502,46 @@ export default {
         )
         .then((response) => {
           if (response === null || response.data === null) {
-            console.error('get all urls - received null response / data')
+            console.error('getExercises - received null response / data')
             vm.stats = []
+            vm.loadingData = false
             return
           }
+          console.log('getExercises - received response:', response.data)
           vm.handleStatsResp(response)
         })
         .catch((error) => {
-          console.log(error)
+          console.error('getExercises - error:', error)
+          vm.stats = []
+          vm.loadingData = false
         })
         .finally(() => {
           vm.loadingData = false
+          console.log('getExercises - loadingData set to false, stats length:', vm.stats?.length)
         })
     },
 
     editExercise(exercise) {
       console.warn('will edit exercise', exercise)
       // TODO: implement
+    },
+
+    startEdit(item, field) {
+      this.editingCell = { itemId: item.id, field }
+      this.editValue = item[field]
+    },
+
+    cancelEdit() {
+      this.editingCell = null
+      this.editValue = ''
+    },
+
+    saveEdit(item, field) {
+      if (this.editValue !== item[field]) {
+        item[field] = this.editValue
+        this.saveExercise(item)
+      }
+      this.cancelEdit()
     },
 
     saveExercise(exercise) {

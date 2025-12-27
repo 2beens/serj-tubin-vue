@@ -1,17 +1,15 @@
 <template>
-  <v-row justify="center">
-    <v-dialog v-model="showDialog" persistent max-width="600px">
-      <template v-slot:activator="{ props }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="props"
-          v-if="$vuetify.display.mdAndUp"
-        >
-          Add Exercise ➕
-        </v-btn>
-        <v-btn color="primary" dark v-bind="props" v-else>Add ➕</v-btn>
-      </template>
+  <v-dialog v-model="showDialog" persistent max-width="600px">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        color="primary"
+        v-bind="props"
+        v-if="$vuetify.display.mdAndUp"
+      >
+        Add Exercise ➕
+      </v-btn>
+      <v-btn color="primary" v-bind="props" v-else>Add ➕</v-btn>
+    </template>
       <v-card>
         <v-card-text>
           <v-container>
@@ -116,7 +114,6 @@
         </v-btn>
       </template>
     </v-snackbar>
-  </v-row>
 </template>
 
 <script>

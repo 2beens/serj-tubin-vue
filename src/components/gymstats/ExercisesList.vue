@@ -4,7 +4,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[0]
+            selectedMuscleGroup = muscleGroups[0];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -21,7 +21,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[1]
+            selectedMuscleGroup = muscleGroups[1];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -38,7 +38,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[2]
+            selectedMuscleGroup = muscleGroups[2];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -55,7 +55,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[3]
+            selectedMuscleGroup = muscleGroups[3];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -72,7 +72,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[4]
+            selectedMuscleGroup = muscleGroups[4];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -89,7 +89,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[5]
+            selectedMuscleGroup = muscleGroups[5];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -106,7 +106,7 @@
       <v-col cols="6" sm="3">
         <v-card
           @click="
-            selectedMuscleGroup = muscleGroups[6]
+            selectedMuscleGroup = muscleGroups[6];
             onMuscleGroupChange()
           "
           class="blue lighten-4"
@@ -132,32 +132,28 @@
     >
       <v-col>
         <v-list color="blue lighten-4" style="border-radius: 5px">
-          <v-list-item-group color="primary" active-class="pink--text">
-            <v-list-item
-              v-for="(
-                percentageInfo, exerciseId
-              ) in loadedExerciseDistributions"
-              :key="exerciseId"
-            >
-              <v-list-item-icon>
-                <v-icon :color="getPercentageColor(percentageInfo.percentage)">
-                  mdi-circle
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content
-                @click="onExerciseSelected(selectedMuscleGroup, exerciseId)"
-              >
-                <v-list-item-title>
-                  {{ percentageInfo.exerciseName }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <v-chip color="blue lighten-1">
-                    {{ percentageInfo.percentage }}%
-                  </v-chip>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
+          <v-list-item
+            v-for="(
+              percentageInfo, exerciseId
+            ) in loadedExerciseDistributions"
+            :key="exerciseId"
+            @click="onExerciseSelected(selectedMuscleGroup, exerciseId)"
+            active-class="pink--text"
+          >
+            <template v-slot:prepend>
+              <v-icon :color="getPercentageColor(percentageInfo.percentage)">
+                mdi-circle
+              </v-icon>
+            </template>
+            <v-list-item-title>
+              {{ percentageInfo.exerciseName }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              <v-chip color="blue lighten-1">
+                {{ percentageInfo.percentage }}%
+              </v-chip>
+            </v-list-item-subtitle>
+          </v-list-item>
         </v-list>
       </v-col>
     </v-row>
