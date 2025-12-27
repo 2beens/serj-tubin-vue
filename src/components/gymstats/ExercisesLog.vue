@@ -146,10 +146,15 @@
           <template #[`item.muscleGroup`]="{ item }">
             <v-chip
               v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'muscleGroup'"
-              :color="getMuscleGroupColor(item.muscleGroup)"
-              dark
               @click="startEdit(item, 'muscleGroup')"
-              style="cursor: pointer"
+              :style="{
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontSize: '0.875rem',
+                backgroundColor: getMuscleGroupColor(item.muscleGroup),
+                color: getMuscleGroupTextColor(item.muscleGroup),
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+              }"
             >
               {{ item.muscleGroup }}
             </v-chip>
@@ -169,10 +174,17 @@
           <template #[`item.kilos`]="{ item }">
             <v-chip
               v-if="editingCell?.itemId !== item.id || editingCell?.field !== 'kilos'"
-              :color="getKilosColor(item.kilos)"
-              dark
               @click="startEdit(item, 'kilos')"
-              style="cursor: pointer"
+              :style="{
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontSize: '0.875rem',
+                minWidth: '50px',
+                justifyContent: 'center',
+                backgroundColor: getKilosColor(item.kilos),
+                color: getKilosTextColor(item.kilos),
+                textShadow: item.kilos >= 15 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none'
+              }"
             >
               {{ item.kilos }}
             </v-chip>
@@ -254,7 +266,15 @@
             ></v-text-field>
           </template>
           <template #[`item.isTesting`]="{ item }">
-            <v-chip :color="item.isTesting === 'yes' ? 'gray' : 'green'">
+            <v-chip 
+              :style="{
+                fontWeight: '700',
+                fontSize: '0.875rem',
+                backgroundColor: item.isTesting === 'yes' ? '#616161' : '#2E7D32',
+                color: '#FFFFFF',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+              }"
+            >
               {{ item.isTesting }}
             </v-chip>
           </template>
@@ -291,11 +311,40 @@
               {{ new Date(exercise.createdAt).toLocaleString() }}
             </v-list-item-subtitle>
             <v-list-item-subtitle>
-              {{ muscleGroupToText[exercise.muscleGroup] }}
-              <v-chip size="small" color="blue lighten-1" class="ml-1">
+              <v-chip 
+                size="small"
+                class="mr-1"
+                :style="{
+                  fontWeight: '700',
+                  backgroundColor: getMuscleGroupColor(exercise.muscleGroup),
+                  color: getMuscleGroupTextColor(exercise.muscleGroup),
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                }"
+              >
+                {{ muscleGroupToText[exercise.muscleGroup] }}
+              </v-chip>
+              <v-chip 
+                size="small"
+                class="ml-1"
+                :style="{
+                  fontWeight: '700',
+                  backgroundColor: getKilosColor(exercise.kilos),
+                  color: getKilosTextColor(exercise.kilos),
+                  textShadow: exercise.kilos >= 15 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none'
+                }"
+              >
                 {{ exercise.kilos }} kg
               </v-chip>
-              <v-chip size="small" color="blue lighten-4" class="ml-1">
+              <v-chip 
+                size="small"
+                class="ml-1"
+                :style="{
+                  fontWeight: '700',
+                  backgroundColor: '#1565C0',
+                  color: '#FFFFFF',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                }"
+              >
                 {{ exercise.reps }} reps
               </v-chip>
             </v-list-item-subtitle>
@@ -348,6 +397,32 @@
   background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
   font-weight: 600;
+}
+
+/* Make chips more prominent and vibrant */
+#data-table :deep(.v-chip) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#data-table :deep(.v-chip:hover) {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Ensure text color is applied and has high contrast */
+#data-table :deep(.v-chip__content) {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Force white text on darker chips for better visibility */
+#data-table :deep(.v-chip[style*="color"]) {
+  color: inherit !important;
 }
 </style>
 
@@ -679,51 +754,68 @@ export default {
     },
 
     getKilosColor(kilos) {
-      // returns different shares of green color based on kilos
-      if (kilos < 10) {
-        return 'green lighten-5'
-      } else if (kilos < 20) {
-        return 'green lighten-4'
-      } else if (kilos < 30) {
-        return 'green lighten-3'
-      } else if (kilos < 40) {
-        return 'green lighten-2'
-      } else if (kilos < 50) {
-        return 'green lighten-1'
-      } else if (kilos < 60) {
-        return 'green'
+      // returns vibrant green colors based on kilos - more saturated for better visibility
+      if (kilos === 0 || kilos < 1) {
+        return '#A5D6A7' // very light green - will use dark text
+      } else if (kilos < 5) {
+        return '#81C784' // light green - will use dark text
+      } else if (kilos < 15) {
+        return '#66BB6A' // medium-light green - will use dark text
+      } else if (kilos < 25) {
+        return '#4CAF50' // standard green - will use white text
+      } else if (kilos < 35) {
+        return '#43A047' // medium green - will use white text
+      } else if (kilos < 45) {
+        return '#388E3C' // medium-dark green - will use white text
+      } else if (kilos < 55) {
+        return '#2E7D32' // dark green - will use white text
       } else if (kilos < 70) {
-        return 'green darken-1'
-      } else if (kilos < 80) {
-        return 'green darken-2'
-      } else if (kilos < 90) {
-        return 'green darken-3'
+        return '#1B5E20' // darker green - will use white text
+      } else if (kilos < 85) {
+        return '#0D4F1C' // very dark green - will use white text
       } else if (kilos < 100) {
-        return 'green darken-4'
+        return '#004D1A' // deepest green - will use white text
       } else {
-        return 'green'
+        return '#1B5E20' // dark green for 100+ - will use white text
+      }
+    },
+
+    getKilosTextColor(kilos) {
+      // Returns appropriate text color for kilos chips based on background brightness
+      if (kilos === 0 || kilos < 5) {
+        return '#1B5E20' // dark green text on light background
+      } else if (kilos < 15) {
+        return '#1B5E20' // dark green text on light background
+      } else {
+        return '#FFFFFF' // white text on darker backgrounds
       }
     },
 
     getMuscleGroupColor(muscleGroup) {
+      // More vibrant, saturated colors for better visibility - all dark enough for white text
       switch (muscleGroup) {
         case 'biceps':
-          return 'red'
+          return '#C62828' // deep vibrant red
         case 'triceps':
-          return 'blue'
+          return '#1565C0' // deep vibrant blue
         case 'legs':
-          return 'green'
+          return '#2E7D32' // deep vibrant green
         case 'shoulders':
-          return 'orange'
+          return '#E65100' // deep vibrant orange
         case 'chest':
-          return 'purple'
+          return '#6A1B9A' // deep vibrant purple
         case 'back':
-          return 'brown'
+          return '#5D4037' // deep brown/amber
         case 'other':
-          return 'grey'
+          return '#546E7A' // deep blue-grey
         default:
-          return 'black'
+          return '#212121' // deep dark grey
       }
+    },
+
+    getMuscleGroupTextColor(muscleGroup) {
+      // All muscle group colors are dark enough for white text
+      return '#FFFFFF'
     },
   },
 }
