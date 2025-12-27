@@ -4,7 +4,8 @@
       v-if="$vuetify.display.smAndDown"
       id="main-menu-bar-sm"
       app
-      :color="$vuetify.theme.dark ? 'black' : 'white'"
+      :bg-color="$vuetify.theme.dark ? '#000000' : '#FFFFFF'"
+      :color="$vuetify.theme.dark ? '#FFFFFF' : '#000000'"
     >
       <v-btn icon @click="drawer = !drawer">
         <v-icon color="blue lighten-1">mdi-menu</v-icon>
@@ -20,7 +21,8 @@
       v-model="drawer"
       app
       v-if="$vuetify.display.smAndDown"
-      :color="$vuetify.theme.dark ? 'black' : 'white'"
+      :bg-color="$vuetify.theme.dark ? '#000000' : '#FFFFFF'"
+      :color="$vuetify.theme.dark ? '#FFFFFF' : '#000000'"
     >
       <v-btn icon @click="drawer = false">
         <v-icon color="blue lighten-1">mdi-close</v-icon>
@@ -43,9 +45,9 @@
     <v-app-bar
       id="main-menu-bar"
       app
-      :color="$vuetify.theme.dark ? 'black' : 'white'"
+      :bg-color="$vuetify.theme.dark ? '#000000' : '#FFFFFF'"
+      :color="$vuetify.theme.dark ? '#FFFFFF' : '#000000'"
       :elevation="$vuetify.theme.dark ? 0 : 1"
-      :dark="$vuetify.theme.dark"
       v-else
     >
       <v-spacer />
@@ -240,17 +242,28 @@ export default {
 </style>
 
 <style>
-/* Theme-aware app-bar background */
-.theme--dark #main-menu-bar,
-.theme--dark #main-menu-bar-sm {
+/* Theme-aware app-bar background - force override */
+.v-application.theme--dark #main-menu-bar,
+.v-application.theme--dark #main-menu-bar-sm,
+.v-application.v-theme--dark #main-menu-bar,
+.v-application.v-theme--dark #main-menu-bar-sm {
   background-color: #000000 !important;
+  background: #000000 !important;
   color: #ffffff !important;
 }
 
-.theme--light #main-menu-bar,
-.theme--light #main-menu-bar-sm {
+.v-application.theme--light #main-menu-bar,
+.v-application.theme--light #main-menu-bar-sm,
+.v-application.v-theme--light #main-menu-bar,
+.v-application.v-theme--light #main-menu-bar-sm {
   background-color: #ffffff !important;
+  background: #ffffff !important;
   color: #000000 !important;
+}
+
+/* Override Vuetify's default app-bar styling */
+.v-app-bar {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Theme-aware menu button styles */
