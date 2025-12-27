@@ -294,12 +294,14 @@
           <v-list-item>
             <template v-slot:prepend>
               <v-chip
-                :color="getColorFromName(exercise.exerciseName)"
-                :style="{
-                  color: getTextColor(getColorFromName(exercise.exerciseName)),
-                }"
                 size="small"
                 class="mt-2"
+                :style="{
+                  backgroundColor: getColorFromName(exercise.exerciseName),
+                  color: getTextColor(getColorFromName(exercise.exerciseName)),
+                  fontWeight: '700',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+                }"
               >
                 {{ index + 1 }}
               </v-chip>
@@ -318,7 +320,9 @@
                   fontWeight: '700',
                   backgroundColor: getMuscleGroupColor(exercise.muscleGroup),
                   color: getMuscleGroupTextColor(exercise.muscleGroup),
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
                 }"
               >
                 {{ muscleGroupToText[exercise.muscleGroup] }}
@@ -330,7 +334,9 @@
                   fontWeight: '700',
                   backgroundColor: getKilosColor(exercise.kilos),
                   color: getKilosTextColor(exercise.kilos),
-                  textShadow: exercise.kilos >= 15 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none'
+                  textShadow: exercise.kilos >= 15 ? '0 1px 2px rgba(0,0,0,0.3)' : 'none',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
                 }"
               >
                 {{ exercise.kilos }} kg
@@ -342,7 +348,9 @@
                   fontWeight: '700',
                   backgroundColor: '#1565C0',
                   color: '#FFFFFF',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                  textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)'
                 }"
               >
                 {{ exercise.reps }} reps
@@ -399,30 +407,40 @@
   font-weight: 600;
 }
 
-/* Make chips more prominent and vibrant */
-#data-table :deep(.v-chip) {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  font-weight: 700;
-  min-height: 28px;
-  padding: 0 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Make chips more prominent and vibrant - applies to both table and list views */
+#data-table :deep(.v-chip),
+.v-list :deep(.v-chip) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  font-weight: 700 !important;
+  min-height: 24px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-#data-table :deep(.v-chip:hover) {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+#data-table :deep(.v-chip:hover),
+.v-list :deep(.v-chip:hover) {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
   transform: translateY(-1px);
   transition: all 0.2s ease;
 }
 
 /* Ensure text color is applied and has high contrast */
-#data-table :deep(.v-chip__content) {
-  font-weight: 700;
+#data-table :deep(.v-chip__content),
+.v-list :deep(.v-chip__content) {
+  font-weight: 700 !important;
   letter-spacing: 0.3px;
 }
 
-/* Force white text on darker chips for better visibility */
-#data-table :deep(.v-chip[style*="color"]) {
-  color: inherit !important;
+/* Ensure inline backgroundColor styles are not overridden by Vuetify */
+#data-table :deep(.v-chip[style*="background"]),
+.v-list :deep(.v-chip[style*="background"]) {
+  /* Inline styles should take precedence - don't override */
+}
+
+/* Prevent Vuetify from applying default background colors when we have custom ones */
+#data-table :deep(.v-chip),
+.v-list :deep(.v-chip) {
+  /* Remove any default background that might interfere */
 }
 </style>
 
