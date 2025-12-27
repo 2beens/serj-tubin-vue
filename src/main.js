@@ -66,10 +66,12 @@ app.mixin({
 })
 
 // Set it as a global property for direct access
-// Note: In Vue 3, $root refers to the root component instance, but we can
-// add properties to it. The warnings about loggedIn not being defined are
-// expected but don't break functionality.
+// In Vue 3, we set $root to the reactive state object
+// This ensures loggedIn is always defined and reactive
 app.config.globalProperties.$root = globalState
+
+// Provide the state via provide/inject as well for better Vue 3 compatibility
+app.provide('loggedInState', globalState)
 
 // Theme will be initialized by ThemeToggle component
 

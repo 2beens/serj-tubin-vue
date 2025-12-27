@@ -146,9 +146,18 @@ export default {
       ],
     }
   },
+  beforeCreate() {
+    // Ensure $root.loggedIn is initialized before render to avoid Vue warnings
+    if (!this.$root || this.$root.loggedIn === undefined) {
+      // This will be set by globalProperties, but we ensure it exists
+      if (this.$root) {
+        this.$root.loggedIn = false
+      }
+    }
+  },
   computed: {
     filteredRoutes() {
-      // Access loggedIn via globalProperties to avoid warnings
+      // Access loggedIn safely - ensure it's defined
       const loggedIn = this.$root?.loggedIn ?? false
       return this.routes.filter((route) => !route.requiresAuth || loggedIn)
     },
