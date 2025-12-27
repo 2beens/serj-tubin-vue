@@ -1166,7 +1166,7 @@ Use this to track which steps are complete:
 
 ### Component Updates
 
-- **Updated**: `src/components/gymstats/AddExercise.vue` - Removed `v-row` wrapper, removed `dark` prop
+- **Updated**: `src/components/gymstats/AddExercise.vue` - See "AddExercise Component Fixes" section below for details
 - **Updated**: Various components - Replaced `small` prop with `size="small"` for icons and chips
 - **Updated**: Various components - Replaced `dense` prop with `density="compact"` for lists
 - **Updated**: Various components - Replaced `outlined` prop with `variant="outlined"` for text fields
@@ -1177,6 +1177,34 @@ Use this to track which steps are complete:
 - **Added**: Enhanced chip styling with box-shadows and borders
 - **Added**: CSS rules to ensure inline `backgroundColor` styles are respected
 - **Added**: Consistent styling for chips in both table and list views
+
+### AddExercise Component Fixes
+
+- **Fixed**: Updated v-select props for Vuetify 3 compatibility
+  - Changed `item-text` → `item-title` (Vuetify 3 syntax)
+  - Changed `solo` → `variant="outlined"`
+  - Changed `dense` → `density="compact"`
+- **Fixed**: Updated v-text-field props (`solo` → `variant="outlined"`, `dense` → `density="compact"`)
+- **Fixed**: Updated button props (removed `dark`, changed `large` → `size="large"`)
+- **Added**: `emits: ['exercise-added']` to fix Vue warning about non-emits event listeners
+- **Improved**: Error handling for exercise percentage fetching
+  - Made percentage fetching non-blocking (exercises work without percentages)
+  - Added timeout to percentage requests (3 seconds)
+  - Improved error handling to avoid console spam for network/CORS errors
+  - Store exercise types immediately, update with percentages asynchronously
+
+### App.vue Navigation Bar Fixes
+
+- **Fixed**: Main menu bar theme awareness
+  - Changed `:color` → `:bg-color` for background (Vuetify 3 syntax)
+  - Added explicit text color handling
+  - Removed `:dark` prop (handling colors explicitly)
+  - Used hex colors instead of color names for better control
+- **Fixed**: Navigation drawer theme awareness (same updates as app-bar)
+- **Enhanced**: CSS with higher specificity to override Vuetify defaults
+  - Added multiple selector variations for theme classes
+  - Added `!important` flags to ensure styles are applied
+  - Added smooth transitions for theme switching
 
 ---
 
