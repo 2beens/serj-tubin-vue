@@ -52,7 +52,6 @@
 import NotesDialog from '../components/notes/NotesDialog.vue'
 import NotesList from '../components/notes/NotesList.vue'
 import axios from 'axios'
-import Vue from 'vue'
 
 export default {
   name: 'NotesView',
@@ -153,9 +152,10 @@ export default {
 
           const noteId = parseInt(response.data.split(':')[1])
           // Update the note in the notes array immediately
+          // In Vue 3, direct assignment works with reactive arrays
           const index = vm.notes.findIndex((n) => n.id === noteId)
           if (index !== -1) {
-            Vue.set(vm.notes, index, { ...vm.notes[index], ...note })
+            vm.notes[index] = { ...vm.notes[index], ...note }
           }
 
           vm.snackbarText = `Note ${note.title} updated!`

@@ -44,6 +44,8 @@
       id="main-menu-bar"
       app
       :color="$vuetify.theme.dark ? 'black' : 'white'"
+      :elevation="$vuetify.theme.dark ? 0 : 1"
+      :dark="$vuetify.theme.dark"
       v-else
     >
       <v-spacer />
@@ -149,11 +151,13 @@ export default {
     }
   },
   computed: {
+    isLoggedIn() {
+      // Use the composable's loggedIn ref - accessing .value makes it reactive
+      return loggedIn.value
+    },
     filteredRoutes() {
-      // Access loggedIn from reactive $root - this will be reactive
-      // Since $root is a reactive object, accessing .loggedIn will track changes
-      const isLoggedIn = this.$root && this.$root.loggedIn ? this.$root.loggedIn : false
-      return this.routes.filter((route) => !route.requiresAuth || isLoggedIn)
+      // Filter routes based on authentication status
+      return this.routes.filter((route) => !route.requiresAuth || this.isLoggedIn)
     },
   },
   watch: {
@@ -236,6 +240,19 @@ export default {
 </style>
 
 <style>
+/* Theme-aware app-bar background */
+.theme--dark #main-menu-bar,
+.theme--dark #main-menu-bar-sm {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.theme--light #main-menu-bar,
+.theme--light #main-menu-bar-sm {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
 /* Theme-aware menu button styles */
 .theme--dark #main-menu-bar .v-btn {
   color: #40A9FF !important;
