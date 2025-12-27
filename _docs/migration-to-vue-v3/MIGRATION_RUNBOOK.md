@@ -1099,12 +1099,84 @@ Use this to track which steps are complete:
 - [x] Step 13: Test startup ✅ COMPLETED (App runs successfully on http://localhost:8080)
 - [x] Step 14: Fix Vuetify issues ✅ COMPLETED (Fixed router catch-all route, breakpoint API)
 - [x] Step 15: Fix cookie consent ✅ COMPLETED (Created custom CookieConsent component)
+- [x] Step 18: Fix remaining issues ✅ COMPLETED (See details below)
 - [ ] Step 16: Run linter
 - [ ] Step 17: Manual testing
-- [ ] Step 18: Fix remaining issues
 - [ ] Step 19: Run E2E tests
 - [ ] Step 20: Final verification
 - [ ] Step 21: Update docs
+
+---
+
+## Step 18 Details: Fixes Completed
+
+### Authentication State Management
+
+- **Created**: `src/composables/useAuth.js` - Centralized authentication state management
+  - Provides reactive `loggedIn` state using Vue 3 Composition API
+  - Persists login state via cookies
+  - Maintains backward compatibility with `$root.loggedIn`
+- **Updated**: `src/main.js` - Integrated `useAuth` composable and synced with `$root.loggedIn`
+- **Updated**: `src/App.vue` - Uses `useAuth` composable for reactive login state
+- **Updated**: `src/components/LoginLogoutButton.vue` - Uses `useAuth` for login/logout actions
+
+### NetlogView Fixes
+
+- **Fixed**: Syntax error in `@click` handler (missing semicolons)
+- **Fixed**: Prevented API calls to `/netlog` when user is not logged in
+- **Updated**: Added guards in `mounted` hook and methods to check `loggedIn` state
+
+### FileBox Component Fixes
+
+- **Fixed**: Prevented API calls to `/file-box` when user is not logged in
+- **Updated**: Added guards in `mounted` hook and `refreshFilesTree()` method
+
+### NotesView Fixes
+
+- **Fixed**: Removed Vue 2 import (`import Vue from 'vue'`)
+- **Fixed**: Replaced `Vue.set()` with direct array assignment (Vue 3 reactivity)
+
+### GymStats Page Fixes
+
+- **Fixed**: Syntax errors in `@click` handlers in `ExercisesList.vue` (missing semicolons)
+- **Fixed**: Replaced `v-edit-dialog` (removed in Vuetify 3) with inline editing solution
+  - Added `editingCell` and `editValue` state tracking
+  - Implemented `startEdit()`, `saveEdit()`, and `cancelEdit()` methods
+  - Click-to-edit functionality with blur/Enter to save, Esc to cancel
+- **Fixed**: Updated list components for Vuetify 3:
+  - Replaced `v-list-item-icon` with `v-slot:prepend`
+  - Replaced `v-list-item-content` with direct `v-list-item-title` and `v-list-item-subtitle`
+  - Removed `v-list-item-group` wrapper (not needed in Vuetify 3)
+- **Fixed**: Removed unnecessary `<template>` wrapper around `v-data-table`
+- **Fixed**: Removed `scoped` from `<script>` tag (should only be on `<style>`)
+- **Improved**: Layout and styling of controls above the table
+  - Better column sizing and alignment
+  - Removed inline styles with hardcoded margins
+  - Improved responsive layout
+- **Improved**: Badge/chip colors and visibility
+  - Made muscle group colors more vibrant (specific hex values)
+  - Improved kilos color gradient (more saturated greens)
+  - Added explicit text colors for high contrast
+  - Added box-shadow and borders for better visibility
+  - Fixed chip colors to use `backgroundColor` in inline styles (Vuetify 3 compatibility)
+- **Improved**: Mobile list view badge alignment
+  - Added flexbox styling for horizontal alignment
+  - Consistent spacing with `gap` property
+  - Applied same vibrant colors to mobile view
+
+### Component Updates
+
+- **Updated**: `src/components/gymstats/AddExercise.vue` - Removed `v-row` wrapper, removed `dark` prop
+- **Updated**: Various components - Replaced `small` prop with `size="small"` for icons and chips
+- **Updated**: Various components - Replaced `dense` prop with `density="compact"` for lists
+- **Updated**: Various components - Replaced `outlined` prop with `variant="outlined"` for text fields
+- **Updated**: Pagination events - Changed `@input` to `@update:model-value` for Vue 3
+
+### CSS Improvements
+
+- **Added**: Enhanced chip styling with box-shadows and borders
+- **Added**: CSS rules to ensure inline `backgroundColor` styles are respected
+- **Added**: Consistent styling for chips in both table and list views
 
 ---
 

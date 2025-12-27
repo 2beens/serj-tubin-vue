@@ -312,10 +312,9 @@
             <v-list-item-subtitle style="font-size: 0.8em">
               {{ new Date(exercise.createdAt).toLocaleString() }}
             </v-list-item-subtitle>
-            <v-list-item-subtitle>
+            <v-list-item-subtitle style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px">
               <v-chip 
                 size="small"
-                class="mr-1"
                 :style="{
                   fontWeight: '700',
                   backgroundColor: getMuscleGroupColor(exercise.muscleGroup),
@@ -329,7 +328,6 @@
               </v-chip>
               <v-chip 
                 size="small"
-                class="ml-1"
                 :style="{
                   fontWeight: '700',
                   backgroundColor: getKilosColor(exercise.kilos),
@@ -343,7 +341,6 @@
               </v-chip>
               <v-chip 
                 size="small"
-                class="ml-1"
                 :style="{
                   fontWeight: '700',
                   backgroundColor: '#1565C0',
