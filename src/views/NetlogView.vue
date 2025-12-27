@@ -134,9 +134,9 @@
           <v-btn
             v-bind="attrs"
             color="primary"
-            text
+            variant="text"
             @click="
-              copyLinkToClipboard(lastAddedId)
+              copyLinkToClipboard(lastAddedId);
               snack = false
             "
           >
@@ -180,7 +180,9 @@ export default {
     }
   },
   mounted: function () {
-    this.getVisits()
+    if (this.theRoot.loggedIn) {
+      this.getVisits()
+    }
   },
   methods: {
     onSourceFilterChanged(source) {
@@ -209,6 +211,9 @@ export default {
       return 'title'
     },
     filterVisits() {
+      if (!this.theRoot.loggedIn) {
+        return
+      }
       if (!this.filterInput || this.filterInput.length === 0) {
         this.getVisits()
         return
@@ -270,6 +275,9 @@ export default {
       this.getVisits()
     },
     getVisits() {
+      if (!this.theRoot.loggedIn) {
+        return
+      }
       this.loading = true
       const source = this.getSeachSourceType()
       const field = this.getSearchFieldType()

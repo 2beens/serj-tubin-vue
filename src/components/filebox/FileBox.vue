@@ -324,7 +324,9 @@ export default {
   },
 
   mounted() {
-    this.refreshFilesTreeAndDeselectItems()
+    if (this.$root.loggedIn) {
+      this.refreshFilesTreeAndDeselectItems()
+    }
 
     // deselect all files/folders on ESC
     document.addEventListener('keydown', (e) => {
@@ -603,6 +605,9 @@ export default {
       this.refreshFilesTree(true)
     },
     refreshFilesTree(deselectItems) {
+      if (!this.$root.loggedIn) {
+        return
+      }
       const vm = this
       axios
         .get(import.meta.env.VITE_FILE_BOX_ENDPOINT + '/f/root', {
