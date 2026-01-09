@@ -24,7 +24,7 @@
     "vue-chartjs": "^5.2.0",
     "vue-cookieconsent-component": "^1.2.0",
     "vue-router": "^3.6.5",
-    "vuetify": "^2.6.15"
+    "vuetify": "^3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^5.0.8",
