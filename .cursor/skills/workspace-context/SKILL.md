@@ -38,6 +38,7 @@ Gymstats remains in React. The Vue site has a `/gymstats` section (Log, Stats, L
 - **Role**: Single-user gym analytics (progress chart, progression rate, exercises table, filters, metric toggles). Auth via backend `/a/login`; `X-SERJ-TOKEN` header.
 - **Backend API**: `/gymstats/stats/progress`, `/gymstats/stats/progression-rate`, `/gymstats/stats/exercises`, `/gymstats/types`, etc.
 - **Deploy**: Future **gymstats.serj-tubin.com**; backend CORS will need that origin (`internal/middleware/cors.go` in serj-tubin-com).
+- **Gymstats MCP**: Backend exposes an MCP server at `/mcp` (Streamable HTTP) with gymstats DB schema and production data. When configured in Cursor (e.g. `https://h.serj-tubin.com/api/mcp`), the agent can call tools like `get_gymstats_context`, `get_exercise_types`, `get_exercises_for_time_range`, etc. Code and setup: `serj-tubin-com/internal/gymstats/mcp/README.md`.
 
 ## Deployment and Infrastructure
 
