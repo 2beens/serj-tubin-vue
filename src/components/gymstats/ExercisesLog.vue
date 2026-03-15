@@ -246,11 +246,23 @@
     </div>
     <div v-else style="text-align: left">
       <!-- used for small devices, ability to show exercises log in a simple list instead of a table -->
+      <!-- tap does nothing; long-press opens edit modal -->
       <v-list dark dense style="border-radius: 5px">
-        <v-list-item-group v-for="(exercise, index) in stats" :key="index">
-          <v-divider v-if="index > 0" dark class="ma-0"></v-divider>
-
-          <v-list-item :key="exercise.id">
+        <template v-for="(exercise, index) in stats">
+          <v-divider
+            v-if="index > 0"
+            :key="`div-${exercise.id}`"
+            dark
+            class="ma-0"
+          ></v-divider>
+          <v-list-item
+            :key="exercise.id"
+            @touchstart.prevent="onListTouchStart($event, exercise)"
+            @touchend.prevent="onListTouchEnd"
+            @touchmove.prevent="onListTouchEnd"
+            @touchcancel.prevent="onListTouchEnd"
+            @contextmenu.prevent="openEditModal(exercise)"
+          >
             <v-list-item-icon>
               <v-chip
                 :color="getColorFromName(exercise.exerciseName)"
@@ -281,9 +293,16 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
-        </v-list-item-group>
+        </template>
       </v-list>
     </div>
+
+    <EditExercise
+      v-model="editDialogVisible"
+      :exercise="exerciseToEdit"
+      @save="saveExercise"
+      @delete="onEditDelete"
+    />
 
     <v-snackbar v-model="showSnackbar">
       {{ snackbarText }}
@@ -306,13 +325,17 @@
 
 <script scoped>
 import AddExercise from '@/components/gymstats/AddExercise.vue'
+import EditExercise from '@/components/gymstats/EditExercise.vue'
 import GymStatsData from '@/gymstats'
 import axios from 'axios'
+
+const LONG_PRESS_MS = 500
 
 export default {
   name: 'ExercisesLog',
   components: {
     AddExercise,
+    EditExercise,
   },
 
   data() {
@@ -346,6 +369,9 @@ export default {
       showSnackbar: false,
       showTable: true,
       muscleGroupToText: GymStatsData.muscleGroupToText,
+      editDialogVisible: false,
+      exerciseToEdit: null,
+      longPressTimer: null,
     }
   },
 
@@ -465,6 +491,36 @@ export default {
     editExercise(exercise) {
       console.warn('will edit exercise', exercise)
       // TODO: implement
+    },
+
+    onListTouchStart(event, exercise) {
+      this.cancelLongPress()
+      this.longPressTimer = setTimeout(() => {
+        this.longPressTimer = null
+        this.exerciseToEdit = exercise
+        this.editDialogVisible = true
+      }, LONG_PRESS_MS)
+    },
+
+    onListTouchEnd() {
+      this.cancelLongPress()
+    },
+
+    cancelLongPress() {
+      if (this.longPressTimer) {
+        clearTimeout(this.longPressTimer)
+        this.longPressTimer = null
+      }
+    },
+
+    openEditModal(exercise) {
+      this.exerciseToEdit = exercise
+      this.editDialogVisible = true
+    },
+
+    onEditDelete(exercise) {
+      this.editDialogVisible = false
+      this.deleteExercise(exercise)
     },
 
     saveExercise(exercise) {
