@@ -271,10 +271,10 @@
             }"
             class="exercises-log-item"
             @touchstart="onListTouchStart($event, exercise)"
-            @touchend="onListTouchEnd"
-            @touchmove="onListTouchEnd"
-            @touchcancel="onListTouchEnd"
-            @contextmenu.prevent="openEditModal(exercise)"
+            @touchend="onListTouchEnd($event)"
+            @touchmove="onListTouchEnd($event)"
+            @touchcancel="onListTouchEnd($event)"
+            @contextmenu.prevent="onListContextMenu($event, exercise)"
           >
             <div
               v-show="longPressExerciseId === exercise.id"
@@ -343,6 +343,8 @@
 .exercises-log-item {
   position: relative;
   touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .exercises-log-item__badge {
@@ -428,7 +430,18 @@ export default {
       exerciseToEdit: null,
       longPressTimer: null,
       longPressExerciseId: null,
+      longPressHandled: false,
     }
+  },
+
+  watch: {
+    editDialogVisible(visible) {
+      if (visible) {
+        this.addContextMenuSuppress()
+      } else {
+        this.removeContextMenuSuppress()
+      }
+    },
   },
 
   computed: {
@@ -483,6 +496,7 @@ export default {
 
   beforeDestroy() {
     this.stopTimeUpdater()
+    this.removeContextMenuSuppress()
   },
 
   methods: {
@@ -551,16 +565,23 @@ export default {
 
     onListTouchStart(_event, exercise) {
       this.cancelLongPress()
+      this.longPressHandled = false
       this.longPressExerciseId = exercise.id
       this.longPressTimer = setTimeout(() => {
         this.longPressTimer = null
         this.longPressExerciseId = null
+        this.longPressHandled = true
         this.exerciseToEdit = exercise
         this.editDialogVisible = true
       }, LONG_PRESS_MS)
     },
 
-    onListTouchEnd() {
+    onListTouchEnd(event) {
+      if (this.longPressHandled && event) {
+        event.preventDefault()
+        event.stopPropagation()
+        this.longPressHandled = false
+      }
       this.longPressExerciseId = null
       this.cancelLongPress()
     },
@@ -569,6 +590,30 @@ export default {
       if (this.longPressTimer) {
         clearTimeout(this.longPressTimer)
         this.longPressTimer = null
+      }
+    },
+
+    onListContextMenu(event, exercise) {
+      event.preventDefault()
+      this.openEditModal(exercise)
+    },
+
+    addContextMenuSuppress() {
+      this._contextMenuHandler = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+      document.addEventListener('contextmenu', this._contextMenuHandler, true)
+    },
+
+    removeContextMenuSuppress() {
+      if (this._contextMenuHandler) {
+        document.removeEventListener(
+          'contextmenu',
+          this._contextMenuHandler,
+          true
+        )
+        this._contextMenuHandler = null
       }
     },
 
