@@ -1,5 +1,10 @@
 <template>
-  <v-dialog :value="value" @input="$emit('input', $event)" persistent max-width="600px">
+  <v-dialog
+    :value="value"
+    @input="$emit('input', $event)"
+    persistent
+    max-width="600px"
+  >
     <v-card>
       <v-card-title class="text-h6">Edit exercise</v-card-title>
       <v-card-text>
@@ -75,9 +80,7 @@
           Delete
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="grey" dark @click="$emit('input', false)">
-          Close
-        </v-btn>
+        <v-btn color="grey" dark @click="$emit('input', false)">Close</v-btn>
         <v-btn
           color="success"
           dark

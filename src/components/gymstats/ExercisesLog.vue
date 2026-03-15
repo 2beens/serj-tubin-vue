@@ -257,13 +257,23 @@
           ></v-divider>
           <v-list-item
             :key="exercise.id"
-            @touchstart.prevent="onListTouchStart($event, exercise)"
-            @touchend.prevent="onListTouchEnd"
-            @touchmove.prevent="onListTouchEnd"
-            @touchcancel.prevent="onListTouchEnd"
+            :class="{
+              'exercises-log-item--long-press':
+                longPressExerciseId === exercise.id,
+            }"
+            class="exercises-log-item"
+            @touchstart="onListTouchStart($event, exercise)"
+            @touchend="onListTouchEnd"
+            @touchmove="onListTouchEnd"
+            @touchcancel="onListTouchEnd"
             @contextmenu.prevent="openEditModal(exercise)"
           >
-            <v-list-item-icon>
+            <div
+              v-show="longPressExerciseId === exercise.id"
+              class="exercises-log-item__progress"
+              aria-hidden="true"
+            />
+            <v-list-item-icon class="exercises-log-item__badge">
               <v-chip
                 :color="getColorFromName(exercise.exerciseName)"
                 :style="{
@@ -321,6 +331,39 @@
   margin-bottom: 100px;
   background: #26c6da;
 }
+
+.exercises-log-item {
+  position: relative;
+  touch-action: manipulation;
+}
+
+.exercises-log-item__badge {
+  margin-right: 12px;
+  min-width: 36px;
+}
+
+.exercises-log-item--long-press {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.exercises-log-item__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #26c6da;
+  border-radius: 0 2px 0 0;
+  animation: exercises-log-progress 500ms linear forwards;
+}
+
+@keyframes exercises-log-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
 </style>
 
 <script scoped>
@@ -372,6 +415,7 @@ export default {
       editDialogVisible: false,
       exerciseToEdit: null,
       longPressTimer: null,
+      longPressExerciseId: null,
     }
   },
 
@@ -493,16 +537,19 @@ export default {
       // TODO: implement
     },
 
-    onListTouchStart(event, exercise) {
+    onListTouchStart(_event, exercise) {
       this.cancelLongPress()
+      this.longPressExerciseId = exercise.id
       this.longPressTimer = setTimeout(() => {
         this.longPressTimer = null
+        this.longPressExerciseId = null
         this.exerciseToEdit = exercise
         this.editDialogVisible = true
       }, LONG_PRESS_MS)
     },
 
     onListTouchEnd() {
+      this.longPressExerciseId = null
       this.cancelLongPress()
     },
 
