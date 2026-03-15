@@ -17,10 +17,10 @@
     <div class="mt-12">
       <v-bottom-navigation
         v-model="currentTab"
-        dark
+        :dark="$vuetify.theme.dark"
         shift
         fixed
-        background-color="black"
+        :background-color="$vuetify.theme.dark ? 'black' : 'white'"
       >
         <v-btn value="log" @click="onTabChange('log')">
           <span>Log</span>

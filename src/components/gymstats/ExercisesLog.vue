@@ -46,7 +46,7 @@
     <v-row v-if="$vuetify.breakpoint.smAndDown">
       <v-col cols="7" style="padding: 0%">
         <v-text-field
-          dark
+          :dark="$vuetify.theme.dark"
           style="margin-right: 20%; margin-left: 20%; margin-top: 10px"
           v-model="itemsPerPageInput"
           label="Items per page"
@@ -62,7 +62,7 @@
         <v-checkbox
           v-model="showTable"
           label="Show table"
-          dark
+          :dark="$vuetify.theme.dark"
           @change="onShowTableChange"
         ></v-checkbox>
       </v-col>
@@ -92,7 +92,7 @@
     <v-row v-if="$vuetify.breakpoint.smAndDown && lastExerciseTime">
       <v-col>
         <v-card
-          dark
+          :dark="$vuetify.theme.dark"
           color="blue darken-2"
           class="mx-2 mb-3 mt-0"
           style="border-radius: 8px"
@@ -244,15 +244,23 @@
         </v-data-table>
       </template>
     </div>
-    <div v-else style="text-align: left">
+    <div
+      v-else
+      style="text-align: left"
+      :class="
+        $vuetify.theme.dark
+          ? 'exercises-log-list theme--dark'
+          : 'exercises-log-list theme--light'
+      "
+    >
       <!-- used for small devices, ability to show exercises log in a simple list instead of a table -->
       <!-- tap does nothing; long-press opens edit modal -->
-      <v-list dark dense style="border-radius: 5px">
+      <v-list :dark="$vuetify.theme.dark" dense style="border-radius: 5px">
         <template v-for="(exercise, index) in stats">
           <v-divider
             v-if="index > 0"
             :key="`div-${exercise.id}`"
-            dark
+            :dark="$vuetify.theme.dark"
             class="ma-0"
           ></v-divider>
           <v-list-item
@@ -342,8 +350,12 @@
   min-width: 36px;
 }
 
-.exercises-log-item--long-press {
+.theme--dark .exercises-log-item--long-press {
   background: rgba(255, 255, 255, 0.06);
+}
+
+.theme--light .exercises-log-item--long-press {
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .exercises-log-item__progress {
