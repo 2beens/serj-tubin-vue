@@ -14,6 +14,14 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
   },
+  overrides: [
+    {
+      files: ['tests/unit/**/*.spec.js'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
   rules: {
     // override/add rules settings here, such as:
     // 'vue/no-unused-vars': 'error',
