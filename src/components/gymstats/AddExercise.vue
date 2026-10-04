@@ -85,7 +85,14 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" dark large @click="refreshExerciseTypes">
+          <v-btn
+            color="primary"
+            dark
+            large
+            :loading="refreshingExerciseTypes"
+            :disabled="refreshingExerciseTypes"
+            @click="refreshExerciseTypes(true)"
+          >
             Refresh
           </v-btn>
           <v-spacer></v-spacer>
@@ -138,16 +145,15 @@ export default {
       },
       snackbarText: '',
       showSnackbar: false,
+      refreshingExerciseTypes: false,
     }
   },
 
   computed: {
     addDisabled() {
       return (
-        !this.exercise.kilos ||
-        isNaN(this.exercise.kilos) ||
-        !this.exercise.reps ||
-        isNaN(this.exercise.reps) ||
+        !this.wholeNonNegative(this.exercise.kilos) ||
+        !this.wholeNonNegative(this.exercise.reps) ||
         !this.exercise.muscleGroup ||
         !this.exercise.exerciseId
       )
@@ -185,27 +191,48 @@ export default {
   mounted() {
     const lastAddedExercise = localStorage.getItem('lastAddedExercise')
     if (lastAddedExercise) {
-      this.exercise = JSON.parse(lastAddedExercise)
+      try {
+        this.exercise = JSON.parse(lastAddedExercise)
+      } catch (error) {
+        console.error('stored last exercise is not valid JSON', error)
+      }
     }
     // get exercise types from local storage
     const muscleGroupToExercises = localStorage.getItem('exerciseTypes')
     if (muscleGroupToExercises && muscleGroupToExercises.length > 0) {
-      this.muscleGroupToExercises = JSON.parse(muscleGroupToExercises)
-    } else {
-      console.log('no exercise types in local storage, will refresh')
-      this.refreshExerciseTypes()
+      try {
+        this.muscleGroupToExercises = JSON.parse(muscleGroupToExercises)
+      } catch (error) {
+        console.error('stored exercise types are not valid JSON', error)
+      }
     }
+    this.refreshExerciseTypes()
   },
 
   methods: {
-    refreshExerciseTypes() {
+    wholeNonNegative(value) {
+      if (value === '' || value === null || value === undefined) {
+        return false
+      }
+      const n = Number(value)
+      return Number.isInteger(n) && n >= 0
+    },
+
+    refreshExerciseTypes(notify) {
+      if (this.refreshingExerciseTypes) {
+        return
+      }
+      if (!notify && !this.getCookie('sessionkolacic')) {
+        return
+      }
+      this.refreshingExerciseTypes = true
       const vm = this
       axios
         .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
           headers: {
             'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
           },
-          timeout: 3500,
+          timeout: 15000,
         })
         .then(function (response) {
           if (!response.data) {
@@ -225,53 +252,67 @@ export default {
             muscleGroupToExercises[exerciseType.muscleGroup].push(exerciseType)
           })
 
-          vm.muscleGroupToExercises = muscleGroupToExercises
-
-          // now, for each muscle group, get exercise distributions
-          // and add them to the exercise type name (name + (percentage%))
-          for (const muscleGroup in muscleGroupToExercises) {
-            vm.getExerciseDistributions(muscleGroup)
-              .then((response) => {
-                if (response === null || response.data === null) {
-                  console.error('response is null')
-                  return
-                }
-                const exerciseDistributions = response.data
-                muscleGroupToExercises[muscleGroup].forEach((exerciseType) => {
-                  const exerciseDistribution =
-                    exerciseDistributions[exerciseType.exerciseId]
-                  if (exerciseDistribution) {
+          const failedGroups = []
+          return Promise.all(
+            Object.keys(muscleGroupToExercises).map((muscleGroup) =>
+              vm
+                .getExerciseDistributions(muscleGroup)
+                .then((distResponse) => {
+                  if (distResponse === null || distResponse.data === null) {
+                    failedGroups.push(muscleGroup)
+                    return
+                  }
+                  const exerciseDistributions = distResponse.data
+                  muscleGroupToExercises[muscleGroup].forEach((exerciseType) => {
+                    const exerciseDistribution =
+                      exerciseDistributions[exerciseType.exerciseId]
+                    if (!exerciseDistribution) {
+                      return
+                    }
                     exerciseType.name = `${
                       exerciseType.name
                     } (${exerciseDistribution.percentage.toFixed(2)}%)`
                     exerciseType.percentage = exerciseDistribution.percentage
-                  }
+                  })
                 })
-              })
-              .catch((err) => {
-                console.error(
-                  `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
-                )
-              })
-              .finally(() => {
-                // store exercise types in local storage
-                localStorage.setItem(
-                  'exerciseTypes',
-                  JSON.stringify(vm.muscleGroupToExercises)
-                )
-              })
-          }
+                .catch((err) => {
+                  failedGroups.push(muscleGroup)
+                  console.error(
+                    `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
+                  )
+                })
+            )
+          ).then(function () {
+            // assign once, after names include percentages, so the select
+            // renders the final labels instead of bare names
+            vm.muscleGroupToExercises = muscleGroupToExercises
+            localStorage.setItem(
+              'exerciseTypes',
+              JSON.stringify(vm.muscleGroupToExercises)
+            )
+            if (!notify) {
+              return
+            }
+            vm.snackbarText =
+              failedGroups.length === 0
+                ? 'Exercise types refreshed!'
+                : `Exercise types refreshed. Percentages missing for: ${failedGroups.join(
+                    ', '
+                  )}`
+            vm.showSnackbar = true
+          })
         })
         .catch(function (error) {
-          vm.snackbarText = `Error getting muscle groups: ${error.message}`
-          vm.showSnackbar = true
-          // fallback to local hardcoded data
           vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
-          vm.snackbarText = `${error}: ${error.response.data}`
+          const detail =
+            error.response && error.response.data
+              ? error.response.data
+              : error.message
+          vm.snackbarText = `Error getting muscle groups: ${detail}`
+          vm.showSnackbar = true
         })
         .finally(function () {
-          vm.snackbarText = 'Exercise types refreshed!'
-          vm.showSnackbar = true
+          vm.refreshingExerciseTypes = false
         })
     },
 
@@ -291,12 +332,21 @@ export default {
       // store added exercise in local storage, and get it from there when adding next time
       localStorage.setItem('lastAddedExercise', JSON.stringify(this.exercise))
 
+      let metadata
+      try {
+        metadata = JSON.parse(this.effectiveMetadataJson)
+      } catch (error) {
+        this.snackbarText = `Invalid metadata JSON: ${error.message}`
+        this.showSnackbar = true
+        return
+      }
+
       const requestBody = {
         muscleGroup: this.exercise.muscleGroup.id,
         exerciseId: this.exercise.exerciseId,
         kilos: Number(this.exercise.kilos),
         reps: Number(this.exercise.reps),
-        metadata: JSON.parse(this.effectiveMetadataJson),
+        metadata,
       }
 
       if (this.exercise.createdAt) {
@@ -325,7 +375,7 @@ export default {
             `Exercise ${response.data.id} added, today: ${response.data.countToday}, seconds since last: ${response.data.secondsSincePreviousSet}`
           )
           const secondsSincePreviousSet =
-            response.data.secondsSincePreviousSet || -1
+            response.data.secondsSincePreviousSet ?? -1
           // if no previous set was found (e.g. first set of the day), backend will return -1
           let timeSincePreviousSetMessage = 'no previous set found'
           if (secondsSincePreviousSet >= 0) {

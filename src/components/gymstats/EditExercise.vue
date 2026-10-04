@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import GymStatsData from '@/gymstats'
 
 export default {
@@ -119,6 +120,11 @@ export default {
     }
   },
   watch: {
+    value(open) {
+      if (open) {
+        this.loadExerciseTypes()
+      }
+    },
     exercise: {
       immediate: true,
       handler(ex) {
@@ -140,18 +146,23 @@ export default {
     if (stored && stored.length > 0) {
       try {
         this.muscleGroupToExercises = JSON.parse(stored)
-      } catch (_) {
-        // use default muscleGroupToExercises from data
+      } catch (error) {
+        console.error('stored exercise types are not valid JSON', error)
       }
     }
+    this.loadExerciseTypes()
   },
   computed: {
     saveDisabled() {
+      const kilos = Number(this.form.kilos)
+      const reps = Number(this.form.reps)
       return (
-        !this.form.kilos ||
-        isNaN(Number(this.form.kilos)) ||
-        !this.form.reps ||
-        isNaN(Number(this.form.reps)) ||
+        this.form.kilos === '' ||
+        this.form.reps === '' ||
+        !Number.isInteger(kilos) ||
+        kilos < 0 ||
+        !Number.isInteger(reps) ||
+        reps < 0 ||
         !this.form.muscleGroup ||
         !this.form.exerciseId
       )
@@ -159,18 +170,57 @@ export default {
     exercisesForSelectedMuscleGroup() {
       if (!this.form.muscleGroup)
         return [{ exerciseId: null, name: 'Select a muscle group first ⛔️' }]
-      const exercises = this.muscleGroupToExercises[this.form.muscleGroup.id]
-      if (!exercises)
+      const exercises =
+        this.muscleGroupToExercises[this.form.muscleGroup.id] || []
+      if (
+        this.form.exerciseId &&
+        !exercises.some((item) => item.exerciseId === this.form.exerciseId)
+      ) {
+        return [
+          { exerciseId: this.form.exerciseId, name: this.form.exerciseId },
+          ...exercises,
+        ]
+      }
+      if (exercises.length === 0) {
         return [
           {
             exerciseId: null,
             name: `No exercises for: ${this.form.muscleGroup.id} ⛔️`,
           },
         ]
+      }
       return exercises
     },
   },
   methods: {
+    loadExerciseTypes() {
+      if (!this.getCookie('sessionkolacic')) {
+        return
+      }
+      axios
+        .get(`${process.env.VUE_APP_API_ENDPOINT}/gymstats/types`, {
+          headers: {
+            'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
+          },
+        })
+        .then((response) => {
+          if (!response.data) {
+            return
+          }
+          const grouped = {}
+          response.data.forEach((exerciseType) => {
+            if (!grouped[exerciseType.muscleGroup]) {
+              grouped[exerciseType.muscleGroup] = []
+            }
+            grouped[exerciseType.muscleGroup].push(exerciseType)
+          })
+          this.muscleGroupToExercises = grouped
+        })
+        .catch((error) => {
+          console.error('error loading exercise types', error)
+        })
+    },
+
     onSave() {
       if (!this.exercise) return
       const payload = {

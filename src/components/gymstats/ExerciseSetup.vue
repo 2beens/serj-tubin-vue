@@ -7,6 +7,7 @@
             outlined
             v-model="exerciseType.exerciseId"
             label="ID"
+            readonly
             required
           ></v-text-field>
         </v-col>
@@ -28,7 +29,7 @@
             item-text="name"
             item-value="id"
             label="Muscle Group"
-            return-object
+            readonly
           ></v-select>
         </v-col>
       </v-row>
@@ -280,11 +281,15 @@ export default {
         })
     },
 
+    muscleGroupId(group) {
+      return group && group.id ? group.id : group
+    },
+
     updateExerciseType() {
       const requestBody = {
         exerciseId: this.exerciseType.exerciseId,
         name: this.exerciseType.name,
-        muscleGroup: this.exerciseType.muscleGroup,
+        muscleGroup: this.muscleGroupId(this.exerciseType.muscleGroup),
         description: this.exerciseType.description,
       }
 
@@ -319,7 +324,9 @@ export default {
       const vm = this
       axios
         .delete(
-          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${this.exerciseType.exerciseId}/mg/${this.exerciseType.muscleGroup}`,
+          `${process.env.VUE_APP_API_ENDPOINT}/gymstats/types/${
+            this.exerciseType.exerciseId
+          }/mg/${this.muscleGroupId(this.exerciseType.muscleGroup)}`,
           {
             headers: {
               'X-SERJ-TOKEN': this.getCookie('sessionkolacic'),
