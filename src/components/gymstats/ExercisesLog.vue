@@ -3,7 +3,7 @@
     <v-row v-if="$vuetify.breakpoint.mdAndUp">
       <v-col cols="2">
         <v-text-field
-          dark
+          :dark="$vuetify.theme.dark"
           style="margin-top: 30px; margin-left: 15px"
           v-model="itemsPerPageInput"
           label="Items per page"
@@ -15,15 +15,16 @@
           @change="onItemsPerPageChange"
         />
       </v-col>
-      <v-col cols="1">
+      <v-col cols="2">
         <v-checkbox
           v-model="showTable"
           label="Show table"
-          dark
+          :dark="$vuetify.theme.dark"
+          class="mt-4"
           @change="onShowTableChange"
         ></v-checkbox>
       </v-col>
-      <v-col cols="7">
+      <v-col cols="6">
         <v-pagination
           style="margin-top: 30px; margin-bottom: 15px"
           v-if="stats && stats.length > 0"
@@ -122,6 +123,7 @@
           :headers="headers"
           :items="stats"
           :items-per-page="itemsPerPage"
+          :dark="$vuetify.theme.dark"
           hide-default-footer
           disable-pagination
           class="elevation-1"
@@ -340,6 +342,10 @@
   background: #26c6da;
 }
 
+#data-table.theme--dark {
+  background: #2a3441;
+}
+
 .exercises-log-item {
   position: relative;
   touch-action: manipulation;
@@ -435,6 +441,11 @@ export default {
   },
 
   watch: {
+    '$root.loggedIn'(loggedIn) {
+      if (loggedIn) {
+        this.getExercises()
+      }
+    },
     editDialogVisible(visible) {
       if (visible) {
         this.addContextMenuSuppress()
@@ -519,8 +530,6 @@ export default {
     },
 
     getExercises() {
-      this.loadingData = true
-
       const storedItemsPerPageInput = localStorage.getItem('itemsPerPageInput')
       if (storedItemsPerPageInput) {
         this.itemsPerPage = parseInt(storedItemsPerPageInput)
@@ -528,8 +537,10 @@ export default {
 
       this.itemsPerPageInput = String(this.itemsPerPage)
       if (!this.$root.loggedIn) {
+        this.loadingData = false
         return
       }
+      this.loadingData = true
 
       const vm = this
       axios
@@ -559,8 +570,7 @@ export default {
     },
 
     editExercise(exercise) {
-      console.warn('will edit exercise', exercise)
-      // TODO: implement
+      this.openEditModal(exercise)
     },
 
     onListTouchStart(_event, exercise) {
@@ -628,15 +638,36 @@ export default {
     },
 
     saveExercise(exercise) {
-      console.warn('will save exercise', exercise)
+      let metadata
+      try {
+        metadata = JSON.parse(exercise.metadataJson)
+      } catch (error) {
+        this.snackbarText = `Invalid metadata JSON: ${error.message}`
+        this.showSnackbar = true
+        return
+      }
+
+      const kilos = Number(exercise.kilos)
+      const reps = Number(exercise.reps)
+      if (
+        !Number.isInteger(kilos) ||
+        kilos < 0 ||
+        !Number.isInteger(reps) ||
+        reps < 0
+      ) {
+        this.snackbarText = 'Kilos and reps must be whole numbers, zero or more'
+        this.showSnackbar = true
+        return
+      }
+
       const requestBody = {
         id: exercise.id,
         muscleGroup: exercise.muscleGroup,
         exerciseId: exercise.exerciseId,
-        kilos: Number(exercise.kilos),
-        reps: Number(exercise.reps),
+        kilos,
+        reps,
         createdAt: exercise.createdAt,
-        metadata: JSON.parse(exercise.metadataJson),
+        metadata,
       }
 
       const vm = this
