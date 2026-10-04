@@ -188,6 +188,19 @@ export default {
     },
   },
 
+  watch: {
+    showDialog(open) {
+      if (open) {
+        this.loadSelectedGroupPercentages(false)
+      }
+    },
+    'exercise.muscleGroup.id'(id) {
+      if (id && this.showDialog) {
+        this.loadSelectedGroupPercentages(false)
+      }
+    },
+  },
+
   mounted() {
     const lastAddedExercise = localStorage.getItem('lastAddedExercise')
     if (lastAddedExercise) {
@@ -252,55 +265,18 @@ export default {
             muscleGroupToExercises[exerciseType.muscleGroup].push(exerciseType)
           })
 
-          const failedGroups = []
-          return Promise.all(
-            Object.keys(muscleGroupToExercises).map((muscleGroup) =>
-              vm
-                .getExerciseDistributions(muscleGroup)
-                .then((distResponse) => {
-                  if (distResponse === null || distResponse.data === null) {
-                    failedGroups.push(muscleGroup)
-                    return
-                  }
-                  const exerciseDistributions = distResponse.data
-                  muscleGroupToExercises[muscleGroup].forEach((exerciseType) => {
-                    const exerciseDistribution =
-                      exerciseDistributions[exerciseType.exerciseId]
-                    if (!exerciseDistribution) {
-                      return
-                    }
-                    exerciseType.name = `${
-                      exerciseType.name
-                    } (${exerciseDistribution.percentage.toFixed(2)}%)`
-                    exerciseType.percentage = exerciseDistribution.percentage
-                  })
-                })
-                .catch((err) => {
-                  failedGroups.push(muscleGroup)
-                  console.error(
-                    `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
-                  )
-                })
-            )
-          ).then(function () {
-            // assign once, after names include percentages, so the select
-            // renders the final labels instead of bare names
-            vm.muscleGroupToExercises = muscleGroupToExercises
-            localStorage.setItem(
-              'exerciseTypes',
-              JSON.stringify(vm.muscleGroupToExercises)
-            )
-            if (!notify) {
-              return
-            }
-            vm.snackbarText =
-              failedGroups.length === 0
-                ? 'Exercise types refreshed!'
-                : `Exercise types refreshed. Percentages missing for: ${failedGroups.join(
-                    ', '
-                  )}`
+          vm.muscleGroupToExercises = muscleGroupToExercises
+          localStorage.setItem(
+            'exerciseTypes',
+            JSON.stringify(vm.muscleGroupToExercises)
+          )
+          if (notify) {
+            vm.snackbarText = 'Exercise types refreshed!'
             vm.showSnackbar = true
-          })
+          }
+          if (vm.showDialog) {
+            vm.loadSelectedGroupPercentages(!!notify)
+          }
         })
         .catch(function (error) {
           const detail =
@@ -316,6 +292,53 @@ export default {
         })
         .finally(function () {
           vm.refreshingExerciseTypes = false
+        })
+    },
+
+    loadSelectedGroupPercentages(notify) {
+      const muscleGroup =
+        this.exercise.muscleGroup && this.exercise.muscleGroup.id
+      const exercises = muscleGroup && this.muscleGroupToExercises[muscleGroup]
+      if (!exercises || exercises.some((item) => item.percentage != null)) {
+        return
+      }
+      const vm = this
+      this.getExerciseDistributions(muscleGroup)
+        .then((distResponse) => {
+          if (!distResponse || distResponse.data == null) {
+            if (notify) {
+              vm.snackbarText = `Percentages missing for ${muscleGroup}`
+              vm.showSnackbar = true
+            }
+            return
+          }
+          exercises.forEach((exerciseType) => {
+            const exerciseDistribution =
+              distResponse.data[exerciseType.exerciseId]
+            exerciseType.percentage = exerciseDistribution
+              ? exerciseDistribution.percentage
+              : 0
+            if (!exerciseDistribution) {
+              return
+            }
+            exerciseType.name = `${
+              exerciseType.name
+            } (${exerciseDistribution.percentage.toFixed(2)}%)`
+          })
+          vm.muscleGroupToExercises = { ...vm.muscleGroupToExercises }
+          localStorage.setItem(
+            'exerciseTypes',
+            JSON.stringify(vm.muscleGroupToExercises)
+          )
+        })
+        .catch((err) => {
+          console.error(
+            `Error getting exercise distributions for muscle group ${muscleGroup}: ${err}`
+          )
+          if (notify) {
+            vm.snackbarText = `Percentages missing for ${muscleGroup}`
+            vm.showSnackbar = true
+          }
         })
     },
 
