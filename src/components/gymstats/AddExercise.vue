@@ -236,11 +236,11 @@ export default {
         })
         .then(function (response) {
           if (!response.data) {
-            vm.snackbarText = 'Received unexpected response from server'
-            vm.showSnackbar = true
             console.warn(response)
-            // fallback to local hardcoded data
-            vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
+            if (notify) {
+              vm.snackbarText = 'Received unexpected response from server'
+              vm.showSnackbar = true
+            }
             return
           }
 
@@ -303,11 +303,14 @@ export default {
           })
         })
         .catch(function (error) {
-          vm.muscleGroupToExercises = GymStatsData.muscleGroupToExercises
           const detail =
             error.response && error.response.data
               ? error.response.data
               : error.message
+          console.error(`Error getting muscle groups: ${detail}`)
+          if (!notify) {
+            return
+          }
           vm.snackbarText = `Error getting muscle groups: ${detail}`
           vm.showSnackbar = true
         })
