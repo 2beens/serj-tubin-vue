@@ -36,6 +36,7 @@ function createWrapper(props = {}) {
         breakpoint: { mdAndUp: true },
         theme: { dark: false },
       },
+      getCookie: () => null,
     },
   })
 }
