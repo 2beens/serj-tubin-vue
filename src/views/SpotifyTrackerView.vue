@@ -224,7 +224,7 @@ export default {
 
   data: function () {
     return {
-      // status can be 'running' or 'stopped'
+      // status can be 'uninitialized', 'running', or 'stopped'
       status: 'loading...',
       // message is at the moment returned only if the tracker is stopped with an error/reason
       message: '',
@@ -362,9 +362,12 @@ export default {
         .catch((error) => {
           if (error.response) {
             if (error.response.status === 400) {
-              vm.status = 'stopped'
-              vm.message = 'Tracker not running'
-              console.log('run now: Tracker not running')
+              const body = error.response.data || 'Tracker not running'
+              vm.message = body
+              vm.status = String(body).includes('not initialized')
+                ? 'uninitialized'
+                : 'stopped'
+              console.log('run now:', vm.message)
             } else if (error.response.status === 500) {
               vm.status = 'error'
               vm.message = `Failed to save recently played tracks: ${error.response.data}`
